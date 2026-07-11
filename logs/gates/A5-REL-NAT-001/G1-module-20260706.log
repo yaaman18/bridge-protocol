@@ -1,0 +1,26 @@
+✖ [2362/2362] Building ERIEC.InterfaceLinearization (6.6s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/InterfaceLinearization.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.setup.json --json
+error: formal/ERIEC/InterfaceLinearization.lean:90:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  h.codomain.symm e' ∈ rel (h.domain.symm m')
+in the target expression
+  (relationMatrix rel).submatrix (⇑h.codomain.symm) (⇑h.domain.symm) e' m' = if e' ∈ rel' m' then 1 else 0
+
+M : Type u_1
+E : Type u_2
+M' : Type u_3
+E' : Type u_4
+rel : M → Set E
+rel' : M' → Set E'
+h : RelationIso rel rel'
+e' : E'
+m' : M'
+⊢ (relationMatrix rel).submatrix (⇑h.codomain.symm) (⇑h.domain.symm) e' m' = if e' ∈ rel' m' then 1 else 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    (relationMatrix rel).submatrix (⇑h.codomain.symm) (⇑h.domain.symm) e'
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.InterfaceLinearization
+error: build failed

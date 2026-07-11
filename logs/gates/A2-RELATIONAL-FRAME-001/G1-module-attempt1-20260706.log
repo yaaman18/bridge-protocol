@@ -1,0 +1,12 @@
+formal/ERIEC/ViabilityClosure.lean:210:77: error: unsolved goals
+A : OpenSystem
+K : Set (Config A)
+x : Config A
+⊢ (∃ x_1 x_2 x_3, (x_1, x_2, x_3) ∈ K ∧ (x = (x_1, x_2, x_3) ∨ x ∈ A.step (x_1, x_2, x_3))) ↔
+    x ∈ K ∨ ∃ a a_1 b, (a, a_1, b) ∈ K ∧ x ∈ A.step (a, a_1, b)
+formal/ERIEC/ViabilityClosure.lean:217:79: error: unsolved goals
+A : OpenSystem
+K : Set (Config A)
+x : Config A
+⊢ (∃ x_1 x_2 x_3, (x_1, x_2, x_3) ∈ K ∧ (x = (x_1, x_2, x_3) ∨ x ∈ A.step (x_1, x_2, x_3))) ↔
+    x ∈ K ∨ ∃ a a_1 b, (a, a_1, b) ∈ K ∧ x ∈ A.step (a, a_1, b)

@@ -1,0 +1,26 @@
+✖ [2387/2390] Building ERIEC.Collapse (1.9s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Collapse.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Collapse.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Collapse.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Collapse.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Collapse.setup.json --json
+error: formal/ERIEC/Collapse.lean:13:53: unsolved goals
+M : Type u_1
+E : Type u_2
+C : Type u_3
+S : Type u_4
+rhoRel : C → Set M
+sigmaRel : E → Set M
+kappa : S → Set C
+epsilon : S → Set E
+s : S
+hKappa : kappa s = ∅
+⊢ (⋃ c ∈ kappa s, rhoRel c) ∩ Adj.sigma_star sigmaRel (epsilon s) = ∅
+warning: formal/ERIEC/Collapse.lean:14:19: This simp argument is unused:
+  hKappa
+
+Hint: Omit it from the simp argument list.
+  simp [Hinge.Act, h̵K̵a̵p̵p̵a̵,̵ ̵Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: Lean exited with code 1
+✔ [2388/2390] Built ERIEC.CertifiedArtifact (4.2s)
+Some required targets logged failures:
+- ERIEC.Collapse
+error: build failed

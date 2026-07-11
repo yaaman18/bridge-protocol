@@ -1,0 +1,31 @@
+✖ [813/813] Building ERIEC.Value (3.8s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Value.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Value.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Value.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Value.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Value.setup.json --json
+error: formal/ERIEC/Value.lean:193:63: unsolved goals
+case true.false
+m e : Unit
+hle : true ≤ false
+⊢ False
+warning: formal/ERIEC/Value.lean:206:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+error: formal/ERIEC/Value.lean:225:12: Function expected at
+  hPost hc
+but this term has type
+  c ∈ { op := fun w => Closure.Phi (gradedRel w) (gradedRel w), monotone := ⋯ }.op true Y
+
+Note: Expected a function because this term is being applied to the argument
+  (by simp [Closure.Phi, Closure.pi_star, Closure.rho_star, gradedRel])
+warning: formal/ERIEC/Value.lean:232:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+error: formal/ERIEC/Value.lean:239:19: Tactic `assumption` failed
+
+E : Type u_1
+C : Type u_2
+inst✝ : DecidableEq C
+⊢ {()} = Set.univ
+warning: formal/ERIEC/Value.lean:254:4: declaration uses `sorry`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Value
+error: build failed

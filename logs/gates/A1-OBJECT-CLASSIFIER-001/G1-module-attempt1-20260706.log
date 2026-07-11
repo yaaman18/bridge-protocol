@@ -1,0 +1,58 @@
+formal/ERIEC/BridgeFunctor.lean:38:10: warning: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+formal/ERIEC/BridgeFunctor.lean:72:10: warning: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+formal/ERIEC/BridgeFunctor.lean:93:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (HingeWitness rhoRel sigmaRel kappa epsilon)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/ERIEC/BridgeFunctor.lean:108:40: error: Type mismatch
+  fun x => 1
+has type
+  (x : ?m.30) → ?m.33 x
+but is expected to have type
+  EuclideanSpace ℝ (Fin 1)
+formal/ERIEC/BridgeFunctor.lean:111:23: error: Application type mismatch: The argument
+  hx
+has type
+  x = 0
+but is expected to have type
+  ?m.50 = ?m.51
+in the application
+  congrFun hx
+formal/ERIEC/BridgeFunctor.lean:113:4: error: unsolved goals
+case pos.refine_2
+M : Type u_1
+E : Type u_2
+C : Type u_3
+rhoRel : C → Set M
+sigmaRel : E → Set M
+kappa : Set C
+epsilon : Set E
+hHinge x✝ : HingeWitness rhoRel sigmaRel kappa epsilon
+x : EuclideanSpace ℝ (Fin 1) := sorry
+⊢ (sorry ()) x = x
+formal/ERIEC/BridgeFunctor.lean:118:4: error: Type mismatch
+  hx0 hx
+has type
+  False
+but is expected to have type
+  HingeWitness rhoRel sigmaRel kappa epsilon
+formal/ERIEC/BridgeFunctor.lean:113:36: warning: declaration uses `sorry`
+formal/ERIEC/BridgeFunctor.lean:113:58: warning: This simp argument is unused:
+  hHinge
+
+Hint: Omit it from the simp argument list.
+  simp [World.WorldFixedVector, hingeClassifyingLoop,̵ ̵h̵H̵i̵n̵g̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

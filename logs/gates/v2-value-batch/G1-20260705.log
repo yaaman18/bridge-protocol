@@ -1,0 +1,25 @@
+⚠ [2370/2393] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:211:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:212:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:214:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:225:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:251:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2372/2393] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [2391/2393] Built ERIEC.CertifiedArtifact (6.4s)
+✔ [2392/2393] Built ERIEC (5.1s)
+Build completed successfully (2393 jobs).

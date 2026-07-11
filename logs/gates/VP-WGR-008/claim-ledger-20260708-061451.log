@@ -1,0 +1,32 @@
+ERROR: LoadError: Some tests did not pass: 374 passed, 1 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:5
+claim ledger integrity: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:44
+  Expression: get(claim, "certification_status", defaults["certification_status"]) == "certified"
+   Evaluated: "pending" == "certified"
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_claim_ledger.jl:44 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_claim_ledger.jl:6
+claim ledger integrity: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:50
+  Test threw exception
+  Expression: isfile(joinpath(project_root, claim["certification_log"]))
+  KeyError: key "certification_log" not found
+  Stacktrace:
+   [1] macro expansion
+     @ ~/erie-c/test/test_claim_ledger.jl:50 [inlined]
+   [2] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [3] macro expansion
+     @ ~/erie-c/test/test_claim_ledger.jl:50 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/erie-c/test/test_claim_ledger.jl:6
+Test Summary:          | Pass  Fail  Error  Total  Time
+claim ledger integrity |  374     1      1    376  6.1s

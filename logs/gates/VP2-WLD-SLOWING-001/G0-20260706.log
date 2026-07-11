@@ -1,0 +1,1 @@
+fun {S} => ERIEC.World.CriticalSlowingConjecture : {S : Type u_1} → ((ℕ → S) → Prop) → (S → ℝ) → (S → ℝ) → Prop

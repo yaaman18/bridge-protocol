@@ -1,0 +1,127 @@
+⚠ [2367/2370] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:245:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:246:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:248:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:259:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:285:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✖ [2691/2696] Building ERIEC.World (14s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/World.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/World.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/World.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/World.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/World.setup.json --json
+error: formal/ERIEC/World.lean:182:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  L u
+in the target expression
+  ((hL.eigenvectorBasis hdim).repr (↑L u)).ofLp i =
+    ↑(hL.eigenvalues hdim i) * ((hL.eigenvectorBasis hdim).repr u).ofLp i
+
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+hL : (↑L).IsSymmetric
+eta : ℝ
+x : EuclideanSpace ℝ (Fin m)
+hx : x ∈ ↑(Wld_band L eta)
+hEta : 0 ≤ eta
+hdim : Module.finrank ℝ (EuclideanSpace ℝ (Fin m)) = m :=
+  of_eq_true (Eq.trans (congrFun' (congrArg Eq (Eq.trans finrank_euclideanSpace (Fintype.card_fin m))) m) (eq_self m))
+b : OrthonormalBasis (Fin m) ℝ (EuclideanSpace ℝ (Fin m)) := hL.eigenvectorBasis hdim
+eigenvalue : Fin m → ℝ := hL.eigenvalues hdim
+bandSpace : Submodule ℝ (EuclideanSpace ℝ (Fin m)) :=
+  { carrier := {x | ∀ (i : Fin m), ¬|eigenvalue i - 1| ≤ eta → (b.repr x).ofLp i = 0}, add_mem' := ⋯, zero_mem' := ⋯,
+    smul_mem' := ⋯ }
+u : EuclideanSpace ℝ (Fin m)
+lambda : ℝ
+hLambda : |lambda - 1| ≤ eta
+hEigen : L u = lambda • u
+i : Fin m
+hi : ¬|eigenvalue i - 1| ≤ eta
+hCoordinate :
+  ((hL.eigenvectorBasis hdim).repr (↑L u)).ofLp i =
+    ↑(hL.eigenvalues hdim i) * ((hL.eigenvectorBasis hdim).repr u).ofLp i
+⊢ (b.repr u).ofLp i = 0
+error: formal/ERIEC/World.lean:198:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((hL.eigenvectorBasis hdim).repr (↑L x)).ofLp i
+in the target expression
+  (b.repr (L x) - b.repr x).ofLp i = (eigenvalue i - 1) * (b.repr x).ofLp i
+
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+hL : (↑L).IsSymmetric
+eta : ℝ
+x : EuclideanSpace ℝ (Fin m)
+hx : x ∈ ↑(Wld_band L eta)
+hEta : 0 ≤ eta
+hdim : Module.finrank ℝ (EuclideanSpace ℝ (Fin m)) = m :=
+  of_eq_true (Eq.trans (congrFun' (congrArg Eq (Eq.trans finrank_euclideanSpace (Fintype.card_fin m))) m) (eq_self m))
+b : OrthonormalBasis (Fin m) ℝ (EuclideanSpace ℝ (Fin m)) := hL.eigenvectorBasis hdim
+eigenvalue : Fin m → ℝ := hL.eigenvalues hdim
+bandSpace : Submodule ℝ (EuclideanSpace ℝ (Fin m)) :=
+  { carrier := {x | ∀ (i : Fin m), ¬|eigenvalue i - 1| ≤ eta → (b.repr x).ofLp i = 0}, add_mem' := ⋯, zero_mem' := ⋯,
+    smul_mem' := ⋯ }
+hBandLe : Wld_band L eta ≤ bandSpace
+hxBand : x ∈ bandSpace
+i : Fin m
+hApply :
+  ((hL.eigenvectorBasis hdim).repr (↑L x)).ofLp i =
+    ↑(hL.eigenvalues hdim i) * ((hL.eigenvectorBasis hdim).repr x).ofLp i
+⊢ (b.repr (L x) - b.repr x).ofLp i = (eigenvalue i - 1) * (b.repr x).ofLp i
+error: formal/ERIEC/World.lean:208:8: linarith failed to find a contradiction
+case pos
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+hL : (↑L).IsSymmetric
+eta : ℝ
+x : EuclideanSpace ℝ (Fin m)
+hx : x ∈ ↑(Wld_band L eta)
+hEta : 0 ≤ eta
+hdim : Module.finrank ℝ (EuclideanSpace ℝ (Fin m)) = m :=
+  of_eq_true (Eq.trans (congrFun' (congrArg Eq (Eq.trans finrank_euclideanSpace (Fintype.card_fin m))) m) (eq_self m))
+b : OrthonormalBasis (Fin m) ℝ (EuclideanSpace ℝ (Fin m)) := hL.eigenvectorBasis hdim
+eigenvalue : Fin m → ℝ := hL.eigenvalues hdim
+bandSpace : Submodule ℝ (EuclideanSpace ℝ (Fin m)) :=
+  { carrier := {x | ∀ (i : Fin m), ¬|eigenvalue i - 1| ≤ eta → (b.repr x).ofLp i = 0}, add_mem' := ⋯, zero_mem' := ⋯,
+    smul_mem' := ⋯ }
+hBandLe : Wld_band L eta ≤ bandSpace
+hxBand : x ∈ bandSpace
+hCoordinate : ∀ (i : Fin m), (b.repr (L x - x)).ofLp i = (eigenvalue i - 1) * (b.repr x).ofLp i
+i : Fin m
+hi : |eigenvalue i - 1| ≤ eta
+hSq : |eigenvalue i - 1| ^ 2 ≤ eta ^ 2
+a✝ : eta ^ 2 * (b.repr x).ofLp i ^ 2 < ((eigenvalue i - 1) * (b.repr x).ofLp i) ^ 2
+⊢ False
+failed
+error: formal/ERIEC/World.lean:224:14: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * ∑ i ∈ ?s, ?f i
+in the target expression
+  ∑ i, eta ^ 2 * (b.repr x).ofLp i ^ 2 = eta ^ 2 * ‖b.repr x‖ ^ 2
+
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+hL : (↑L).IsSymmetric
+eta : ℝ
+x : EuclideanSpace ℝ (Fin m)
+hx : x ∈ ↑(Wld_band L eta)
+hEta : 0 ≤ eta
+hdim : Module.finrank ℝ (EuclideanSpace ℝ (Fin m)) = m :=
+  of_eq_true (Eq.trans (congrFun' (congrArg Eq (Eq.trans finrank_euclideanSpace (Fintype.card_fin m))) m) (eq_self m))
+b : OrthonormalBasis (Fin m) ℝ (EuclideanSpace ℝ (Fin m)) := hL.eigenvectorBasis hdim
+eigenvalue : Fin m → ℝ := hL.eigenvalues hdim
+bandSpace : Submodule ℝ (EuclideanSpace ℝ (Fin m)) :=
+  { carrier := {x | ∀ (i : Fin m), ¬|eigenvalue i - 1| ≤ eta → (b.repr x).ofLp i = 0}, add_mem' := ⋯, zero_mem' := ⋯,
+    smul_mem' := ⋯ }
+hBandLe : Wld_band L eta ≤ bandSpace
+hxBand : x ∈ bandSpace
+hCoordinate : ∀ (i : Fin m), (b.repr (L x - x)).ofLp i = (eigenvalue i - 1) * (b.repr x).ofLp i
+hPointwise : ∀ (i : Fin m), ((eigenvalue i - 1) * (b.repr x).ofLp i) ^ 2 ≤ eta ^ 2 * (b.repr x).ofLp i ^ 2
+⊢ ∑ i, eta ^ 2 * (b.repr x).ofLp i ^ 2 = eta ^ 2 * ‖b.repr x‖ ^ 2
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.World
+error: build failed

@@ -1,0 +1,112 @@
+schema_version = 1
+document = "category/三層構造の圏論的定式化_v5_1.md"
+
+# vp_ids は直接影響のみ。driver が ledger.depends_on の下流閉包を展開する。
+# 空配列の節が変更された場合は成功扱いにせず、claude による新VP起票を要求する。
+
+[[section]]
+id = "§0"
+vp_ids = []
+tests = []
+all_vps = true
+
+[[section]]
+id = "§1"
+vp_ids = ["VP-ADJ-001", "VP-ADJ-002"]
+tests = ["test/test_adjunction.jl"]
+
+[[section]]
+id = "§2"
+vp_ids = ["VP-GRD-001", "VP-GRA-001"]
+tests = ["test/test_orderreach_graded.jl"]
+
+[[section]]
+id = "§3"
+vp_ids = ["VP-CLO-001", "VP-KT-001", "VP-GRA-002"]
+tests = ["test/test_closure.jl"]
+
+[[section]]
+id = "§4"
+vp_ids = ["VP-HNG-001", "VP-DC-001", "VP-CER-001"]
+tests = ["test/test_hinge.jl", "test/test_dc.jl"]
+
+[[section]]
+id = "§5"
+vp_ids = ["VP-CLP-001", "VP-BDY-001", "VP-DYN-001"]
+tests = ["test/test_reachability.jl", "test/test_slowing.jl", "test/test_body.jl"]
+
+[[section]]
+id = "§6"
+vp_ids = ["VP-SEN-001", "VP-SEN-002", "VP-WLD-001", "VP-WLD-002"]
+tests = ["test/test_sensitivity.jl", "test/test_world.jl"]
+
+[[section]]
+id = "§7"
+vp_ids = ["VP-SEN-001", "VP-DC-001", "VP-VAL-002"]
+tests = ["test/test_sensitivity.jl", "test/test_value.jl", "test/test_weighted.jl"]
+
+[[section]]
+id = "§8"
+vp_ids = ["VP-WDC-001", "VP-WDC-002"]
+tests = ["test/test_worlddc.jl"]
+
+[[section]]
+id = "§9"
+vp_ids = ["VP-MRK-001"]
+tests = ["test/test_markers.jl"]
+
+[[section]]
+id = "§10"
+vp_ids = ["VP-BDY-001", "VP-GUA-001"]
+tests = ["test/test_body.jl"]
+
+[[section]]
+id = "§11"
+vp_ids = ["VP-GRD-001", "VP-DEC-001"]
+tests = ["test/test_orderreach_graded.jl"]
+
+[[section]]
+id = "§12"
+vp_ids = ["VP-ADJ-001", "VP-WLD-001", "VP-INV-001"]
+tests = ["test/test_adjunction.jl", "test/test_world.jl"]
+
+[[section]]
+id = "§13"
+vp_ids = ["VP-ADJ-001", "VP-CLO-001", "VP-HNG-001", "VP-DC-001", "VP-BDY-001", "VP-WLD-001", "VP-REF-001"]
+tests = ["test/test_toy_systems.jl"]
+
+[[section]]
+id = "§14"
+vp_ids = ["VP-MRK-001"]
+tests = ["test/test_markers.jl"]
+
+[[section]]
+id = "§15"
+vp_ids = ["VP-DC-001", "VP-BDY-001", "VP-WDC-001"]
+tests = ["test/test_dc.jl", "test/test_body.jl", "test/test_worlddc.jl"]
+
+[[section]]
+id = "§16"
+vp_ids = []
+tests = ["test/test_formal_julia_contract.jl"]
+all_vps = true
+
+[[section]]
+id = "§17"
+vp_ids = ["VP-OPD-001"]
+tests = ["test/test_open_categorical_layers.jl"]
+
+[[section]]
+id = "§18"
+vp_ids = ["VP-AUD-001"]
+tests = ["test/test_open_categorical_layers.jl"]
+
+[[section]]
+id = "§19"
+vp_ids = ["VP-LIN-001"]
+tests = ["test/test_open_categorical_layers.jl"]
+
+[[section]]
+id = "§20"
+vp_ids = ["VP-TTR-001"]
+tests = ["test/test_open_categorical_layers.jl"]

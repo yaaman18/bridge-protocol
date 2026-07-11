@@ -1,0 +1,86 @@
+Precompiling ERIEC...
+   3247.9 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:333
+  Expression: occursin(declaration_regex(lean_name), text)
+   Evaluated: occursin(r"(?m)^(structure|def|theorem|inductive|abbrev)\s+normalized_V\b", "import Mathlib.Data.Finset.Card\nimport Mathlib.Data.Rat.Cast.Order\n\nnamespace ERIEC\n\nnamespace Value\n\n/-!\nFormal guardrail for §4 / §13-5 of\n`category/tensor_categorical_v5.md`.\n\nThe value tensor side is represented here only as an endogenous structural\nquantity: how much an environmental coupling contributes to `nuPhi`.\nPhenomenal mattering is a separate predicate. The file proves that structural\nweight alone does not entail phenomenal mattering; the entailment requires an\nexplicit bridge assumption.\n-/\n\nvariable {E C : Type*} [DecidableEq C]\n\n/-- A finitary proxy for `𝐕_w[e]`: the part of `e`'s contribution that lies in\nthe self-maintaining core `nuPhi`. This is the structural side only. -/\ndef viabilityContribution (nuPhi : Finset C) (contribution : E → Finset C)\n    (e : E) : Nat :=\n  ((contribution e).filter fun c => c ∈ nuPhi).card\n\n/-- Certified cardinality normalization; the nonempty premise is checked by\n`V_endogenous` callers before interpreting the quotient as a value weight. -/\nnoncomputable def normalized_V (nuPhi : Finset C)\n    (contribution : E → Finset C) (e : E) : ℚ :=\n  (viabilityContribution nuPhi contribution e : ℚ) / (nuPhi.card : ℚ)\n\n/-- Normalized structural value is extensional in its endogenous inputs. -/\ntheorem V_endogenous\n    {nuPhi₁ nuPhi₂ : Finset C} {contribution₁ contribution₂ : E → Finset C}\n    (hNu : nuPhi₁ = nuPhi₂) (hContribution : contribution₁ = contribution₂)\n    (e : E) :\n    normalized_V nuPhi₁ contribution₁ e = normalized_V nuPhi₂ contribution₂ e := by\n  subst nuPhi₂\n  subst contribution₂\n  rfl\n\n/-- Extensionality of the structural value computation: it depends only on\n`nuPhi` and the contribution map, not on a phenomenal predicate or set point. -/\ntheorem viabilityContribution_ext\n    {nuPhi₁ nuPhi₂ : Finset C} {contribution₁ contribution₂ : E → Finset C}\n    {e : E}\n    (hNu : nuPhi₁ = nuPhi₂)\n    (hContribution : contribution₁ e = contribution₂ e) :\n    viabilityContribution nuPhi₁ contribution₁ e =\n      viabilityContribution nuPhi₂ contribution₂ e := by\n  simp [viabilityContribution, hNu, hContribution]\n\n/-- Positive structural contribution to `nuPhi`. This is the formal counterpart\nof \"structural weight\" or \"viability contribution\", not mattering. -/\ndef HasStructuralWeight (nuPhi : Finset C) (contribution : E → Finset C)\n    (e : E) : Prop :=\n  0 < viabilityContribution nuPhi contribution e\n\n/-- Phenomenal mattering is intentionally a separate predicate. -/\nabbrev PhenomenalMattering (E : Type*) := E → Prop\n\n/-- A bridge is the extra §13-5 wager that identifies structural weight with\nphenomenal mattering. Without this, the implication is not available. -/\nstructure MatteringBridge (nuPhi : Finset C) (contribution : E → Finset C)\n    (mattering : PhenomenalMattering E) : Prop where\n  to_mattering :\n    ∀ e, HasStructuralWeight nuPhi contribution e → mattering e\n\ntheorem mattering_of_bridge\n    {nuPhi : Finset C} {contribution : E → Finset C}\n    {mattering : PhenomenalMattering E} {e : E}\n    (bridge : MatteringBridge nuPhi contribution mattering)\n    (hWeight : HasStructuralWeight nuPhi contribution e) :\n    mattering e :=\n  bridge.to_mattering e hWeight\n\nnamespace Countermodel\n\n/-- A one-coupling model with a nonzero structural contribution. -/\ndef nuPhi : Finset Unit := {()}\n\ndef contribution (_ : Unit) : Finset Unit := {()}\n\n/-- In the countermodel, phenomenal mattering is absent by stipulation. -/\ndef mattering : PhenomenalMattering Unit := fun _ => False\n\ntheorem has_structural_weight :\n    HasStructuralWeight nuPhi contribution () := by\n  simp [HasStructuralWeight, viabilityContribution, nuPhi, contribution]\n\ntheorem no_phenomenal_mattering :\n    ¬ mattering () := by\n  intro h\n  exact h\n\n/-- Therefore there is no theorem from structural weight alone to phenomenal\nmattering. Any such implication would be refuted by this model. -/\ntheorem no_general_structural_to_mattering :\n    ¬ (∀ (nuPhi : Finset Unit) (contribution : Unit → Finset Unit)\n        (mattering : PhenomenalMattering Unit),\n        HasStructuralWeight nuPhi contribution () → mattering ()) := by\n  intro h\n  exact no_phenomenal_mattering\n    (h nuPhi contribution mattering has_structural_weight)\n\nend Countermodel\n\n/-- The two §13-5 outlets of the same structural-to-phenomenal gap. -/\ninductive StructuralPhenomenalOutlet where\n  | tensorToLight\n  | valueToMattering\n  deriving DecidableEq\n\n/-- The gap kind at stake in §13-5: an extra bridge from third-person structure\nto first-person phenomenal fact. -/\ninductive GapKind where\n  | structuralToPhenomenal\n  deriving DecidableEq\n\n/-- Classify each outlet by the kind of gap it opens. -/\ndef outletGapKind : StructuralPhenomenalOutlet → GapKind\n  | .tensorToLight => .structuralToPhenomenal\n  | .valueToMattering => .structuralToPhenomenal\n\n/-- `𝐓 → light` and `𝐕 → mattering` are distinct outlets but the same\nstructural-to-phenomenal gap kind. -/\ntheorem tensor_and_value_outlets_share_gap_kind :\n    outletGapKind StructuralPhenomenalOutlet.tensorToLight =\n      outletGapKind StructuralPhenomenalOutlet.valueToMattering := by\n  rfl\n\nend Value\n\nend ERIEC\n")
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:333 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:333
+  Expression: occursin(declaration_regex(lean_name), text)
+   Evaluated: occursin(r"(?m)^(structure|def|theorem|inductive|abbrev)\s+Wld_band\b", "import ERIEC.Sensitivity\n\nopen scoped RealInnerProductSpace\n\nnamespace ERIEC\n\nnamespace World\n\n/-!\nMinimal formal layer for the actuated world `Wld`.\n\nThe numerical Julia implementation extracts an eigenspace of\n`L = T^* ∘ T` near eigenvalue `1`. Lean fixes the structural core first:\n`L` is the body/sensitivity loop operator, and a nonzero fixed vector of `L`\nis a nontrivial actuated-world direction. Spectral approximation is a numerical\nlayer, not part of this file.\n-/\n\n/-- The world loop operator `L = T^* ∘ T` on action space. -/\nnoncomputable def worldLoop {m e : Nat}\n    (sigma : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e))\n    (a : EuclideanSpace ℝ (Fin m)) :\n    EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m) :=\n  (Sens.T_w_adjoint sigma a).comp (Sens.T_w sigma a)\n\ntheorem worldLoop_def {m e : Nat}\n    (sigma : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e))\n    (a : EuclideanSpace ℝ (Fin m)) :\n    worldLoop sigma a = (Sens.T_w_adjoint sigma a).comp (Sens.T_w sigma a) :=\n  rfl\n\n/-- A vector fixed by the world loop, corresponding to eigenvalue `1`. -/\ndef WorldFixedVector {m : Nat}\n    (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m))\n    (x : EuclideanSpace ℝ (Fin m)) : Prop :=\n  L x = x\n\n/-- `Wld` is nontrivial when the loop has a nonzero fixed direction. -/\ndef WldNontrivial {m : Nat}\n    (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) : Prop :=\n  ∃ x : EuclideanSpace ℝ (Fin m), x ≠ 0 ∧ WorldFixedVector L x\n\n/-- Spectral band generated by eigenvectors whose eigenvalues lie near one. -/\nnoncomputable def Wld_band {m : Nat}\n    (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m))\n    (eta : ℝ) : Submodule ℝ (EuclideanSpace ℝ (Fin m)) :=\n  Submodule.span ℝ\n    {x | ∃ lambda : ℝ, |lambda - 1| ≤ eta ∧ L x = lambda • x}\n\ntheorem fixedVector_witnesses_nontrivial {m : Nat}\n    {L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)}\n    {x : EuclideanSpace ℝ (Fin m)}\n    (hx0 : x ≠ 0)\n    (hfix : WorldFixedVector L x) :\n    WldNontrivial L :=\n  ⟨x, hx0, hfix⟩\n\n/-- The loop inner product reduces to the sensitivity inner product. -/\ntheorem worldLoop_inner {m e : Nat}\n    (sigma : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e))\n    (a : EuclideanSpace ℝ (Fin m))\n    (x y : EuclideanSpace ℝ (Fin m)) :\n    inner ℝ (worldLoop sigma a x) y =\n      inner ℝ (Sens.T_w sigma a x) (Sens.T_w sigma a y) := by\n  simpa [worldLoop, Sens.T_w_adjoint] using\n    ContinuousLinearMap.adjoint_inner_left (Sens.T_w sigma a) y (Sens.T_w sigma a x)\n\n/-- `L = T^* ∘ T` is symmetric with respect to the real inner product. -/\ntheorem worldLoop_symmetric {m e : Nat}\n    (sigma : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e))\n    (a : EuclideanSpace ℝ (Fin m))\n    (x y : EuclideanSpace ℝ (Fin m)) :\n    inner ℝ (worldLoop sigma a x) y =\n      inner ℝ x (worldLoop sigma a y) := by\n  calc\n    inner ℝ (worldLoop sigma a x) y =\n        inner ℝ (Sens.T_w sigma a x) (Sens.T_w sigma a y) := by\n          exact worldLoop_inner sigma a x y\n    _ = inner ℝ x (worldLoop sigma a y) := by\n          simpa [worldLoop, Sens.T_w_adjoint] using\n            (ContinuousLinearMap.adjoint_inner_right\n              (Sens.T_w sigma a) x (Sens.T_w sigma a y)).symm\n\nend World\n\nend ERIEC\n")
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:333 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:383
+  Expression: certified_artifact_ok(artifact_check)
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:383 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:385
+  Expression: isempty(artifact_check.missing_lean)
+   Evaluated: isempty(CertifiedContract[CertifiedContract("world.spectral_band", "ERIEC.World", "Wld_band", "def", :world_band, :world_band)])
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:385 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:390
+  Expression: summary.ok
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:390 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:1
+  Got exception outside of a @test
+  ArgumentError: cannot certify payload with a failing artifact check
+  Stacktrace:
+   [1] certified_artifact_envelope(payload::@NamedTuple{kind::Symbol}, check::CertifiedArtifactCheck)
+     @ ERIEC ~/erie-c/src/certification.jl:228
+   [2] macro expansion
+     @ ~/erie-c/test/test_formal_julia_contract.jl:407 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/erie-c/test/test_formal_julia_contract.jl:2
+   [5] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [6] top-level scope
+     @ none:1
+Test Summary:       | Pass  Fail  Error  Total   Time
+Lean Julia contract |  441     5      1    447  10.3s
+ERROR: LoadError: Some tests did not pass: 441 passed, 5 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:1

@@ -1,0 +1,66 @@
+⚠ [2715/2766] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2722/2766] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2728/2766] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:245:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:246:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:248:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:259:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:285:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2729/2766] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2745/2766] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [2763/2766] Built ERIEC.Gate (1.1s)
+✖ [2764/2766] Building ERIEC.Gap (6.1s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Gap.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Gap.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Gap.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Gap.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Gap.setup.json --json
+error: formal/ERIEC/Gap.lean:65:11: Unknown constant `Set.not_subset_iff_exists_mem_not_mem.mp`
+error: formal/ERIEC/Gap.lean:65:66: Tactic `rcases` failed: `x✝ : ?m.87` is not an inductive datatype
+warning: formal/ERIEC/Gap.lean:89:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Gap
+error: build failed

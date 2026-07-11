@@ -1,0 +1,9 @@
+import ERIEC.Wager
+
+namespace ERIECV2.Statement.VP2_WAGER_INTERPRETIVE_CHECKER_001
+
+#check ERIEC.Wager.FrozenInterpretiveCheck
+#check ERIEC.Wager.frozen_interpretive_checker_soundness
+#print axioms ERIEC.Wager.frozen_interpretive_checker_soundness
+
+end ERIECV2.Statement.VP2_WAGER_INTERPRETIVE_CHECKER_001

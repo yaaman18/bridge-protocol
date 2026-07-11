@@ -1,0 +1,12 @@
+ERROR: MethodError: no method matching verify_lean_certified_artifact(; contract_id::String)
+This error has been manually thrown, explicitly, so the method may exist but be intentionally marked as unimplemented.
+
+Closest candidates are:
+  verify_lean_certified_artifact(; project_root, julia_module) got unsupported keyword argument "contract_id"
+   @ ERIEC ~/erie-c/src/certification.jl:175
+
+Stacktrace:
+ [1] kwerr(kw::@NamedTuple{contract_id::String}, args::Function)
+   @ Base ./error.jl:165
+ [2] top-level scope
+   @ none:1

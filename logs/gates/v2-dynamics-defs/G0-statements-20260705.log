@@ -1,0 +1,15 @@
+ERIEC.Dynamics.R2Prime : (W → Set C → W) → Prop
+ERIEC.Dynamics.InternallyTotal : (S → S → Prop) → Prop
+ERIEC.Dynamics.TotalNext : (S → S → Prop) → Type u
+specs/statements/VP2-DYN-TOTAL-DATA-001.lean:14:10: error: don't know how to synthesize implicit argument `S`
+  @Statement ?m.1
+context:
+S : Type u
+⊢ Type ?u.3
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+specs/statements/VP2-DYN-TOTAL-DATA-001.lean:14:23: error: unsolved goals
+S : Type u
+stepInt : ?m.9 → ?m.9 → Prop
+total : ERIEC.Dynamics.TotalNext stepInt
+⊢ ERIEC.Dynamics.InternallyTotal stepInt

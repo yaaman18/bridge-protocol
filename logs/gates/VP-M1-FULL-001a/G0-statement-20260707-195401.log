@@ -1,0 +1,6 @@
+ERIEC.RefModel.LargeStableReferenceWitness (k : ℕ) : Type
+ERIEC.RefModel.LargeDynamicReferenceWitness (k : ℕ) : Type
+ERIEC.RefModel.LargeAXCoreReferenceWitness (k : ℕ) : Type
+ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model : ∀ (k : ℕ),
+  2 ≤ k → Nonempty (ERIEC.RefModel.LargeAXCoreReferenceWitness k)
+'ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model' depends on axioms: [propext, Classical.choice, Quot.sound]

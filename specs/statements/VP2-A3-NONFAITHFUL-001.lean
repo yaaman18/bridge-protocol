@@ -1,0 +1,14 @@
+import ERIEC.LayerComposition
+
+open ERIEC.LayerComposition
+
+namespace ERIECV2.Statement.VP2_A3_NONFAITHFUL_001
+
+#check ERIEC.LayerComposition.viableToHilbert_maps_bool_isos_equal
+#check ERIEC.LayerComposition.viableToHilbert_not_faithful
+#check ERIEC.LayerComposition.no_bool_hom_left_inverse
+
+#print axioms ERIEC.LayerComposition.viableToHilbert_not_faithful
+#print axioms ERIEC.LayerComposition.no_bool_hom_left_inverse
+
+end ERIECV2.Statement.VP2_A3_NONFAITHFUL_001

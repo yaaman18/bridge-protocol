@@ -1,0 +1,13 @@
+import ERIEC.BridgeFunctor
+
+open ERIEC.BridgeFunctor
+
+namespace ERIECV2.Statement.VP2_A1_STRICT_FUNCTOR_001
+
+#check ERIEC.BridgeFunctor.strictHingeClassifierFunctor
+#check ERIEC.BridgeFunctor.strictHingeClassifier_loop_eq
+#check ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines
+
+#print axioms ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines
+
+end ERIECV2.Statement.VP2_A1_STRICT_FUNCTOR_001

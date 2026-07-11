@@ -1,0 +1,37 @@
+ERROR: LoadError: Some tests did not pass: 10 passed, 0 failed, 2 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_toy_systems.jl:1
+toy recurrent system: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_toy_systems.jl:40
+  Test threw exception
+  Expression: weighted_sensitivity(tensor, weights) ≈ tensor
+  DimensionMismatch: weights length must match tensor column count
+  Stacktrace:
+   [1] weighted_sensitivity(tensor::Matrix{Float64}, weights::Vector{Float64})
+     @ ERIEC ~/erie-c/src/weighted.jl:4
+   [2] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [3] macro expansion
+     @ ~/erie-c/test/test_toy_systems.jl:40 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/erie-c/test/test_toy_systems.jl:2
+toy recurrent system: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_toy_systems.jl:1
+  Got exception outside of a @test
+  DimensionMismatch: weights length must match tensor column count
+  Stacktrace:
+   [1] weighted_sensitivity(tensor::Matrix{Float64}, weights::Vector{Float64})
+     @ ERIEC ~/erie-c/src/weighted.jl:4
+   [2] run_system_pipeline(adapter::SigmaSystemAdapter{Vector{Float64}, ERIEC.var"#95#96"{ToyRecurrentSystem{Matrix{Float64}, Matrix{Float64}}}, typeof(toy_recurrent_features)}, action::Vector{Float64}, dc_result::DCResult; weights::Vector{Float64}, direction::Vector{Float64}, target::Float64, eig_tol::Float64, fixed_tol::Float64, reachable_directions::Vector{Float64}, action_index::Int64, fm1_with_action::Bool, fm1_without_action::Bool, interoceptive_signal::Vector{Float64}, wld_method::Symbol, wld_rank::Nothing, wld_oversample::Int64, wld_power_iterations::Int64, wld_seed::Int64)
+     @ ERIEC ~/erie-c/src/system_adapter.jl:105
+   [3] macro expansion
+     @ ~/erie-c/test/test_toy_systems.jl:53 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/erie-c/test/test_toy_systems.jl:2
+   [6] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [7] top-level scope
+     @ none:1
+Test Summary:        | Pass  Error  Total   Time
+toy recurrent system |   10      2     12  14.8s

@@ -1,0 +1,33 @@
+ERIEC.Wager.RawCore.{u_1, u_2, u_3} (A : Type u_1) (E : Type u_2) (C : Type u_3) : Type (max (max u_1 u_2) u_3)
+ERIEC.Wager.ConvHolds.{u_1, u_2, u_3} {A : Type u_1} {E : Type u_2} {C : Type u_3} (core : ERIEC.Wager.RawCore A E C) :
+  Prop
+ERIEC.Wager.FrozenImpl.{u_1, u_2, u_3, u_4} (A : Type u_1) (E : Type u_2) (C : Type u_3) (S : Type u_4) :
+  Type (max (max (max u_1 u_2) u_3) u_4)
+ERIEC.Wager.W1.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (Ph : S → Prop) : Prop
+ERIEC.Wager.W2.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (Mat : S → E → Prop) : Prop
+ERIEC.Wager.W3.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (Ph : S → Prop) : Prop
+ERIEC.Wager.W4.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) : Prop
+ERIEC.Wager.W5.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (k0 : ℕ) : Prop
+ERIEC.Wager.W6.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) : Prop
+ERIEC.Wager.W1_indep.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (s0 : S) (hleft : impl.dc s0 ∧ impl.nontrivial) :
+  (∃ Ph, ERIEC.Wager.W1 impl Ph) ∧ ∃ Ph, ¬ERIEC.Wager.W1 impl Ph
+ERIEC.Wager.W2_indep.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (s0 : S) (e0 : E) (hdc : impl.dc s0) (hpos : impl.positiveValue s0 e0) :
+  (∃ Mat, ERIEC.Wager.W2 impl Mat) ∧ ∃ Mat, ¬ERIEC.Wager.W2 impl Mat
+ERIEC.Wager.W3_indep.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) (s0 : S) (hconscious : impl.consciousHinge s0) :
+  (∃ Ph, ERIEC.Wager.W3 impl Ph) ∧ ∃ Ph, ¬ERIEC.Wager.W3 impl Ph
+ERIEC.Wager.W4_indep : ERIEC.Wager.W4 ERIEC.Wager.consistentImpl ∧ ¬ERIEC.Wager.W4 ERIEC.Wager.inconsistentImpl
+ERIEC.Wager.W6_indep : ERIEC.Wager.W6 ERIEC.Wager.consistentImpl ∧ ¬ERIEC.Wager.W6 ERIEC.Wager.noViableImpl
+'ERIEC.Wager.W1_indep' depends on axioms: [propext, Quot.sound]
+'ERIEC.Wager.W2_indep' depends on axioms: [propext, Quot.sound]
+'ERIEC.Wager.W3_indep' depends on axioms: [propext, Quot.sound]
+'ERIEC.Wager.W4_indep' depends on axioms: [propext, Quot.sound]
+'ERIEC.Wager.W6_indep' depends on axioms: [propext, Quot.sound]

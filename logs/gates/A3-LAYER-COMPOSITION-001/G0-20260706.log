@@ -1,0 +1,14 @@
+ERIEC.LayerComposition.relationalToHingeFunctor.{u} :
+  CategoryTheory.Functor ERIEC.ViabilityClosure.RelationalFrameObject ERIEC.StructuralHinge.StructuralHingeData
+ERIEC.LayerComposition.viableToHilbertFunctor.{u} :
+  CategoryTheory.Functor ERIEC.ViabilityClosure.ViableCategoryObject
+    (ERIEC.HilbertIntertwiner.EndomorphismObject (EuclideanSpace ℝ (Fin 1)))
+ERIEC.LayerComposition.viableToHilbert_comp_assoc.{u_1} :
+  (ERIEC.ViabilityClosure.viabilityRelationalFunctor.comp relationalToHingeFunctor).comp
+      ERIEC.StructuralHinge.structuralHingeHilbertFunctor =
+    ERIEC.ViabilityClosure.viabilityRelationalFunctor.comp
+      (relationalToHingeFunctor.comp ERIEC.StructuralHinge.structuralHingeHilbertFunctor)
+ERIEC.LayerComposition.viableToHilbert_nontrivial_iff.{u} (X : ERIEC.ViabilityClosure.ViableCategoryObject) :
+  ERIEC.World.WldNontrivial (viableToHilbertFunctor.obj X).op ↔ (ERIEC.ViabilityClosure.viableSet X.system).Nonempty
+'ERIEC.LayerComposition.viableToHilbert_comp_assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.LayerComposition.viableToHilbert_nontrivial_iff' depends on axioms: [propext, Classical.choice, Quot.sound]

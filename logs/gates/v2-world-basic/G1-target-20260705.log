@@ -1,0 +1,25 @@
+✖ [2361/2361] Building ERIEC.World (14s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/World.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/World.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/World.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/World.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/World.setup.json --json
+error: formal/ERIEC/World.lean:65:27: unsolved goals
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+x : EuclideanSpace ℝ (Fin m)
+⊢ L x - x = 0 ↔ L x = x
+error: formal/ERIEC/World.lean:95:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.96 ∈ Fix ?m.95
+in the target expression
+  x ∈ ↑(Fix L)
+
+case a
+m : ℕ
+L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)
+x : EuclideanSpace ℝ (Fin m)
+lambda : ℝ
+hBand : |lambda - 1| ≤ 0
+hEigen : L x = lambda • x
+hLambda : lambda = 1
+⊢ x ∈ ↑(Fix L)
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.World
+error: build failed

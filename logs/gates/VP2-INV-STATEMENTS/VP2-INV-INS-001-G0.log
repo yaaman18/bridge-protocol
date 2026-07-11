@@ -1,0 +1,12 @@
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {Ω} {F} {F'} {step} {step'} {observe} {observe'} =>
+  INS_invariant : ∀ {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6}
+  {C' : Type u_7} {S' : Type u_8} {W : Type u_9} {Ω : Type u_10} {F : StaticFrame A E C S W}
+  {F' : StaticFrame A' E' C' S' W} {step : S → S → Prop} {step' : S' → S' → Prop} {observe : S → Ω} {observe' : S' → Ω}
+  (h : KIso F F'),
+  DynamicIso h step step' observe observe' →
+    (INS observe (K step {s | F.DCAt s}) ↔ INS observe' (K step' {s | F'.DCAt s}))
+specs/statements/VP2-INV-INS-001.lean:13:5: warning: Variable name `hdyn` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

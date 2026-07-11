@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4286.5 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary:                 | Pass  Total  Time
+finite relation linearization |   14     14  5.2s

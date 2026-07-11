@@ -1,0 +1,2 @@
+ERIEC.RefModel.StableReferenceWitness : Type
+ERIEC.RefModel.stable_reference_model : Nonempty ERIEC.RefModel.StableReferenceWitness

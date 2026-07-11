@@ -1,0 +1,7 @@
+ERIEC.LayerComposition.viableToHilbert_maps_bool_isos_equal :
+  viableToHilbertFunctor.map boolIdentityIso = viableToHilbertFunctor.map boolToggleIso
+ERIEC.LayerComposition.viableToHilbert_not_faithful : ¬Function.Injective fun f => viableToHilbertFunctor.map f
+ERIEC.LayerComposition.no_bool_hom_left_inverse :
+  ¬∃ recover, ∀ (f : boolViableObject ⟶ boolViableObject), recover (viableToHilbertFunctor.map f) = f
+'ERIEC.LayerComposition.viableToHilbert_not_faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.LayerComposition.no_bool_hom_left_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]

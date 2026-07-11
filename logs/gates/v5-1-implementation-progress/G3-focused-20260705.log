@@ -1,0 +1,20 @@
+Test Summary: | Pass  Total  Time
+adjunction    |   11     11  1.0s
+Test Summary:            | Pass  Total  Time
+ranked relation presheaf |    2      2  0.1s
+Test Summary:                | Pass  Total  Time
+critical rank collapse bound |    2      2  0.1s
+Test Summary: | Pass  Total  Time
+closure       |   17     17  0.4s
+Test Summary: | Pass  Total  Time
+dc            |    8      8  0.4s
+Test Summary:                | Pass  Total  Time
+critical certification bound |    3      3  0.0s
+Test Summary: | Pass  Total  Time
+sensitivity   |    6      6  3.2s
+Test Summary:                | Pass  Total  Time
+terminal and mutation guards |    4      4  0.1s
+Test Summary:     | Pass  Total  Time
+copair uniqueness |    2      2  0.0s
+Test Summary:      | Pass  Total  Time
+functional markers |   11     11  4.3s

@@ -1,0 +1,18 @@
+fun {C} {C'} {W} =>
+  ERIEC.Invariance.DriftEquivariant : {C : Type u_1} →
+  {C' : Type u_2} → {W : Type u_3} → C ≃ C' → (W → Set C → W) → (W → Set C' → W) → Prop
+specs/statements/VP2-INV-DRIFT-001.lean:6:22: warning: Variable name `hC` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+specs/statements/VP2-INV-DRIFT-001.lean:7:5: warning: Variable name `drift` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+specs/statements/VP2-INV-DRIFT-001.lean:7:29: warning: Variable name `drift'` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

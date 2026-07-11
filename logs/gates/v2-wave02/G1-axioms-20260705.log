@@ -1,0 +1,3 @@
+'ERIEC.Value.V_welldef' does not depend on any axioms
+'ERIEC.Value.V_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Value.V_endogenous' depends on axioms: [propext, Classical.choice, Quot.sound]

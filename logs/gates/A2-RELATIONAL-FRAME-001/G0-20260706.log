@@ -1,0 +1,17 @@
+ERIEC.ViabilityClosure.phi_reflexiveStep_eq_successorClosure.{u} (A : ERIEC.OpenEvolution.OpenSystem)
+  (K : Set (ERIEC.OpenEvolution.Config A)) : ERIEC.Closure.Phi identityRel (reflexiveStepRel A) K = successorClosure A K
+ERIEC.ViabilityClosure.tPrime_reflexiveStep_eq_successorClosure.{u} (A : ERIEC.OpenEvolution.OpenSystem)
+  (K : Set (ERIEC.OpenEvolution.Config A)) :
+  ERIEC.Hinge.T_prime identityRel (reflexiveStepRel A) K = successorClosure A K
+ERIEC.ViabilityClosure.viabilityRelationalFrame.{u} (A : ERIEC.OpenEvolution.ViableSystem) :
+  RelationalClosureFrame (ERIEC.OpenEvolution.Config A.toOpenSystem)
+ERIEC.ViabilityClosure.viabilityRelationalFrame_left_fixed.{u} (A : ERIEC.OpenEvolution.ViableSystem) :
+  ERIEC.Closure.Phi (viabilityRelationalFrame A).piRel (viabilityRelationalFrame A).rhoRel
+      (viabilityRelationalFrame A).kappa =
+    (viabilityRelationalFrame A).kappa
+ERIEC.ViabilityClosure.viabilityRelationalFrame_right_fixed.{u} (A : ERIEC.OpenEvolution.ViableSystem) :
+  ERIEC.Hinge.T_prime (viabilityRelationalFrame A).alphaRel (viabilityRelationalFrame A).sigmaRel
+      (viabilityRelationalFrame A).epsilon =
+    (viabilityRelationalFrame A).epsilon
+'ERIEC.ViabilityClosure.viabilityRelationalFrame_left_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.ViabilityClosure.viabilityRelationalFrame_right_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]

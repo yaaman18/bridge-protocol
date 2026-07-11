@@ -1,0 +1,31 @@
+Precompiling ERIEC...
+   3789.0 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 4 passed, 2 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_richness.jl:1
+Richness: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_richness.jl:7
+  Expression: !(check_hinge_branch_pump(sigma_rel = Dict(:e0 => Set([:m0]), :e1 => Set{Symbol}())))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_richness.jl:7 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_richness.jl:2
+Richness: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_richness.jl:10
+  Expression: !(check_hinge_branch_pump(epsilon = Set([:e0])))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_richness.jl:10 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_richness.jl:2
+Test Summary: | Pass  Fail  Total  Time
+Richness      |    4     2      6  2.9s

@@ -1,0 +1,4 @@
+formal/ERIEC/LayerComposition.lean:159:4: error: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.60
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

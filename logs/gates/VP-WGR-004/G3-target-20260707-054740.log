@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4405.6 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary: | Pass  Total  Time
+Frozen wagers |    6      6  0.6s

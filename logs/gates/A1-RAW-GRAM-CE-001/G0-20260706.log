@@ -1,0 +1,3 @@
+raw_gram_bridge_counterexample : ∃ alphaRel rhoRel sigmaRel kappa epsilon,
+  HingeWitness rhoRel sigmaRel kappa epsilon ∧ ¬MatrixFixedNontrivial (relationGram alphaRel)
+'ERIEC.BridgeFunctor.raw_gram_bridge_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]

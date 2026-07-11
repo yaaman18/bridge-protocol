@@ -1,0 +1,5 @@
+strict_naturality_fails_for_relationHom : ∃ rel rel' h,
+  relationMatrix rel () () ≠ relationMatrix rel' (h.onCodomain ()) (h.onDomain ())
+'ERIEC.InterfaceLinearization.strict_naturality_fails_for_relationHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,10 @@
+ERIEC.Wager.KBad : ERIEC.Wager.RawCore Unit Bool Unit
+ERIEC.Wager.M0 : ERIEC.Wager.FrozenImpl Unit Unit Unit Unit
+ERIEC.Wager.KPlus : ERIEC.Wager.RawCore Unit Unit Unit
+ERIEC.Wager.MPlus : ERIEC.Wager.FrozenImpl Unit Unit Unit Unit
+ERIEC.Wager.MCyc : ERIEC.Wager.FrozenImpl Unit Unit Unit Unit
+ERIEC.Wager.named_frozen_models_boundary :
+  ¬ERIEC.Wager.ConvHolds ERIEC.Wager.KBad ∧
+    ERIEC.Wager.ConvHolds ERIEC.Wager.KPlus ∧
+      ERIEC.Wager.W6 ERIEC.Wager.M0 ∧ ¬ERIEC.Wager.W6 ERIEC.Wager.MPlus ∧ ERIEC.Wager.W6 ERIEC.Wager.MCyc
+'ERIEC.Wager.named_frozen_models_boundary' depends on axioms: [propext, Quot.sound]

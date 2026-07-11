@@ -1,0 +1,11 @@
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} =>
+  static_closure_bisim : ∀ {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6}
+  {C' : Type u_7} {S' : Type u_8} {W : Type u_9} {F : StaticFrame A E C S W} {F' : StaticFrame A' E' C' S' W}
+  (h : KIso F F'),
+  (∀ (Y : Set C),
+      image h.hC (ERIEC.Closure.Phi F.piRel F.rhoRel Y) = ERIEC.Closure.Phi F'.piRel F'.rhoRel (image h.hC Y)) ∧
+    image h.hC (ERIEC.Closure.nu (ERIEC.Closure.Phi F.piRel F.rhoRel)) =
+        ERIEC.Closure.nu (ERIEC.Closure.Phi F'.piRel F'.rhoRel) ∧
+      ∀ (K : Set C) (X : Set E),
+        image h.hA (ERIEC.Closure.rho_star F.rhoRel K ∩ ERIEC.Adj.sigma_star F.sigmaRel X) =
+          ERIEC.Closure.rho_star F'.rhoRel (image h.hC K) ∩ ERIEC.Adj.sigma_star F'.sigmaRel (image h.hE X)

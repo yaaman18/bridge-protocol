@@ -1,0 +1,12 @@
+formal/ERIEC/LayerComposition.lean:117:18: error: unsolved goals
+x✝¹ x✝ : boolViableSystem.toOpenSystem.Fast × boolViableSystem.toOpenSystem.Slow × boolViableSystem.toOpenSystem.Env
+⊢ x✝ ∈ ∅ ↔ toggleConfig x✝ ∈ ∅
+formal/ERIEC/LayerComposition.lean:120:78: error: unsolved goals
+h : boolIdentityIso = boolToggleIso
+hAt :
+  (false, (), ()) =
+    { toFun := fun c => (!c.1, c.2), invFun := fun c => (!c.1, c.2), left_inv := toggleConfig._proof_1,
+        right_inv := toggleConfig._proof_1 }
+      (false, (), ())
+⊢ False
+formal/ERIEC/LayerComposition.lean:125:25: warning: declaration uses `sorry`

@@ -1,0 +1,19 @@
+✖ [2362/2362] Building ERIEC.InterfaceLinearization (6.7s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/InterfaceLinearization.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.setup.json --json
+error: formal/ERIEC/InterfaceLinearization.lean:111:2: unsolved goals
+case neg
+M : Type u_1
+E : Type u_2
+M' : Type u_3
+E' : Type u_4
+rel : M → Set E
+rel' : M' → Set E'
+h : RelationHom rel rel'
+m : M
+e : E
+hmem : e ∉ rel m
+⊢ 0 ≤ if h.onCodomain e ∈ rel' (h.onDomain m) then 1 else 0
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.InterfaceLinearization
+error: build failed

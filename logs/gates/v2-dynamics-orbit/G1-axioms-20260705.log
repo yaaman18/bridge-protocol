@@ -1,0 +1,1 @@
+'ERIEC.Dynamics.total_orbit_collapse' depends on axioms: [propext, Quot.sound]

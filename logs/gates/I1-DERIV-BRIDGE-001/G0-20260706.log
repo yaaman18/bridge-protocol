@@ -1,0 +1,8 @@
+fun {m e} =>
+  converse_linearization_eq_sensitivity_adjoint : ∀ {m e : ℕ} (sys : ERIEC.Adj.ConvSystem (Fin m) (Fin e))
+  (response : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e)) (base : EuclideanSpace ℝ (Fin m)),
+  RealizesSensitivityAt sys.alphaRel response base →
+    linearizeRelation sys.sigmaRel = ↑(ERIEC.Sens.T_w_adjoint response base)
+'ERIEC.InterfaceLinearization.converse_linearization_eq_sensitivity_adjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

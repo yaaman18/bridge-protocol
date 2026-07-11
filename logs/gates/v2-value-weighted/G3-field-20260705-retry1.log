@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4068.8 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+Test Summary:                | Pass  Total     Time
+field coupled system adapter |  142    142  1m12.5s

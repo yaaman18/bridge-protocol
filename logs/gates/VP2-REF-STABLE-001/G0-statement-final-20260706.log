@@ -1,0 +1,3 @@
+ERIEC.RefModel.StableReferenceWitness : Type
+ERIEC.RefModel.stable_reference_model : Nonempty ERIEC.RefModel.StableReferenceWitness
+'ERIEC.RefModel.stable_reference_model' depends on axioms: [propext, Classical.choice, Quot.sound]

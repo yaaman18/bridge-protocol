@@ -1,0 +1,21 @@
+formal/ERIEC/ViabilityClosure.lean:137:54: error: Type mismatch: After simplification, term
+  hy
+ has type
+  y ∈ viableSet B
+but is expected to have type
+  B.viable y
+formal/ERIEC/ViabilityClosure.lean:177:26: error: Application type mismatch: The argument
+  ((viabilityClosureFunctor W).obj X).pair.stage
+has type
+  W → Set (Config ((viabilityClosureFunctor W).obj X).system.toOpenSystem)
+of sort `Type (max u v)` but is expected to have type
+  Set (Config X.system.toOpenSystem)
+of sort `Type u` in the application
+  ⇑f.mapConfig '' ((viabilityClosureFunctor W).obj X).pair.stage
+formal/ERIEC/ViabilityClosure.lean:178:6: error: Type mismatch
+  ((viabilityClosureFunctor W).obj Y).pair.stage w
+has type
+  Set (Config ((viabilityClosureFunctor W).obj Y).system.toOpenSystem)
+of sort `Type u` but is expected to have type
+  Prop
+of sort `Type`

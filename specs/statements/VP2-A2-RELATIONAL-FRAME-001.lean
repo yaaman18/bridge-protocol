@@ -1,0 +1,16 @@
+import ERIEC.ViabilityClosure
+
+open ERIEC.ViabilityClosure
+
+namespace ERIECV2.Statement.VP2_A2_RELATIONAL_FRAME_001
+
+#check ERIEC.ViabilityClosure.phi_reflexiveStep_eq_successorClosure
+#check ERIEC.ViabilityClosure.tPrime_reflexiveStep_eq_successorClosure
+#check ERIEC.ViabilityClosure.viabilityRelationalFrame
+#check ERIEC.ViabilityClosure.viabilityRelationalFrame_left_fixed
+#check ERIEC.ViabilityClosure.viabilityRelationalFrame_right_fixed
+
+#print axioms ERIEC.ViabilityClosure.viabilityRelationalFrame_left_fixed
+#print axioms ERIEC.ViabilityClosure.viabilityRelationalFrame_right_fixed
+
+end ERIECV2.Statement.VP2_A2_RELATIONAL_FRAME_001

@@ -1,0 +1,17 @@
+ERIEC.ViabilityClosure.RelationalFrameIso.{u} (X Y : RelationalFrameObject) : Type u
+ERIEC.ViabilityClosure.viabilityRelationalFunctor.{u} :
+  CategoryTheory.Functor ViableCategoryObject RelationalFrameObject
+ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural.{u} {X Y : ViableCategoryObject} (f : X ⟶ Y)
+  (x : ERIEC.OpenEvolution.Config X.system.toOpenSystem) :
+  x ∈ (viabilityRelationalFunctor.obj X).frame.kappa ↔
+    (viabilityRelationalFunctor.map f).onX x ∈ (viabilityRelationalFunctor.obj Y).frame.kappa
+ERIEC.ViabilityClosure.viabilityRelationalFunctor_epsilon_natural.{u} {X Y : ViableCategoryObject} (f : X ⟶ Y)
+  (x : ERIEC.OpenEvolution.Config X.system.toOpenSystem) :
+  x ∈ (viabilityRelationalFunctor.obj X).frame.epsilon ↔
+    (viabilityRelationalFunctor.map f).onX x ∈ (viabilityRelationalFunctor.obj Y).frame.epsilon
+'ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.ViabilityClosure.viabilityRelationalFunctor_epsilon_natural' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

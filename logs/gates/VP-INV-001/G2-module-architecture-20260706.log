@@ -1,0 +1,57 @@
+ERROR: LoadError: Some tests did not pass: 540 passed, 3 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:1
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:509
+  Expression: certified_artifact_ok(artifact_check)
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:509 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:511
+  Expression: isempty(artifact_check.missing_lean)
+   Evaluated: isempty(CertifiedContract[CertifiedContract("invariance.update_bisimulation", "ERIEC.Invariance", "upd_bisim", "theorem", :check_update_bisimulation, :check_update_bisimulation)])
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:511 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:516
+  Expression: summary.ok
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:516 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:1
+  Got exception outside of a @test
+  ArgumentError: cannot certify payload with a failing artifact check
+  Stacktrace:
+   [1] certified_artifact_envelope(payload::@NamedTuple{kind::Symbol}, check::CertifiedArtifactCheck)
+     @ ERIEC ~/erie-c/src/certification.jl:228
+   [2] macro expansion
+     @ ~/erie-c/test/test_formal_julia_contract.jl:533 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/erie-c/test/test_formal_julia_contract.jl:2
+   [5] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [6] top-level scope
+     @ none:1
+Test Summary:       | Pass  Fail  Error  Total   Time
+Lean Julia contract |  540     3      1    544  10.5s

@@ -1,0 +1,7 @@
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} =>
+  static_rel_bisim : ∀ {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6}
+  {C' : Type u_7} {S' : Type u_8} {W : Type u_9} {F : StaticFrame A E C S W} {F' : StaticFrame A' E' C' S' W}
+  (h : KIso F F'),
+  (∀ (a : A), image h.hE (F.alphaRel a) = F'.alphaRel (h.hA a)) ∧
+    (∀ (e : E), image h.hA (F.sigmaRel e) = F'.sigmaRel (h.hE e)) ∧
+      (∀ (a : A), image h.hC (F.piRel a) = F'.piRel (h.hA a)) ∧ ∀ (c : C), image h.hA (F.rhoRel c) = F'.rhoRel (h.hC c)

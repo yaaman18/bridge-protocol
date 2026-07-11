@@ -1,0 +1,2 @@
+specs/statements/VP2-WLD-SLOWING-001.lean:5:8: error(lean.unknownIdentifier): Unknown identifier `ERIEC.World.CriticalSlowingConjecture`
+fun {S} => sorry : {S : Type u_1} → ((ℕ → S) → Prop) → (S → ℝ) → (S → ℝ) → Prop

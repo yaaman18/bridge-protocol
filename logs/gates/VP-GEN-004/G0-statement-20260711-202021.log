@@ -1,0 +1,8 @@
+ERIEC.Generation.richness_inherits_generational.{u} {M E C S M' E' C' S' : Type u} {parent : ERIEC.DC M E C S}
+  {child : ERIEC.DC M' E' C' S'} (f : ERIEC.Generation.ProliferationMorphism parent child) {m : M}
+  (hm : m ∈ ERIEC.Hinge.Act parent.rhoRel parent.sigmaRel parent.kappa parent.epsilon parent.s)
+  (hbranch : ERIEC.Richness.Branch parent.alphaRel m) :
+  ∃ m' ∈ ERIEC.Hinge.Act child.rhoRel child.sigmaRel child.kappa child.epsilon child.s,
+    ERIEC.Richness.Branch child.alphaRel m' ∧
+      child.alphaRel m' ⊆ ERIEC.Closure.nu (ERIEC.Hinge.T_prime child.alphaRel child.sigmaRel)
+'ERIEC.Generation.richness_inherits_generational' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,23 @@
+fun {C} {E} {C'} {E'} {W} =>
+  upd_bisim : ∀ {C : Type u_1} {E : Type u_2} {C' : Type u_3} {E' : Type u_4} {W : Type u_5} (hC : C ≃ C') (hE : E ≃ E')
+  (phi : W → Set C → Set C) (phi' : W → Set C' → Set C') (theta : W → Set E → Set E) (theta' : W → Set E' → Set E')
+  (drift : W → Set C → W) (drift' : W → Set C' → W),
+  (∀ (w : W) (K : Set C), image hC (phi w K) = phi' w (image hC K)) →
+    (∀ (w : W) (X : Set E), image hE (theta w X) = theta' w (image hE X)) →
+      DriftEquivariant hC drift drift' →
+        ∀ (c : Conf C E W), mapConf hC hE (upd phi theta drift c) = upd phi' theta' drift' (mapConf hC hE c)
+specs/statements/VP2-INV-UPD-001.lean:13:5: warning: Variable name `hPhi` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+specs/statements/VP2-INV-UPD-001.lean:14:5: warning: Variable name `hTheta` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+specs/statements/VP2-INV-UPD-001.lean:15:5: warning: Variable name `hDrift` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

@@ -1,0 +1,14 @@
+import ERIEC.StructuralHinge
+
+open ERIEC.BridgeFunctor
+open ERIEC.StructuralHinge
+
+namespace ERIECV2.Statement.VP2_A1_STRUCTURAL_FUNCTOR_001
+
+#check ERIEC.StructuralHinge.CompleteHingeIso.hingeWitness_iff
+#check ERIEC.StructuralHinge.structuralHingeHilbertFunctor
+#check ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff
+
+#print axioms ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff
+
+end ERIECV2.Statement.VP2_A1_STRUCTURAL_FUNCTOR_001

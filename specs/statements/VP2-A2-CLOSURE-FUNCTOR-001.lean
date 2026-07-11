@@ -1,0 +1,15 @@
+import ERIEC.ViabilityClosure
+
+open ERIEC.ViabilityClosure
+
+namespace ERIECV2.Statement.VP2_A2_CLOSURE_FUNCTOR_001
+
+#check ERIEC.ViabilityClosure.viabilityClosureFunctor
+#check ERIEC.ViabilityClosure.viabilityClosureFunctor_stage_natural
+#check ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural
+#check ERIEC.ViabilityClosure.viabilityClosureFunctor_right_natural
+
+#print axioms ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural
+#print axioms ERIEC.ViabilityClosure.viabilityClosureFunctor_right_natural
+
+end ERIECV2.Statement.VP2_A2_CLOSURE_FUNCTOR_001

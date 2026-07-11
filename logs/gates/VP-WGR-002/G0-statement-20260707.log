@@ -1,0 +1,23 @@
+ERIEC.Wager.richImpl (k0 : ℕ) : ERIEC.Wager.FrozenImpl (Fin k0) Unit Unit Unit
+ERIEC.Wager.richImpl_W5 (k0 : ℕ) : ERIEC.Wager.W5 (ERIEC.Wager.richImpl k0) k0
+ERIEC.Wager.poorImpl_not_W5 (k0 : ℕ) (hk : 2 ≤ k0) : ¬ERIEC.Wager.W5 ERIEC.Wager.poorImpl k0
+ERIEC.RefModel.parameterizedRichDC (k : ℕ) (hk : 0 < k) : ERIEC.DC (Fin k) Unit Unit ERIEC.RefModel.RefState
+ERIEC.RefModel.parameterizedRichDC_act_eq_univ (k : ℕ) (hk : 0 < k) :
+  ERIEC.Hinge.Act (ERIEC.RefModel.parameterizedRichDC k hk).rhoRel (ERIEC.RefModel.parameterizedRichDC k hk).sigmaRel
+      (ERIEC.RefModel.parameterizedRichDC k hk).kappa (ERIEC.RefModel.parameterizedRichDC k hk).epsilon
+      ERIEC.RefModel.RefState.s0 =
+    Set.univ
+ERIEC.RefModel.richImpl_hinge_card (k : ℕ) : ((ERIEC.Wager.richImpl k).hinge ()).card = k
+ERIEC.RefModel.richImpl_realized_by_DC (k : ℕ) (hk : 0 < k) :
+  ↑((ERIEC.Wager.richImpl k).hinge ()) =
+    ERIEC.Hinge.Act (ERIEC.RefModel.parameterizedRichDC k hk).rhoRel (ERIEC.RefModel.parameterizedRichDC k hk).sigmaRel
+      (ERIEC.RefModel.parameterizedRichDC k hk).kappa (ERIEC.RefModel.parameterizedRichDC k hk).epsilon
+      ERIEC.RefModel.RefState.s0
+ERIEC.RefModel.ParameterizedRichReferenceWitness (k : ℕ) : Type
+ERIEC.RefModel.parameterized_rich_reference_model (k : ℕ) (hk : 0 < k) :
+  Nonempty (ERIEC.RefModel.ParameterizedRichReferenceWitness k)
+ERIEC.Wager.W5_indep_all : ∀ (k0 : ℕ),
+  2 ≤ k0 → ERIEC.Wager.W5 (ERIEC.Wager.richImpl k0) k0 ∧ ¬ERIEC.Wager.W5 ERIEC.Wager.poorImpl k0
+'ERIEC.Wager.W5_indep_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModel.richImpl_realized_by_DC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModel.parameterized_rich_reference_model' depends on axioms: [propext, Classical.choice, Quot.sound]

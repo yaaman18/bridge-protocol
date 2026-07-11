@@ -1,0 +1,4 @@
+'ERIEC.Dynamics.kappa_descends_strict' depends on axioms: [propext, Quot.sound]
+'ERIEC.Dynamics.K_absorbing' does not depend on any axioms
+'ERIEC.Dynamics.BdPair_oneway' depends on axioms: [propext]
+'ERIEC.Dynamics.INS_iff_fiber' depends on axioms: [propext, Classical.choice, Quot.sound]

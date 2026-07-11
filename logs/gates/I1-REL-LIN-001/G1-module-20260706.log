@@ -1,0 +1,29 @@
+✖ [2353/2353] Building ERIEC.InterfaceLinearization (46s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/InterfaceLinearization.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/InterfaceLinearization.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/InterfaceLinearization.setup.json --json
+error: formal/ERIEC/InterfaceLinearization.lean:11:12: failed to synthesize instance of type class
+  Decidable (e ∈ rel m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: formal/ERIEC/InterfaceLinearization.lean:17:55: unexpected token 'ᵀ'; expected ':=', 'where' or '|'
+error: formal/ERIEC/InterfaceLinearization.lean:17:30: Type mismatch
+  relationMatrix alphaRel
+has type
+  Matrix.{u_2, u_1, 0} E M ℝ
+but is expected to have type
+  Matrix.{u_1, u_2, 0} M E ℝ
+warning: formal/ERIEC/InterfaceLinearization.lean:32:8: declaration uses `sorry`
+warning: formal/ERIEC/InterfaceLinearization.lean:35:5: Variable name `hConv` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: formal/ERIEC/InterfaceLinearization.lean:39:2: 'simpa using (Matrix.toEuclideanLin_conjTranspose_eq_adjoint (relationMatrix alphaRel))' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/InterfaceLinearization.lean:39:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.InterfaceLinearization
+error: build failed

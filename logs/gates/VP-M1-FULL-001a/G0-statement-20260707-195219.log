@@ -1,0 +1,6 @@
+specs/statements/VP2-M1-FULL-001a.lean:24:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.RefModel.LargeStableReferenceWitness`
+specs/statements/VP2-M1-FULL-001a.lean:25:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.RefModel.LargeDynamicReferenceWitness`
+specs/statements/VP2-M1-FULL-001a.lean:26:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.RefModel.LargeAXCoreReferenceWitness`
+specs/statements/VP2-M1-FULL-001a.lean:30:14: error(lean.unknownIdentifier): Unknown identifier `ERIEC.RefModel.LargeAXCoreReferenceWitness`
+specs/statements/VP2-M1-FULL-001a.lean:28:8: error(lean.unknownIdentifier): Unknown identifier `ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model`
+specs/statements/VP2-M1-FULL-001a.lean:32:14: error(lean.unknownIdentifier): Unknown constant `ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model`

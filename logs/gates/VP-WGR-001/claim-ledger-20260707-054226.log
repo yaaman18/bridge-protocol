@@ -1,0 +1,43 @@
+Precompiling ERIEC...
+   4433.2 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 324 passed, 3 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:5
+claim ledger integrity: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:50
+  Expression: isfile(joinpath(project_root, claim["certification_log"]))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_claim_ledger.jl:50 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_claim_ledger.jl:6
+claim ledger integrity: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:50
+  Expression: isfile(joinpath(project_root, claim["certification_log"]))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_claim_ledger.jl:50 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_claim_ledger.jl:6
+claim ledger integrity: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_claim_ledger.jl:50
+  Expression: isfile(joinpath(project_root, claim["certification_log"]))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_claim_ledger.jl:50 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_claim_ledger.jl:6
+Test Summary:          | Pass  Fail  Total  Time
+claim ledger integrity |  324     3    327  7.2s

@@ -1,0 +1,22 @@
+✖ [934/934] Building ERIEC.Dynamics (30s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Dynamics.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.setup.json --json
+warning: formal/ERIEC/Dynamics.lean:217:38: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+error: formal/ERIEC/Dynamics.lean:222:48: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: formal/ERIEC/Dynamics.lean:214:4: Alternative `x_3` has not been provided
+error: formal/ERIEC/Dynamics.lean:214:4: Alternative `x_4` has not been provided
+error: formal/ERIEC/Dynamics.lean:214:4: Alternative `x_5` has not been provided
+error: formal/ERIEC/Dynamics.lean:227:2: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Dynamics
+error: build failed

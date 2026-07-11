@@ -1,0 +1,7 @@
+fun {M} {E} [Fintype M] [DecidableEq M] [Fintype E] [DecidableEq E] =>
+  convSystem_linearization_eq_adjoint : ∀ {M : Type u_1} {E : Type u_2} [inst : Fintype M] [inst_1 : DecidableEq M]
+  [inst_2 : Fintype E] [inst_3 : DecidableEq E] (sys : ERIEC.Adj.ConvSystem M E),
+  linearizeRelation sys.sigmaRel = LinearMap.adjoint (linearizeRelation sys.alphaRel)
+'ERIEC.InterfaceLinearization.convSystem_linearization_eq_adjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

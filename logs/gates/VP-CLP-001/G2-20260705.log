@@ -1,0 +1,17 @@
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:329
+  Expression: certified_artifact_contract_ids(artifact) == ["adjunction.system", "adjunction.rigidity", "grading.const_presheaf_antitone", "grading.critical_rank", "closure.nu_phi", "closure.knaster_tarski", "hinge.act", "dc.system", "certification.critical_bound", "sensitivity.dual_symmetry", "sensitivity.no_order_unit", "worlddc.bridge", "worlddc.representation.forward", "graded.presheaf_transition_coproduct", "decomp.copair_unique", "graded.presheaf_transition_naturality", "graded.presheaf_transition_output_copair_unique", "body.no_terminal_setpoint", "guard.terminal_iff", "markers.fm_classification"]
+   Evaluated: ["adjunction.system", "adjunction.rigidity", "grading.const_presheaf_antitone", "grading.critical_rank", "closure.nu_phi", "closure.knaster_tarski", "hinge.act", "dc.system", "certification.critical_bound", "sensitivity.dual_symmetry"  …  "world.actuated", "worlddc.bridge", "worlddc.representation.forward", "graded.presheaf_transition_coproduct", "decomp.copair_unique", "graded.presheaf_transition_naturality", "graded.presheaf_transition_output_copair_unique", "body.no_terminal_setpoint", "guard.terminal_iff", "markers.fm_classification"] == ["adjunction.system", "adjunction.rigidity", "grading.const_presheaf_antitone", "grading.critical_rank", "closure.nu_phi", "closure.knaster_tarski", "hinge.act", "dc.system", "certification.critical_bound", "sensitivity.dual_symmetry", "sensitivity.no_order_unit", "worlddc.bridge", "worlddc.representation.forward", "graded.presheaf_transition_coproduct", "decomp.copair_unique", "graded.presheaf_transition_naturality", "graded.presheaf_transition_output_copair_unique", "body.no_terminal_setpoint", "guard.terminal_iff", "markers.fm_classification"]
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_formal_julia_contract.jl:329 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_formal_julia_contract.jl:2
+Test Summary:       | Pass  Fail  Total  Time
+Lean Julia contract |  428     1    429  9.9s
+ERROR: LoadError: Some tests did not pass: 428 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_formal_julia_contract.jl:1

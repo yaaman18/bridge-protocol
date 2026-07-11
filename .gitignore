@@ -1,0 +1,22 @@
+.DS_Store
+.lake/
+.venv-trm/
+external/
+.env
+.env.*
+!.env.example
+
+# --- 非公開: エージェント運用ファイル（公開リポジトリに含めない） ---
+CLAUDE.md
+AGENTS.md
+Codex_agent_skill.md
+Custom instructions with AGENTS.md
+prompting_claude_fable5.md
+.claude/
+
+# --- 非公開: 第三者著作物（再配布不可） ---
+2510.04871v1.md
+Claudeのおすすめ/
+
+# --- 非公開: 一時テストログ ---
+logs/gates/quiet/

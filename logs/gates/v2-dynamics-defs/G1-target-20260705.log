@@ -1,0 +1,23 @@
+✖ [430/430] Building ERIEC.Dynamics (2.3s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Dynamics.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.setup.json --json
+error: formal/ERIEC/Dynamics.lean:141:2: Type mismatch
+  core (omega s)
+has type
+  Type u_3
+of sort `Type (u_3 + 1)` but is expected to have type
+  Type u_4
+of sort `Type (u_4 + 1)`
+error: formal/ERIEC/Dynamics.lean:143:0: declaration `ERIEC.Dynamics.Transport` contains universe level metavariables at the expression
+  Nonempty.{max (max 1 (?u.24 + 1)) (?u.20 + 1)}
+    (Equiv.{?u.20 + 1, ?u.24 + 1} (coreOf.{u_1, u_2, u_3, ?u.20} core omega s)
+      (coreOf.{u_1, u_2, u_3, ?u.24} core omega t))
+in the declaration body
+  fun {S} {W} stepExt core omega s t =>
+    stepExt s t ∧
+      Nonempty.{max (max 1 (?u.24 + 1)) (?u.20 + 1)}
+        (Equiv.{?u.20 + 1, ?u.24 + 1} (coreOf.{u_1, u_2, u_3, ?u.20} core omega s)
+          (coreOf.{u_1, u_2, u_3, ?u.24} core omega t))
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Dynamics
+error: build failed

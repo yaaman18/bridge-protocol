@@ -1,0 +1,410 @@
+def ERIEC.Invariance.image.{u_1, u_2} : {α : Type u_1} → {β : Type u_2} → α ≃ β → Set α → Set β :=
+fun {α} {β} e X => ⇑e '' X
+theorem ERIEC.Invariance.mem_image.{u_1, u_2} : ∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) (X : Set α) (y : β),
+  y ∈ ERIEC.Invariance.image e X ↔ e.symm y ∈ X :=
+fun {α} {β} e X y =>
+  {
+    mp := fun a =>
+      Exists.casesOn a fun x h =>
+        And.casesOn h fun hx right => right ▸ Eq.mpr (id (congrArg (Membership.mem X) (Equiv.symm_apply_apply e x))) hx,
+    mpr := fun hy => Exists.intro (e.symm y) ⟨hy, Equiv.apply_symm_apply e y⟩ }
+theorem ERIEC.Invariance.image_inter.{u_1, u_2} : ∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) (X Y : Set α),
+  ERIEC.Invariance.image e (X ∩ Y) = ERIEC.Invariance.image e X ∩ ERIEC.Invariance.image e Y :=
+fun {α} {β} e X Y =>
+  Set.ext fun y =>
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Iff
+            (Eq.trans (ERIEC.Invariance.mem_image._simp_1 e (X ∩ Y) y) (Set.mem_inter_iff._simp_1 (e.symm y) X Y)))
+          (Eq.trans (Set.mem_inter_iff._simp_1 y (ERIEC.Invariance.image e X) (ERIEC.Invariance.image e Y))
+            (congr (congrArg And (ERIEC.Invariance.mem_image._simp_1 e X y))
+              (ERIEC.Invariance.mem_image._simp_1 e Y y))))
+        (iff_self (e.symm y ∈ X ∧ e.symm y ∈ Y)))
+theorem ERIEC.Invariance.image_compl.{u_1, u_2} : ∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) (X : Set α),
+  ERIEC.Invariance.image e Xᶜ = (ERIEC.Invariance.image e X)ᶜ :=
+fun {α} {β} e X =>
+  Set.ext fun y =>
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Iff (Eq.trans (ERIEC.Invariance.mem_image._simp_1 e Xᶜ y) (Set.mem_compl_iff._simp_1 X (e.symm y))))
+          (Eq.trans (Set.mem_compl_iff._simp_1 (ERIEC.Invariance.image e X) y)
+            (congrArg Not (ERIEC.Invariance.mem_image._simp_1 e X y))))
+        (iff_self (e.symm y ∉ X)))
+structure ERIEC.Invariance.StaticFrame.{u_1, u_2, u_3, u_4, u_5} (A : Type u_1) (E : Type u_2) (C : Type u_3)
+  (S : Type u_4) (W : Type u_5) : Type (max (max (max (max u_1 u_2) u_3) u_4) u_5)
+number of parameters: 5
+fields:
+  ERIEC.Invariance.StaticFrame.alphaRel : A → Set E
+  ERIEC.Invariance.StaticFrame.sigmaRel : E → Set A
+  ERIEC.Invariance.StaticFrame.piRel : A → Set C
+  ERIEC.Invariance.StaticFrame.rhoRel : C → Set A
+  ERIEC.Invariance.StaticFrame.kappa : S → Set C
+  ERIEC.Invariance.StaticFrame.epsilon : S → Set E
+  ERIEC.Invariance.StaticFrame.boundary : Set C
+  ERIEC.Invariance.StaticFrame.omega : S → W
+constructor:
+  ERIEC.Invariance.StaticFrame.mk.{u_1, u_2, u_3, u_4, u_5} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+    {W : Type u_5} (alphaRel : A → Set E) (sigmaRel : E → Set A) (piRel : A → Set C) (rhoRel : C → Set A)
+    (kappa : S → Set C) (epsilon : S → Set E) (boundary : Set C) (omega : S → W) :
+    ERIEC.Invariance.StaticFrame A E C S W
+def ERIEC.Invariance.StaticFrame.DCAt.{u_1, u_2, u_3, u_4, u_5} : {A : Type u_1} →
+  {E : Type u_2} →
+    {C : Type u_3} → {S : Type u_4} → {W : Type u_5} → ERIEC.Invariance.StaticFrame A E C S W → S → Prop :=
+fun {A} {E} {C} {S} {W} F s =>
+  F.kappa s ⊆ ERIEC.Closure.Phi F.piRel F.rhoRel (F.kappa s) ∧
+    F.epsilon s ⊆ ERIEC.Hinge.T_prime F.alphaRel F.sigmaRel (F.epsilon s) ∧
+      (ERIEC.Hinge.Act F.rhoRel F.sigmaRel F.kappa F.epsilon s).Nonempty ∧ (F.kappa s ∩ F.boundary).Nonempty
+structure ERIEC.Invariance.KIso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  (F : ERIEC.Invariance.StaticFrame A E C S W) (F' : ERIEC.Invariance.StaticFrame A' E' C' S' W) :
+  Type (max (max (max (max (max (max (max u_1 u_2) u_3) u_4) u_5) u_6) u_7) u_8)
+number of parameters: 11
+fields:
+  ERIEC.Invariance.KIso.hA : A ≃ A'
+  ERIEC.Invariance.KIso.hE : E ≃ E'
+  ERIEC.Invariance.KIso.hC : C ≃ C'
+  ERIEC.Invariance.KIso.hS : S ≃ S'
+  ERIEC.Invariance.KIso.alpha_iff : ∀ (a : A) (e : E), e ∈ F.alphaRel a ↔ self.hE e ∈ F'.alphaRel (self.hA a)
+  ERIEC.Invariance.KIso.sigma_iff : ∀ (e : E) (a : A), a ∈ F.sigmaRel e ↔ self.hA a ∈ F'.sigmaRel (self.hE e)
+  ERIEC.Invariance.KIso.pi_iff : ∀ (a : A) (c : C), c ∈ F.piRel a ↔ self.hC c ∈ F'.piRel (self.hA a)
+  ERIEC.Invariance.KIso.rho_iff : ∀ (c : C) (a : A), a ∈ F.rhoRel c ↔ self.hA a ∈ F'.rhoRel (self.hC c)
+  ERIEC.Invariance.KIso.kappa_image : ∀ (s : S), ERIEC.Invariance.image self.hC (F.kappa s) = F'.kappa (self.hS s)
+  ERIEC.Invariance.KIso.epsilon_image : ∀ (s : S), ERIEC.Invariance.image self.hE (F.epsilon s) = F'.epsilon (self.hS s)
+  ERIEC.Invariance.KIso.boundary_image : ERIEC.Invariance.image self.hC F.boundary = F'.boundary
+  ERIEC.Invariance.KIso.omega_eq : ∀ (s : S), F'.omega (self.hS s) = F.omega s
+constructor:
+  ERIEC.Invariance.KIso.mk.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+    {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+    {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W} (hA : A ≃ A')
+    (hE : E ≃ E') (hC : C ≃ C') (hS : S ≃ S')
+    (alpha_iff : ∀ (a : A) (e : E), e ∈ F.alphaRel a ↔ hE e ∈ F'.alphaRel (hA a))
+    (sigma_iff : ∀ (e : E) (a : A), a ∈ F.sigmaRel e ↔ hA a ∈ F'.sigmaRel (hE e))
+    (pi_iff : ∀ (a : A) (c : C), c ∈ F.piRel a ↔ hC c ∈ F'.piRel (hA a))
+    (rho_iff : ∀ (c : C) (a : A), a ∈ F.rhoRel c ↔ hA a ∈ F'.rhoRel (hC c))
+    (kappa_image : ∀ (s : S), ERIEC.Invariance.image hC (F.kappa s) = F'.kappa (hS s))
+    (epsilon_image : ∀ (s : S), ERIEC.Invariance.image hE (F.epsilon s) = F'.epsilon (hS s))
+    (boundary_image : ERIEC.Invariance.image hC F.boundary = F'.boundary)
+    (omega_eq : ∀ (s : S), F'.omega (hS s) = F.omega s) : ERIEC.Invariance.KIso F F'
+def ERIEC.Invariance.KIso.symm.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : {A : Type u_1} →
+  {E : Type u_2} →
+    {C : Type u_3} →
+      {S : Type u_4} →
+        {A' : Type u_5} →
+          {E' : Type u_6} →
+            {C' : Type u_7} →
+              {S' : Type u_8} →
+                {W : Type u_9} →
+                  {F : ERIEC.Invariance.StaticFrame A E C S W} →
+                    {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W} →
+                      ERIEC.Invariance.KIso F F' → ERIEC.Invariance.KIso F' F :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h =>
+  { hA := h.hA.symm, hE := h.hE.symm, hC := h.hC.symm, hS := h.hS.symm, alpha_iff := ⋯, sigma_iff := ⋯, pi_iff := ⋯,
+    rho_iff := ⋯, kappa_image := ⋯, epsilon_image := ⋯, boundary_image := ⋯, omega_eq := ⋯ }
+theorem ERIEC.Invariance.static_rel_bisim.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : ∀ {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F'),
+  (∀ (a : A), ERIEC.Invariance.image h.hE (F.alphaRel a) = F'.alphaRel (h.hA a)) ∧
+    (∀ (e : E), ERIEC.Invariance.image h.hA (F.sigmaRel e) = F'.sigmaRel (h.hE e)) ∧
+      (∀ (a : A), ERIEC.Invariance.image h.hC (F.piRel a) = F'.piRel (h.hA a)) ∧
+        ∀ (c : C), ERIEC.Invariance.image h.hA (F.rhoRel c) = F'.rhoRel (h.hC c) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h =>
+  ⟨fun a =>
+    Set.ext fun e =>
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Iff
+              (Eq.trans (ERIEC.Invariance.mem_image._simp_1 h.hE (F.alphaRel a) e)
+                (Eq.trans ((fun a e => propext (h.alpha_iff a e)) a (h.hE.symm e))
+                  (congrArg (Membership.mem (F'.alphaRel (h.hA a))) (Equiv.apply_symm_apply h.hE e)))))
+            (e ∈ F'.alphaRel (h.hA a)))
+          (iff_self (e ∈ F'.alphaRel (h.hA a)))),
+    ⟨fun e =>
+      Set.ext fun a =>
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Iff
+                (Eq.trans (ERIEC.Invariance.mem_image._simp_1 h.hA (F.sigmaRel e) a)
+                  (Eq.trans ((fun e a => propext (h.sigma_iff e a)) e (h.hA.symm a))
+                    (congrArg (Membership.mem (F'.sigmaRel (h.hE e))) (Equiv.apply_symm_apply h.hA a)))))
+              (a ∈ F'.sigmaRel (h.hE e)))
+            (iff_self (a ∈ F'.sigmaRel (h.hE e)))),
+      ⟨fun a =>
+        Set.ext fun c =>
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Iff
+                  (Eq.trans (ERIEC.Invariance.mem_image._simp_1 h.hC (F.piRel a) c)
+                    (Eq.trans ((fun a c => propext (h.pi_iff a c)) a (h.hC.symm c))
+                      (congrArg (Membership.mem (F'.piRel (h.hA a))) (Equiv.apply_symm_apply h.hC c)))))
+                (c ∈ F'.piRel (h.hA a)))
+              (iff_self (c ∈ F'.piRel (h.hA a)))),
+        fun c =>
+        Set.ext fun a =>
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Iff
+                  (Eq.trans (ERIEC.Invariance.mem_image._simp_1 h.hA (F.rhoRel c) a)
+                    (Eq.trans ((fun c a => propext (h.rho_iff c a)) c (h.hA.symm a))
+                      (congrArg (Membership.mem (F'.rhoRel (h.hC c))) (Equiv.apply_symm_apply h.hA a)))))
+                (a ∈ F'.rhoRel (h.hC c)))
+              (iff_self (a ∈ F'.rhoRel (h.hC c))))⟩⟩⟩
+theorem ERIEC.Invariance.static_closure_bisim.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : ∀ {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F'),
+  (∀ (Y : Set C),
+      ERIEC.Invariance.image h.hC (ERIEC.Closure.Phi F.piRel F.rhoRel Y) =
+        ERIEC.Closure.Phi F'.piRel F'.rhoRel (ERIEC.Invariance.image h.hC Y)) ∧
+    ERIEC.Invariance.image h.hC (ERIEC.Closure.nu (ERIEC.Closure.Phi F.piRel F.rhoRel)) =
+        ERIEC.Closure.nu (ERIEC.Closure.Phi F'.piRel F'.rhoRel) ∧
+      ∀ (K : Set C) (X : Set E),
+        ERIEC.Invariance.image h.hA (ERIEC.Closure.rho_star F.rhoRel K ∩ ERIEC.Adj.sigma_star F.sigmaRel X) =
+          ERIEC.Closure.rho_star F'.rhoRel (ERIEC.Invariance.image h.hC K) ∩
+            ERIEC.Adj.sigma_star F'.sigmaRel (ERIEC.Invariance.image h.hE X) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h =>
+  ⟨ERIEC.Invariance.phi_bisim✝ h, ⟨ERIEC.Invariance.nu_bisim✝ h, ERIEC.Invariance.hinge_bisim✝ h⟩⟩
+theorem ERIEC.Invariance.static_DC_bisim.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : ∀ {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (s : S), F.DCAt s ↔ F'.DCAt (h.hS s) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h s =>
+  { mp := ERIEC.Invariance.static_DC_forward✝ h s,
+    mpr := fun hs =>
+      have this := ERIEC.Invariance.static_DC_forward✝ h.symm (h.hS s) hs;
+      Eq.mpr
+        (eq_of_heq
+          ((fun A E C S W F s s' e'_7 =>
+              Eq.casesOn (motive := fun a x => s' = a → e'_7 ≍ x → F.DCAt s ≍ F.DCAt s') e'_7
+                (fun h =>
+                  Eq.ndrec (motive := fun s' => ∀ (e_7 : s = s'), e_7 ≍ Eq.refl s → F.DCAt s ≍ F.DCAt s')
+                    (fun e_7 h => HEq.refl (F.DCAt s)) (Eq.symm h) e'_7)
+                (Eq.refl s') (HEq.refl e'_7))
+            A E C S W F s (h.symm.hS (h.hS s))
+            (of_eq_true (Eq.trans (congrArg (Eq s) (Equiv.symm_apply_apply h.hS s)) (eq_self s)))))
+        this }
+theorem ERIEC.Invariance.internal_bisim_kappa.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : ∀ {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (_w : W) (K : Set C),
+  ERIEC.Invariance.image h.hC (K ∩ ERIEC.Closure.Phi F.piRel F.rhoRel K) =
+    ERIEC.Invariance.image h.hC K ∩ ERIEC.Closure.Phi F'.piRel F'.rhoRel (ERIEC.Invariance.image h.hC K) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h _w K =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = ERIEC.Invariance.image h.hC K ∩ ERIEC.Closure.Phi F'.piRel F'.rhoRel (ERIEC.Invariance.image h.hC K))
+        (ERIEC.Invariance.image_inter h.hC K (ERIEC.Closure.Phi F.piRel F.rhoRel K))))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ERIEC.Invariance.image h.hC K ∩ _a =
+              ERIEC.Invariance.image h.hC K ∩ ERIEC.Closure.Phi F'.piRel F'.rhoRel (ERIEC.Invariance.image h.hC K))
+          (ERIEC.Invariance.phi_bisim✝ h K)))
+      (Eq.refl (ERIEC.Invariance.image h.hC K ∩ ERIEC.Closure.Phi F'.piRel F'.rhoRel (ERIEC.Invariance.image h.hC K))))
+theorem ERIEC.Invariance.internal_bisim_epsilon.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} : ∀ {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (X : Set E),
+  ERIEC.Invariance.image h.hE (X ∩ ERIEC.Hinge.T_prime F.alphaRel F.sigmaRel X) =
+    ERIEC.Invariance.image h.hE X ∩ ERIEC.Hinge.T_prime F'.alphaRel F'.sigmaRel (ERIEC.Invariance.image h.hE X) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {F} {F'} h X =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            ERIEC.Invariance.image h.hE X ∩ ERIEC.Hinge.T_prime F'.alphaRel F'.sigmaRel (ERIEC.Invariance.image h.hE X))
+        (ERIEC.Invariance.image_inter h.hE X (ERIEC.Hinge.T_prime F.alphaRel F.sigmaRel X))))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ERIEC.Invariance.image h.hE X ∩ _a =
+              ERIEC.Invariance.image h.hE X ∩
+                ERIEC.Hinge.T_prime F'.alphaRel F'.sigmaRel (ERIEC.Invariance.image h.hE X))
+          (ERIEC.Invariance.static_tprime_bisim✝ h X)))
+      (Eq.refl
+        (ERIEC.Invariance.image h.hE X ∩ ERIEC.Hinge.T_prime F'.alphaRel F'.sigmaRel (ERIEC.Invariance.image h.hE X))))
+structure ERIEC.Invariance.DriftEquivariant.{u_1, u_2, u_3} {C : Type u_1} {C' : Type u_2} {W : Type u_3} (hC : C ≃ C')
+  (drift : W → Set C → W) (drift' : W → Set C' → W) : Prop
+number of parameters: 6
+fields:
+  ERIEC.Invariance.DriftEquivariant.eq : ∀ (w : W) (K : Set C), drift' w (ERIEC.Invariance.image hC K) = drift w K
+constructor:
+  ERIEC.Invariance.DriftEquivariant.mk.{u_1, u_2, u_3} {C : Type u_1} {C' : Type u_2} {W : Type u_3} {hC : C ≃ C'}
+    {drift : W → Set C → W} {drift' : W → Set C' → W}
+    (eq : ∀ (w : W) (K : Set C), drift' w (ERIEC.Invariance.image hC K) = drift w K) :
+    ERIEC.Invariance.DriftEquivariant hC drift drift'
+def ERIEC.Invariance.mapConf.{u_1, u_2, u_3, u_4, u_5} : {C : Type u_1} →
+  {E : Type u_2} →
+    {C' : Type u_3} →
+      {E' : Type u_4} → {W : Type u_5} → C ≃ C' → E ≃ E' → ERIEC.Dynamics.Conf C E W → ERIEC.Dynamics.Conf C' E' W :=
+fun {C} {E} {C'} {E'} {W} hC hE c =>
+  { kappa := ERIEC.Invariance.image hC c.kappa, epsilon := ERIEC.Invariance.image hE c.epsilon, rank := c.rank }
+theorem ERIEC.Invariance.upd_bisim.{u_1, u_2, u_3, u_4, u_5} : ∀ {C : Type u_1} {E : Type u_2} {C' : Type u_3}
+  {E' : Type u_4} {W : Type u_5} (hC : C ≃ C') (hE : E ≃ E') (phi : W → Set C → Set C) (phi' : W → Set C' → Set C')
+  (theta : W → Set E → Set E) (theta' : W → Set E' → Set E') (drift : W → Set C → W) (drift' : W → Set C' → W),
+  (∀ (w : W) (K : Set C), ERIEC.Invariance.image hC (phi w K) = phi' w (ERIEC.Invariance.image hC K)) →
+    (∀ (w : W) (X : Set E), ERIEC.Invariance.image hE (theta w X) = theta' w (ERIEC.Invariance.image hE X)) →
+      ERIEC.Invariance.DriftEquivariant hC drift drift' →
+        ∀ (c : ERIEC.Dynamics.Conf C E W),
+          ERIEC.Invariance.mapConf hC hE (ERIEC.Dynamics.upd phi theta drift c) =
+            ERIEC.Dynamics.upd phi' theta' drift' (ERIEC.Invariance.mapConf hC hE c) :=
+fun {C} {E} {C'} {E'} {W} hC hE phi phi' theta theta' drift drift' hPhi hTheta hDrift c =>
+  ERIEC.Dynamics.Conf.casesOn (motive := fun t =>
+    c = t →
+      ERIEC.Invariance.mapConf hC hE (ERIEC.Dynamics.upd phi theta drift c) =
+        ERIEC.Dynamics.upd phi' theta' drift' (ERIEC.Invariance.mapConf hC hE c))
+    c
+    (fun kappa epsilon rank h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrFun'
+                  (congr
+                    (congrArg ERIEC.Dynamics.Conf.mk
+                      (Eq.trans (ERIEC.Invariance.image_inter hC kappa (phi rank kappa))
+                        (congrArg (Inter.inter (ERIEC.Invariance.image hC kappa)) ((fun w K => hPhi w K) rank kappa))))
+                    (Eq.trans (ERIEC.Invariance.image_inter hE epsilon (theta rank epsilon))
+                      (congrArg (Inter.inter (ERIEC.Invariance.image hE epsilon))
+                        ((fun w X => hTheta w X) rank epsilon))))
+                  (drift rank kappa)))
+              (congrArg
+                (ERIEC.Dynamics.Conf.mk (ERIEC.Invariance.image hC kappa ∩ phi' rank (ERIEC.Invariance.image hC kappa))
+                  (ERIEC.Invariance.image hE epsilon ∩ theta' rank (ERIEC.Invariance.image hE epsilon)))
+                ((fun w K => hDrift.eq w K) rank kappa)))
+            (eq_self
+              { kappa := ERIEC.Invariance.image hC kappa ∩ phi' rank (ERIEC.Invariance.image hC kappa),
+                epsilon := ERIEC.Invariance.image hE epsilon ∩ theta' rank (ERIEC.Invariance.image hE epsilon),
+                rank := drift rank kappa })))
+    (Eq.refl c)
+theorem ERIEC.Invariance.iterate_bisim.{u_1, u_2} : ∀ {A : Type u_1} {B : Type u_2} (map : A → B) (update : A → A)
+  (update' : B → B),
+  (∀ (a : A), map (update a) = update' (map a)) → ∀ (n : ℕ) (a : A), map (update^[n] a) = update'^[n] (map a) :=
+fun {A} {B} map update update' hcomm n =>
+  Nat.recAux (motive := fun n => ∀ (a : A), map (update^[n] a) = update'^[n] (map a))
+    (fun a => Eq.refl (map (update^[0] a)))
+    (fun n ih a => id (Trans.trans (ih (update a)) (congrArg update'^[n] (hcomm a)))) n
+structure ERIEC.Invariance.DynamicIso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {Ω : Type u_10} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (static : ERIEC.Invariance.KIso F F') (step : S → S → Prop) (step' : S' → S' → Prop) (observe : S → Ω)
+  (observe' : S' → Ω) : Prop
+number of parameters: 17
+fields:
+  ERIEC.Invariance.DynamicIso.step_iff : ∀ (s t : S), step s t ↔ step' (static.hS s) (static.hS t)
+  ERIEC.Invariance.DynamicIso.observe_eq : ∀ (s : S), observe' (static.hS s) = observe s
+constructor:
+  ERIEC.Invariance.DynamicIso.mk.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10} {A : Type u_1} {E : Type u_2}
+    {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+    {Ω : Type u_10} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+    {static : ERIEC.Invariance.KIso F F'} {step : S → S → Prop} {step' : S' → S' → Prop} {observe : S → Ω}
+    {observe' : S' → Ω} (step_iff : ∀ (s t : S), step s t ↔ step' (static.hS s) (static.hS t))
+    (observe_eq : ∀ (s : S), observe' (static.hS s) = observe s) :
+    ERIEC.Invariance.DynamicIso static step step' observe observe'
+theorem ERIEC.Invariance.INS_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10} : ∀ {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {Ω : Type u_10} {F : ERIEC.Invariance.StaticFrame A E C S W}
+  {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W} {step : S → S → Prop} {step' : S' → S' → Prop} {observe : S → Ω}
+  {observe' : S' → Ω} (h : ERIEC.Invariance.KIso F F'),
+  ERIEC.Invariance.DynamicIso h step step' observe observe' →
+    (ERIEC.Dynamics.INS observe (ERIEC.Dynamics.K step {s | F.DCAt s}) ↔
+      ERIEC.Dynamics.INS observe' (ERIEC.Dynamics.K step' {s | F'.DCAt s})) :=
+fun {A} {E} {C} {S} {A'} {E'} {C'} {S'} {W} {Ω} {F} {F'} {step} {step'} {observe} {observe'} h hdyn =>
+  have hV :=
+    Set.ext fun s' =>
+      Eq.mpr (id (congrFun' (congrArg Iff (ERIEC.Invariance.mem_image._simp_1 h.hS {s | F.DCAt s} s')) (F'.DCAt s')))
+        (Eq.mp (congrArg (Iff (F.DCAt (h.hS.symm s'))) (congrArg F'.DCAt (Equiv.apply_symm_apply h.hS s')))
+          (ERIEC.Invariance.static_DC_bisim h (h.hS.symm s')));
+  have hDown := ERIEC.Invariance.downV_image✝ h.hS hdyn.step_iff {s | F.DCAt s};
+  have hK :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = (ERIEC.Dynamics.downV step' {s | F'.DCAt s})ᶜ)
+            (ERIEC.Invariance.image_compl h.hS (ERIEC.Dynamics.downV step {s | F.DCAt s}))))
+        (Eq.mpr (id (congrArg (fun _a => _aᶜ = (ERIEC.Dynamics.downV step' {s | F'.DCAt s})ᶜ) hDown))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => (ERIEC.Dynamics.downV step' _a)ᶜ = (ERIEC.Dynamics.downV step' {s | F'.DCAt s})ᶜ)
+                hV))
+            (Eq.refl (ERIEC.Dynamics.downV step' {s | F'.DCAt s})ᶜ))));
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => ERIEC.Dynamics.INS observe (ERIEC.Dynamics.K step {s | F.DCAt s}) ↔ ERIEC.Dynamics.INS observe' _a)
+        (Eq.symm hK)))
+    (ERIEC.Invariance.INS_image_iff✝ h.hS observe observe' hdyn.observe_eq (ERIEC.Dynamics.K step {s | F.DCAt s}))
+def ERIEC.Invariance.unitaryConjugate : {m n : ℕ} →
+  (EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n)) →
+    (EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) →
+      EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) :=
+fun {m n} U L => U.toLinearIsometry.toContinuousLinearMap ∘SL L ∘SL U.symm.toLinearIsometry.toContinuousLinearMap
+theorem ERIEC.Invariance.unitaryConjugate_apply : ∀ {m n : ℕ}
+  (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (x : EuclideanSpace ℝ (Fin m)),
+  (ERIEC.Invariance.unitaryConjugate U L) (U x) = U (L x) :=
+fun {m n} U L x =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg (⇑U.toLinearIsometry.toContinuousLinearMap)
+            (congrArg (⇑L) (LinearIsometryEquiv.symm_apply_apply U x))))
+        (U (L x)))
+      (eq_self (U (L x))))
+theorem ERIEC.Invariance.unitary_conj : ∀ {m n : ℕ} [NeZero m] [NeZero n]
+  (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (eta : ℝ),
+  (∀ (lambda : ℝ),
+      Module.End.HasEigenvalue (↑L) lambda ↔
+        Module.End.HasEigenvalue (↑(ERIEC.Invariance.unitaryConjugate U L)) lambda) ∧
+    Submodule.map (↑U.toLinearEquiv) (ERIEC.World.Wld_band L eta) =
+        ERIEC.World.Wld_band (ERIEC.Invariance.unitaryConjugate U L) eta ∧
+      ERIEC.World.chi (ERIEC.Invariance.unitaryConjugate U L) = ERIEC.World.chi L ∧
+        (ERIEC.World.WldNontrivial (ERIEC.Invariance.unitaryConjugate U L) ↔ ERIEC.World.WldNontrivial L) :=
+fun {m n} [NeZero m] [NeZero n] U L eta =>
+  ⟨ERIEC.Invariance.eigenvalue_unitary✝ U L,
+    ⟨ERIEC.Invariance.band_unitary✝ U L eta,
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun' (congrArg Eq (congrArg abs (congrArg (HSub.hSub 1) (ERIEC.Invariance.lambdaMax_unitary✝ U L))))
+              |1 - ERIEC.World.lambdaMax L|)
+            (eq_self |1 - ERIEC.World.lambdaMax L|)),
+        {
+          mp := fun a =>
+            Exists.casesOn a fun y h =>
+              And.casesOn h fun hy hfix =>
+                Exists.intro (U.symm y)
+                  ⟨Eq.mpr (id (congrArg Not EmbeddingLike.map_eq_zero_iff._simp_1)) hy,
+                    id
+                      (LinearIsometryEquiv.injective U
+                        (Trans.trans
+                          (Trans.trans
+                            (Eq.mp
+                              (congrArg (Eq (U (L (U.symm y))))
+                                (congrArg (⇑(ERIEC.Invariance.unitaryConjugate U L))
+                                  (LinearIsometryEquiv.apply_symm_apply U y)))
+                              (Eq.symm (ERIEC.Invariance.unitaryConjugate_apply U L (U.symm y))))
+                            hfix)
+                          (of_eq_true
+                            (Eq.trans (congrArg (Eq y) (LinearIsometryEquiv.apply_symm_apply U y)) (eq_self y)))))⟩,
+          mpr := fun a =>
+            Exists.casesOn a fun x h =>
+              And.casesOn h fun hx hfix =>
+                Exists.intro (U x)
+                  ⟨Eq.mpr (id (congrArg Not EmbeddingLike.map_eq_zero_iff._simp_1)) hx,
+                    id
+                      (Eq.mpr (id (congrArg (fun _a => _a = U x) (ERIEC.Invariance.unitaryConjugate_apply U L x)))
+                        (Eq.mpr (id (congrArg (fun _a => U _a = U x) hfix)) (Eq.refl (U x))))⟩ }⟩⟩⟩

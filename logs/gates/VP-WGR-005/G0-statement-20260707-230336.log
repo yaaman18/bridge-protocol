@@ -1,0 +1,7 @@
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:5:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.KBad`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:6:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.M0`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:7:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.KPlus`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:8:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.MPlus`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.MCyc`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:10:7: error(lean.unknownIdentifier): Unknown identifier `ERIEC.Wager.named_frozen_models_boundary`
+specs/statements/VP2-WAGER-NAMED-MODELS-001.lean:11:14: error(lean.unknownIdentifier): Unknown constant `ERIEC.Wager.named_frozen_models_boundary`

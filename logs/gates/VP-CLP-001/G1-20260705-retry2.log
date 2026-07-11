@@ -1,0 +1,8 @@
+✖ [2388/2390] Building ERIEC.Collapse (1.8s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Collapse.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Collapse.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Collapse.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Collapse.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Collapse.setup.json --json
+error: formal/ERIEC/Collapse.lean:16:8: Unknown constant `Set.eq_empty_iff_forall_not_mem.mpr`
+error: formal/ERIEC/Collapse.lean:17:8: No goals to be solved
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Collapse
+error: build failed

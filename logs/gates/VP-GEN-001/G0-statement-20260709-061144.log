@@ -1,0 +1,5 @@
+ERIEC.Generation.dcToOpenSystem.{u} {M E C S : Type u} (dc : ERIEC.DC M E C S) : ERIEC.OpenEvolution.OpenSystem
+ERIEC.Generation.dcViable.{u} {M E C S : Type u} (dc : ERIEC.DC M E C S) :
+  ERIEC.OpenEvolution.Config (ERIEC.Generation.dcToOpenSystem dc) → Prop
+ERIEC.Generation.dcViableTranslation.{u} {M E C S : Type u} (dc : ERIEC.DC M E C S) : ERIEC.OpenEvolution.ViableSystem
+'ERIEC.Generation.dcViableTranslation' does not depend on any axioms

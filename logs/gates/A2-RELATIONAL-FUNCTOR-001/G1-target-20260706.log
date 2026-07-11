@@ -1,0 +1,11 @@
+⚠ [2413/2413] Built ERIEC.ViabilityClosure (13s)
+warning: formal/ERIEC/ViabilityClosure.lean:312:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:313:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:314:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Build completed successfully (2413 jobs).

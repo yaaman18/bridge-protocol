@@ -1,0 +1,10 @@
+ERIEC.Wager.WitnessPair.{u_1} (Model : Type u_1) (sentence : Model → Prop) : Type u_1
+ERIEC.Wager.PackPreserves.{u_1} {Model : Type u_1} {sentence : Model → Prop}
+  (pair : ERIEC.Wager.WitnessPair Model sentence) (pack : Model → Prop) : Prop
+ERIEC.Wager.ModelsAll.{u_1} {Model : Type u_1} (packs : List (Model → Prop)) (model : Model) : Prop
+ERIEC.Wager.global_frozen_protocol_invariant.{u_1} {Model : Type u_1} {sentence : Model → Prop}
+  (pair : ERIEC.Wager.WitnessPair Model sentence) (packs : List (Model → Prop))
+  (hpreserves : ∀ pack ∈ packs, ERIEC.Wager.PackPreserves pair pack) :
+  sentence pair.positive ∧
+    ¬sentence pair.negative ∧ ERIEC.Wager.ModelsAll packs pair.positive ∧ ERIEC.Wager.ModelsAll packs pair.negative
+'ERIEC.Wager.global_frozen_protocol_invariant' does not depend on any axioms

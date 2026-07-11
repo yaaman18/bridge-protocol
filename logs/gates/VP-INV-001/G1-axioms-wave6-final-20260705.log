@@ -1,0 +1,8 @@
+'ERIEC.Invariance.static_rel_bisim' depends on axioms: [propext, Quot.sound]
+'ERIEC.Invariance.static_closure_bisim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Invariance.static_DC_bisim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Invariance.internal_bisim_kappa' depends on axioms: [propext, Quot.sound]
+'ERIEC.Invariance.internal_bisim_epsilon' depends on axioms: [propext, Quot.sound]
+'ERIEC.Invariance.upd_bisim' depends on axioms: [propext, Quot.sound]
+'ERIEC.Invariance.INS_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Invariance.unitary_conj' depends on axioms: [propext, Classical.choice, Quot.sound]

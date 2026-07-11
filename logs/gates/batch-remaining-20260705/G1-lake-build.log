@@ -1,0 +1,88 @@
+✔ [2384/2393] Built ERIEC.RefModel (615ms)
+✔ [2385/2393] Built ERIEC.Dynamics (4.7s)
+✖ [2386/2393] Building ERIEC.Value (5.1s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Value.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Value.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Value.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Value.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Value.setup.json --json
+error: formal/ERIEC/Value.lean:30:2: Type mismatch
+  viabilityContribution nuPhi contribution e
+has type
+  ℕ
+but is expected to have type
+  ℚ
+error: formal/ERIEC/Value.lean:30:53: Type mismatch
+  nuPhi.card
+has type
+  ℕ
+but is expected to have type
+  ℚ
+error: formal/ERIEC/Value.lean:36:4: don't know how to synthesize implicit argument `α`
+  @Eq (E → ?m.10 hNu hContribution) (normalized_V nuPhi₁ contribution₁) (normalized_V nuPhi₂ contribution₂)
+context:
+E : Type u_1
+C : Type u_2
+inst✝ : DecidableEq C
+nuPhi₁ nuPhi₂ : Finset C
+contribution₁ contribution₂ : E → Finset C
+hNu : nuPhi₁ = nuPhi₂
+hContribution : contribution₁ = contribution₂
+⊢ Type (max u_1 ?u.23)
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+error: formal/ERIEC/Value.lean:36:40: don't know how to synthesize implicit argument `ℚ`
+  @normalized_V E C (?m.10 hNu hContribution) nuPhi₂ contribution₂
+context:
+E : Type u_1
+C : Type u_2
+inst✝ : DecidableEq C
+nuPhi₁ nuPhi₂ : Finset C
+contribution₁ contribution₂ : E → Finset C
+hNu : nuPhi₁ = nuPhi₂
+hContribution : contribution₁ = contribution₂
+⊢ Type ?u.23
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+error: formal/ERIEC/Value.lean:36:4: don't know how to synthesize implicit argument `ℚ`
+  @normalized_V E C (?m.10 hNu hContribution) nuPhi₁ contribution₁
+context:
+E : Type u_1
+C : Type u_2
+inst✝ : DecidableEq C
+nuPhi₁ nuPhi₂ : Finset C
+contribution₁ contribution₂ : E → Finset C
+hNu : nuPhi₁ = nuPhi₂
+hContribution : contribution₁ = contribution₂
+⊢ Type ?u.23
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+warning: formal/ERIEC/Value.lean:33:0: automatically included section variable(s) unused in theorem `ERIEC.Value.V_endogenous`:
+  [DecidableEq C]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq C] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+error: Lean exited with code 1
+✖ [2387/2393] Building ERIEC.Invariance (1.6s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Invariance.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Invariance.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Invariance.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Invariance.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Invariance.setup.json --json
+error: formal/ERIEC/Invariance.lean:21:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  map (update ?a)
+in the target expression
+  map (update^[n] (update a)) = update'^[n] (update' (map a))
+
+case succ
+A : Type u_1
+B : Type u_2
+map : A → B
+update : A → A
+update' : B → B
+hcomm : ∀ (a : A), map (update a) = update' (map a)
+n : ℕ
+ih : ∀ (a : A), map (update^[n] a) = update'^[n] (map a)
+a : A
+⊢ map (update^[n] (update a)) = update'^[n] (update' (map a))
+error: Lean exited with code 1
+✔ [2388/2393] Built ERIEC.World (15s)
+✔ [2389/2393] Built ERIEC.WorldDC (4.4s)
+✔ [2390/2393] Built ERIEC.WorldDCRep (4.4s)
+Some required targets logged failures:
+- ERIEC.Value
+- ERIEC.Invariance
+error: build failed

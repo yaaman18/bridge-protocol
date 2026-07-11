@@ -1,0 +1,11 @@
+ERIEC.BridgeFunctor.hingeForward_id (source : Prop) : HingeForward source source
+ERIEC.BridgeFunctor.hingeForward_comp {source middle target : Prop} (f : HingeForward source middle)
+  (g : HingeForward middle target) : HingeForward source target
+ERIEC.BridgeFunctor.hingeClassifyingLoop_lax.{u_1, u_2, u_3, u_4, u_5, u_6} {M₁ : Type u_1} {E₁ : Type u_2}
+  {C₁ : Type u_3} {M₂ : Type u_4} {E₂ : Type u_5} {C₂ : Type u_6} (rho₁ : C₁ → Set M₁) (sigma₁ : E₁ → Set M₁)
+  (kappa₁ : Set C₁) (epsilon₁ : Set E₁) (rho₂ : C₂ → Set M₂) (sigma₂ : E₂ → Set M₂) (kappa₂ : Set C₂)
+  (epsilon₂ : Set E₂)
+  (hForward : HingeForward (HingeWitness rho₁ sigma₁ kappa₁ epsilon₁) (HingeWitness rho₂ sigma₂ kappa₂ epsilon₂))
+  (x : EuclideanSpace ℝ (Fin 1)) :
+  ‖(hingeClassifyingLoop rho₁ sigma₁ kappa₁ epsilon₁) x‖ ≤ ‖(hingeClassifyingLoop rho₂ sigma₂ kappa₂ epsilon₂) x‖
+'ERIEC.BridgeFunctor.hingeClassifyingLoop_lax' depends on axioms: [propext, Classical.choice, Quot.sound]

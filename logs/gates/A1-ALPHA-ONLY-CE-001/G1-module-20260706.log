@@ -1,0 +1,23 @@
+✖ [429/429] Building ERIEC.BridgeFunctor (4.0s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/BridgeFunctor.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/BridgeFunctor.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/BridgeFunctor.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/BridgeFunctor.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/BridgeFunctor.setup.json --json
+error: formal/ERIEC/BridgeFunctor.lean:35:68: unsolved goals
+classify : (Unit → Set Unit) → Prop
+hclassify : AlphaOnlyClassifiesHinge classify
+alphaRel : Unit → Set Unit := fun x => Set.univ
+rhoFull : Unit → Set Unit := fun x => Set.univ
+rhoEmpty : Unit → Set Unit := fun x => ∅
+sigmaRel : Unit → Set Unit := fun x => Set.univ
+carrier : Set Unit := Set.univ
+hFull : HingeWitness rhoFull sigmaRel carrier carrier
+⊢ ¬((⋃ c ∈ Set.univ, ∅) ∩ ⋃ e ∈ Set.univ, Set.univ).Nonempty
+warning: formal/ERIEC/BridgeFunctor.lean:34:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.BridgeFunctor
+error: build failed

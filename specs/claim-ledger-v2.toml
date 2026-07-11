@@ -1,0 +1,2352 @@
+# ERIEC claim ledger schema v2 — draft migration ledger
+#
+# This file does not replace specs/ledger.toml yet. It atomizes the broad v1
+# verification points whose contract certification was weaker than their prose.
+# A claim may move from spec_status="draft" only after its exact Lean type is
+# written under specs/statements/ and reviewed.
+
+schema_version = 2
+document = "category/三層構造の圏論的定式化_v5_1.md"
+legacy_ledger = "specs/ledger.toml"
+
+[defaults]
+owner = "codex"
+pinned = false
+spec_status = "draft"
+proof_status = "unproved"
+implementation_status = "not_applicable"
+certification_status = "uncertified"
+
+[[claim_group]]
+id = "GRP-DYN-5"
+source = "category/三層構造の圏論的定式化_v5_1.md#§5"
+title_ja = "階付き動態・崩壊・到達構造"
+legacy_vp_ids = ["VP-CLP-001", "VP-DYN-001"]
+children = [
+  "VP2-DYN-CONF-001",
+  "VP2-DYN-UPD-001",
+  "VP2-DYN-DESCENT-001",
+  "VP2-DYN-R2P-001",
+  "VP2-DYN-TOTAL-PROP-001",
+  "VP2-DYN-TOTAL-DATA-001",
+  "VP2-DYN-COLLAPSE-CONF-001",
+  "VP2-DYN-PATH-ITERATE-001",
+  "VP2-DYN-TOTAL-ORBIT-001",
+  "VP2-DYN-HINGE-COLLAPSE-001",
+  "VP2-DYN-REACHABLE-001",
+  "VP2-DYN-DOWNV-001",
+  "VP2-DYN-K-001",
+  "VP2-DYN-BDPAIR-001",
+  "VP2-DYN-K-ABSORB-001",
+  "VP2-DYN-BD-ONEWAY-001",
+  "VP2-DYN-INS-001",
+  "VP2-DYN-INS-FIBER-001",
+  "VP2-DYN-COREOF-001",
+  "VP2-DYN-TRANSPORT-001",
+]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-WLD-6"
+source = "category/三層構造の圏論的定式化_v5_1.md#§6"
+title_ja = "スペクトル世界・臨界指標"
+legacy_vp_ids = ["VP-WLD-002", "VP-CLP-001"]
+children = [
+  "VP2-WLD-EETA-001",
+  "VP2-WLD-BAND-001",
+  "VP2-WLD-INVARIANT-001",
+  "VP2-WLD-ZERO-FIX-001",
+  "VP2-WLD-MONO-001",
+  "VP2-WLD-SUBSET-EETA-001",
+  "VP2-WLD-LAMBDAMAX-001",
+  "VP2-WLD-CHI-001",
+  "VP2-WLD-CHI-NONTRIV-001",
+  "VP2-WLD-SLOWING-001",
+]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-VAL-7"
+source = "category/三層構造の圏論的定式化_v5_1.md#§7"
+title_ja = "価値テンソル・重みづけ感受性"
+legacy_vp_ids = ["VP-VAL-002"]
+children = [
+  "VP2-VAL-RAW-001",
+  "VP2-VAL-NORMALIZED-001",
+  "VP2-VAL-WELLDEF-001",
+  "VP2-VAL-RANGE-001",
+  "VP2-VAL-ENDOGENOUS-001",
+  "VP2-VAL-COUNTERMODEL-001",
+  "VP2-VAL-WEIGHTED-001",
+  "VP2-VAL-WEIGHTED-PURE-001",
+]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-WDC-8"
+source = "category/三層構造の圏論的定式化_v5_1.md#§8"
+title_ja = "DCとWldの無条件同値の反証"
+legacy_vp_ids = ["VP-WDC-002"]
+children = ["VP2-WDC-FORWARD-CE-001", "VP2-WDC-BACKWARD-CE-001"]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-INV-12"
+source = "category/三層構造の圏論的定式化_v5_1.md#§12"
+title_ja = "静的・動的不変性"
+legacy_vp_ids = ["VP-INV-001"]
+children = [
+  "VP2-INV-STATIC-REL-001",
+  "VP2-INV-STATIC-CLOSURE-001",
+  "VP2-INV-STATIC-DC-001",
+  "VP2-INV-INTERNAL-KAPPA-001",
+  "VP2-INV-INTERNAL-EPS-001",
+  "VP2-INV-DRIFT-001",
+  "VP2-INV-UPD-001",
+  "VP2-INV-UNITARY-001",
+  "VP2-INV-INS-001",
+  "VP2-INV-E5-001",
+]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-REF-13"
+source = "category/三層構造の圏論的定式化_v5_1.md#§13"
+title_ja = "参照模型構成義務"
+legacy_vp_ids = ["VP-REF-001"]
+children = ["VP2-REF-STABLE-001", "VP2-REF-DYN-001", "VP2-REF-NONDEG-001"]
+coverage = "complete"
+
+[[claim_group]]
+id = "GRP-IFACE-I1"
+source = "docs/ERIEC_未解決命題台帳_v1.md#I-1"
+title_ja = "有限関係と連続感受性の界面"
+legacy_vp_ids = []
+children = ["VP2-I1-REL-LIN-001", "VP2-I1-DERIV-BRIDGE-001"]
+coverage = "complete"
+coverage_note = "有限関係の線形化と、実際のJacobianがそれを実現する場合の T_w† 一致を形式化。適合述語の充足は個別模型ごとの検証事項。"
+
+[[claim_group]]
+id = "GRP-A5-NAT"
+source = "docs/ERIEC_未解決命題台帳_v1.md#A-5"
+title_ja = "表現選択の自然性"
+legacy_vp_ids = []
+children = ["VP2-A5-REL-NAT-001", "VP2-A5-REL-LAX-001", "VP2-A5-STRICT-CE-001"]
+coverage = "complete"
+coverage_note = "関係同型では厳密自然、一般の前向関係射ではlax保存のみ。一般射上の厳密自然性に反例を与え、弱化階層を確定。"
+
+[[claim_group]]
+id = "GRP-A1-BRIDGE"
+source = "docs/ERIEC_未解決命題台帳_v1.md#A-1"
+title_ja = "離散層からHilbert層への橋関手"
+legacy_vp_ids = []
+children = ["VP2-A1-ALPHA-ONLY-CE-001", "VP2-A1-RAW-GRAM-CE-001", "VP2-A1-OBJECT-CLASSIFIER-001", "VP2-A1-LAX-MAP-001", "VP2-A1-THIN-FUNCTOR-001", "VP2-A1-STRICT-FUNCTOR-001", "VP2-A1-HILBERT-FUNCTOR-001", "VP2-A1-STRUCTURAL-FUNCTOR-001"]
+coverage = "complete"
+coverage_note = "alphaRelのみと非正規化Gramの候補は反例で棄却。rho/sigma/kappa/epsilonの構造同型圏から実際のHilbert intertwiner圏へのFunctorを構成し、h3 iff Nontrivを証明したため、A-1の論理的存在問題は完了。物理的Jacobian由来の自然な橋は、この存在定理に含まれない強化命題。"
+
+[[claim_group]]
+id = "GRP-A2-CLOSURE-FUNCTOR"
+source = "docs/ERIEC_未解決命題台帳_v1.md#A-2"
+title_ja = "開放系viabilityから二重閉包段階族への関手"
+legacy_vp_ids = []
+children = ["VP2-A2-VIABILITY-CLOSURE-001", "VP2-A2-CLOSURE-FUNCTOR-001", "VP2-A2-RELATIONAL-FRAME-001", "VP2-A2-RELATIONAL-FUNCTOR-001"]
+coverage = "complete"
+coverage_note = "反射的後続閉包の対象写像、固定点性、構造同型上の自然性、pi/rho/alpha/sigma関係フレーム実現、および関係フレーム圏へのFunctor包装を証明し、A-2を完了。"
+
+[[claim_group]]
+id = "GRP-A3-LAYER-COMPOSITION"
+source = "docs/ERIEC_未解決命題台帳_v1.md#A-3"
+title_ja = "三層合成図式"
+legacy_vp_ids = []
+children = ["VP2-A3-LAYER-COMPOSITION-001", "VP2-A3-NONFAITHFUL-001"]
+coverage = "complete"
+coverage_note = "実装済み三層経路の結合律と端点意味論を証明。さらに異なるBool自己同型が同一Hilbert射へ潰れる反例から非faithful性とHom左逆不存在を証明し、情報保存的な恒等閉ループを否定。任意の追加戻り脚に関する主張はしない。"
+
+[[claim_group]]
+id = "GRP-WAGER-14"
+source = "docs/§14凍結文書_v1.md"
+title_ja = "凍結賭け・独立性・保存性"
+legacy_vp_ids = []
+children = ["VP2-WAGER-FROZEN-001", "VP2-WAGER-W5-FAMILY-001", "VP2-WAGER-PRESERVATION-001", "VP2-WAGER-GLOBAL-INVARIANT-001", "VP2-WAGER-NAMED-MODELS-001", "VP2-WAGER-W6-CYCLE-SOUND-001", "VP2-WAGER-FINITE-CHECKER-001"]
+coverage = "complete"
+coverage_note = "W1–W6の閉式、W1–W4/W6の二証人境界、任意k0≥2のW5模型族、Ph定義的拡張の保存性、凍結文書で用いるnamed witness model境界、W6自己閉路soundness、およびW4/W5/W6有限モデル検査器を形式化。W6一般閉路の完全iffは別義務として残す。W3はFM3の具体的意味論ではなく凍結済みconsciousHinge述語に相対的。"
+
+[[claim_group]]
+id = "GRP-M1-LARGE-DC"
+source = "docs/ERIEC_未解決命題台帳_v1.md#M-1"
+title_ja = "任意サイズの有限非退化DC参照モデル"
+legacy_vp_ids = ["VP-M1-001", "VP-M1-FULL-001a", "VP-M1-FULL-001b"]
+children = ["VP2-M1-LARGE-DC-001", "VP2-M1-FULL-001a", "VP2-M1-FULL-001b"]
+coverage = "partial"
+coverage_note = "有限DC参照モデルの任意サイズfragmentとAX_core離散・動態Tier-1を認証済み。001bはWorld/Value非自明性と§13.2三層接続をDCWorldBridge型のshape witnessとして分離する。"
+
+# ---------------------------------------------------------------------------
+# §5 Dynamics
+
+[[claim]]
+id = "VP2-DYN-CONF-001"
+group_id = "GRP-DYN-5"
+source_label = "定義 5.1"
+claim_kind = "definition"
+statement_ja = "構成空間 Conf = Set(C) × Set(E) × W"
+conclusion = "Conf はκ・ε・階数の三成分を持つ"
+lean_decl = "ERIEC.Dynamics.Conf"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-CONF-001.lean"
+statement_hash = "sha256:e6ea72450eca68a0537f1dc33f756da7c54d7bfcbca9a3be3f5fcea55464931a"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "formal_only"
+depends_on = []
+
+[[claim]]
+id = "VP2-DYN-UPD-001"
+group_id = "GRP-DYN-5"
+source_label = "定義 5.1"
+claim_kind = "definition"
+statement_ja = "全域更新 upd(K,X,w)=(K∩Φw(K), X∩Θw(X), δ(w,K))"
+conclusion = "upd : Conf → Conf"
+lean_decl = "ERIEC.Dynamics.upd"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-UPD-001.lean"
+statement_hash = "sha256:003e76bc85659ccf6fcc35759e9b4214740689f1cdc77d3c98fc04678a33e6bc"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "finite_update"
+julia_file = "src/dynamics.jl"
+depends_on = ["VP2-DYN-CONF-001"]
+
+[[claim]]
+id = "VP2-DYN-DESCENT-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.2"
+claim_kind = "theorem"
+statement_ja = "upd軌道でκは単調非増加し、非後不動点では厳密減少する"
+assumptions = ["c : Conf", "K ⊄ Φw(K) for strictness"]
+conclusion = "κ(upd c) ⊆ κ(c)、かつ指定条件下で真包含"
+lean_decl = "ERIEC.Dynamics.kappa_descends_strict"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-DESCENT-001.lean"
+statement_hash = "sha256:e95748bd0d86297d48c7e8ebd7418b39001fafa842e0b5cc604b8450a875e6a2"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-UPD-001"]
+
+[[claim]]
+id = "VP2-DYN-R2P-001"
+group_id = "GRP-DYN-5"
+source_label = "公理 5.3(R2′)‡"
+claim_kind = "field"
+statement_ja = "漂移は非減少で、κ非空かつ非最上位なら厳密増加する"
+assumptions = ["LinearOrder W", "OrderTop W"]
+conclusion = "R2Prime drift"
+lean_decl = "ERIEC.Dynamics.R2Prime"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-R2P-001.lean"
+statement_hash = "sha256:983ccb0fee7096a054bc9577f0c65004260f2625f564b2ce5665e15b5759684d"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "none"
+reconstructed = true
+ratification = "accepted"
+depends_on = ["VP2-DYN-CONF-001"]
+
+[[claim]]
+id = "VP2-DYN-TOTAL-PROP-001"
+group_id = "GRP-DYN-5"
+source_label = "定義 5.3′"
+claim_kind = "definition"
+statement_ja = "任意の状態に内的後続が存在する"
+conclusion = "∀s, ∃t, TransInt s t"
+lean_decl = "ERIEC.Dynamics.InternallyTotal"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-TOTAL-PROP-001.lean"
+statement_hash = "sha256:6c6267799dc16d12cf8fd72403161a89c93cbebfab157c9e45ccf6be4a706916"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "formal_only"
+depends_on = []
+
+[[claim]]
+id = "VP2-DYN-TOTAL-DATA-001"
+group_id = "GRP-DYN-5"
+source_label = "定義 5.3″"
+claim_kind = "definition"
+statement_ja = "内的後続選択 next と h_next を持つ"
+conclusion = "TotalNext TransInt"
+lean_decl = "ERIEC.Dynamics.TotalNext"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-TOTAL-DATA-001.lean"
+statement_hash = "sha256:4e927f807fcc9b6f14c7f4d4452a2c68beefa8f98cc5d7cddee71a00b3cb45fc"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_total_next"
+julia_file = "src/dynamics.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-DYN-COLLAPSE-CONF-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.4(1)‡"
+claim_kind = "theorem"
+statement_ja = "有限C・有限W・Sig-2・R2′から構成軌道の有限歩恒久崩壊を導く"
+direction = "implies"
+assumptions = ["Finite C", "FiniteLinearOrder W", "Sig2", "R2Prime"]
+conclusion = "∀c0, ∃n≤|W|+|C|, ∀k≥n, κ(iterate upd k c0)=∅"
+lean_decl = "ERIEC.Dynamics.collapse_conf"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-COLLAPSE-CONF-001.lean"
+statement_hash = "sha256:ff9feb79c75530794e204fd32f64c2f85d34975cd7f2e3756688c20a69bb27ef"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_finite_collapse"
+julia_file = "src/dynamics.jl"
+depends_on = ["VP2-DYN-DESCENT-001", "VP2-DYN-R2P-001"]
+
+[[claim]]
+id = "VP2-DYN-PATH-ITERATE-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.4(2)"
+claim_kind = "theorem"
+statement_ja = "有限内的経路の構成はupd反復に一致する"
+assumptions = ["DynFrame.h_int", "finite internal path"]
+conclusion = "conf(sj)=iterate upd j (conf(s0))"
+lean_decl = "ERIEC.Dynamics.path_conf_iterate"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-PATH-ITERATE-001.lean"
+statement_hash = "sha256:b181dfeb8aa740cbe98b6c7195677885ac2cf4236bfb19107279e2570f91c830"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-UPD-001"]
+
+[[claim]]
+id = "VP2-DYN-TOTAL-ORBIT-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.4(3)‡"
+claim_kind = "theorem"
+statement_ja = "TotalNextから選択なしの無限内的軌道と有限歩崩壊を得る"
+assumptions = ["TotalNext", "collapse_conf", "DynFrame.h_int"]
+conclusion = "各初期状態のnext反復は内的軌道で有限歩後にκ=∅"
+lean_decl = "ERIEC.Dynamics.total_orbit_collapse"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-TOTAL-ORBIT-001.lean"
+statement_hash = "sha256:e1e4776563bcfb93c32a1302946d0434a475353e5cb3018dd896eba50af7924b"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-TOTAL-DATA-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-PATH-ITERATE-001"]
+
+[[claim]]
+id = "VP2-DYN-HINGE-COLLAPSE-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.4(3)・定理 4.2"
+claim_kind = "theorem"
+statement_ja = "κ=∅なら蝶番H=∅となりh3は偽になる"
+assumptions = ["κ(s)=∅"]
+conclusion = "H(κ(s),ε(s))=∅ ∧ ¬h3(s)"
+lean_decl = "ERIEC.Dynamics.hinge_collapse"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-HINGE-COLLAPSE-001.lean"
+statement_hash = "sha256:a83970d69d9ae976028977114c2ace6a6bfd710ec4aef84154e5987cc89699da"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-COLLAPSE-CONF-001"]
+
+[[claim]]
+id = "VP2-DYN-REACHABLE-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.3 到達構造"
+claim_kind = "definition"
+statement_ja = "遷移の反射推移閉包として到達可能性を定義する"
+conclusion = "Reachable step = Relation.ReflTransGen step"
+lean_decl = "ERIEC.Dynamics.Reachable"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-REACHABLE-001.lean"
+statement_hash = "sha256:9f8ac391237bd712a61f372ee8c5a65fd64c985ad9c1b391c67c164adda134b6"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = []
+
+[[claim]]
+id = "VP2-DYN-DOWNV-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.3 到達構造"
+claim_kind = "definition"
+statement_ja = "↓VをVへ到達可能な状態の集合として定義する"
+conclusion = "downV={s | ∃v∈V, Reachable s v}"
+lean_decl = "ERIEC.Dynamics.downV"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-DOWNV-001.lean"
+statement_hash = "sha256:e6279ad5dd0e0e7e2447cebba853d03ae5a30804d752de352b9691e290759b05"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-REACHABLE-001"]
+
+[[claim]]
+id = "VP2-DYN-K-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.3 到達構造"
+claim_kind = "definition"
+statement_ja = "Kを↓Vの補集合として定義する"
+conclusion = "K=(downV)ᶜ"
+lean_decl = "ERIEC.Dynamics.K"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-K-001.lean"
+statement_hash = "sha256:6a5b902e1a317ce46677a5cbb92ae8c53bd17b1d0be2b158fa992939d36d9a1f"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-DOWNV-001"]
+
+[[claim]]
+id = "VP2-DYN-BDPAIR-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.3 到達構造"
+claim_kind = "definition"
+statement_ja = "↓VからKへの一段遷移を境界対とする"
+conclusion = "BdPair={(s,t)|s∈downV ∧ step s t ∧ t∈K}"
+lean_decl = "ERIEC.Dynamics.BdPair"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-BDPAIR-001.lean"
+statement_hash = "sha256:8899611c16a021a501b7758f147e848fc22e7c109761833952ce6288961a8e02"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-DOWNV-001", "VP2-DYN-K-001"]
+
+[[claim]]
+id = "VP2-DYN-K-ABSORB-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.5"
+claim_kind = "theorem"
+statement_ja = "Kは前方吸収的である"
+assumptions = ["s∈K", "step s t"]
+conclusion = "t∈K"
+lean_decl = "ERIEC.Dynamics.K_absorbing"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-K-ABSORB-001.lean"
+statement_hash = "sha256:c43e1c7442f0a7fa0534dc1468f630b51b08036a8f19bd0c07574f19dbd7c1fb"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-K-001"]
+
+[[claim]]
+id = "VP2-DYN-BD-ONEWAY-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.6"
+claim_kind = "theorem"
+statement_ja = "Kから↓Vへの遷移は存在しない"
+assumptions = ["s∈K", "step s t"]
+conclusion = "t∉downV"
+lean_decl = "ERIEC.Dynamics.BdPair_oneway"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-BD-ONEWAY-001.lean"
+statement_hash = "sha256:931a44735078f3414a6300cfa26ac4ad5613fa601366d5138a0ef7386805e29b"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-K-ABSORB-001"]
+
+[[claim]]
+id = "VP2-DYN-INS-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.4"
+claim_kind = "definition"
+statement_ja = "Kが観測逆像の像に属さないことをINSとする"
+conclusion = "INS o K := ∀X, o⁻¹(X)≠K"
+lean_decl = "ERIEC.Dynamics.INS"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-INS-001.lean"
+statement_hash = "sha256:949f1ec6ed6f02584e3874a66d0cef109a9986677cd7a7e07463192e519b724c"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-K-001"]
+
+[[claim]]
+id = "VP2-DYN-INS-FIBER-001"
+group_id = "GRP-DYN-5"
+source_label = "定理 5.7"
+claim_kind = "theorem"
+statement_ja = "INSを観測繊維がK内外を混同することとして特徴づける"
+direction = "iff"
+assumptions = []
+conclusion = "INS o K ↔ ∃s∈K, ∃t∉K, o(s)=o(t)"
+lean_decl = "ERIEC.Dynamics.INS_iff_fiber"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-INS-FIBER-001.lean"
+statement_hash = "sha256:71aad40c55ed5b31773d8e9ec2ac54363fb676b497782fdd6286aa7b20d0b414"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+depends_on = ["VP2-DYN-INS-001"]
+
+[[claim]]
+id = "VP2-DYN-COREOF-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.5"
+claim_kind = "definition"
+statement_ja = "状態の核をその階数の核として定義する"
+conclusion = "coreOf(s)=R(omega(s))"
+lean_decl = "ERIEC.Dynamics.coreOf"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-COREOF-001.lean"
+statement_hash = "sha256:073b74f57b71f10926a46de32dd59da1c233af85c21ac73d0551d0cac53618f1"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "formal_only"
+depends_on = []
+
+[[claim]]
+id = "VP2-DYN-TRANSPORT-001"
+group_id = "GRP-DYN-5"
+source_label = "§5.5"
+claim_kind = "definition"
+statement_ja = "外的遷移かつ前後の核が同型であることをTransportとする"
+conclusion = "Transport(s,t) := stepExt s t ∧ coreOf(s)≈coreOf(t)"
+lean_decl = "ERIEC.Dynamics.Transport"
+lean_file = "formal/ERIEC/Dynamics.lean"
+statement_spec = "specs/statements/VP2-DYN-TRANSPORT-001.lean"
+statement_hash = "sha256:591499d884fd322218649bb729fde5f6be2073b61d0e5b748ed8f367e256b649"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "formal_only"
+depends_on = ["VP2-DYN-COREOF-001"]
+
+# ---------------------------------------------------------------------------
+# §6 World
+
+[[claim]]
+id = "VP2-WLD-EETA-001"
+group_id = "GRP-WLD-6"
+source_label = "§6.2"
+claim_kind = "definition"
+statement_ja = "許容集合Eη(L)を残差ノルムで定義する"
+conclusion = "Eeta(L,η)={x | ‖Lx-x‖≤η‖x‖}"
+lean_decl = "ERIEC.World.Eeta"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-EETA-001.lean"
+statement_hash = "sha256:38ba4092be25c6acc05f35e2ab99e65f2a997306338a50a104c43732d625ea00"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "numerical"
+julia_api = "world_admissible"
+julia_file = "src/world.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-WLD-BAND-001"
+group_id = "GRP-WLD-6"
+source_label = "定義 6.5"
+claim_kind = "definition"
+statement_ja = "1からη以内の固有空間の直和をWld帯域とする"
+conclusion = "Wld_band η L = ⊕{|λ-1|≤η} Eλ(L)"
+lean_decl = "ERIEC.World.Wld_band"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-BAND-001.lean"
+statement_hash = "sha256:4ea81ab15a4500e4115b4b66e4bd921cf47568ad467f5ee986995650f582dbf9"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "numerical"
+julia_api = "world_band"
+julia_file = "src/world.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-WLD-INVARIANT-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.6(1)"
+claim_kind = "theorem"
+statement_ja = "Wld帯域はL不変部分空間である"
+conclusion = "L(Wld_band η L)⊆Wld_band η L"
+lean_decl = "ERIEC.World.band_invariant"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-INVARIANT-001.lean"
+statement_hash = "sha256:9a0f8d441d48c6bf6435ccb05449492594d5e234fb9a2f79f0d6c2191c269b6f"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-BAND-001"]
+
+[[claim]]
+id = "VP2-WLD-ZERO-FIX-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.6(2)"
+claim_kind = "theorem"
+statement_ja = "零帯域は固定部分空間に等しい"
+direction = "iff"
+conclusion = "Wld_band 0 L = Fix(L)"
+lean_decl = "ERIEC.World.band_zero_eq_fix"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-ZERO-FIX-001.lean"
+statement_hash = "sha256:1301909a8bf27f0aaddf8691f6131c3a39d89d265737bcefc97f8e8cf5c6ee07"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-BAND-001"]
+
+[[claim]]
+id = "VP2-WLD-MONO-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.6(3)"
+claim_kind = "theorem"
+statement_ja = "帯域はηについて単調である"
+assumptions = ["η≤η′"]
+conclusion = "Wld_band η L ≤ Wld_band η′ L"
+lean_decl = "ERIEC.World.band_mono"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-MONO-001.lean"
+statement_hash = "sha256:45b64aa9fb70ae4d5283f61d756cf54b12814a9b42a66c6b4129b4cfc1c9cb63"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-BAND-001"]
+
+[[claim]]
+id = "VP2-WLD-SUBSET-EETA-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.6(4)"
+claim_kind = "theorem"
+statement_ja = "スペクトル帯域は許容集合Eηに含まれる"
+assumptions = ["L.toLinearMap.IsSymmetric"]
+conclusion = "Wld_band η L ⊆ Eeta L η"
+lean_decl = "ERIEC.World.band_subset_Eeta"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-SUBSET-EETA-001.lean"
+statement_hash = "sha256:a5f558c2415dd96adc388492d749d8b5d9d540fde30300f3cef779140398910c"
+spec_status = "frozen"
+proof_status = "proved"
+formalization_note = "非正規作用素で偽となる旧形を、L=T†Tが満たす自己共役仮定付きのexact statementへ修正"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-EETA-001", "VP2-WLD-BAND-001"]
+
+[[claim]]
+id = "VP2-WLD-LAMBDAMAX-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.8"
+claim_kind = "theorem"
+statement_ja = "非零有限次元でλmax(T†T)=‖T‖²"
+assumptions = ["m≥1", "L=T†T"]
+conclusion = "lambdaMax L = ‖T‖^2"
+lean_decl = "ERIEC.World.lambdaMax_eq_normSq_T"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-LAMBDAMAX-001.lean"
+statement_hash = "sha256:61d9bc4b54eb4d2238266e6ef61e3035997f2cdfbdb48760fd7abab4962d69ab"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "numerical"
+julia_api = "dominant_world_eigenvalue"
+julia_file = "src/slowing.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-WLD-CHI-001"
+group_id = "GRP-WLD-6"
+source_label = "§6.4"
+claim_kind = "definition"
+statement_ja = "臨界指標χを|1-λmax|と定義する"
+conclusion = "chi L = |1-lambdaMax L|"
+lean_decl = "ERIEC.World.chi"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-CHI-001.lean"
+statement_hash = "sha256:d888c62882a2ccf14ffd61a5789848c26e3bf4b439b059359704321ded4cf79b"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "numerical"
+julia_api = "world_chi"
+julia_file = "src/slowing.jl"
+depends_on = ["VP2-WLD-LAMBDAMAX-001"]
+
+[[claim]]
+id = "VP2-WLD-CHI-NONTRIV-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.8"
+claim_kind = "theorem"
+statement_ja = "χ(L)≤ηならWld帯域は非自明である"
+assumptions = ["m≥1", "chi L≤η"]
+conclusion = "Wld_band η L ≠ ⊥"
+lean_decl = "ERIEC.World.band_nontrivial_of_chi_le"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-CHI-NONTRIV-001.lean"
+statement_hash = "sha256:95dfc74efce17985b1d5cb32f0fde14f8a285180ba6e8be5cb29ca09fa70517d"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-BAND-001", "VP2-WLD-CHI-001"]
+
+[[claim]]
+id = "VP2-WLD-SLOWING-001"
+group_id = "GRP-WLD-6"
+source_label = "予想 6.9"
+claim_kind = "conjecture"
+statement_ja = "崩壊接近時にλmax→1となり回復時定数が発散する"
+conclusion = "CriticalSlowingConjecture"
+lean_decl = "ERIEC.World.CriticalSlowingConjecture"
+lean_file = "formal/ERIEC/World.lean"
+statement_spec = "specs/statements/VP2-WLD-SLOWING-001.lean"
+statement_hash = "sha256:13f0282b4a3c7a2e745f4db63144ae5d719f0bc10686b08b034fac66ea1e1ba5"
+spec_status = "frozen"
+proof_status = "unproved"
+implementation_status = "tested"
+realization_kind = "numerical"
+checker_relation = "observation_only"
+julia_api = "critical_slowing_score"
+julia_file = "src/slowing.jl"
+depends_on = ["VP2-DYN-COLLAPSE-CONF-001", "VP2-WLD-CHI-001"]
+
+# ---------------------------------------------------------------------------
+# §7 Value
+
+[[claim]]
+id = "VP2-VAL-RAW-001"
+group_id = "GRP-VAL-7"
+source_label = "§7.1"
+claim_kind = "definition"
+statement_ja = "非正規化価値を核と寄与集合の共通部分の濃度とする"
+conclusion = "rawV(e)=|nuPhi∩contribution(e)|"
+lean_decl = "ERIEC.Value.raw_V"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-RAW-001.lean"
+statement_hash = "sha256:1f8e421b4513886c5e6595a0f1b2ae3c4af92bd8be5986fdb52bc0a90c367db3"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "viability_contribution"
+julia_file = "src/value.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-VAL-NORMALIZED-001"
+group_id = "GRP-VAL-7"
+source_label = "§7.1"
+claim_kind = "definition"
+statement_ja = "核非空時の正規化価値をrawV/|nuPhi|とする"
+assumptions = ["nuPhi.Nonempty"]
+conclusion = "normalized_V(e)=rawV(e)/|nuPhi|"
+lean_decl = "ERIEC.Value.normalized_V"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-NORMALIZED-001.lean"
+statement_hash = "sha256:fc28ae651024ac685811dda8dbba5c2bbcafc95cf77e3ca744c667637abeafe1"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "viability_weight_ratio"
+julia_file = "src/value.jl"
+depends_on = ["VP2-VAL-RAW-001"]
+
+[[claim]]
+id = "VP2-VAL-WELLDEF-001"
+group_id = "GRP-VAL-7"
+source_label = "定理 7.1"
+claim_kind = "theorem"
+statement_ja = "h1かつh4からnuPhi非空と正規化値の定義可能性を得る"
+assumptions = ["h1 frame s", "h4 frame s"]
+conclusion = "nuPhi(frame,s).Nonempty"
+lean_decl = "ERIEC.Value.V_welldef"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-WELLDEF-001.lean"
+statement_hash = "sha256:f768fe34488597bcba79d50b49eed4b9b8b8195dce77f0fe56c5c31fd87c3a97"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-VAL-NORMALIZED-001"]
+
+[[claim]]
+id = "VP2-VAL-RANGE-001"
+group_id = "GRP-VAL-7"
+source_label = "定理 7.2(ii)"
+claim_kind = "theorem"
+statement_ja = "核非空時に正規化価値は0以上1以下である"
+assumptions = ["nuPhi.Nonempty"]
+conclusion = "0≤normalized_V(e) ∧ normalized_V(e)≤1"
+lean_decl = "ERIEC.Value.V_range"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-RANGE-001.lean"
+statement_hash = "sha256:8ab8effd8f91380cfbdd1256295faca24146a86cafe5c00fe5844bd1817e7a73"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-VAL-NORMALIZED-001"]
+
+[[claim]]
+id = "VP2-VAL-ENDOGENOUS-001"
+group_id = "GRP-VAL-7"
+source_label = "定理 7.2"
+claim_kind = "theorem"
+statement_ja = "価値は内部の関係と核だけから決まり外部引数を持たない"
+direction = "extensional"
+assumptions = ["same sigma", "same pi", "same rho"]
+conclusion = "same normalized_V"
+lean_decl = "ERIEC.Value.V_endogenous"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-ENDOGENOUS-001.lean"
+statement_hash = "sha256:8cad3b4061e97151c20d8f45edffc4e2792ef81e0d7ca027e9a64578907d761b"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_value_endogenous"
+julia_file = "src/value.jl"
+depends_on = ["VP2-VAL-WELLDEF-001", "VP2-VAL-RANGE-001"]
+
+[[claim]]
+id = "VP2-VAL-COUNTERMODEL-001"
+group_id = "GRP-VAL-7"
+source_label = "定理 7.3"
+claim_kind = "counterexample"
+statement_ja = "正の構造的重みから無解釈の外部述語は一様には導出できない"
+conclusion = "∃model, AXStable model ∧ positiveWeight model ∧ ¬P(e)"
+lean_decl = "ERIEC.Value.countermodel"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-COUNTERMODEL-001.lean"
+statement_hash = "sha256:f52c7c17d2ce270a61457c607b79e9a8b009a1de50e105e651358c650f4b9873"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_value_countermodel"
+julia_file = "src/value.jl"
+depends_on = ["VP2-VAL-RAW-001"]
+
+[[claim]]
+id = "VP2-VAL-WEIGHTED-001"
+group_id = "GRP-VAL-7"
+source_label = "§7.2"
+claim_kind = "definition"
+statement_ja = "重みづけ感受性をTの各列と価値の積で定義する"
+conclusion = "weighted_O[m,e]=T[m,e]*V(e)"
+lean_decl = "ERIEC.Value.weighted_O"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-WEIGHTED-001.lean"
+statement_hash = "sha256:22941e83cd96c6d31a4c07438b1ffde4ec670f384a405bcf8c4bfb373721e6e0"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "weighted_sensitivity"
+julia_file = "src/weighted.jl"
+depends_on = ["VP2-VAL-NORMALIZED-001"]
+
+[[claim]]
+id = "VP2-VAL-WEIGHTED-PURE-001"
+group_id = "GRP-VAL-7"
+source_label = "定理 7.4"
+claim_kind = "theorem"
+statement_ja = "重みづけ感受性はTとV以外の追加データを導入しない"
+assumptions = ["same T", "same V"]
+conclusion = "same weighted_O"
+lean_decl = "ERIEC.Value.weighted_O_endogenous"
+lean_file = "formal/ERIEC/Value.lean"
+statement_spec = "specs/statements/VP2-VAL-WEIGHTED-PURE-001.lean"
+statement_hash = "sha256:afca1f768be3f6ce6e52551452e8ebb84fa31f716de1260da08c7029f8b9ac2c"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-VAL-ENDOGENOUS-001", "VP2-VAL-WEIGHTED-001"]
+
+# ---------------------------------------------------------------------------
+# §8 Counterexamples
+
+[[claim]]
+id = "VP2-WDC-FORWARD-CE-001"
+group_id = "GRP-WDC-8"
+source_label = "定理 8.1"
+claim_kind = "counterexample"
+statement_ja = "DCを満たす模型でも零作用素を組み合わせればWldは非自明でない"
+conclusion = "∃model L, DC(model) ∧ ¬WldNontrivial(L)"
+lean_decl = "ERIEC.WorldDC.no_forward_unconditional"
+lean_file = "formal/ERIEC/WorldDC.lean"
+statement_spec = "specs/statements/VP2-WDC-FORWARD-CE-001.lean"
+statement_hash = "sha256:b9c816dcedc32302ccb56636eabbee221a103731f9456df254e9a9bb2490c0ab"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_forward_worlddc_counterexample"
+julia_file = "src/worlddc.jl"
+depends_on = []
+
+[[claim]]
+id = "VP2-WDC-BACKWARD-CE-001"
+group_id = "GRP-WDC-8"
+source_label = "定理 8.2"
+claim_kind = "counterexample"
+statement_ja = "恒等作用素でWldが非自明でもDC状態が存在しない模型がある"
+conclusion = "∃model L, WldNontrivial(L) ∧ ¬∃s, DC(model,s)"
+lean_decl = "ERIEC.WorldDC.no_backward_unconditional"
+lean_file = "formal/ERIEC/WorldDC.lean"
+statement_spec = "specs/statements/VP2-WDC-BACKWARD-CE-001.lean"
+statement_hash = "sha256:2f3b6c810d9e5599829580078f77fef71176c6920796ba10b0e2993d6caff0e5"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_backward_worlddc_counterexample"
+julia_file = "src/worlddc.jl"
+depends_on = []
+
+# ---------------------------------------------------------------------------
+# §12 Invariance
+
+[[claim]]
+id = "VP2-INV-STATIC-REL-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.2"
+claim_kind = "theorem"
+statement_ja = "strict square同型は四関係の直像作用を保存する"
+conclusion = "relation image squares commute"
+lean_decl = "ERIEC.Invariance.static_rel_bisim"
+lean_file = "formal/ERIEC/Invariance/Static.lean"
+statement_spec = "specs/statements/VP2-INV-STATIC-REL-001.lean"
+statement_hash = "sha256:91d260c0ae61c1b82602f81a82121776699a818462d0bfbaa52e2ced5e23695b"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = []
+
+[[claim]]
+id = "VP2-INV-STATIC-CLOSURE-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.2"
+claim_kind = "theorem"
+statement_ja = "静的同型はPhi、nuPhi、蝶番を保存する"
+conclusion = "closure and hinge images commute"
+lean_decl = "ERIEC.Invariance.static_closure_bisim"
+lean_file = "formal/ERIEC/Invariance/Static.lean"
+statement_spec = "specs/statements/VP2-INV-STATIC-CLOSURE-001.lean"
+statement_hash = "sha256:17765da7005d09192e1d315ec562d992705eb117cd4027c6bfd91de44196327c"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-INV-STATIC-REL-001"]
+
+[[claim]]
+id = "VP2-INV-STATIC-DC-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.2"
+claim_kind = "theorem"
+statement_ja = "静的同型はDCを双方向に保存する"
+direction = "iff"
+conclusion = "DC frame s ↔ DC frame' (hS s)"
+lean_decl = "ERIEC.Invariance.static_DC_bisim"
+lean_file = "formal/ERIEC/Invariance/Static.lean"
+statement_spec = "specs/statements/VP2-INV-STATIC-DC-001.lean"
+statement_hash = "sha256:f51b41dbfc6066db07ecb8eba4ea787b7036b441c05599dcb3823c806148c88c"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-INV-STATIC-CLOSURE-001"]
+
+[[claim]]
+id = "VP2-INV-INTERNAL-KAPPA-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.3"
+claim_kind = "theorem"
+statement_ja = "静的同型はκ更新成分と可換する"
+conclusion = "hC''(Psi K)=Psi'(hC''K)"
+lean_decl = "ERIEC.Invariance.internal_bisim_kappa"
+lean_file = "formal/ERIEC/Invariance/Static.lean"
+statement_spec = "specs/statements/VP2-INV-INTERNAL-KAPPA-001.lean"
+statement_hash = "sha256:e3e910f3d8e98d798140903ad04996d4fec195cb162b0a41cc8e29b7a0ebbf0d"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-INV-STATIC-CLOSURE-001", "VP2-DYN-UPD-001"]
+
+[[claim]]
+id = "VP2-INV-INTERNAL-EPS-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.3"
+claim_kind = "theorem"
+statement_ja = "静的同型はε更新成分と可換する"
+conclusion = "hE''(PsiE X)=PsiE'(hE''X)"
+lean_decl = "ERIEC.Invariance.internal_bisim_epsilon"
+lean_file = "formal/ERIEC/Invariance/Static.lean"
+statement_spec = "specs/statements/VP2-INV-INTERNAL-EPS-001.lean"
+statement_hash = "sha256:f028230dca3cf85647aa4a653b734fef2cf2515f22d9ec451b7aceb97e346a2c"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-INV-STATIC-CLOSURE-001", "VP2-DYN-UPD-001"]
+
+[[claim]]
+id = "VP2-INV-DRIFT-001"
+group_id = "GRP-INV-12"
+source_label = "定義 12.3′"
+claim_kind = "field"
+statement_ja = "漂移が構成集合の直像について等変である"
+conclusion = "delta'(w,hC''K)=delta(w,K)"
+lean_decl = "ERIEC.Invariance.DriftEquivariant"
+lean_file = "formal/ERIEC/Invariance/Dynamic.lean"
+statement_spec = "specs/statements/VP2-INV-DRIFT-001.lean"
+statement_hash = "sha256:328c9620e9804089494324233349e0d9c6ac83444fb751928841841a202409ac"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "none"
+depends_on = []
+
+[[claim]]
+id = "VP2-INV-UPD-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.3″"
+claim_kind = "theorem"
+statement_ja = "静的同型と漂移等変性から全更新の可換性を導く"
+assumptions = ["static isomorphism", "DriftEquivariant"]
+conclusion = "hConf(upd c)=upd'(hConf c)"
+lean_decl = "ERIEC.Invariance.upd_bisim"
+lean_file = "formal/ERIEC/Invariance/Dynamic.lean"
+statement_spec = "specs/statements/VP2-INV-UPD-001.lean"
+statement_hash = "sha256:2127029c5367e88fbd9ea80fea68417e933528a627cee20f2b66b0e3f982d6d8"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_update_bisimulation"
+julia_file = "src/invariance.jl"
+depends_on = ["VP2-INV-INTERNAL-KAPPA-001", "VP2-INV-INTERNAL-EPS-001", "VP2-INV-DRIFT-001"]
+
+[[claim]]
+id = "VP2-INV-UNITARY-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.4"
+claim_kind = "theorem"
+statement_ja = "ユニタリ共役はL、スペクトル、Wld、chi、非自明性を保存する"
+conclusion = "continuous invariants are preserved by unitary conjugacy"
+lean_decl = "ERIEC.Invariance.unitary_conj"
+lean_file = "formal/ERIEC/Invariance/Spectral.lean"
+statement_spec = "specs/statements/VP2-INV-UNITARY-001.lean"
+statement_hash = "sha256:a0442dc91cfec39985d7dfb246bb736fac512eb065aaa1a14795e174adf6e6b6"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-WLD-BAND-001", "VP2-WLD-CHI-001"]
+
+[[claim]]
+id = "VP2-INV-INS-001"
+group_id = "GRP-INV-12"
+source_label = "定理 12.5"
+claim_kind = "theorem"
+statement_ja = "観測両立動的同型はINSを双方向に保存する"
+direction = "iff"
+assumptions = ["dynamic isomorphism", "observation compatibility"]
+conclusion = "INS frame ↔ INS frame'"
+lean_decl = "ERIEC.Invariance.INS_invariant"
+lean_file = "formal/ERIEC/Invariance/Dynamic.lean"
+statement_spec = "specs/statements/VP2-INV-INS-001.lean"
+statement_hash = "sha256:dc80b78102a3b4467d52fe1515c45ea9c66361974721644bff448bbe2874ae85"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = ["VP2-INV-STATIC-DC-001", "VP2-DYN-INS-FIBER-001"]
+
+[[claim]]
+id = "VP2-INV-E5-001"
+group_id = "GRP-INV-12"
+source_label = "公理 12.6(E5)‡"
+claim_kind = "field"
+statement_ja = "外的遷移を同型な核へ移送できる"
+conclusion = "E5 transport field"
+lean_decl = "ERIEC.Invariance.E5"
+lean_file = "formal/ERIEC/Invariance.lean"
+statement_spec = "specs/statements/VP2-INV-E5-001.lean"
+statement_hash = "sha256:a4bfbcdb941e46b9ef5ebbe0d0e52ec53bde240a6e8f43865be78afac9e6cf6f"
+spec_status = "frozen"
+proof_status = "not_applicable"
+realization_kind = "none"
+reconstructed = true
+ratification = "accepted"
+depends_on = ["VP2-DYN-COREOF-001"]
+
+# ---------------------------------------------------------------------------
+# §13 Reference models
+
+[[claim]]
+id = "VP2-REF-STABLE-001"
+group_id = "GRP-REF-13"
+source_label = "義務 13.1a"
+claim_kind = "obligation"
+statement_ja = "三状態極小模型を構成しAX_stableと非退化内的遷移を充足する"
+conclusion = "∃witness, StableReferenceWitness witness"
+lean_decl = "ERIEC.RefModel.stable_reference_model"
+lean_file = "formal/ERIEC/RefModel.lean"
+statement_spec = "specs/statements/VP2-REF-STABLE-001.lean"
+statement_hash = "sha256:943383be748348b094753ef24f903e38dc8dbbe7018cbd131fac1ab152e94050"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_reference_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.stable_v2"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-REF-STABLE-001/G4-20260706.log"
+depends_on = ["VP2-DYN-TOTAL-DATA-001", "VP2-WLD-BAND-001", "VP2-VAL-NORMALIZED-001"]
+
+[[claim]]
+id = "VP2-REF-DYN-001"
+group_id = "GRP-REF-13"
+source_label = "義務 13.1b‡"
+claim_kind = "obligation"
+statement_ja = "13.1a模型がR2′を満たしE5を空虚に充足することを示す"
+conclusion = "∃witness, DynamicReferenceWitness witness"
+lean_decl = "ERIEC.RefModel.dynamic_reference_model"
+lean_file = "formal/ERIEC/RefModel.lean"
+statement_spec = "specs/statements/VP2-REF-DYN-001.lean"
+statement_hash = "sha256:3a651f29c0e7847cfe03711a1ceba652c0e566c1af08996e7f3d04929a2b44be"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_reference_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.dynamic_v2"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-REF-DYN-001/G4-20260706.log"
+depends_on = ["VP2-REF-STABLE-001", "VP2-DYN-R2P-001", "VP2-INV-E5-001"]
+
+[[claim]]
+id = "VP2-REF-NONDEG-001"
+group_id = "GRP-REF-13"
+source_label = "義務 13.2"
+claim_kind = "obligation"
+statement_ja = "多価関係、崩壊、INS、Blind、NoTStarを同時に持つ非退化模型を構成する"
+conclusion = "∃witness, NondegenerateReferenceWitness witness"
+lean_decl = "ERIEC.RefModel.nondegenerate_reference_model"
+lean_file = "formal/ERIEC/RefModel.lean"
+statement_spec = "specs/statements/VP2-REF-NONDEG-001.lean"
+statement_hash = "sha256:ad9c33073470f1282f17543b8dc2c5ba28eb0077460bd5f3306a08501f28b395"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_reference_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.nondegenerate_v2"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-REF-NONDEG-001/G4-20260706.log"
+depends_on = ["VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-INS-FIBER-001", "VP2-INV-E5-001"]
+
+# ---------------------------------------------------------------------------
+# Interface I-1
+
+[[claim]]
+id = "VP2-I1-REL-LIN-001"
+group_id = "GRP-IFACE-I1"
+source_label = "I-1 有限関係線形化"
+claim_kind = "theorem"
+statement_ja = "hConvで逆向関係となる有限関係のEuclidean線形化はHilbert空間の随伴に一致する"
+conclusion = "linearizeRelation sigmaRel = adjoint (linearizeRelation alphaRel)"
+lean_decl = "ERIEC.InterfaceLinearization.convSystem_linearization_eq_adjoint"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-I1-REL-LIN-001.lean"
+statement_hash = "sha256:8fbe7b41759dbc9a3262e502653ff2fad3a5b9097442db974c95038c61300795"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_converse_adjoint"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.relation_linearization"
+certification_status = "certified"
+certification_log = "logs/gates/I1-REL-LIN-001/G4-20260706.log"
+depends_on = []
+
+[[claim]]
+id = "VP2-I1-DERIV-BRIDGE-001"
+group_id = "GRP-IFACE-I1"
+source_label = "I-1 感受性適合界面"
+claim_kind = "theorem"
+statement_ja = "物理応答のJacobianが前向関係の標準線形化を実現するなら、逆向関係の線形化は T_w† に一致する"
+assumptions = ["hConv", "RealizesSensitivityAt alphaRel response base"]
+conclusion = "linearizeRelation sigmaRel = (T_w_adjoint response base).toLinearMap"
+lean_decl = "ERIEC.InterfaceLinearization.converse_linearization_eq_sensitivity_adjoint"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-I1-DERIV-BRIDGE-001.lean"
+statement_hash = "sha256:e9fc8a5a786d293ac44d01f61a60733a618637348a600880e0a1b8f98dfa0085"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_relation_sensitivity_bridge"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.sensitivity_realization"
+certification_status = "certified"
+certification_log = "logs/gates/I1-DERIV-BRIDGE-001/G4-20260706.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
+id = "VP2-A5-REL-NAT-001"
+group_id = "GRP-A5-NAT"
+source_label = "A-5 有限同型自然性"
+claim_kind = "theorem"
+statement_ja = "有限関係同型に沿って行と列をreindexすると接続行列は厳密に保存される"
+conclusion = "Matrix.reindex codomain domain (relationMatrix rel) = relationMatrix rel'"
+lean_decl = "ERIEC.InterfaceLinearization.relationMatrix_reindex_natural"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-A5-REL-NAT-001.lean"
+statement_hash = "sha256:1e4fe862e8bf9d77069dc1d50a6cbb605f3ee0497389fdeb159b9c1dc541abbe"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_relation_linearization_naturality"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.relation_naturality"
+certification_status = "certified"
+certification_log = "logs/gates/A5-REL-NAT-001/G4-20260706.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
+id = "VP2-A5-REL-LAX-001"
+group_id = "GRP-A5-NAT"
+source_label = "A-5 一般関係射のlax自然性"
+claim_kind = "theorem"
+statement_ja = "前向関係射は接続行列の各成分を単調に保存する"
+conclusion = "relationMatrix rel e m ≤ relationMatrix rel' (fE e) (fM m)"
+lean_decl = "ERIEC.InterfaceLinearization.relationMatrix_lax_natural"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-A5-REL-LAX-001.lean"
+statement_hash = "sha256:7080a9c53a2d22214e9bc2d5ec1215af3319915c0ef8713c2f709dd401db163e"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_relation_hom_lax_naturality"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.relation_lax_naturality"
+certification_status = "certified"
+certification_log = "logs/gates/A5-REL-HOM-001/G4-20260706.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
+id = "VP2-A5-STRICT-CE-001"
+group_id = "GRP-A5-NAT"
+source_label = "A-5 厳密自然性の反例"
+claim_kind = "counterexample"
+statement_ja = "一般の前向関係射で接続行列の厳密自然性は成立しない"
+conclusion = "∃ relation hom, source incidence ≠ target incidence"
+lean_decl = "ERIEC.InterfaceLinearization.strict_naturality_fails_for_relationHom"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-A5-STRICT-CE-001.lean"
+statement_hash = "sha256:cc329c9bbc320573c7a059ba681c1c48521995c328c683abc89869d3e97646f4"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "strict_relation_hom_naturality_counterexample"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.strict_naturality_counterexample"
+certification_status = "certified"
+certification_log = "logs/gates/A5-REL-HOM-001/G4-20260706.log"
+depends_on = ["VP2-A5-REL-LAX-001"]
+
+[[claim]]
+id = "VP2-A1-ALPHA-ONLY-CE-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 alpha-only標準候補の反例"
+claim_kind = "counterexample"
+statement_ja = "alphaRelのみを見る分類器は、すべての完成模型の蝶番非空性を分類できない"
+conclusion = "not exists alpha-only hinge classifier"
+lean_decl = "ERIEC.BridgeFunctor.no_alphaOnly_hinge_classifier"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-ALPHA-ONLY-CE-001.lean"
+statement_hash = "sha256:0eaf7d9722673efb526419130d17e6c89012627b9c53070f1131cf2a18d4619e"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "alpha_only_hinge_counterexample"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.alpha_only_counterexample"
+certification_status = "certified"
+certification_log = "logs/gates/A1-ALPHA-ONLY-CE-001/G4-20260706.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
+id = "VP2-A1-RAW-GRAM-CE-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 非正規化Gram候補の反例"
+claim_kind = "counterexample"
+statement_ja = "蝶番が非空でも、関係行列の非正規化Gram M^T Mには非零な固有値1の固定方向が存在しない場合がある"
+conclusion = "raw Gram bridge does not imply a nontrivial fixed direction"
+lean_decl = "ERIEC.BridgeFunctor.raw_gram_bridge_counterexample"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-RAW-GRAM-CE-001.lean"
+statement_hash = "sha256:9f3f9f7818fc79ef7b0422c95d918517af47b5b8f1fdd84ecd4e6a0c31214c93"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "raw_gram_bridge_counterexample"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.raw_gram_counterexample"
+certification_status = "certified"
+certification_log = "logs/gates/A1-RAW-GRAM-CE-001/G4-20260706.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
+id = "VP2-A1-OBJECT-CLASSIFIER-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 完全Deltaデータによる対象分類器"
+claim_kind = "theorem"
+statement_ja = "完全な蝶番データから一次元Hilbert空間上の恒等/零ループを選ぶ対象写像について、世界非自明性と蝶番非空性は同値"
+conclusion = "WldNontrivial(hingeClassifyingLoop) iff HingeWitness"
+lean_decl = "ERIEC.BridgeFunctor.hingeClassifyingLoop_nontrivial_iff"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-OBJECT-CLASSIFIER-001.lean"
+statement_hash = "sha256:5ce99b2ddb0a7ad9a4fc62afbc90e5394cdc4eb41b0b1df0c246b322cf6e6716"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_hinge_classifying_loop"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_object_classifier"
+certification_status = "certified"
+certification_log = "logs/gates/A1-OBJECT-CLASSIFIER-001/G4-20260706.log"
+depends_on = ["VP2-A1-ALPHA-ONLY-CE-001"]
+
+[[claim]]
+id = "VP2-A1-LAX-MAP-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 前向蝶番射のlax写像"
+claim_kind = "theorem"
+statement_ja = "蝶番非空性を前向保存する射は恒等と合成に閉じ、分類ループの作用ノルムを単調にする"
+conclusion = "HingeForward induces a lax norm inequality between classifying loops"
+lean_decl = "ERIEC.BridgeFunctor.hingeClassifyingLoop_lax"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-LAX-MAP-001.lean"
+statement_hash = "sha256:4809cf5658e4175ad437f453e5a6c5fb1f354425b853465528c87b6691572ceb"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_hinge_classifying_loop_lax"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_lax_map"
+certification_status = "certified"
+certification_log = "logs/gates/A1-LAX-MAP-001/G4-20260706.log"
+depends_on = ["VP2-A1-OBJECT-CLASSIFIER-001", "VP2-A5-REL-LAX-001"]
+
+[[claim]]
+id = "VP2-A1-THIN-FUNCTOR-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 薄いclassifier圏の関手"
+claim_kind = "theorem"
+statement_ja = "完全蝶番データの前向保存前順序から作用ノルム順序classifier圏への対象・射写像は関手をなし、その像の世界非自明性は蝶番非空性と同値"
+conclusion = "hingeClassifierFunctor is a thin-category functor and classifies nontriviality"
+lean_decl = "ERIEC.BridgeFunctor.hingeClassifierFunctor_nontrivial_iff"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-THIN-FUNCTOR-001.lean"
+statement_hash = "sha256:cd5d728c776dcea52415d801516f6a8457216eee3835fb6a9bc1f55549cad465"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_hinge_classifier_functor_laws"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_thin_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A1-THIN-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A1-LAX-MAP-001"]
+
+[[claim]]
+id = "VP2-A1-STRICT-FUNCTOR-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 可逆断片のstrict classifier関手"
+claim_kind = "theorem"
+statement_ja = "蝶番非空性を双方向保存する射上では分類ループが等しく、恒等連続線形写像がintertwinerとなる"
+conclusion = "strict hinge arrows induce equal loops and identity intertwiners"
+lean_decl = "ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-STRICT-FUNCTOR-001.lean"
+statement_hash = "sha256:a9810f930ec8c42467db704b05d7db397391b97d8ed92973497d1df9d188d3af"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_strict_hinge_classifier_intertwining"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_strict_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A1-STRICT-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A1-THIN-FUNCTOR-001", "VP2-A5-REL-NAT-001"]
+
+[[claim]]
+id = "VP2-A1-HILBERT-FUNCTOR-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 Hilbert intertwiner圏へのstrict関手"
+claim_kind = "theorem"
+statement_ja = "双方向蝶番保存圏から連続線形intertwinerをHomとするHilbert作用素圏へのstrict関手が存在し、その像の非自明性は蝶番非空性と同値"
+conclusion = "strictHingeHilbertFunctor lands in the actual intertwiner category and classifies nontriviality"
+lean_decl = "ERIEC.BridgeFunctor.strictHingeHilbertFunctor_nontrivial_iff"
+lean_file = "formal/ERIEC/BridgeFunctor.lean"
+statement_spec = "specs/statements/VP2-A1-HILBERT-FUNCTOR-001.lean"
+statement_hash = "sha256:24efd794b08362da285d8f4c1d5b9fc7d190993f6014eb171d851b7db3e768ed"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_hinge_hilbert_functor"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_hilbert_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A1-HILBERT-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A1-STRICT-FUNCTOR-001"]
+
+[[claim]]
+id = "VP2-A1-STRUCTURAL-FUNCTOR-001"
+group_id = "GRP-A1-BRIDGE"
+source_label = "A-1 構造同型圏からHilbert intertwiner圏への関手"
+claim_kind = "theorem"
+statement_ja = "rho/sigma/kappa/epsilonを保存する完全蝶番データの構造同型は蝶番非空性を双方向保存し、Hilbert intertwiner圏への関手の像で世界非自明性と蝶番非空性が同値"
+conclusion = "structuralHingeHilbertFunctor classifies hinge nonemptiness on structural isomorphisms"
+lean_decl = "ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff"
+lean_file = "formal/ERIEC/StructuralHinge.lean"
+statement_spec = "specs/statements/VP2-A1-STRUCTURAL-FUNCTOR-001.lean"
+statement_hash = "sha256:ba47387716f81dbebad82c6e346395109f55ea35af3ad24171a9ea686b2d0214"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "structural_hinge_isomorphism_witness"
+julia_file = "src/bridge_functor.jl"
+contract_id = "bridge.hinge_structural_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A1-STRUCTURAL-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A1-HILBERT-FUNCTOR-001", "VP2-A5-REL-NAT-001"]
+
+[[claim]]
+id = "VP2-A2-VIABILITY-CLOSURE-001"
+group_id = "GRP-A2-CLOSURE-FUNCTOR"
+source_label = "A-2 viability閉包の対象写像"
+claim_kind = "theorem"
+statement_ja = "viableな開放系の反射的後続閉包について、viability集合は全段階で左右両閉包の固定点となる"
+conclusion = "viability invariance yields fixed left and right closure stages"
+lean_decl = "ERIEC.ViabilityClosure.viabilityClosureImage_left_fixed"
+lean_file = "formal/ERIEC/ViabilityClosure.lean"
+statement_spec = "specs/statements/VP2-A2-VIABILITY-CLOSURE-001.lean"
+statement_hash = "sha256:5c6b5d34f9ecfc05e26bc8dfbf73c232158570e68e8698cda73423c50922cd2e"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_viability_closure"
+julia_file = "src/viability_closure.jl"
+contract_id = "viability.closure_object"
+certification_status = "certified"
+certification_log = "logs/gates/A2-VIABILITY-CLOSURE-001/G4-20260706.log"
+depends_on = []
+
+[[claim]]
+id = "VP2-A2-CLOSURE-FUNCTOR-001"
+group_id = "GRP-A2-CLOSURE-FUNCTOR"
+source_label = "A-2 viability閉包関手の自然性"
+claim_kind = "theorem"
+statement_ja = "viability・遷移を双方向保存する構造同型上で、viability段階と左右反射的後続閉包は像写像と可換し、対象・射写像は関手をなす"
+conclusion = "viabilityClosureFunctor preserves stages and both closure channels naturally"
+lean_decl = "ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural"
+lean_file = "formal/ERIEC/ViabilityClosure.lean"
+statement_spec = "specs/statements/VP2-A2-CLOSURE-FUNCTOR-001.lean"
+statement_hash = "sha256:759ad8468b7c2194840200da8c5b9abe866695e55bbf436dbd4251980125315e"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_viability_closure_naturality"
+julia_file = "src/viability_closure.jl"
+contract_id = "viability.closure_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A2-CLOSURE-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A2-VIABILITY-CLOSURE-001"]
+
+[[claim]]
+id = "VP2-A2-RELATIONAL-FRAME-001"
+group_id = "GRP-A2-CLOSURE-FUNCTOR"
+source_label = "A-2 関係フレーム実現"
+claim_kind = "theorem"
+statement_ja = "恒等関係と反射的一歩後続関係で構成したpi/rho/alpha/sigmaフレームでは、PhiとT-primeが反射的後続閉包に一致し、viability集合が左右両方の固定点となる"
+conclusion = "the abstract viability closure is realized by an explicit relational frame"
+lean_decl = "ERIEC.ViabilityClosure.viabilityRelationalFrame_left_fixed"
+lean_file = "formal/ERIEC/ViabilityClosure.lean"
+statement_spec = "specs/statements/VP2-A2-RELATIONAL-FRAME-001.lean"
+statement_hash = "sha256:b3b431fbfb56c175e79a4fb0514786c75adbc149e7564d6c356033ddbb499f30"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_viability_relational_frame"
+julia_file = "src/viability_closure.jl"
+contract_id = "viability.relational_frame"
+certification_status = "certified"
+certification_log = "logs/gates/A2-RELATIONAL-FRAME-001/G4-20260706.log"
+depends_on = ["VP2-A2-CLOSURE-FUNCTOR-001"]
+
+[[claim]]
+id = "VP2-A2-RELATIONAL-FUNCTOR-001"
+group_id = "GRP-A2-CLOSURE-FUNCTOR"
+source_label = "A-2 関係フレーム関手"
+claim_kind = "theorem"
+statement_ja = "viability・遷移の構造同型をpi/rho/alpha/sigma/kappa/epsilonすべてを保存する関係フレーム同型へ送り、対象・射写像は関手をなす"
+conclusion = "viabilityRelationalFunctor lands in the explicit relational-frame category"
+lean_decl = "ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural"
+lean_file = "formal/ERIEC/ViabilityClosure.lean"
+statement_spec = "specs/statements/VP2-A2-RELATIONAL-FUNCTOR-001.lean"
+statement_hash = "sha256:6abfa166b262ff783029b49aa34566ef96c343cdc6b53ee0f014f6ba8409e64c"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_viability_relational_functor"
+julia_file = "src/viability_closure.jl"
+contract_id = "viability.relational_functor"
+certification_status = "certified"
+certification_log = "logs/gates/A2-RELATIONAL-FUNCTOR-001/G4-20260706.log"
+depends_on = ["VP2-A2-RELATIONAL-FRAME-001"]
+
+[[claim]]
+id = "VP2-A3-LAYER-COMPOSITION-001"
+group_id = "GRP-A3-LAYER-COMPOSITION"
+source_label = "A-3 実装済み三層経路の合成"
+claim_kind = "theorem"
+statement_ja = "viable open systemから関係フレーム・蝶番データを経てHilbert intertwinerへ至る合成関手は親括弧に依存せず、その像はviability領域が非空であるときかつそのときに限り世界非自明"
+conclusion = "the implemented three-layer path composes associatively and classifies viable-region inhabitation"
+lean_decl = "ERIEC.LayerComposition.viableToHilbert_nontrivial_iff"
+lean_file = "formal/ERIEC/LayerComposition.lean"
+statement_spec = "specs/statements/VP2-A3-LAYER-COMPOSITION-001.lean"
+statement_hash = "sha256:39dc2c98e4a46ed209918dc09a548faa4bf5cd32035514f2ec12b3e63d96586f"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "check_layer_composition"
+julia_file = "src/layer_composition.jl"
+contract_id = "layers.viable_to_hilbert"
+certification_status = "certified"
+certification_log = "logs/gates/A3-LAYER-COMPOSITION-001/G4-20260706.log"
+depends_on = ["VP2-A1-STRUCTURAL-FUNCTOR-001", "VP2-A2-RELATIONAL-FUNCTOR-001"]
+
+[[claim]]
+id = "VP2-A3-NONFAITHFUL-001"
+group_id = "GRP-A3-LAYER-COMPOSITION"
+source_label = "A-3 情報保存閉ループへの反例"
+claim_kind = "counterexample"
+statement_ja = "二状態viable systemの恒等自己同型とBool反転自己同型は合成関手で同一のHilbert恒等intertwinerへ写るため、合成関手はfaithfulでなくHom上の左逆を持たない"
+conclusion = "the composite is nonfaithful and has no hom-set left inverse on the Boolean witness"
+lean_decl = "ERIEC.LayerComposition.viableToHilbert_not_faithful"
+lean_file = "formal/ERIEC/LayerComposition.lean"
+statement_spec = "specs/statements/VP2-A3-NONFAITHFUL-001.lean"
+statement_hash = "sha256:65aa66052420f7375cb80e28a807fc42304d6e99c554dc206f9c279e0c1cc93a"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "witness"
+julia_api = "layer_composition_nonfaithful_witness"
+julia_file = "src/layer_composition.jl"
+contract_id = "layers.nonfaithful_counterexample"
+certification_status = "certified"
+certification_log = "logs/gates/A3-NONFAITHFUL-001/G4-20260706.log"
+depends_on = ["VP2-A3-LAYER-COMPOSITION-001"]
+
+# ---------------------------------------------------------------------------
+# Batch evidence. Individual claim states above remain uncertified until a v2
+# catalog records exact statement hashes.
+
+[[claim]]
+id = "VP2-WAGER-FROZEN-001"
+group_id = "GRP-WAGER-14"
+source_label = "§14 定義1.1–1.2・定理4.1–4.4,4.6"
+claim_kind = "theorem"
+statement_ja = "凍結文W1–W6を定義し、W1–W4およびW6に真偽の有限証人を与える"
+conclusion = "各凍結文について構成的な真側と偽側の証人が存在する"
+lean_decl = "ERIEC.Wager.W6_indep"
+lean_file = "formal/ERIEC/Wager.lean"
+statement_spec = "specs/statements/VP2-WAGER-FROZEN-001.lean"
+statement_hash = "sha256:d3f9106ea063beaee2c9c469af0698a6aab39362b13b1e447715800f96e5d767"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_wager_independence"
+julia_file = "src/wager.jl"
+contract_id = "wager.frozen_independence"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-001/G4-20260707.log"
+depends_on = []
+
+[[claim]]
+id = "VP2-WAGER-W5-FAMILY-001"
+group_id = "GRP-WAGER-14"
+source_label = "W-8・定理4.5一般化"
+claim_kind = "theorem"
+statement_ja = "全てのk0≥2について、濃度k0の真模型と一要素の偽模型を一様構成する"
+assumptions = ["2 ≤ k0"]
+conclusion = "W5(richImpl k0,k0) ∧ ¬W5(poorImpl,k0)"
+lean_decl = "ERIEC.Wager.W5_indep_all"
+lean_file = "formal/ERIEC/Wager/Richness.lean"
+statement_spec = "specs/statements/VP2-WAGER-W5-FAMILY-001.lean"
+statement_hash = "sha256:4e0aa57390bf98f4053e4ff9e848e3aa3194be519fa0af885543512051d07c8a"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_w5_independence_family"
+julia_file = "src/wager.jl"
+contract_id = "wager.w5_independence_family"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-002/G4-20260707.log"
+depends_on = ["VP2-WAGER-FROZEN-001"]
+
+[[claim]]
+id = "VP2-WAGER-PRESERVATION-001"
+group_id = "GRP-WAGER-14"
+source_label = "W-7・定理5.2"
+claim_kind = "theorem"
+statement_ja = "新鮮なPhを構造述語と定義的に同一視してもPhを含まない文は保存される"
+conclusion = "(∃Ph, Ph=structural ∧ sentence) ↔ sentence"
+lean_decl = "ERIEC.Wager.W1_identification_conservative"
+lean_file = "formal/ERIEC/Wager/Preservation.lean"
+statement_spec = "specs/statements/VP2-WAGER-PRESERVATION-001.lean"
+statement_hash = "sha256:02b6eafc71ab84126746d889a6452f581d14107a0bf7a3f98ae8322c704c77d0"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_wager_conservative_extension"
+julia_file = "src/wager.jl"
+contract_id = "wager.conservative_extension"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-003/G4-20260707.log"
+depends_on = ["VP2-WAGER-FROZEN-001"]
+
+[[claim]]
+id = "VP2-WAGER-GLOBAL-INVARIANT-001"
+group_id = "GRP-WAGER-14"
+source_label = "M-6"
+claim_kind = "theorem"
+statement_ja = "各追加パックが正負の証人を保存する有限リリース列では凍結賭けの真偽分離が大域的に保存される"
+assumptions = ["各packがpositive/negativeの両証人で成立"]
+conclusion = "全pack成立と元のsentence真/偽分離が同時に維持される"
+lean_decl = "ERIEC.Wager.global_frozen_protocol_invariant"
+lean_file = "formal/ERIEC/Wager/Preservation.lean"
+statement_spec = "specs/statements/VP2-WAGER-GLOBAL-INVARIANT-001.lean"
+statement_hash = "sha256:6128733802db7383327f1327d8d0dfef15075063ca8aac51405fc86c4d6bd7f1"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_frozen_protocol_invariant"
+julia_file = "src/wager.jl"
+contract_id = "wager.global_protocol_invariant"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-004/G4-20260707.log"
+depends_on = ["VP2-WAGER-PRESERVATION-001"]
+
+[[claim]]
+id = "VP2-WAGER-NAMED-MODELS-001"
+group_id = "GRP-WAGER-14"
+source_label = "§14 §7 Lean対応 named models"
+claim_kind = "theorem"
+statement_ja = "凍結文書のKBad/M0/KPlus/MPlus/MCycの有限証人役を現行Lean抽象化の公開名として固定し、W4/W6境界を再掲する"
+conclusion = "¬ConvHolds KBad ∧ ConvHolds KPlus ∧ W6 M0 ∧ ¬W6 MPlus ∧ W6 MCyc"
+lean_decl = "ERIEC.Wager.named_frozen_models_boundary"
+lean_file = "formal/ERIEC/Wager/Models.lean"
+statement_spec = "specs/statements/VP2-WAGER-NAMED-MODELS-001.lean"
+statement_hash = "sha256:c704a9097ddc679c2863be387da3ddde1463126b5dfbf3c84425aa64c4ad2146"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_wager_named_models"
+julia_file = "src/wager.jl"
+contract_id = "wager.named_models"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-005/G4-20260707-230547.log"
+depends_on = [
+  "VP2-WAGER-FROZEN-001",
+  "VP2-WAGER-PRESERVATION-001",
+  "VP2-WAGER-GLOBAL-INVARIANT-001",
+]
+
+[[claim]]
+id = "VP2-WAGER-W6-CYCLE-SOUND-001"
+group_id = "GRP-WAGER-14"
+source_label = "§14 定理2.1 片方向"
+claim_kind = "theorem"
+statement_ja = "DC状態が一歩自己閉路を持てば、定数軌道によりW6が成立する"
+assumptions = ["impl.dc s", "impl.step s s"]
+conclusion = "W6 impl"
+lean_decl = "ERIEC.Wager.W6_of_dc_cycle"
+lean_file = "formal/ERIEC/Wager/Models.lean"
+statement_spec = "specs/statements/VP2-WAGER-W6-CYCLE-SOUND-001.lean"
+statement_hash = "sha256:17d5053253b240ba40d99d5b22a0710bb08ca2205125eb6259e79ca7479538c6"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_w6_cycle_soundness"
+julia_file = "src/wager.jl"
+contract_id = "wager.w6_cycle_soundness"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-006/G4-20260708-060505.log"
+depends_on = [
+  "VP2-WAGER-FROZEN-001",
+  "VP2-WAGER-NAMED-MODELS-001",
+]
+
+[[claim]]
+id = "VP2-WAGER-FINITE-CHECKER-001"
+group_id = "GRP-WAGER-14"
+source_label = "L-4 Wager finite checker"
+claim_kind = "theorem"
+statement_ja = "有限凍結Wager実装について、W4/W5/W6検査結果をLean上のW4 ∧ W5 ∧ W6 contract endpointへ束ねる"
+conclusion = "W4 impl ∧ W5 impl k0 ∧ W6 impl"
+lean_decl = "ERIEC.Wager.frozen_model_checker_soundness"
+lean_file = "formal/ERIEC/Wager/Models.lean"
+statement_spec = "specs/statements/VP2-WAGER-FINITE-CHECKER-001.lean"
+statement_hash = "sha256:a3f5792f33bbee0735961bdfd94a0e1af0a5ca14fe8a11e03c3bc9e3132bd212"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_frozen_wager_model"
+julia_file = "src/wager.jl"
+contract_id = "wager.finite_model_checker"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-007/G4-20260708-060845.log"
+depends_on = [
+  "VP2-WAGER-FROZEN-001",
+  "VP2-WAGER-NAMED-MODELS-001",
+  "VP2-WAGER-W6-CYCLE-SOUND-001",
+]
+
+[[claim]]
+id = "VP2-WAGER-INTERPRETIVE-CHECKER-001"
+group_id = "GRP-WAGER-14"
+source_label = "L-4 Wager interpretive finite checker"
+claim_kind = "theorem"
+statement_ja = "有限凍結Wager実装について、与えられたPh/Mat解釈表のW1/W2/W3検査結果をLean上のW1 ∧ W2 ∧ W3 contract endpointへ束ねる"
+conclusion = "W1 impl Ph ∧ W2 impl Mat ∧ W3 impl Ph"
+lean_decl = "ERIEC.Wager.frozen_interpretive_checker_soundness"
+lean_file = "formal/ERIEC/Wager/Models.lean"
+statement_spec = "specs/statements/VP2-WAGER-INTERPRETIVE-CHECKER-001.lean"
+statement_hash = "sha256:7f84af7cdc08d6619e8fc739ad5d9145b148c66a8c4da679d392e45a953a8519"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_frozen_wager_interpretive_model"
+julia_file = "src/wager.jl"
+contract_id = "wager.interpretive_model_checker"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-008/G4-20260708-061436.log"
+depends_on = [
+  "VP2-WAGER-FROZEN-001",
+  "VP2-WAGER-PRESERVATION-001",
+  "VP2-WAGER-FINITE-CHECKER-001",
+]
+
+[[claim]]
+id = "VP2-WAGER-FULL-CHECKER-001"
+group_id = "GRP-WAGER-14"
+source_label = "L-4 Wager full finite checker"
+claim_kind = "theorem"
+statement_ja = "有限凍結Wager実装について、与えられた解釈表と構造検査結果をW1-W6全体のLean contract endpointへ束ねる"
+conclusion = "W1 impl Ph ∧ W2 impl Mat ∧ W3 impl Ph ∧ W4 impl ∧ W5 impl k0 ∧ W6 impl"
+lean_decl = "ERIEC.Wager.frozen_full_model_checker_soundness"
+lean_file = "formal/ERIEC/Wager/Models.lean"
+statement_spec = "specs/statements/VP2-WAGER-FULL-CHECKER-001.lean"
+statement_hash = "sha256:a950005cbdb78495da22c6cbc36d864e92ba1e1674714077c16e0a66ff471a4a"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_frozen_wager_full_model"
+julia_file = "src/wager.jl"
+contract_id = "wager.full_model_checker"
+certification_status = "certified"
+certification_log = "logs/gates/VP-WGR-009/G4-20260708-061747.log"
+depends_on = [
+  "VP2-WAGER-FINITE-CHECKER-001",
+  "VP2-WAGER-INTERPRETIVE-CHECKER-001",
+]
+
+[[claim]]
+id = "VP2-M1-LARGE-DC-001"
+group_id = "GRP-M1-LARGE-DC"
+source_label = "M-1 finite fragment"
+claim_kind = "theorem"
+statement_ja = "任意のk≥2について、行為・環境・核の各台がFin kで、alphaRelが真に多価な有限DC参照モデルが存在する"
+assumptions = ["2 ≤ k"]
+conclusion = "Nonempty (ERIEC.RefModel.LargeNondegenerateWitness k)"
+lean_decl = "ERIEC.RefModel.arbitrarily_large_nondegenerate_dc"
+lean_file = "formal/ERIEC/RefModel/Large.lean"
+statement_spec = "specs/statements/VP2-M1-LARGE-DC-001.lean"
+statement_hash = "sha256:a801aef12a5e96f9aa14b956f501916be5854fda0b40f52ac86692653a03025f"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_arbitrarily_large_nondegenerate_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_dc"
+certification_status = "certified"
+certification_log = "logs/gates/VP-M1-001/G4-20260707-180844.log"
+depends_on = ["VP2-REF-NONDEG-001"]
+
+[[claim]]
+id = "VP2-M1-FULL-001a"
+group_id = "GRP-M1-LARGE-DC"
+source_label = "M-1 full Tier-1, v5.1 §0.3/§13"
+claim_kind = "theorem"
+statement_ja = "任意のk≥2について、現行v5.1のAX_core=AX_stable∪AX_dynの離散・動態Tier-1を満たす有限参照模型が存在する"
+assumptions = [
+  "2 ≤ k",
+  "AX_core is read from category/三層構造の圏論的定式化_v5_1.md §0.3",
+  "withdrawn layer-coherence condition 6.3 is excluded",
+]
+conclusion = "Nonempty (ERIEC.RefModel.LargeAXCoreReferenceWitness k)"
+lean_decl = "ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model"
+lean_file = "formal/ERIEC/RefModel/LargeCore.lean"
+statement_spec = "specs/statements/VP2-M1-FULL-001a.lean"
+statement_hash = "sha256:258719fd4cba0161586aeda09599a8d327337b7be61ce364d23fd983aa0525dd"
+source_revision = "1798d8e4758e294a0b40eeca139853e85681c404"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_arbitrarily_large_ax_core_discrete_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_ax_core_discrete"
+certification_status = "certified"
+certification_log = "logs/gates/VP-M1-FULL-001a/G4-20260707-195447.log"
+depends_on = [
+  "VP2-M1-LARGE-DC-001",
+  "VP2-REF-DYN-001",
+  "VP2-DYN-R2P-001",
+  "VP2-INV-E5-001",
+]
+
+[[claim]]
+id = "VP2-M1-FULL-001b"
+group_id = "GRP-M1-LARGE-DC"
+source_label = "M-1 full Tier-2 bridge shape, v5.1 §0.3/§13"
+claim_kind = "theorem"
+statement_ja = "任意のk≥2について、001aの任意サイズTier-1模型を既存World/Value非自明証人および§13.2非退化参照義務とDCWorldBridge型に束ねられる"
+assumptions = [
+  "2 ≤ k",
+  "VP2-M1-FULL-001a",
+  "bridge-shaped consistency witness only",
+  "no unconditional DC ↔ World equivalence",
+  "no phenomenal claim",
+]
+conclusion = "Nonempty (ERIEC.RefModel.LargeThreeLayerReferenceWitness k)"
+lean_decl = "ERIEC.RefModel.arbitrarily_large_three_layer_reference_model"
+lean_file = "formal/ERIEC/RefModel/LargeCore.lean"
+statement_spec = "specs/statements/VP2-M1-FULL-001b.lean"
+statement_hash = "sha256:adf0dc4cc2fe81321870be15c0db38e590d0d7683750f7950fb4001b2132964f"
+source_revision = "1798d8e4758e294a0b40eeca139853e85681c404"
+spec_status = "frozen"
+proof_status = "proved"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_arbitrarily_large_three_layer_reference_models"
+julia_file = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_three_layer"
+certification_status = "certified"
+certification_log = "logs/gates/VP-M1-FULL-001b/G4-20260707-224049.log"
+depends_on = [
+  "VP2-M1-FULL-001a",
+  "VP2-WDC-FORWARD-CE-001",
+  "VP2-VAL-ENDOGENOUS-001",
+  "VP2-REF-NONDEG-001",
+]
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE01-G1-20260705"
+claim_ids = [
+  "VP2-DYN-CONF-001",
+  "VP2-DYN-UPD-001",
+  "VP2-DYN-DESCENT-001",
+  "VP2-DYN-REACHABLE-001",
+  "VP2-DYN-DOWNV-001",
+  "VP2-DYN-K-001",
+  "VP2-DYN-BDPAIR-001",
+  "VP2-DYN-K-ABSORB-001",
+  "VP2-DYN-BD-ONEWAY-001",
+  "VP2-DYN-INS-001",
+  "VP2-DYN-INS-FIBER-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-wave01/G1-20260705.log"
+axiom_log = "logs/gates/v2-wave01/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE01-G2-20260705"
+claim_ids = [
+  "VP2-DYN-CONF-001",
+  "VP2-DYN-UPD-001",
+  "VP2-DYN-DESCENT-001",
+  "VP2-DYN-REACHABLE-001",
+  "VP2-DYN-DOWNV-001",
+  "VP2-DYN-K-001",
+  "VP2-DYN-BDPAIR-001",
+  "VP2-DYN-K-ABSORB-001",
+  "VP2-DYN-BD-ONEWAY-001",
+  "VP2-DYN-INS-001",
+  "VP2-DYN-INS-FIBER-001",
+]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-wave01/G2-20260705-retry1.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE01-G3-20260705"
+claim_ids = [
+  "VP2-DYN-UPD-001",
+  "VP2-DYN-REACHABLE-001",
+  "VP2-DYN-DOWNV-001",
+  "VP2-DYN-K-001",
+  "VP2-DYN-BDPAIR-001",
+  "VP2-DYN-K-ABSORB-001",
+  "VP2-DYN-INS-001",
+  "VP2-DYN-INS-FIBER-001",
+]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-wave03/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE02-G0-20260705"
+claim_ids = [
+  "VP2-VAL-RAW-001",
+  "VP2-VAL-NORMALIZED-001",
+  "VP2-VAL-WELLDEF-001",
+  "VP2-VAL-RANGE-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-wave02/G0-statements-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE02-G1-20260705"
+claim_ids = [
+  "VP2-VAL-RAW-001",
+  "VP2-VAL-NORMALIZED-001",
+  "VP2-VAL-WELLDEF-001",
+  "VP2-VAL-RANGE-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-wave02/G1-20260705.log"
+axiom_log = "logs/gates/v2-wave02/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE02-G2-20260705"
+claim_ids = [
+  "VP2-VAL-RAW-001",
+  "VP2-VAL-NORMALIZED-001",
+]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-wave02/G2-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE02-G3-20260705"
+claim_ids = [
+  "VP2-VAL-RAW-001",
+  "VP2-VAL-NORMALIZED-001",
+]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-wave03/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE03-G0-20260705"
+claim_ids = [
+  "VP2-WDC-FORWARD-CE-001",
+  "VP2-WDC-BACKWARD-CE-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-wave03/G0-statements-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE03-G1-20260705"
+claim_ids = [
+  "VP2-WDC-FORWARD-CE-001",
+  "VP2-WDC-BACKWARD-CE-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-wave03/G1-20260705.log"
+axiom_log = "logs/gates/v2-wave03/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE03-G2-20260705"
+claim_ids = [
+  "VP2-WDC-FORWARD-CE-001",
+  "VP2-WDC-BACKWARD-CE-001",
+]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-wave03/G2-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WAVE03-G3-20260705"
+claim_ids = [
+  "VP2-WDC-FORWARD-CE-001",
+  "VP2-WDC-BACKWARD-CE-001",
+]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-wave03/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-REMAINING-G0-20260705"
+claim_ids = [
+  "VP2-VAL-COUNTERMODEL-001",
+  "VP2-VAL-WEIGHTED-001",
+  "VP2-VAL-WEIGHTED-PURE-001",
+]
+gate = "G0"
+result = "pass"
+logs = [
+  "logs/gates/v2-value-countermodel/G0-statement-20260705-retry1.log",
+  "logs/gates/v2-value-weighted/G0-statements-20260705.log",
+]
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-REMAINING-G1-20260705"
+claim_ids = [
+  "VP2-VAL-COUNTERMODEL-001",
+  "VP2-VAL-WEIGHTED-001",
+  "VP2-VAL-WEIGHTED-PURE-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-value-batch/G1-20260705.log"
+axiom_logs = [
+  "logs/gates/v2-value-countermodel/G1-axioms-20260705-retry1.log",
+  "logs/gates/v2-value-weighted/G1-axioms-20260705.log",
+]
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-REMAINING-G2-20260705"
+claim_ids = [
+  "VP2-VAL-COUNTERMODEL-001",
+  "VP2-VAL-WEIGHTED-001",
+]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-value-weighted/G2-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-REMAINING-G3-20260705"
+claim_ids = [
+  "VP2-VAL-COUNTERMODEL-001",
+  "VP2-VAL-WEIGHTED-001",
+]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-value-batch/G3-full-20260705-retry1.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-ENDOGENOUS-G0-20260705"
+claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-value-endogenous/G0-statement-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-ENDOGENOUS-G1-20260705"
+claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-value-endogenous/G1-20260705.log"
+axiom_log = "logs/gates/v2-value-endogenous/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-ENDOGENOUS-G2-20260705"
+claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-value-endogenous/G2-20260705-retry1.log"
+
+[[evidence_batch]]
+id = "EVID-V2-VALUE-ENDOGENOUS-G3-20260705"
+claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-value-endogenous/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-BASIC-G0-20260705"
+claim_ids = [
+  "VP2-WLD-EETA-001",
+  "VP2-WLD-BAND-001",
+  "VP2-WLD-INVARIANT-001",
+  "VP2-WLD-ZERO-FIX-001",
+  "VP2-WLD-MONO-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-world-basic/G0-statements-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-BASIC-G1-20260705"
+claim_ids = [
+  "VP2-WLD-EETA-001",
+  "VP2-WLD-BAND-001",
+  "VP2-WLD-INVARIANT-001",
+  "VP2-WLD-ZERO-FIX-001",
+  "VP2-WLD-MONO-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-world-basic/G1-20260705.log"
+axiom_log = "logs/gates/v2-world-basic/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-BASIC-G2-20260705"
+claim_ids = [
+  "VP2-WLD-EETA-001",
+  "VP2-WLD-BAND-001",
+]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-world-basic/G2-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-DEFS-G0-20260705"
+claim_ids = [
+  "VP2-DYN-R2P-001",
+  "VP2-DYN-TOTAL-PROP-001",
+  "VP2-DYN-TOTAL-DATA-001",
+  "VP2-DYN-COREOF-001",
+  "VP2-DYN-TRANSPORT-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-dynamics-defs/G0-statements-20260705-retry1.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-DEFS-G1-20260705"
+claim_ids = [
+  "VP2-DYN-R2P-001",
+  "VP2-DYN-TOTAL-PROP-001",
+  "VP2-DYN-TOTAL-DATA-001",
+  "VP2-DYN-COREOF-001",
+  "VP2-DYN-TRANSPORT-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-dynamics-defs/G1-20260705.log"
+axiom_log = "logs/gates/v2-dynamics-defs/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-TOTALNEXT-G2-20260705"
+claim_ids = ["VP2-DYN-TOTAL-DATA-001"]
+gate = "G2"
+result = "pass"
+log = "logs/gates/v2-dynamics-defs/G2-20260705-retry1.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-TOTALNEXT-G3-20260705"
+claim_ids = ["VP2-DYN-TOTAL-DATA-001"]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-world-dynamics-batch/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-BASIC-G3-20260705"
+claim_ids = [
+  "VP2-WLD-EETA-001",
+  "VP2-WLD-BAND-001",
+]
+gate = "G3"
+result = "pass"
+log = "logs/gates/v2-world-dynamics-batch/G3-full-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-HINGE-G0-20260705"
+claim_ids = ["VP2-DYN-HINGE-COLLAPSE-001"]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-dynamics-hinge/G0-statement-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-HINGE-G1-20260705"
+claim_ids = ["VP2-DYN-HINGE-COLLAPSE-001"]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-dynamics-hinge/G1-20260705.log"
+axiom_log = "logs/gates/v2-dynamics-hinge/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-PATH-G0-20260705"
+claim_ids = ["VP2-DYN-PATH-ITERATE-001"]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-dynamics-path/G0-statement-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-PATH-G1-20260705"
+claim_ids = ["VP2-DYN-PATH-ITERATE-001"]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-dynamics-path/G1-20260705.log"
+axiom_log = "logs/gates/v2-dynamics-path/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-ORBIT-G0-20260705"
+claim_ids = ["VP2-DYN-TOTAL-ORBIT-001"]
+gate = "G0"
+result = "pass"
+log = "logs/gates/v2-dynamics-orbit/G0-statement-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-DYNAMICS-ORBIT-G1-20260705"
+claim_ids = ["VP2-DYN-TOTAL-ORBIT-001"]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-dynamics-orbit/G1-20260705.log"
+axiom_log = "logs/gates/v2-dynamics-orbit/G1-axioms-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-COLLAPSE-CONF-G0-20260705"
+claim_ids = ["VP2-DYN-COLLAPSE-CONF-001"]
+gate = "G0"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G1-statements-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-COLLAPSE-CONF-G1-20260705"
+claim_ids = ["VP2-DYN-COLLAPSE-CONF-001"]
+gate = "G1"
+result = "pass"
+log = "logs/gates/v2-collapse-conf/G1-target-20260705-retry3.log"
+axiom_log = "logs/gates/VP-WLD-002/G1-axiom-audit-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-COLLAPSE-CONF-G3-20260705"
+claim_ids = ["VP2-DYN-COLLAPSE-CONF-001"]
+gate = "G3"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G3-full-chi-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-SPECTRAL-G0-20260705"
+claim_ids = [
+  "VP2-WLD-SUBSET-EETA-001",
+  "VP2-WLD-LAMBDAMAX-001",
+  "VP2-WLD-CHI-001",
+  "VP2-WLD-CHI-NONTRIV-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G1-statements-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-SPECTRAL-G1-20260705"
+claim_ids = [
+  "VP2-WLD-SUBSET-EETA-001",
+  "VP2-WLD-LAMBDAMAX-001",
+  "VP2-WLD-CHI-001",
+  "VP2-WLD-CHI-NONTRIV-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G1-spectral-20260705-attempt7.log"
+axiom_log = "logs/gates/VP-WLD-002/G1-axiom-audit-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-SPECTRAL-G2-20260705"
+claim_ids = ["VP2-WLD-LAMBDAMAX-001", "VP2-WLD-CHI-001"]
+gate = "G2"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G2-chi-20260705.log"
+
+[[evidence_batch]]
+id = "EVID-V2-WORLD-SPECTRAL-G3-20260705"
+claim_ids = ["VP2-WLD-LAMBDAMAX-001", "VP2-WLD-CHI-001"]
+gate = "G3"
+result = "pass"
+log = "logs/gates/VP-WLD-002/G3-full-chi-20260705.log"
+
+# ---------------------------------------------------------------------------
+# GRP-RICH-A6: 蝶番分岐の余帰納核への遺伝（2026-07-08 起票、draft）。
+# E1 不採用決定（category/erie_c_axiom_categorical_memo.md §11-2）に伴い、
+# 対象層の豊かさは公理でなく分類子 [DEF] + 条件付き増幅定理 + 証人義務で扱う。
+
+[[claim_group]]
+id = "GRP-RICH-A6"
+source = "docs/ERIEC_未解決命題台帳_v1.md#A-6"
+title_ja = "蝶番分岐の余帰納核への遺伝(豊かさの増幅・単段)"
+legacy_vp_ids = []
+children = ["VP2-RICH-BRANCH-001", "VP2-RICH-HINGE-PUMP-001"]
+coverage = "partial"
+coverage_note = "単段版のみ起票。階付き一様版と世代間保存版(upd による Branch∩Act 維持)は別命題として未起票。"
+
+[[claim]]
+id = "VP2-RICH-BRANCH-001"
+group_id = "GRP-RICH-A6"
+source_label = "台帳 A-6・v5.1 定理1.3 証明中の場合分け |α(a)|≥2 の述語化"
+claim_kind = "definition"
+statement_ja = "分岐点述語 Branch(α,m) :⇔ ∃e₁≠e₂, e₁∈α(m) ∧ e₂∈α(m)"
+conclusion = "2 ≤ |α(m)| の Set 版。非退化性の原子分類子(公理ではない)"
+lean_decl = "ERIEC.Richness.Branch"
+lean_file = "formal/ERIEC/Richness.lean"
+statement_spec = "specs/statements/VP2-RICH-BRANCH-001.lean"
+statement_hash = "sha256:01d18297193cfd5be843a18b1456240ff9cbeb4918b08a874a95fccce1405f64"
+proof_status = "not_applicable"
+realization_kind = "formal_only"
+contract_id = "richness.branch"
+certification_status = "certified"
+certification_log = "logs/gates/VP-RICH-001/G4-20260708-223538.log"
+depends_on = []
+
+[[claim]]
+id = "VP2-RICH-HINGE-PUMP-001"
+group_id = "GRP-RICH-A6"
+source_label = "台帳 A-6"
+claim_kind = "theorem"
+statement_ja = "DC のもと、蝶番 Act 上の分岐点 m について α(m) ⊆ νΘ"
+assumptions = ["DC(𝔽,s)", "m ∈ Act(ρ,σ,κ,ε,s)", "Branch(α,m)"]
+conclusion = "α(m) ⊆ νΘ。系として νΘ は相異なる二元を含む。単調性+余帰納原理のみで hConv 非依存の見込み"
+lean_decl = "ERIEC.Richness.hinge_branch_pump"
+lean_file = "formal/ERIEC/Richness.lean"
+statement_spec = "specs/statements/VP2-RICH-HINGE-PUMP-001.lean"
+statement_hash = "sha256:aa50c1da5c42035349fcba3c08c86cc2afeffe1068dad3a0317f042f229e9d4e"
+proof_status = "proved"
+realization_kind = "formal_only"
+contract_id = "richness.hinge_branch_pump"
+certification_status = "certified"
+certification_log = "logs/gates/VP-RICH-002/G4-20260708-223538.log"
+depends_on = ["VP2-RICH-BRANCH-001"]

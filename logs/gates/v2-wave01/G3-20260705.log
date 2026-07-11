@@ -1,0 +1,28 @@
+finite dynamics: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_dynamics.jl:38
+  Expression: !(check_k_absorbing(states, viable, bad_step))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_dynamics.jl:38 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_dynamics.jl:2
+finite dynamics: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_dynamics.jl:39
+  Expression: !(check_boundary_oneway(states, viable, bad_step))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_dynamics.jl:39 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_dynamics.jl:2
+Test Summary:   | Pass  Fail  Total  Time
+finite dynamics |   11     2     13  4.8s
+ERROR: LoadError: Some tests did not pass: 11 passed, 2 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_dynamics.jl:1

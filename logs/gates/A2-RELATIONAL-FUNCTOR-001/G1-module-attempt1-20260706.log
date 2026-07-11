@@ -1,0 +1,19 @@
+formal/ERIEC/ViabilityClosure.lean:312:22: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+formal/ERIEC/ViabilityClosure.lean:313:22: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+formal/ERIEC/ViabilityClosure.lean:314:24: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+formal/ERIEC/ViabilityClosure.lean:348:17: error: No applicable extensionality theorem found for type
+  { X := Config x✝.system.toOpenSystem, frame := viabilityRelationalFrame x✝.system } ⟶
+    { X := Config x✝.system.toOpenSystem, frame := viabilityRelationalFrame x✝.system }
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+formal/ERIEC/ViabilityClosure.lean:349:21: error: No applicable extensionality theorem found for type
+  { X := Config X✝.system.toOpenSystem, frame := viabilityRelationalFrame X✝.system } ⟶
+    { X := Config Z✝.system.toOpenSystem, frame := viabilityRelationalFrame Z✝.system }
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute

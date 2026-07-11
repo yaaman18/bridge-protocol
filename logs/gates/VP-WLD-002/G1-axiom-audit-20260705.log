@@ -1,0 +1,5 @@
+'ERIEC.Dynamics.collapse_conf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.band_subset_Eeta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.lambdaMax_hasEigenvalue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.lambdaMax_eq_normSq_T' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.band_nontrivial_of_chi_le' depends on axioms: [propext, Classical.choice, Quot.sound]

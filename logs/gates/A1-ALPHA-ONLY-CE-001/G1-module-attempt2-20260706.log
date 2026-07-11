@@ -1,0 +1,9 @@
+⚠ [429/429] Built ERIEC.BridgeFunctor (2.4s)
+warning: formal/ERIEC/BridgeFunctor.lean:34:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Build completed successfully (429 jobs).

@@ -1,0 +1,16 @@
+ERROR: LoadError: Some tests did not pass: 15 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_v52_formal_statements.jl:3
+v5.2 Lean formal statement smoke test: Test Failed at /Users/yamaguchimitsuyuki/erie-c/test/test_v52_formal_statements.jl:29
+  Expression: success(result)
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/erie-c/test/test_v52_formal_statements.jl:29 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/erie-c/test/test_v52_formal_statements.jl:4
+Test Summary:                         | Pass  Fail  Total   Time
+v5.2 Lean formal statement smoke test |   15     1     16  10.2s

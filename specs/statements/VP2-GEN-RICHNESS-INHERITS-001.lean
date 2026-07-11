@@ -1,0 +1,8 @@
+import ERIEC.Generation
+
+namespace ERIECV2.Statement.VP2_GEN_RICHNESS_INHERITS_001
+
+#check ERIEC.Generation.richness_inherits_generational
+#print axioms ERIEC.Generation.richness_inherits_generational
+
+end ERIECV2.Statement.VP2_GEN_RICHNESS_INHERITS_001

@@ -1,0 +1,5 @@
+fun {S} => ERIEC.Wager.CycleAt : {S : Type u_1} → (S → S → Prop) → S → Prop
+ERIEC.Wager.W6_of_dc_cycle.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  (impl : ERIEC.Wager.FrozenImpl A E C S) {s : S} (hdc : impl.dc s) (hcycle : ERIEC.Wager.CycleAt impl.step s) :
+  ERIEC.Wager.W6 impl
+'ERIEC.Wager.W6_of_dc_cycle' depends on axioms: [propext, Quot.sound]

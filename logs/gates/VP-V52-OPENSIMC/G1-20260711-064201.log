@@ -1,0 +1,225 @@
+⚠ [2715/2771] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2722/2771] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2728/2771] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:245:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:246:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:248:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:259:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:285:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2729/2771] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2745/2771] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2764/2771] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:89:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2768/2771] Replayed ERIEC.RefModelV52
+warning: formal/ERIEC/RefModelV52.lean:137:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star, sigmaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:138:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star_induced, alphaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:264:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:267:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✖ [2769/2771] Building ERIEC.OpenSimC (5.3s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/OpenSimC.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/OpenSimC.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/OpenSimC.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/OpenSimC.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/OpenSimC.setup.json --json
+error: formal/ERIEC/OpenSimC.lean:29:2: Failed to generate an `ext_iff` theorem from `ext`: Argument `hState` is depended upon by a subsequent argument, which is not supported for arguments after `f` and `g`
+
+Hint: Try `@[ext (iff := false)]` to prevent generating an `ext_iff` theorem.
+error: formal/ERIEC/OpenSimC.lean:41:18: don't know how to synthesize implicit argument `α`
+  @Eq (G.step ?m.94 ?m.96 ?m.95 → { p // Audit.UsesOnly ?m.96 p }) fEdge gEdge
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ Type (max u w)
+error: formal/ERIEC/OpenSimC.lean:41:26: don't know how to synthesize implicit argument `kind`
+  @gEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ EdgeKind Port
+error: formal/ERIEC/OpenSimC.lean:41:26: don't know how to synthesize implicit argument `t`
+  @gEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ G.State
+error: formal/ERIEC/OpenSimC.lean:41:26: don't know how to synthesize implicit argument `s`
+  @gEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ G.State
+error: formal/ERIEC/OpenSimC.lean:41:18: don't know how to synthesize implicit argument `kind`
+  @fEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ EdgeKind Port
+error: formal/ERIEC/OpenSimC.lean:41:18: don't know how to synthesize implicit argument `t`
+  @fEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ G.State
+error: formal/ERIEC/OpenSimC.lean:41:18: don't know how to synthesize implicit argument `s`
+  @fEdge ?m.94 ?m.95 ?m.96
+context:
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+fState : G.State → H.State
+fEdge gEdge : {s t : G.State} → {kind : EdgeKind Port} → G.step s kind t → { p // Audit.UsesOnly kind p }
+hEdge :
+  ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑({ mapState := fState, mapEdge := fEdge }.mapEdge edge) =
+      ⋯ ▸ ↑({ mapState := fState, mapEdge := gEdge }.mapEdge edge)
+⊢ G.State
+error: formal/ERIEC/OpenSimC.lean:148:4: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case hEdge
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+f : Hom G H
+⊢ ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑(((id G).comp f).mapEdge edge) = ⋯ ▸ ↑(f.mapEdge edge)
+error: formal/ERIEC/OpenSimC.lean:149:10: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case hState
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+f : Hom G H
+⊢ ((id G).comp f).mapState = f.mapState
+error: formal/ERIEC/OpenSimC.lean:154:4: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case hEdge
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+f : Hom G H
+⊢ ∀ {s t : G.State} {kind : EdgeKind Port} (edge : G.step s kind t),
+    ↑((f.comp (id H)).mapEdge edge) = ⋯ ▸ ↑(f.mapEdge edge)
+error: formal/ERIEC/OpenSimC.lean:155:10: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case hState
+Port : Type u
+G : OpenGraph Port
+H : OpenGraph Port
+f : Hom G H
+⊢ (f.comp (id H)).mapState = f.mapState
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.OpenSimC
+error: build failed

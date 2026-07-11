@@ -1,0 +1,8 @@
+ERIEC.ViabilityClosure.viabilityClosureImage.{v, u} (W : Type v) (A : ViableSystem) :
+  ClosureStagePair W (Config A.toOpenSystem)
+ERIEC.ViabilityClosure.viabilityClosureImage_left_fixed.{v, u} (W : Type v) (A : ViableSystem) (w : W) :
+  (viabilityClosureImage W A).left.op w ((viabilityClosureImage W A).stage w) = (viabilityClosureImage W A).stage w
+ERIEC.ViabilityClosure.viabilityClosureImage_right_fixed.{v, u} (W : Type v) (A : ViableSystem) (w : W) :
+  (viabilityClosureImage W A).right.op w ((viabilityClosureImage W A).stage w) = (viabilityClosureImage W A).stage w
+'ERIEC.ViabilityClosure.viabilityClosureImage_left_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.ViabilityClosure.viabilityClosureImage_right_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]

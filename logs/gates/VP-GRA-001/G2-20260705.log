@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4031.9 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+Test Summary:       | Pass  Total   Time
+Lean Julia contract |  373    373  10.3s

@@ -1,0 +1,15 @@
+import ERIEC.ViabilityClosure
+
+open ERIEC.ViabilityClosure
+
+namespace ERIECV2.Statement.VP2_A2_RELATIONAL_FUNCTOR_001
+
+#check ERIEC.ViabilityClosure.RelationalFrameIso
+#check ERIEC.ViabilityClosure.viabilityRelationalFunctor
+#check ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural
+#check ERIEC.ViabilityClosure.viabilityRelationalFunctor_epsilon_natural
+
+#print axioms ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural
+#print axioms ERIEC.ViabilityClosure.viabilityRelationalFunctor_epsilon_natural
+
+end ERIECV2.Statement.VP2_A2_RELATIONAL_FUNCTOR_001

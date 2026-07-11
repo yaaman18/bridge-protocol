@@ -1,0 +1,11 @@
+ERIEC.Wager.definitional_extension_conservative.{u_1} {S : Type u_1} (structural : S → Prop) (sentence : Prop) :
+  (∃ Ph, (∀ (s : S), Ph s ↔ structural s) ∧ sentence) ↔ sentence
+ERIEC.Wager.W1_identification_conservative.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} (impl : ERIEC.Wager.FrozenImpl A E C S) (sentence : Prop) :
+  (∃ Ph, ERIEC.Wager.W1 impl Ph ∧ sentence) ↔ sentence
+ERIEC.Wager.witness_pair_forward_stable.{u_1} {Model : Type u_1} {W A : Model → Prop} {positive negative : Model}
+  (hpositive : W positive) (hnegative : ¬W negative) (hApositive : A positive) (hAnegative : A negative) :
+  (W positive ∧ A positive) ∧ ¬W negative ∧ A negative
+'ERIEC.Wager.definitional_extension_conservative' does not depend on any axioms
+'ERIEC.Wager.W1_identification_conservative' depends on axioms: [propext, Quot.sound]
+'ERIEC.Wager.witness_pair_forward_stable' does not depend on any axioms

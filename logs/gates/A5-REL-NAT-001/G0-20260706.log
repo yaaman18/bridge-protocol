@@ -1,0 +1,5 @@
+fun {M} {E} {M'} {E'} {rel} {rel'} =>
+  relationMatrix_reindex_natural : ∀ {M : Type u_1} {E : Type u_2} {M' : Type u_3} {E' : Type u_4} {rel : M → Set E}
+  {rel' : M' → Set E'} (h : RelationIso rel rel'),
+  (Matrix.reindex h.codomain h.domain) (relationMatrix rel) = relationMatrix rel'
+'ERIEC.InterfaceLinearization.relationMatrix_reindex_natural' depends on axioms: [propext, Classical.choice, Quot.sound]

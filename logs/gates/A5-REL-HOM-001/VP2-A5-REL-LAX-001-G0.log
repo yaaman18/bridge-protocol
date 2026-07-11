@@ -1,0 +1,5 @@
+fun {M} {E} {M'} {E'} {rel} {rel'} =>
+  relationMatrix_lax_natural : ∀ {M : Type u_1} {E : Type u_2} {M' : Type u_3} {E' : Type u_4} {rel : M → Set E}
+  {rel' : M' → Set E'} (h : RelationHom rel rel') (m : M) (e : E),
+  relationMatrix rel e m ≤ relationMatrix rel' (h.onCodomain e) (h.onDomain m)
+'ERIEC.InterfaceLinearization.relationMatrix_lax_natural' depends on axioms: [propext, Classical.choice, Quot.sound]

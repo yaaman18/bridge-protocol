@@ -1,0 +1,34 @@
+✖ [2365/2365] Building ERIEC.BridgeFunctor (6.1s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/BridgeFunctor.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/BridgeFunctor.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/BridgeFunctor.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/BridgeFunctor.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/BridgeFunctor.setup.json --json
+warning: formal/ERIEC/BridgeFunctor.lean:37:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: formal/ERIEC/BridgeFunctor.lean:79:4: linarith failed to find a contradiction
+case refine_2.«0».h1
+alphaRel : Unit → Set Bool := fun x => Set.univ
+rhoRel : Unit → Set Unit := fun x => Set.univ
+sigmaRel : Bool → Set Unit := fun x => Set.univ
+kappa : Set Unit := Set.univ
+epsilon : Set Bool := Set.univ
+x : Unit → ℝ
+hx : x ≠ 0
+hfixed : (relationGram alphaRel).mulVec x = x
+hu : 2 * x PUnit.unit = x PUnit.unit
+a✝ : x PUnit.unit < 0 PUnit.unit
+⊢ False
+failed
+warning: formal/ERIEC/BridgeFunctor.lean:71:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.BridgeFunctor
+error: build failed

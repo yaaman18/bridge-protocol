@@ -1,0 +1,5 @@
+ERIEC.Dynamics.R2Prime : (W → Set C → W) → Prop
+ERIEC.Dynamics.InternallyTotal : (S → S → Prop) → Prop
+ERIEC.Dynamics.TotalNext : (S → S → Prop) → Type u
+ERIEC.Dynamics.coreOf : (W → Type w) → (S → W) → S → Type w
+ERIEC.Dynamics.Transport : (S → S → Prop) → (W → Type w) → (S → W) → S → S → Prop

@@ -1,0 +1,6 @@
+ERIEC.Wager.FrozenModelCheck.{u_1, u_2, u_3, u_4} (A : Type u_1) (E : Type u_2) (C : Type u_3) (S : Type u_4) :
+  Type (max (max (max u_1 u_2) u_3) u_4)
+ERIEC.Wager.frozen_model_checker_soundness.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} (check : ERIEC.Wager.FrozenModelCheck A E C S) :
+  ERIEC.Wager.W4 check.impl ∧ ERIEC.Wager.W5 check.impl check.k0 ∧ ERIEC.Wager.W6 check.impl
+'ERIEC.Wager.frozen_model_checker_soundness' depends on axioms: [propext, Quot.sound]

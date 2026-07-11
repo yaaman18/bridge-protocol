@@ -1,0 +1,30 @@
+Test Summary: | Pass  Total  Time
+adjunction    |    9      9  0.8s
+Test Summary: | Pass  Total   Time
+body          |   33     33  15.1s
+Test Summary: | Pass  Total  Time
+closure       |   15     15  0.3s
+Test Summary: | Pass  Total  Time
+dc            |    8      8  0.3s
+Test Summary:       | Pass  Total  Time
+Lean Julia contract |  273    273  5.9s
+Test Summary: | Pass  Total  Time
+hinge         |   11     11  0.3s
+Test Summary:      | Pass  Total  Time
+functional markers |   11     11  3.2s
+Test Summary: | Pass  Total  Time
+reachability  |    7      7  0.2s
+Test Summary: | Pass  Total  Time
+sensitivity   |    4      4  0.4s
+Test Summary:    | Pass  Total  Time
+critical slowing |    9      9  0.5s
+Test Summary:        | Pass  Total  Time
+toy recurrent system |   28     28  4.1s
+Test Summary: | Pass  Total  Time
+value         |   13     13  0.6s
+Test Summary:        | Pass  Total  Time
+weighted sensitivity |    6      6  0.2s
+Test Summary: | Pass  Total  Time
+world         |   41     41  1.6s
+Test Summary: | Pass  Total  Time
+worlddc       |   41     41  6.2s

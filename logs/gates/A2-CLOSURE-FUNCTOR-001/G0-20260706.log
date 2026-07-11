@@ -1,0 +1,17 @@
+ERIEC.ViabilityClosure.viabilityClosureFunctor.{v, u} (W : Type v) :
+  CategoryTheory.Functor ViableCategoryObject (ClosureImageObject W)
+ERIEC.ViabilityClosure.viabilityClosureFunctor_stage_natural.{v, u} (W : Type v) {X Y : ViableCategoryObject}
+  (f : X ⟶ Y) (w : W) :
+  ⇑f.mapConfig '' ((viabilityClosureFunctor W).obj X).pair.stage w = ((viabilityClosureFunctor W).obj Y).pair.stage w
+ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural.{v, u} (W : Type v) {X Y : ViableCategoryObject} (f : X ⟶ Y)
+  (w : W) (K : Set (ERIEC.OpenEvolution.Config X.system.toOpenSystem)) :
+  ⇑f.mapConfig '' ((viabilityClosureFunctor W).obj X).pair.left.op w K =
+    ((viabilityClosureFunctor W).obj Y).pair.left.op w (⇑f.mapConfig '' K)
+ERIEC.ViabilityClosure.viabilityClosureFunctor_right_natural.{v, u} (W : Type v) {X Y : ViableCategoryObject}
+  (f : X ⟶ Y) (w : W) (K : Set (ERIEC.OpenEvolution.Config X.system.toOpenSystem)) :
+  ⇑f.mapConfig '' ((viabilityClosureFunctor W).obj X).pair.right.op w K =
+    ((viabilityClosureFunctor W).obj Y).pair.right.op w (⇑f.mapConfig '' K)
+'ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.ViabilityClosure.viabilityClosureFunctor_right_natural' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

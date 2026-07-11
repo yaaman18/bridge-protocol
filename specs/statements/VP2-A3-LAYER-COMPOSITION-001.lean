@@ -1,0 +1,15 @@
+import ERIEC.LayerComposition
+
+open ERIEC.LayerComposition
+
+namespace ERIECV2.Statement.VP2_A3_LAYER_COMPOSITION_001
+
+#check ERIEC.LayerComposition.relationalToHingeFunctor
+#check ERIEC.LayerComposition.viableToHilbertFunctor
+#check ERIEC.LayerComposition.viableToHilbert_comp_assoc
+#check ERIEC.LayerComposition.viableToHilbert_nontrivial_iff
+
+#print axioms ERIEC.LayerComposition.viableToHilbert_comp_assoc
+#print axioms ERIEC.LayerComposition.viableToHilbert_nontrivial_iff
+
+end ERIECV2.Statement.VP2_A3_LAYER_COMPOSITION_001

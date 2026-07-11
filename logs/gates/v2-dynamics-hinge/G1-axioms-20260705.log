@@ -1,0 +1,1 @@
+'ERIEC.Dynamics.hinge_collapse' depends on axioms: [propext, Quot.sound]

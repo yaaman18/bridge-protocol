@@ -1,0 +1,10 @@
+⚠ [2372/2393] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [2390/2393] Built ERIEC.WorldDCRep (5.5s)
+✔ [2391/2393] Built ERIEC.CertifiedArtifact (5.1s)
+✔ [2392/2393] Built ERIEC (4.0s)
+Build completed successfully (2393 jobs).

@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   3438.6 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+Test Summary:    | Pass  Total  Time
+reference models |    7      7  0.8s

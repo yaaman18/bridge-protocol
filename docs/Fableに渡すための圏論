@@ -1,0 +1,597 @@
+# 三層構造の抽象的定式化
+
+## 0. 目的と記述規律
+
+本文は、意味論仕様と現行機械証明核を、同一の記号系で分離して記述する。対象領域の固有名、物質名、形態名、機能名は意味論の語彙として用いない。末尾の宣言名は意味論的な呼称ではなく、機械宣言を一意に指すアドレスである。
+
+照合元は次の二系統である。これらも意味論語彙ではなくソースアドレスである。
+
+```text
+category/tensor_categorical_v5.md
+formal/ERIEC/*.lean
+```
+
+各命題に次の状態を付す。
+
+- `[F-def]`: 機械証明核に定義がある。
+- `[F-thm]`: 機械証明核に証明がある。
+- `[F-assume]`: 構造体のフィールドとして仮定される。
+- `[S]`: 意味論仕様の要求だが、現行核に定理がない。
+- `[O]`: 橋渡しが未完成である。
+
+`[F-assume]` を `[F-thm]` と読んではならない。`[S]` を機械証明済みと読んではならない。
+
+---
+
+## 1. 集合と関係の核
+
+### 1.1 関係像
+
+集合 `A,E,C,S` と関係値写像
+
+```text
+α : A → Set(E)          σ : E → Set(A)
+π : A → Set(C)          ρ : C → Set(A)
+```
+
+を置く。存在的直像を
+
+```text
+α★(N) := ⋃ {α(a) | a∈N}       σ★(X) := ⋃ {σ(e) | e∈X}
+π★(N) := ⋃ {π(a) | a∈N}       ρ★(Y) := ⋃ {ρ(c) | c∈Y}
+```
+
+と定める。`[F-def]` `π★,ρ★` とその合成は包含順序に関して単調である。`[F-thm]`
+
+### 1.2 二種の右側作用素
+
+`α` から構成される普遍的写像を
+
+```text
+σ∀★(X) := {a∈A | α(a) ⊆ X}
+```
+
+と置く。`[F-def]` このとき
+
+```text
+α★(N) ⊆ X  ⇔  N ⊆ σ∀★(X)
+```
+
+であり、単位と余単位が成り立つ。`[F-thm]`
+
+一方、独立に与えた `σ:E→Set(A)` の直像 `σ★` は自動的に右随伴にはならない。現行核の独立構造は
+
+```text
+ᴸᵈᵢ(A,E) := (α,σ,hGC)
+hGC : ∀N X, α★(N)⊆X ⇔ N⊆σ★(X)
+```
+
+である。`[F-assume]` この仮定から単位と余単位が得られる。`[F-thm]`
+
+```text
+σ∀★ : α から構成される普遍的右随伴
+σ★  : 独立関係 σ の存在的直像
+```
+
+現行核は両者を別の定義として持つ。両者の等式は証明されていない。
+
+---
+
+## 2. 二重再帰条件
+
+### 2.1 第一再帰作用素
+
+```text
+Φ(Y) := π★(ρ★(Y)) : Set(C) → Set(C)
+```
+
+と定める。`[F-def]` `Φ` は単調である。`[F-thm]`
+
+現行核の `ΝΦ` は次のデータを持つ。
+
+```text
+ΝΦ := (π,ρ,νΦ,hfix,hgreatest)
+hfix      : Φ(νΦ) = νΦ
+hgreatest : ∀Y, Φ(Y)=Y → Y⊆νΦ
+```
+
+`[F-assume]` 最大性は「すべての不動点を含む」というフィールドである。現行核は次を証明していない。
+
+- `νΦ` の Knaster–Tarski 構成。`[S]`
+- `νΦ = ⋃{Y | Y⊆Φ(Y)}`。`[S]`
+- すべての後不動点に対する最大性。`[S]`
+- 終余代数性。`[S]`
+
+### 2.2 第二再帰作用素と交差
+
+```text
+Θ(X) := α★(σ★(X))
+H(K,X) := ρ★(K) ∩ σ★(X)
+```
+
+と定める。`[F-def]` ここで使うのは `σ∀★` ではなく、独立関係の直像 `σ★` である。
+
+配置 `κ:S→Set(C)`, `ε:S→Set(E)`、区別集合 `D⊆C`、指定点 `s∈S` に対し、認証構造 `Δ` は次をフィールドとして持つ。
+
+```text
+h₁ : κ(s) ⊆ Φ(κ(s))
+h₂ : ε(s) ⊆ Θ(ε(s))
+h₃ : H(κ(s),ε(s)).Nonempty
+h₄ : (κ(s) ∩ D).Nonempty
+```
+
+`[F-assume]` `h₃` は構造体から取り出せる。`[F-thm]` `ε(s)=∅` ならば `H(κ(s),ε(s))=∅` である。`[F-thm]`
+
+現行核の `Δ` は `ᴸᵈᵢ(A,E)` をフィールドとして持たない。したがって「随伴証明を持つ」と「`Δ` を持つ」は別々の証明対象の連言である。統合構造体は未定義である。`[O]`
+
+---
+
+## 3. 有限次元微分核
+
+### 3.1 微分と随伴写像
+
+`Ā:=ℝ^m`, `Ē:=ℝ^e`、写像 `f:Ā→Ē`、基点 `a∈Ā` に対し、
+
+```text
+T(f,a)  := fderiv(f,a) : Ā →L Ē
+T†(f,a) := adjoint(T(f,a)) : Ē →L Ā
+```
+
+と定める。`[F-def]` `f` が `a` で微分可能ならば `T(f,a)` はそのフレシェ微分である。`[F-thm]`
+
+```text
+⟨T(f,a)x,y⟩ = ⟨x,T†(f,a)y⟩
+```
+
+が成り立つ。`[F-thm]`
+
+関係随伴 `α★⊣σ★` と、ヒルベルト空間上の随伴 `T†` の間の導出、量子化関手、比較自然変換は、現行核に存在しない。`[O]`
+
+### 3.2 循環作用素と非自明性
+
+```text
+L(f,a) := T†(f,a) ∘ T(f,a) : Ā →L Ā
+Fix(L,x) :⇔ L(x)=x
+Nontriv(L) :⇔ ∃x, x≠0 ∧ Fix(L,x)
+```
+
+と定める。`[F-def]` 非零固定ベクトルから `Nontriv(L)` が得られる。`[F-thm]`
+
+```text
+⟨Lx,y⟩ = ⟨Tx,Ty⟩
+⟨Lx,y⟩ = ⟨x,Ly⟩
+```
+
+が成り立つ。`[F-thm]`
+
+意味論仕様の「固有値 `1` 近傍の部分空間」は数値層の対象である。機械証明核が定義するのは `Nontriv(L)` という命題だけであり、等化子、核、固有空間、許容幅付き部分空間は未定義である。`[S]`
+
+---
+
+## 4. 構造量の核
+
+有限集合 `N⊆C` と写像 `g:E→Finset(C)` に対し、
+
+```text
+v_N(e) := |g(e) ∩ N| : ℕ
+Positive_N(e) :⇔ 0 < v_N(e)
+```
+
+と定める。`[F-def]` この量は `N` と `g(e)` だけに依存する。`[F-thm]`
+
+別の述語 `P:E→Prop` への橋渡しを
+
+```text
+Bridge(N,g,P) :⇔ ∀e, Positive_N(e) → P(e)
+```
+
+と定める。`[F-def]` この橋渡しを仮定すれば `Positive_N(e)→P(e)` が得られる。`[F-thm]`
+
+しかし、構造量が正であり、かつ `P` が偽である一要素反例が存在する。したがって、橋渡しなしの一般含意は成り立たない。`[F-thm]`
+
+比率、測度、正規化、および `T` の成分ごとの重み付けは意味論仕様にはあるが、現行の機械証明核には定理がない。`[S]`
+
+---
+
+## 5. 離散核と連続核の橋渡し
+
+### 5.1 最小橋渡し
+
+`Δ` の証明対象 `d` と連続線形写像 `L` に対し、
+
+```text
+B₀(d,L) := (x, x≠0, L(x)=x)
+```
+
+と定める。`[F-def]` この構造から `H(κ(s),ε(s)).Nonempty ∧ Nontriv(L)` が得られる。`[F-thm]`
+
+ただし `B₀` は固定ベクトルをフィールドとして持つため、`Δ→Nontriv(L)` の導出ではない。
+
+### 5.2 表現写像を通じた条件付き前向定理
+
+第一段の表現構造は、写像 `r:A→Ā` と次を持つ。
+
+```text
+∀u∈H(κ(s),ε(s)), r(u)≠0
+∀u∈H(κ(s),ε(s)), L(r(u))=r(u)
+```
+
+`[F-assume]` これから `Nontriv(L)` が得られる。`[F-thm]` ただし第二フィールドは結論と同型の仮定を含む。
+
+第二段は、さらに離散的自己写像 `δ:A→A` と次を持つ。
+
+```text
+∀u, L(r(u)) = r(δ(u))
+∀u∈H(κ(s),ε(s)), δ(u)=u
+∀u∈H(κ(s),ε(s)), r(u)≠0
+```
+
+`[F-assume]` これらから `L(r(u))=r(u)` と `Nontriv(L)` が得られる。`[F-thm]`
+
+次は未証明である。
+
+```text
+Δ → Nontriv(L)                         [O]
+Nontriv(L) → Δ                         [O]
+Δ ⇔ Nontriv(L)                         [O]
+ε(s)⊆Θ(ε(s)) → δ(u)=u on H        [O]
+```
+
+---
+
+## 6. 入力型と終点ガード
+
+### 6.1 入力型の分離
+
+現行核は、入力基底とパラメタ基底を異なる帰納型として持つ。応答構造の型は
+
+```text
+Response := { f : Ā → Ē }
+```
+
+であり、パラメタ基底は入力型に含まれない。`[F-def]` これは型による非注入であり、すべての間接依存を禁ずる非干渉定理ではない。
+
+### 6.2 到達関係によるガード
+
+型 `J` と二項関係 `R:J→J→Prop` を持つ構造を置く。`[F-def]`
+
+```text
+HasT(R) :⇔ ∃t:J, ∀x:J, R(x,t)
+NoT(R)  :⇔ ¬HasT(R)
+```
+
+と定める。`[F-def]` `NoT(R)` は `HasT(R)` の否定を与える。`[F-thm]`
+
+この `R` には合成、恒等射、射の一意性が仮定されていない。したがって、現行核の `NoT` を「小圏に終対象がない」と同一視してはならない。その圏論化は `[S]` である。
+
+---
+
+## 7. 段階付き構造
+
+### 7.1 薄い到達構造
+
+型 `W` 上の構造
+
+```text
+ᵀ := (leq,refl,trans)
+leq   : W → W → Prop
+refl  : ∀w, leq(w,w)
+trans : leq(u,v) → leq(v,w) → leq(u,w)
+```
+
+を置く。`[F-def]` 現行核は `W` の有限性、反対称性、最小要素、最大要素を要求しない。
+
+### 7.2 反変配置
+
+`ᵀ` 上の反変配置 `P` は
+
+```text
+P.Obj : W → Type
+P.res : leq(u,v) → P.Obj(v) → P.Obj(u)
+```
+
+と、恒等則および合成則をフィールドとして持つ。`[F-assume]` それらの則は構造から取り出せる。`[F-thm]`
+
+四配置構造は、互いに独立な四つの `P` を一つのレコードに束ねるだけである。`[F-def]` それらが節 1 の `A,E,C` を共有することや、関係 `α,σ,π,ρ` そのものであることは、現行核にはエンコードされていない。`[O]`
+
+自然変換は成分写像と自然性の可換式をフィールドとして持つ。`[F-assume]` 関係族は、制限後に関係が保存されることをフィールドとして持つ。`[F-assume]`
+
+### 7.3 タグ付き遷移族
+
+現行核の遷移余積構造は、タグ型、各タグの始域と終域、および成分写像を持つ。`[F-def]` 反変配置版では、各成分写像が制限写像と可換であることをフィールドとして持つ。`[F-assume]`
+
+入力和と出力和は依存和で定義され、流入、余対、ベータ則、および余対の一意性が証明されている。`[F-thm]`
+
+---
+
+## 8. 集合値時間発展と内生的順序
+
+### 8.1 二時間尺度の開放発展
+
+開放発展対象を
+
+```text
+ᴼ := (Q_fast,Q_slow,Q_ext,step)
+step : Q_fast × (Q_slow × Q_ext)
+    → Set(Q_fast × (Q_slow × Q_ext))
+```
+
+とする。`[F-def]` `step` は関数ではなく集合値写像である。
+
+`ᴼ→ᴼ'` の射は三成分の写像と、次の厳密な可換式を持つ。
+
+```text
+image(mapConfig, step(q)) = step'(mapConfig(q))
+```
+
+`[F-assume]` 恒等射、合成、左右単位則、結合則、および一段遷移の保存が証明されている。`[F-thm]`
+
+遅い成分を変更する遷移が少なくとも一つ存在することを `Adaptive(ᴼ)` で表す。`[F-def]`
+
+### 8.2 閉包述語、分岐関係、継承量
+
+閉包述語 `V(q)` を持ち、
+
+```text
+V(q) ∧ q'∈step(q) → V(q')
+```
+
+をフィールドとして持つ構造がある。`[F-assume]` これは一段保存であり、節 2 の `Δ` との等式は未定義である。`[O]`
+
+別の集合値関係 `branch(q)` と
+
+```text
+V(q) ∧ q'∈branch(q) → V(q')
+```
+
+を持つ拡張がある。`[F-assume]` さらに、継承型 `H`、写像 `heritage:Q→H`、継承量が異なる分岐対の存在、および多重集合上の集合値更新を持つ拡張がある。`[F-assume]`
+
+順序値 `r:Q→R` が厳密に増加する閉包付き分岐を各閉包点に要求する述語もある。`[F-def]` その述語から、そのような分岐の存在が得られる。`[F-thm]` 増加性自体は追加仮定である。
+
+### 8.3 生成軌道と内生的時計
+
+事象型 `O`、状態写像 `state:O→Q`、直後関係 `next:O→O→Prop` に対し、
+
+```text
+next(x,y) → state(y)∈step(state(x))
+```
+
+をフィールドとして持つ生成軌道を置く。`[F-assume]` `next` の反射推移閉包から節 7.1 の薄い到達構造が構成される。`[F-def]`
+
+認証述語 `C:O→Prop` に対し、途中のすべての事象で `C` を保つ反射推移到達関係が定義される。`[F-def]` その始点と終点が `C` を満たすこと、および合成閉包性が証明されている。`[F-thm]`
+
+外部順序への写像は、すでに生成された到達関係を保存する写像として定義される。`[F-assume]` 外部順序が事象を生成するという定理はない。
+
+### 8.4 局所的な状態分類
+
+直後関係 `next(x,y)` 上で
+
+```text
+Terminate(x,y) :⇔ next(x,y) ∧ C(x) ∧ ¬C(y)
+Pause(x)       :⇔ C(x) ∧ ¬Exec(x)
+Resume(x,y)    :⇔ Pause(x) ∧ Reach_C(x,y) ∧ Exec(y)
+```
+
+と定める。`[F-def]` `Resume(x,y)` から `C(y)` が従い、`Terminate(x,y)` は否定される。`[F-thm]` これらは新しい原始状態ではなく、軌道、認証述語、実行述語から導かれる分類である。
+
+---
+
+## 9. 外部状態からの非干渉
+
+### 9.1 保護トレース
+
+```text
+Trace := (externalToken,core,value,R,sequence)
+externalToken : Option(X)
+core          : N
+value         : V
+R             : J → J → Prop
+sequence      : List(A)
+```
+
+とする。`[F-def]`
+
+```text
+M₄a(t) :⇔ t.externalToken = none
+M₄b(t) :⇔ NoT(t.R)
+M₄(t)  :⇔ M₄a(t) ∧ M₄b(t)
+```
+
+と定める。`[F-def]` すべての点から到達される点を `R` へ書き込むと `M₄b` および `M₄` に反する。`[F-thm]`
+
+### 9.2 非干渉性と変形安全性
+
+```text
+observe : Selector → Individual → Trace
+Pure(observe) :⇔
+  ∀s₁ s₂ i, observe(s₁,i)=observe(s₂,i)
+```
+
+と定める。`[F-def]` これは観測等値による非干渉性と定義上同値である。`[F-thm]`
+
+変形 `evolve:Selector→Individual→Individual` について、
+
+```text
+TraceSafe : 変形前後の保護トレース全体が等しい
+M₄Safe   : 変形前の M₄ から変形後の M₄ が従う
+```
+
+と定める。`[F-def]` `Pure ∧ TraceSafe` からトレース保存と `M₄` 保存が得られる。`[F-thm]` `M₄Safe` から直接 `M₄` 保存が得られる。`[F-thm]`
+
+`Pure` 単独では変形後の `M₄` を保証しない。それを示す反例が機械証明されている。`[F-thm]`
+
+### 9.3 多重集合上の外部作用
+
+型 `I` の有限多重集合を `Pop(I)` とする。型構成子 `P` に対し、
+
+```text
+Select(P,I) := Pop(I) → P(Pop(I))
+```
+
+と定める。`[F-def]` これは抽象的な Kleisli 射の型である。`P` がモナドであること、確率測度を与えること、および Kleisli 圏の合成則は現行核で仮定されていない。
+
+---
+
+## 10. 分解と標準比較
+
+索引型 `I`、依存型 `P:I→Type`、全体型 `W`、写像族 `ι_i:P(i)→W` を置く。`[F-def]` 標準比較写像は
+
+```text
+c : (Σ i:I, P(i)) → W
+c(⟨i,x⟩) := ι_i(x)
+```
+
+である。`[F-def]`
+
+```text
+Reducible(c)   :⇔ Function.Bijective(c)
+Irreducible(c) :⇔ ¬Reducible(c)
+```
+
+と定める。`[F-def]` `Reducible(c)` は、すべての `y∈W` が一意の `⟨i,x⟩` で表されることと同値である。`[F-thm]`
+
+`Σ i,P(i)` は `Type` における依存和である。現行核は一般圏の余極限の普遍性を定義していない。同型は `Function.Bijective` で表現され、逆射をデータとして持つ構造ではない。
+
+部分順序的階層は、節 7.1 の構造に反対称性を追加したレコードである。`[F-def]` ファイブレーションとオペラッドは未定義である。`[S]`
+
+二つの認証済み真理値 `upperIrreducible, lowerIndependent` を入力とする四分類関数も定義されている。`[F-def]` この関数は真理値を計算せず、入力済みの二値をパターン分類するだけである。
+
+また、ペイロードに構造外のクレーム値を付す構造は、その値を常に `notCertified` に固定するガードを持つ。`[F-assume]` 任意のその構造から `claim=notCertified` が得られる。`[F-thm]`
+
+---
+
+## 11. 有限参照模型
+
+現行核には次の有限参照模型がある。
+
+1. 基底対象は三成分がすべて一要素。
+2. 拡張対象は第一成分と第二成分が二値、第三成分が一要素。
+3. 基底から拡張への成分写像が一段発展と可換。`[F-thm]` この射の単射性は射構造のフィールドではない。
+4. 遅い成分が変化する実例がある。`[F-thm]`
+5. 閉包述語はすべての状態で真と置かれる。これは実際の `Δ` からの導出ではない。`[F-assume]`
+6. 分岐、継承量の変化、順序値の厳密増加の具体的証人がある。`[F-thm]`
+7. 到達関係が恒に偽の図式によって `NoT` を満たす。`[F-thm]`
+8. 外部引数を無視するトレースが `Pure` を満たす。`[F-thm]`
+
+この参照模型は、節 8と節 9 の一部の構造が同時に inhabit されうることを示す。数値層の一般的な結線図、非同期更新、可変係数、および学習則の機械定式化ではない。
+
+---
+
+## 12. 意味論仕様と機械証明核の対応
+
+| 抽象要素 | 現行核の状態 | 正確な境界 |
+|---|---|---|
+| 関係随伴 | 構成版は `[F-thm]`、独立関係版は `[F-assume]` | `Δ` の構造には内包されない |
+| 第一再帰作用素 | 定義と単調性は `[F-thm]` | 最大不動点の構成は `[S]` |
+| 二重再帰条件 | 四フィールドとして `[F-assume]` | 各フィールドの生成算法は別問題 |
+| 微分写像と随伴 | `[F-def]`, `[F-thm]` | 関係随伴との橋渡しは `[O]` |
+| 構造量 | 有限集合の非正規化要素数のみ `[F-def]` | 測度比と重み付き微分は `[S]` |
+| 循環の非自明性 | 非零固定ベクトルの存在 `[F-def]` | 数値的固有空間は `[S]` |
+| 二重再帰と循環の接続 | 可換表現付きの前向のみ `[F-thm]` | 無条件の前向と逆向は `[O]` |
+| 終点ガード | 二項到達関係上の否定 `[F-def]` | 圏論的終対象ではない |
+| 段階付き構造 | 反射的・推移的関係と反変配置 `[F-def]` | 有限性と上下端は含まない |
+| 時間発展 | 集合値写像と生成軌道 `[F-def]` | 微分核との統合定理は `[O]` |
+| 非干渉 | トレース等式として `[F-def]` | 単独では変形安全性を含意しない `[F-thm]` |
+| 標準比較 | 依存和からの写像と全単射性 `[F-def]` | 一般余極限ではない |
+| 構造外の述語 | 常に未認証 | 構造量からの一般含意は反例で否定 `[F-thm]` |
+
+### 12.1 意味論仕様の未定式化節
+
+次は意味論仕様にはあるが、現行核では未定式化である。
+
+- 有限線形順序、上下端、台 sieve、臨界段階。
+- 四関係と四反変配置を同一構造にする定義。
+- 最大不動点の束論的構成と終余代数性。
+- 測度比による構造量と重み付き微分。
+- 循環作用素の固有値 `1` 近傍部分空間と到達可能性の制限。
+- `Δ ⇔ Nontriv(L)` の双条件。
+- 内的更新による有限歩崩壊定理、吸収部分、境界射。
+- スペクトル臨界指標。
+- 四つの機能マーカとその分類。
+- 辺型、移送、観測代数に対する非分解性、構造同型不変性。
+
+---
+
+## 13. 三層の現行契約
+
+三層を次のように分ける。
+
+```text
+ℱ : 関係、再帰条件、段階付き構造、証明項
+ℋ : 有限次元微分、随伴写像、循環作用素、固定ベクトル
+ᴼ : 集合値発展、速い成分、遅い成分、外部成分、生成軌道
+```
+
+現行核は、これらを対象とする三つの圏と、それらの間の関手を定義していない。正確な現行契約は次である。
+
+```text
+ℱ 側の Δ と ℋ 側の Nontriv(L)
+  —— 追加の表現構造があるときにのみ前向に結ばれる。
+
+ᴼ 側の閉包述語と ℱ 側の Δ
+  —— 現時点では別の述語である。
+
+ᴼ 側の生成軌道と ℱ 側の認証述語
+  —— 各事象で認証述語を与える読み取り専用構造で結ばれる。
+```
+
+次の合成図式は将来の証明義務であり、現行定理ではない。
+
+```text
+連続層 → 関係層 → 認証層 → 結合層 → 連続層    [O]
+```
+
+---
+
+## 14. 禁止される読み替え
+
+```text
+ΝΦ のフィールド        ⇒ Knaster–Tarski 構成済み
+NoT(R)                    ⇒ 小圏の終対象非存在
+Δ                         ⇒ 随伴証明を内包
+Δ                         ⇒ Nontriv(L)
+Nontriv(L)                 ⇒ Δ
+四反変配置                ⇒ A,E,C を共有する四関係
+Function.Bijective(c)      ⇒ 一般圏の余極限比較同型
+Pure                       ⇒ 変形後の M₄ 保存
+有限参照模型              ⇒ 一般的な結線系の定理
+構造量が正                  ⇒ 構造外の述語
+```
+
+上のいずれも現行核からは従わない。
+
+---
+
+## 15. 機械照合アドレス
+
+| 節 | 宣言アドレス |
+|---|---|
+| 1.1 | `Adj.alpha_star`, `Adj.sigma_star`, `Closure.pi_star`, `Closure.rho_star` |
+| 1.2 | `Adj.sigma_star_induced`, `Adj.galoisConn_induced`, `Adj.ERIESystem`, `Adj.unit_of_gc`, `Adj.counit_of_gc` |
+| 2.1 | `Closure.Phi`, `Closure.phi_mono`, `Closure.NuPhi` |
+| 2.2 | `Hinge.T_prime`, `Hinge.Act`, `DC`, `DC.hinge_requires_both` |
+| 3.1 | `Sens.T_w`, `Sens.wellDefined`, `Sens.T_w_adjoint`, `Sens.dualSymmetry` |
+| 3.2 | `World.worldLoop`, `World.WorldFixedVector`, `World.WldNontrivial`, `World.worldLoop_inner`, `World.worldLoop_symmetric` |
+| 4 | `Value.viabilityContribution`, `Value.MatteringBridge`, `Value.Countermodel.no_general_structural_to_mattering` |
+| 5.1 | `WorldDC.DCWorldBridge`, `WorldDC.dc_and_world_of_bridge` |
+| 5.2 | `WorldDC.SensorimotorRepresentation`, `WorldDC.IntertwiningRepresentation`, `WorldDC.rep_fixed_of_intertwining`, `WorldDC.wldNontrivial_of_intertwining` |
+| 6 | `Body.BodyResponse`, `Body.EndogenousBodyResponse`, `Body.SetPointDiagram`, `Body.NoTerminalSetPoint` |
+| 7 | `Graded.ThinCategory`, `Graded.Presheaf`, `Graded.PresheafRelationFamily`, `Graded.PresheafTransitionCoproduct` |
+| 8 | `OpenEvolution.OpenSystem`, `OpenEvolution.ViableSystem`, `OpenEvolution.ReplicativeSystem`, `OpenEvolution.EvolutionarySystem`, `TemporalDC.GeneratedTrace`, `TemporalDC.DCPreservingReachable` |
+| 9 | `MetaSelection.InternalTrace`, `MetaSelection.SigmaPure`, `MetaSelection.MutationTraceSafe`, `MetaSelection.M4SafeMutation` |
+| 10 | `MetaSelection.WorldDecomposition`, `MetaSelection.canonicalComparison`, `MetaSelection.WorldReducible` |
+| 11 | `TRMTopologyTransition.observedTopologyTransition_certified` |
+
+機械公開境界に含まれる契約は次の七つに限られる。
+
+```text
+adjunction.system
+worlddc.bridge
+worlddc.representation.forward
+graded.presheaf_transition_coproduct
+graded.presheaf_transition_naturality
+graded.presheaf_transition_output_copair_unique
+body.no_terminal_setpoint
+```
+
+この公開境界は、リポジトリ内のすべての機械定理の一覧ではない。外部消費層が名前付きで検査する境界だけを表す。

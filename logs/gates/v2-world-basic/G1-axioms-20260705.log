@@ -1,0 +1,3 @@
+'ERIEC.World.band_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.band_zero_eq_fix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.World.band_mono' depends on axioms: [propext, Classical.choice, Quot.sound]

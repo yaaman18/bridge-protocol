@@ -1,0 +1,29 @@
+Precompiling ERIEC...
+   4390.6 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 0 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/erie-c/test/test_bridge_functor.jl:1
+bridge functor obstructions: Error During Test at /Users/yamaguchimitsuyuki/erie-c/test/test_bridge_functor.jl:1
+  Got exception outside of a @test
+  MethodError: no method matching Act(::ERIEC.var"#21#25", ::ERIEC.var"#20#24", ::Set{Symbol}, ::Set{Symbol})
+  The function `Act` exists, but no method is defined for this combination of argument types.
+  
+  Closest candidates are:
+    Act(::Any, ::Any, !Matched::Function, !Matched::Function, !Matched::Any)
+     @ ERIEC ~/erie-c/src/hinge.jl:5
+  
+  Stacktrace:
+   [1] alpha_only_hinge_counterexample()
+     @ ERIEC ~/erie-c/src/bridge_functor.jl:9
+   [2] macro expansion
+     @ ~/erie-c/test/test_bridge_functor.jl:2 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/erie-c/test/test_bridge_functor.jl:2
+   [5] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [6] top-level scope
+     @ none:1
+Test Summary:               | Error  Total  Time
+bridge functor obstructions |     1      1  4.7s

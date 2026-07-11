@@ -1,0 +1,15 @@
+import ERIEC.ViabilityClosure
+
+open ERIEC.OpenEvolution
+open ERIEC.ViabilityClosure
+
+namespace ERIECV2.Statement.VP2_A2_VIABILITY_CLOSURE_001
+
+#check ERIEC.ViabilityClosure.viabilityClosureImage
+#check ERIEC.ViabilityClosure.viabilityClosureImage_left_fixed
+#check ERIEC.ViabilityClosure.viabilityClosureImage_right_fixed
+
+#print axioms ERIEC.ViabilityClosure.viabilityClosureImage_left_fixed
+#print axioms ERIEC.ViabilityClosure.viabilityClosureImage_right_fixed
+
+end ERIECV2.Statement.VP2_A2_VIABILITY_CLOSURE_001

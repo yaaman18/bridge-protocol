@@ -1,0 +1,10 @@
+ERIEC.BridgeFunctor.strictHingeClassifierFunctor.{w, v, u} :
+  CategoryTheory.Functor StrictHingeData StrictClassifyingLoopObject
+ERIEC.BridgeFunctor.strictHingeClassifier_loop_eq.{w, v, u} {X Y : StrictHingeData} (h : X ≤ Y) :
+  (strictHingeClassifierFunctor.obj X).loop = (strictHingeClassifierFunctor.obj Y).loop
+ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines.{w, v, u} {X Y : StrictHingeData} (h : X ≤ Y) :
+  (strictHingeClassifierFunctor.obj Y).loop ∘SL ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin 1)) =
+    ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin 1)) ∘SL (strictHingeClassifierFunctor.obj X).loop
+'ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

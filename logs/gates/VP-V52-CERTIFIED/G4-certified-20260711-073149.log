@@ -1,0 +1,7 @@
+ok=true
+missing_imports=0
+missing_lean=0
+missing_julia=0
+missing_checkers=0
+v52_contracts=7
+v52.gate.propagation,v52.gap.branch,v52.decay.psi,v52.opensimc.identity_audit,v52.centering.horizontal_wall,v52.traceability.vocabulary,v52.refmodel.symmetric_double

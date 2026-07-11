@@ -1,0 +1,6 @@
+ERIEC.Wager.FrozenInterpretiveCheck.{u_1, u_2, u_3, u_4} (A : Type u_1) (E : Type u_2) (C : Type u_3) (S : Type u_4) :
+  Type (max (max (max u_1 u_2) u_3) u_4)
+ERIEC.Wager.frozen_interpretive_checker_soundness.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} (check : ERIEC.Wager.FrozenInterpretiveCheck A E C S) :
+  ERIEC.Wager.W1 check.impl check.Ph ∧ ERIEC.Wager.W2 check.impl check.Mat ∧ ERIEC.Wager.W3 check.impl check.Ph
+'ERIEC.Wager.frozen_interpretive_checker_soundness' depends on axioms: [propext, Quot.sound]

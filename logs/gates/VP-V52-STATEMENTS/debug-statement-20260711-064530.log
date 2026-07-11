@@ -1,0 +1,81 @@
+ERIEC.Gate.Gv : Type
+ERIEC.Gate.RawEv (P : Prop) : Type
+ERIEC.Gate.GateEv (P : Prop) : Type
+ERIEC.Gate.GateFrame.{u} (Idx : Type u) : Type u
+ERIEC.Gate.GateAssignment.gate.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx}
+  (assignment : ERIEC.Gate.GateAssignment 𝒢) : Idx → ERIEC.Gate.Gv
+ERIEC.Gate.na_propagates.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx} (gate : ERIEC.Gate.GateAssignment 𝒢)
+  {j i : Idx} (path : ERIEC.Gate.DepPath 𝒢.dep j i)
+  (hblock : ERIEC.Gate.Blocks (ERIEC.Gate.eraseEvidence (gate.ev j))) :
+  ERIEC.Gate.eraseEvidence (gate.ev i) = ERIEC.Gate.Gv.na
+ERIEC.Gate.gate_na_propagates.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx}
+  (assignment : ERIEC.Gate.GateAssignment 𝒢) {j i : Idx} (path : ERIEC.Gate.DepPath 𝒢.dep j i)
+  (hblock : ERIEC.Gate.Blocks (assignment.gate j)) : assignment.gate i = ERIEC.Gate.Gv.na
+'ERIEC.Gate.na_propagates' depends on axioms: [propext]
+ERIEC.Gap.second_gc.{u_1, u_2} {M : Type u_1} {E : Type u_2} (sigmaRel : E → Set M) :
+  GaloisConnection (ERIEC.Adj.sigma_star sigmaRel) (ERIEC.Gap.alpha_forall sigmaRel)
+ERIEC.Gap.gapUp_iff_branch.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ERIEC.Gap.GapUp alphaRel sigmaRel a ↔ ERIEC.Richness.Branch alphaRel a
+ERIEC.Gap.gapUp_alpha_two.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) {a : M} (hgap : ERIEC.Gap.GapUp alphaRel sigmaRel a) :
+  ∃ e₁ e₂, e₁ ∈ alphaRel a ∧ e₂ ∈ alphaRel a ∧ e₁ ≠ e₂
+'ERIEC.Gap.gapUp_iff_branch' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Decay.DecayStructure.{u_1} {C : Type u_1} (F : Set C → Set C) : Type u_1
+ERIEC.Decay.psi_isDecay.{u_1} {C : Type u_1} {F : Set C → Set C} (hmono : Monotone F) : ERIEC.Decay.DecayStructure F
+ERIEC.Decay.psi_strict_of_not_postfixed.{u_1} {C : Type u_1} {F : Set C → Set C} {Y : Set C} (hnot : ¬Y ⊆ F Y) :
+  ERIEC.Decay.psi F Y ⊂ Y
+ERIEC.Decay.dec_eq_or_strict.{u_1} {C : Type u_1} {F : Set C → Set C} (D : ERIEC.Decay.DecayStructure F) (Y : Set C) :
+  D.dec Y = Y ∨ D.dec Y ⊂ Y
+'ERIEC.Decay.psi_isDecay' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.OpenSimC.Hom.{u, v, w} {Port : Type u} (G : ERIEC.OpenDynamics.OpenGraph Port)
+  (H : ERIEC.OpenDynamics.OpenGraph Port) : Type (max (max u v) w)
+ERIEC.OpenSimC.Hom.erase.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H) : ERIEC.Audit.Simulation G H
+ERIEC.OpenSimC.Hom.mapPath_comp.{u, v, w, x} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} {K : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H)
+  (g : ERIEC.OpenSimC.Hom H K) {s t : G.State} (p : ERIEC.OpenDynamics.Path G s t) :
+  (f.comp g).mapPath p = g.mapPath (f.mapPath p)
+ERIEC.OpenSimC.identityAuditMap.{u, v} {Port : Type u} (O : ERIEC.OpenDynamics.OpenFrame Port) :
+  ERIEC.Audit.AuditMap O O (ERIEC.OpenDynamics.OpenFrame Port) (ERIEC.OpenDynamics.OpenFrame Port)
+ERIEC.OpenSimC.identityAuditMap_noAssumptions.{u, v} {Port : Type u} (O : ERIEC.OpenDynamics.OpenFrame Port) :
+  (ERIEC.OpenSimC.identityAuditMap O).assumptions = []
+'ERIEC.OpenSimC.Hom.mapPath_comp' depends on axioms: [propext]
+ERIEC.Centering.InvariantFamily.{u} (τ : ERIEC.Centering.Strength) : Type (u + 1)
+ERIEC.Centering.CompatibleIso.toStatF.{u} {τ : ERIEC.Centering.Strength} {A E C S A' E' C' S' W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Centering.CompatibleIso τ F F') : ERIEC.Centering.CompatibleIso ERIEC.Centering.Strength.statF F F'
+ERIEC.Centering.indist_fixed.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} (Pred : ERIEC.Centering.InvariantFamily τ) {m m' : A} {s : S}
+  (φ : ERIEC.Centering.FixedCenterSymmetry τ F m m' s) : Pred.Pred F m s ↔ Pred.Pred F m' s
+ERIEC.Centering.dcAtFamily.{u_1} : ERIEC.Centering.InvariantFamily ERIEC.Centering.Strength.statF
+ERIEC.Centering.dcAt_horizontal_wall_of_any_strength.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {m m' : A} {s : S} (φ : ERIEC.Centering.FixedCenterSymmetry τ F m m' s) :
+  F.DCAt s ↔ F.DCAt s
+'ERIEC.Centering.dcAt_horizontal_wall_of_any_strength' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Traceability.Stmt : Type
+ERIEC.Traceability.DocumentAnchored (doc : ERIEC.Traceability.Document) : Prop
+ERIEC.Traceability.vocabularyStatus.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) : ERIEC.Traceability.VocabularyStatus
+ERIEC.Traceability.vocabularyStatus_complete.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) :
+  ERIEC.Traceability.ProofAnchored T text ∨ ERIEC.Traceability.ExceedsTranslation T text
+'ERIEC.Traceability.vocabularyStatus_complete' does not depend on any axioms
+ERIEC.RefModelV52.minimalGateAssignment : ERIEC.Gate.GateAssignment ERIEC.RefModelV52.minimalGateFrame
+ERIEC.RefModelV52.minimal_gate_phenomenal_na :
+  ERIEC.RefModelV52.minimalGateAssignment.gate ERIEC.RefModelV52.GuaranteeIdx.phenomenal = ERIEC.Gate.Gv.na
+ERIEC.RefModelV52.NonDegenerateRecur.witness : ERIEC.RefModelV52.NonDegenerateRecur.Witness
+ERIEC.RefModelV52.NonDegenerateRecur.gapUp_has_two_alpha :
+  ∃ e₁ e₂,
+    e₁ ∈ ERIEC.RefModelV52.NonDegenerateRecur.alphaRel () ∧
+      e₂ ∈ ERIEC.RefModelV52.NonDegenerateRecur.alphaRel () ∧ e₁ ≠ e₂
+ERIEC.RefModelV52.SymmetricDouble.fixedCenterSymmetry :
+  ERIEC.Centering.FixedCenterSymmetry ERIEC.Centering.Strength.dynLabRep ERIEC.RefModelV52.SymmetricDouble.frame false
+    true 0
+ERIEC.RefModelV52.SymmetricDouble.dc_at_all (s : Fin 3) : ERIEC.RefModelV52.SymmetricDouble.frame.DCAt s
+ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable :
+  ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame false 0 ↔
+    ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame true 0
+'ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

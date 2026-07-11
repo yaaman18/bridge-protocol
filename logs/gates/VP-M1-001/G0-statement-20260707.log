@@ -1,0 +1,5 @@
+ERIEC.RefModel.largeFiniteDC (k : ℕ) (hk : 0 < k) : ERIEC.DC (Fin k) (Fin k) (Fin k) Unit
+ERIEC.RefModel.LargeNondegenerateWitness (k : ℕ) : Type
+ERIEC.RefModel.arbitrarily_large_nondegenerate_dc : ∀ (k : ℕ),
+  2 ≤ k → Nonempty (ERIEC.RefModel.LargeNondegenerateWitness k)
+'ERIEC.RefModel.arbitrarily_large_nondegenerate_dc' depends on axioms: [propext, Classical.choice, Quot.sound]

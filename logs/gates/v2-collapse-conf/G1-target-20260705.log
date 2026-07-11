@@ -1,0 +1,45 @@
+✖ [934/934] Building ERIEC.Dynamics (3.6s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Dynamics.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.setup.json --json
+error: formal/ERIEC/Dynamics.lean:136:4: failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Set.ncard', which is 'noncomputable'
+error: formal/ERIEC/Dynamics.lean:142:50: unsolved goals
+case ht
+W : Type u_1
+inst✝¹ : Finite W
+inst✝ : LinearOrder W
+low high : W
+h : low < high
+⊢ autoParam (Set.Ioi low).Finite Set.ncard_lt_ncard._auto_1
+error: formal/ERIEC/Dynamics.lean:164:23: don't know how to synthesize placeholder for argument `h`
+context:
+C : Type u_1
+E : Type u_2
+W : Type u_3
+inst✝³ : Finite C
+inst✝² : Finite W
+inst✝¹ : LinearOrder W
+inst✝ : OrderTop W
+family : Grading.RankedClosure W C
+theta : W → Set E → Set E
+drift : W → Set C → W
+r2 : R2Prime drift
+threshold : W
+hThreshold : threshold < ⊤
+hSig2 : Grading.sig2 family threshold
+c : Conf C E W
+hKappa : c.kappa.Nonempty
+hCoreLe : (upd family.op theta drift c).kappa.ncard ≤ c.kappa.ncard
+hTop : c.rank = ⊤
+⊢ ⊤ ≤ drift ⊤ c.kappa
+error: formal/ERIEC/Dynamics.lean:178:37: Application type mismatch: The argument
+  hCoreLe
+has type
+  (upd family.op theta drift c).kappa.ncard ≤ c.kappa.ncard
+but is expected to have type
+  (c.kappa ∩ family.op c.rank c.kappa).ncard < c.kappa.ncard
+in the application
+  Nat.add_lt_add hRankStrict hCoreLe
+error: formal/ERIEC/Dynamics.lean:214:23: Unknown identifier `measure_wf`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Dynamics
+error: build failed

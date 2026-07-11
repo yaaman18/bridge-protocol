@@ -1,0 +1,12 @@
+✖ [934/934] Building ERIEC.Dynamics (3.5s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/erie-c/formal/ERIEC/Dynamics.lean -o /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.olean -i /Users/yamaguchimitsuyuki/erie-c/.lake/build/lib/lean/ERIEC/Dynamics.ilean -c /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.c --setup /Users/yamaguchimitsuyuki/erie-c/.lake/build/ir/ERIEC/Dynamics.setup.json --json
+error: formal/ERIEC/Dynamics.lean:214:4: Type mismatch
+  WellFounded.induction WellFoundedRelation.wf c ?m.77
+has type
+  ?m.76 c
+but is expected to have type
+  ∃ n ≤ collapseMeasure c, (update^[n] c).kappa = ∅
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.Dynamics
+error: build failed

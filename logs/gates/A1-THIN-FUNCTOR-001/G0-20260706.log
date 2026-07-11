@@ -1,0 +1,4 @@
+ERIEC.BridgeFunctor.hingeClassifierFunctor.{w, v, u} : CategoryTheory.Functor CompleteHingeData ClassifyingLoopObject
+hingeClassifierFunctor_nontrivial_iff : ∀ (X : CompleteHingeData),
+  ERIEC.World.WldNontrivial (hingeClassifierFunctor.obj X).loop ↔ X.holds
+'ERIEC.BridgeFunctor.hingeClassifierFunctor_nontrivial_iff' depends on axioms: [propext, Classical.choice, Quot.sound]

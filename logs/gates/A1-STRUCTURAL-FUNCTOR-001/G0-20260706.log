@@ -1,0 +1,9 @@
+ERIEC.StructuralHinge.CompleteHingeIso.hingeWitness_iff.{w, v, u} {X Y : CompleteHingeData} (f : CompleteHingeIso X Y) :
+  X.holds ↔ Y.holds
+ERIEC.StructuralHinge.structuralHingeHilbertFunctor.{w, v, u} :
+  CategoryTheory.Functor StructuralHingeData (ERIEC.HilbertIntertwiner.EndomorphismObject (EuclideanSpace ℝ (Fin 1)))
+ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff.{w, v, u} (X : StructuralHingeData) :
+  ERIEC.World.WldNontrivial (structuralHingeHilbertFunctor.obj X).op ↔ X.data.holds
+'ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

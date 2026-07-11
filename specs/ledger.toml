@@ -1,0 +1,702 @@
+# 検証点台帳（claim ledger）— specs/loop-orchestration-spec.md §1 準拠
+#
+# 唯一の真実源。各検証点が1エントリ。category/tensor_categorical_v5.md の [検証点 N] から起票。
+# （spec 原文の enactive_tensor_categorical_v5.md は category/tensor_categorical_v5.md へリネーム済み）
+#
+# status 値域: proposed | formalized | bound | implemented | certified | failed
+#   G1 証明   proposed→formalized   lake build ∧ lean_decl 存在
+#   G2 接続   formalized→bound      test/test_formal_julia_contract.jl 通過
+#   G3 実装   bound→implemented     Pkg.test()（対象 testset）通過
+#   G4 認証   implemented→certified certificate catalog 登録 + 依存グラフ edge
+#
+# ブートストラップ時のゲート証拠（2026-07-05 実行）:
+#   G1: lake build 成功（2377 jobs）        → logs/gates/bootstrap/G1-lake-build.log
+#   G2: Lean Julia contract 273/273 pass   → logs/gates/bootstrap/G2-contract-test.log
+# よって Lean 宣言 + contract test 対応が実在するエントリは bound。
+# G3/G4 は未実行のため implemented/certified は付与していない（driver 実行で昇格）。
+
+schema_version = 1
+
+# ---- 検証点 1: 四前層性・M 共有・→ の余積 --------------------------------
+
+[[vp]]
+id          = "VP-GRD-001"
+source      = "category/tensor_categorical_v5.md#検証点1"
+claim_ja    = "四前層性。M 共有。遷移の余積(PresheafTransitionCoproduct)"
+lean_decl   = "ERIEC.Graded.PresheafTransitionCoproduct"
+lean_file   = "formal/ERIEC/Graded.lean"
+julia_api   = "check_presheaf_transition_coproduct"
+julia_file  = "src/graded.jl"
+contract_id = "graded.presheaf_transition_coproduct"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-GRD-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 2: 随伴（最重要）と双対対称性 --------------------------------
+
+[[vp]]
+id          = "VP-ADJ-001"
+source      = "category/tensor_categorical_v5.md#検証点2"
+claim_ja    = "α_w★ ⊣ σ_w★（感覚運動随伴 = ガロア接続）。破れれば表象主義に退化"
+lean_decl   = "ERIEC.Adj.galoisConn_induced"
+lean_file   = "formal/ERIEC/Adjunction.lean"
+julia_api   = "check_galois_conn"
+julia_file  = "src/adjunction.jl"
+contract_id = "adjunction.system"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-ADJ-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-SEN-001"
+source      = "category/tensor_categorical_v5.md#検証点2"
+claim_ja    = "Prop 2.4 双対対称性（𝐓 と 𝐓^* の随伴関係）。𝐓_w はヤコビアン ∂σ/∂a"
+lean_decl   = "ERIEC.Sens.dualSymmetry"
+lean_file   = "formal/ERIEC/Sensitivity.lean"
+julia_api   = "check_dual_symmetry"
+julia_file  = "src/sensitivity.jl"
+contract_id = "sensitivity.dual_symmetry"      # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = ["VP-ADJ-001"]
+status      = "certified"                     # G4: logs/gates/VP-SEN-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 3: νΦ 終余代数性（最大不動点） --------------------------------
+
+[[vp]]
+id          = "VP-CLO-001"
+source      = "category/tensor_categorical_v5.md#検証点3"
+claim_ja    = "νΦ_w 終余代数性 = 閉包 Φ の最大不動点（isFixedPoint ∧ isGreatest）"
+lean_decl   = "ERIEC.Closure.NuPhi"
+lean_file   = "formal/ERIEC/Closure.lean"
+julia_api   = "check_nu_phi_fixedpoint"
+julia_file  = "src/closure.jl"
+contract_id = "closure.nu_phi"                 # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = ["VP-ADJ-001"]
+status      = "certified"                     # G4: logs/gates/VP-CLO-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 4: DC (i)-(iv)・蝶番・M4 終対象 set point 不在 -----------------
+
+[[vp]]
+id          = "VP-HNG-001"
+source      = "category/tensor_categorical_v5.md#検証点4"
+claim_ja    = "蝶番 Act_w = ρ⋆(κs) ∩ σ⋆(εs) ≠ ∅（M3）"
+lean_decl   = "ERIEC.Hinge.Act"
+lean_file   = "formal/ERIEC/Hinge.lean"
+julia_api   = "check_hinge"
+julia_file  = "src/hinge.jl"
+contract_id = "hinge.act"                      # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = ["VP-ADJ-001", "VP-CLO-001"]
+status      = "certified"                     # G4: logs/gates/VP-HNG-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-DC-001"
+source      = "category/tensor_categorical_v5.md#検証点4"
+claim_ja    = "DC (i)-(iv) 同時成立。𝐕_w が νΦ_w のみから計算される"
+lean_decl   = "ERIEC.DC"
+lean_file   = "formal/ERIEC/DC.lean"
+julia_api   = "check_DC"
+julia_file  = "src/dc.jl"
+contract_id = "dc.system"                      # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = ["VP-HNG-001"]
+status      = "certified"                     # G4: logs/gates/VP-DC-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-BDY-001"
+source      = "category/tensor_categorical_v5.md#検証点4"
+claim_ja    = "M4: 求めの図式に全対象から到達する終対象 set point が存在しない（有限ハーネス検査）"
+lean_decl   = "ERIEC.Body.NoTerminalSetPoint"
+lean_file   = "formal/ERIEC/Body.lean"
+julia_api   = "check_m4_no_terminal_setpoint"
+julia_file  = "src/body.jl"
+contract_id = "body.no_terminal_setpoint"      # catalog 登録済み
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-BDY-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 5: Wld の内生計算と Umwelt 相対性 ------------------------------
+
+[[vp]]
+id          = "VP-WLD-001"
+source      = "category/tensor_categorical_v5.md#検証点5"
+claim_ja    = "𝐖𝐥𝐝_w が 𝐓_w（=α,σ）のみから計算、外部表象不参照。系(α,σ)改変で 𝐖𝐥𝐝 が変わる（Umwelt 相対性）"
+lean_decl   = "ERIEC.World.WldNontrivial"
+lean_file   = "formal/ERIEC/World.lean"
+julia_api   = "actuated_world"
+julia_file  = "src/world.jl"
+contract_id = "world.actuated"                 # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = ["VP-ADJ-001"]
+status      = "certified"                     # G4: logs/gates/VP-WLD-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WDC-001"
+source      = "category/tensor_categorical_v5.md#検証点5"
+claim_ja    = "DC ∧ Wld 非自明性の橋渡し（DCWorldBridge）。DC⇔Wld 同値は未証明（bridge は条件付き）"
+lean_decl   = "ERIEC.WorldDC.DCWorldBridge"
+lean_file   = "formal/ERIEC/WorldDC.lean"
+julia_api   = "check_worlddc_bridge"
+julia_file  = "src/worlddc.jl"
+contract_id = "worlddc.bridge"                 # catalog 登録済み
+owner       = "codex"
+depends_on  = ["VP-DC-001", "VP-WLD-001"]
+status      = "certified"                     # G4: logs/gates/VP-WDC-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 6–8: 蝶番崩壊・K 吸収性・臨界漸近（Lean 未着手） ----------------
+
+[[vp]]
+id          = "VP-CLP-001"
+source      = "category/tensor_categorical_v5.md#検証点6-8"
+claim_ja    = "二配置同時更新、蝶番崩壊（κ→∅ が Act_w→∅）、K 吸収性、𝐋_w 最大固有値の臨界漸近"
+lean_decl   = "ERIEC.Collapse.hingeCollapse"   # 予約名（Lean 未実装。G1 で実装要）
+lean_file   = "formal/ERIEC/Collapse.lean"     # 予約名（ファイル未作成）
+julia_api   = "critical_slowing_score"         # Julia 側は既存（src/slowing.jl, src/collapse.jl）
+julia_file  = "src/slowing.jl"
+contract_id = "collapse.critical_slowing"      # 予約名
+owner       = "codex"
+depends_on  = ["VP-HNG-001", "VP-WLD-001"]
+status      = "certified"                    # G4: logs/gates/VP-CLP-001/G4-20260705.log
+pinned      = false
+
+# ---- category-v5-1 §17-20: 一般核（OpenDynamics/Audit/Lineage/TheoryTranslation）-------
+# codex が 2026-07-05 に G1/G2 通過済み。G3〜G4 は未実施。
+
+[[vp]]
+id          = "VP-OPD-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§17"
+claim_ja    = "OpenGraph の経路・実行・OpenFrame の一般核（圏の三法則: id_comp / comp_id / assoc）"
+lean_decl   = "ERIEC.OpenDynamics.OpenGraph"
+lean_file   = "formal/ERIEC/OpenDynamics.lean"
+julia_api   = "FiniteOpenGraph"
+julia_file  = "src/open_dynamics.jl"
+contract_id = "opendynamics.open_graph"        # 予約名（catalog 未登録。G4 で登録要）
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-OPD-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-AUD-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§18"
+claim_ja    = "Audit: Simulation の圏の三法則（id_comp / comp_id / assoc）、UsesOnly 保存"
+lean_decl   = "ERIEC.Audit.Simulation"
+lean_file   = "formal/ERIEC/Audit.lean"
+julia_api   = "FiniteSimulation"
+julia_file  = "src/audit.jl"
+contract_id = "audit.simulation"               # 予約名
+owner       = "codex"
+depends_on  = ["VP-OPD-001"]
+status      = "certified"                     # G4: logs/gates/VP-AUD-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-LIN-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§19"
+claim_ja    = "Lineage: 系統追跡の形式化"
+lean_decl   = "ERIEC.OpenEvolution.Lineage"
+lean_file   = "formal/ERIEC/Lineage.lean"
+julia_api   = "FiniteLineage"
+julia_file  = "src/lineage.jl"
+contract_id = "lineage.core"                   # 予約名
+owner       = "codex"
+depends_on  = ["VP-OPD-001"]
+status      = "certified"                     # G4: logs/gates/VP-LIN-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-TTR-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§20"
+claim_ja    = "TheoryTranslation: 理論翻訳・SatisfactionPreserving・Conservative。phenomenal_notCertified 定理を含む"
+lean_decl   = "ERIEC.TheoryTranslation.phenomenal_notCertified"
+lean_file   = "formal/ERIEC/TheoryTranslation.lean"
+julia_api   = "GuaranteeProfile"
+julia_file  = "src/theory_translation.jl"
+contract_id = "theorytr.phenomenal_guard"      # 予約名
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-TTR-001/G4-20260705.log
+pinned      = false
+
+# ---- 検証点 9: FM マーカー・盲視アナログ（Lean 未着手） --------------------
+
+[[vp]]
+id          = "VP-MRK-001"
+source      = "category/tensor_categorical_v5.md#検証点9"
+claim_ja    = "FM-1〜4 計算可能、盲視アナログ分類、接続A/B の文書分離"
+lean_decl   = "ERIEC.Markers.FMMarkers"        # 予約名（Lean 未実装。G1 で実装要）
+lean_file   = "formal/ERIEC/Markers.lean"      # 予約名（ファイル未作成）
+julia_api   = "classify_action_markers"        # Julia 側は既存（src/markers.jl）
+julia_file  = "src/markers.jl"
+contract_id = "markers.fm_classification"      # 予約名
+owner       = "codex"
+depends_on  = ["VP-DC-001"]
+status      = "certified"                     # G4: logs/gates/VP-MRK-001/G4-20260705.log
+pinned      = false
+
+# ---- v5.1 §16: 未実装Lean義務の機械追跡 ----------------------------------
+
+[[vp]]
+id          = "VP-ADJ-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§1"
+claim_ja    = "関係随伴の剛性定理と双対整合系（rigidity_of_gc, ConvSystem, conv_gc）"
+lean_decl   = "ERIEC.Adj.rigidity_of_gc"
+lean_file   = "formal/ERIEC/Adjunction.lean"
+julia_api   = "check_relational_rigidity"
+julia_file  = "src/adjunction.jl"
+contract_id = "adjunction.rigidity"
+owner       = "codex"
+depends_on  = ["VP-ADJ-001"]
+status      = "certified"                     # G4: logs/gates/VP-ADJ-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GRA-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§2"
+claim_ja    = "階数圏・関係前層・定台前層性と反単調性の同値"
+lean_decl   = "ERIEC.Grading.constPresheaf_iff_antitone"
+lean_file   = "formal/ERIEC/Grading.lean"
+julia_api   = "check_const_presheaf_antitone"
+julia_file  = "src/grading.jl"
+contract_id = "grading.const_presheaf_antitone"
+owner       = "codex"
+depends_on  = ["VP-ADJ-002"]
+status      = "certified"                     # G4: logs/gates/VP-GRA-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-KT-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§3"
+claim_ja    = "Knaster–Tarski構成による余帰納原理・最大不動点・終余代数"
+lean_decl   = "ERIEC.Closure.finalCoalgebra"
+lean_file   = "formal/ERIEC/Closure.lean"
+julia_api   = "check_final_coalgebra"
+julia_file  = "src/closure.jl"
+contract_id = "closure.knaster_tarski"
+owner       = "codex"
+depends_on  = ["VP-CLO-001"]
+status      = "certified"                     # G4: logs/gates/VP-KT-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GRA-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§3"
+claim_ja    = "階数sieve・臨界階数・Sig-2による臨界階数超過時のνΦ空性"
+lean_decl   = "ERIEC.Grading.nuPhi_empty_above"
+lean_file   = "formal/ERIEC/Grading.lean"
+julia_api   = "check_sig2_collapse_bound"
+julia_file  = "src/grading.jl"
+contract_id = "grading.critical_rank"
+owner       = "codex"
+depends_on  = ["VP-GRA-001", "VP-KT-001"]
+status      = "certified"                     # G4: logs/gates/VP-GRA-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-CER-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§4"
+claim_ja    = "認証枠の三分離、空性伝播、認証の臨界階数拘束"
+lean_decl   = "ERIEC.DC.crit_bound"
+lean_file   = "formal/ERIEC/DC.lean"
+julia_api   = "check_critical_bound"
+julia_file  = "src/dc.jl"
+contract_id = "certification.critical_bound"
+owner       = "codex"
+depends_on  = ["VP-HNG-001", "VP-DC-001", "VP-GRA-002"]
+status      = "certified"                     # G4: logs/gates/VP-CER-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-DYN-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§5"
+claim_ja    = "階付き動態、有限歩崩壊、吸収部、境界一方向性、観測分解不能性、移送"
+lean_decl   = "ERIEC.Dynamics.collapse"
+lean_file   = "formal/ERIEC/Dynamics.lean"
+julia_api   = "check_finite_collapse"
+julia_file  = "src/dynamics.jl"
+contract_id = "dynamics.finite_collapse"
+owner       = "codex"
+depends_on  = ["VP-CER-001", "VP-CLP-001"]
+status      = "certified"                     # G4: logs/gates/VP-DYN-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-SEN-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§6"
+claim_ja    = "連続随伴にT†T≽idを課せないことの反例"
+lean_decl   = "ERIEC.Sens.not_id_le_adjoint_comp"
+lean_file   = "formal/ERIEC/Sensitivity.lean"
+julia_api   = "check_adjoint_unit_counterexample"
+julia_file  = "src/sensitivity.jl"
+contract_id = "sensitivity.no_order_unit"
+owner       = "codex"
+depends_on  = ["VP-SEN-001"]
+status      = "certified"                     # G4: logs/gates/VP-SEN-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WLD-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§6"
+claim_ja    = "スペクトル世界の許容帯、固定空間との関係、臨界指標χ"
+lean_decl   = "ERIEC.World.Wld_band"
+lean_file   = "formal/ERIEC/World.lean"
+julia_api   = "world_band"
+julia_file  = "src/world.jl"
+contract_id = "world.spectral_band"
+owner       = "codex"
+depends_on  = ["VP-WLD-001", "VP-SEN-002"]
+status      = "certified"                     # G4: logs/gates/VP-WLD-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-VAL-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§7"
+claim_ja    = "正規化価値テンソルのwell-definedness・内生性・重み付き感受性"
+lean_decl   = "ERIEC.Value.V_endogenous"
+lean_file   = "formal/ERIEC/Value.lean"
+julia_api   = "check_value_endogenous"
+julia_file  = "src/value.jl"
+contract_id = "value.endogenous"
+owner       = "codex"
+depends_on  = ["VP-KT-001", "VP-DC-001", "VP-SEN-001"]
+status      = "certified"                     # G4: logs/gates/VP-VAL-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WDC-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§8"
+claim_ja    = "DCとWld非自明性の無条件な双方向含意を反例で否定"
+lean_decl   = "ERIEC.WorldDC.no_forward_unconditional"
+lean_file   = "formal/ERIEC/WorldDC.lean"
+julia_api   = "check_no_unconditional_worlddc"
+julia_file  = "src/worlddc.jl"
+contract_id = "worlddc.no_unconditional_equivalence"
+owner       = "codex"
+depends_on  = ["VP-DC-001", "VP-WLD-001"]
+status      = "certified"                     # G4: logs/gates/VP-WDC-002/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GUA-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§10"
+claim_ja    = "到達成分上の終対象ガード、M4、安全変異、Kleisli合成"
+lean_decl   = "ERIEC.Guard.hasTStar_iff_terminal"
+lean_file   = "formal/ERIEC/Guard.lean"
+julia_api   = "check_terminal_guard"
+julia_file  = "src/guard.jl"
+contract_id = "guard.terminal_iff"
+owner       = "codex"
+depends_on  = ["VP-BDY-001"]
+status      = "certified"                     # G4: logs/gates/VP-GUA-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-DEC-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§11"
+claim_ja    = "タグ付き余積、copair一意性、標準分解、可約性"
+lean_decl   = "ERIEC.Decomp.copair_unique"
+lean_file   = "formal/ERIEC/Decomp.lean"
+julia_api   = "check_copair_unique"
+julia_file  = "src/decomp.jl"
+contract_id = "decomp.copair_unique"
+owner       = "codex"
+depends_on  = ["VP-GRD-001"]
+status      = "certified"                     # G4: logs/gates/VP-DEC-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-INV-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§12"
+claim_ja    = "静的・動的同型、内的双模倣、漂移等変、更新可換、INS不変性"
+lean_decl   = "ERIEC.Invariance.upd_bisim"
+lean_file   = "formal/ERIEC/Invariance.lean"
+julia_api   = "check_update_bisimulation"
+julia_file  = "src/invariance.jl"
+contract_id = "invariance.update_bisimulation"
+owner       = "codex"
+depends_on  = ["VP-DYN-001", "VP-DEC-001"]
+status      = "certified"                     # G4: logs/gates/VP-INV-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-REF-001"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§13"
+claim_ja    = "安定核・動的パック・独立性を分離した有限参照模型群"
+lean_decl   = "ERIEC.RefModel.reference_models"
+lean_file   = "formal/ERIEC/RefModel.lean"
+julia_api   = "check_reference_models"
+julia_file  = "src/reference_models.jl"
+contract_id = "reference_models.v5_1"
+owner       = "codex"
+depends_on  = ["VP-INV-001", "VP-MRK-001", "VP-WDC-002"]
+status      = "certified"                     # G4: logs/gates/VP-REF-001/G4-20260705.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-001"
+source      = "docs/§14凍結文書_v1.md#§2-§4"
+claim_ja    = "凍結文W1–W6と独立性の構成的証人"
+lean_decl   = "ERIEC.Wager.W6_indep"
+lean_file   = "formal/ERIEC/Wager.lean"
+julia_api   = "check_wager_independence"
+julia_file  = "src/wager.jl"
+contract_id = "wager.frozen_independence"
+owner       = "codex"
+depends_on  = []
+status      = "certified"
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-002"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#W-8"
+claim_ja    = "全k0≥2に対するW5独立性模型族"
+lean_decl   = "ERIEC.Wager.W5_indep_all"
+lean_file   = "formal/ERIEC/Wager/Richness.lean"
+julia_api   = "check_w5_independence_family"
+julia_file  = "src/wager.jl"
+contract_id = "wager.w5_independence_family"
+owner       = "codex"
+depends_on  = ["VP-WGR-001"]
+status      = "certified"
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-003"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#W-7"
+claim_ja    = "無解釈述語の定義的拡張に対する保存性"
+lean_decl   = "ERIEC.Wager.W1_identification_conservative"
+lean_file   = "formal/ERIEC/Wager/Preservation.lean"
+julia_api   = "check_wager_conservative_extension"
+julia_file  = "src/wager.jl"
+contract_id = "wager.conservative_extension"
+owner       = "codex"
+depends_on  = ["VP-WGR-001"]
+status      = "certified"
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-004"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#M-6"
+claim_ja    = "有限リリース列に対する凍結プロトコル大域不変量"
+lean_decl   = "ERIEC.Wager.global_frozen_protocol_invariant"
+lean_file   = "formal/ERIEC/Wager/Preservation.lean"
+julia_api   = "check_frozen_protocol_invariant"
+julia_file  = "src/wager.jl"
+contract_id = "wager.global_protocol_invariant"
+owner       = "codex"
+depends_on  = ["VP-WGR-003"]
+status      = "certified"
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-005"
+source      = "docs/§14凍結文書_v1.md#§7"
+claim_ja    = "凍結文書のnamed finite witness models境界"
+lean_decl   = "ERIEC.Wager.named_frozen_models_boundary"
+lean_file   = "formal/ERIEC/Wager/Models.lean"
+julia_api   = "check_wager_named_models"
+julia_file  = "src/wager.jl"
+contract_id = "wager.named_models"
+owner       = "codex"
+depends_on  = ["VP-WGR-001", "VP-WGR-003", "VP-WGR-004"]
+status      = "certified"                     # G4: logs/gates/VP-WGR-005/G4-20260707-230547.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-006"
+source      = "docs/§14凍結文書_v1.md#§2"
+claim_ja    = "W6のDC自己閉路soundness"
+lean_decl   = "ERIEC.Wager.W6_of_dc_cycle"
+lean_file   = "formal/ERIEC/Wager/Models.lean"
+julia_api   = "check_w6_cycle_soundness"
+julia_file  = "src/wager.jl"
+contract_id = "wager.w6_cycle_soundness"
+owner       = "codex"
+depends_on  = ["VP-WGR-001", "VP-WGR-005"]
+status      = "certified"                     # G4: logs/gates/VP-WGR-006/G4-20260708-060505.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-007"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#L-4"
+claim_ja    = "凍結Wager有限モデル検査器"
+lean_decl   = "ERIEC.Wager.frozen_model_checker_soundness"
+lean_file   = "formal/ERIEC/Wager/Models.lean"
+julia_api   = "check_frozen_wager_model"
+julia_file  = "src/wager.jl"
+contract_id = "wager.finite_model_checker"
+owner       = "codex"
+depends_on  = ["VP-WGR-001", "VP-WGR-005", "VP-WGR-006"]
+status      = "certified"                     # G4: logs/gates/VP-WGR-007/G4-20260708-060845.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-008"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#L-4"
+claim_ja    = "凍結Wager解釈層W1-W3有限モデル検査器"
+lean_decl   = "ERIEC.Wager.frozen_interpretive_checker_soundness"
+lean_file   = "formal/ERIEC/Wager/Models.lean"
+julia_api   = "check_frozen_wager_interpretive_model"
+julia_file  = "src/wager.jl"
+contract_id = "wager.interpretive_model_checker"
+owner       = "codex"
+depends_on  = ["VP-WGR-001", "VP-WGR-003", "VP-WGR-007"]
+status      = "certified"                     # G4: logs/gates/VP-WGR-008/G4-20260708-061436.log
+pinned      = false
+
+[[vp]]
+id          = "VP-WGR-009"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#L-4"
+claim_ja    = "凍結Wager W1-W6 full有限モデル検査器"
+lean_decl   = "ERIEC.Wager.frozen_full_model_checker_soundness"
+lean_file   = "formal/ERIEC/Wager/Models.lean"
+julia_api   = "check_frozen_wager_full_model"
+julia_file  = "src/wager.jl"
+contract_id = "wager.full_model_checker"
+owner       = "codex"
+depends_on  = ["VP-WGR-007", "VP-WGR-008"]
+status      = "certified"                     # G4: logs/gates/VP-WGR-009/G4-20260708-061747.log
+pinned      = false
+
+[[vp]]
+id          = "VP-M1-001"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#M-1"
+claim_ja    = "有限DC参照モデルの任意サイズ非退化fragment"
+lean_decl   = "ERIEC.RefModel.arbitrarily_large_nondegenerate_dc"
+lean_file   = "formal/ERIEC/RefModel/Large.lean"
+julia_api   = "check_arbitrarily_large_nondegenerate_models"
+julia_file  = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_dc"
+owner       = "codex"
+depends_on  = ["VP-REF-001"]
+status      = "certified"                     # G4: logs/gates/VP-M1-001/G4-20260707-180844.log
+pinned      = false
+
+[[vp]]
+id          = "VP-M1-FULL-001a"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§0.3,#§13"
+claim_ja    = "M-1 full Tier-1: 任意サイズ有限AX_core離散・動態fragment"
+lean_decl   = "ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model"
+lean_file   = "formal/ERIEC/RefModel/LargeCore.lean"
+julia_api   = "check_arbitrarily_large_ax_core_discrete_models"
+julia_file  = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_ax_core_discrete"
+owner       = "codex"
+depends_on  = ["VP-M1-001", "VP-REF-001", "VP-DYN-001", "VP-INV-001"]
+status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001a/G4-20260707-195447.log
+pinned      = false
+
+[[vp]]
+id          = "VP-M1-FULL-001b"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§0.3,#§13"
+claim_ja    = "M-1 full Tier-2: 任意サイズ三層bridge shape fragment"
+lean_decl   = "ERIEC.RefModel.arbitrarily_large_three_layer_reference_model"
+lean_file   = "formal/ERIEC/RefModel/LargeCore.lean"
+julia_api   = "check_arbitrarily_large_three_layer_reference_models"
+julia_file  = "src/reference_models.jl"
+contract_id = "reference_models.arbitrarily_large_three_layer"
+owner       = "codex"
+depends_on  = ["VP-M1-FULL-001a", "VP-WDC-001", "VP-VAL-002", "VP-REF-001"]
+status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001b/G4-20260707-224049.log
+pinned      = false
+
+# ---- 検証点 RICH: 蝶番分岐の余帰納核への遺伝（台帳 A-6。E1 不採用決定に伴う対象層の豊かさ扱い）----
+
+[[vp]]
+id          = "VP-RICH-001"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#A-6"
+claim_ja    = "分岐点述語 Branch（2 ≤ |α(m)| の Set 版・非退化性の原子。公理でなく分類子 [DEF]）"
+lean_decl   = "ERIEC.Richness.Branch"
+lean_file   = "formal/ERIEC/Richness.lean"
+julia_api   = "is_branch_point"
+julia_file  = "src/richness.jl"
+contract_id = "richness.branch"
+owner       = "codex"
+depends_on  = []
+status      = "proposed"
+pinned      = true                            # 起票直後の人間凍結レビュー用（LOOP.md 品質退避口）
+
+[[vp]]
+id          = "VP-RICH-002"
+source      = "docs/ERIEC_未解決命題台帳_v1.md#A-6"
+claim_ja    = "蝶番分岐の遺伝（単段）: DC ∧ m∈Act ∧ Branch(m) ⇒ α(m) ⊆ νΘ（系: 2 ≤ |νΘ|）。単調性+余帰納原理のみ・hConv 非依存の見込み"
+lean_decl   = "ERIEC.Richness.hinge_branch_pump"
+lean_file   = "formal/ERIEC/Richness.lean"
+julia_api   = "check_hinge_branch_pump"
+julia_file  = "src/richness.jl"
+contract_id = "richness.hinge_branch_pump"
+owner       = "codex"
+depends_on  = ["VP-RICH-001"]
+status      = "proposed"
+pinned      = true                            # 起票直後の人間凍結レビュー用
+
+# ---- 検証点 GEN: 増殖射（誕生半球・§11-3）。批准 2026-07-08。設計 specs/eriec-proliferation-spec.md ----
+# アーキテクチャ: GenEvent を DC→DC に持ち替えず、DC→OpenSystem 翻訳 witness を新設し
+# 既存 Lineage/OpenEvolution（viable 世界）を再利用（codex 案・viable≠DC 保持）。
+# 正確な statement 型は codex が G0 で凍結（実装内部の符号化に依存）。全エントリ人間凍結中。
+
+[[vp]]
+id          = "VP-GEN-001"
+source      = "category/erie_c_axiom_categorical_memo.md#§11-3"
+claim_ja    = "DC→OpenSystem 一方向 translation witness（forgetful adapter + viable 述語 + step_closed 相当証人）。viable⇒DC 逆向きは作らない"
+lean_decl   = "ERIEC.Generation.dcViableTranslation"
+lean_file   = "formal/ERIEC/Generation.lean"
+julia_api   = "check_dc_viable_translation"
+julia_file  = "src/generation.jl"
+contract_id = "generation.dc_viable_translation"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-GEN-001/G4-20260711-203639.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GEN-002"
+source      = "category/erie_c_axiom_categorical_memo.md#§11-3"
+claim_ja    = "増殖射 ProliferationMorphism（メタ層 Hom(𝓘)。GenerationWitness 拡張。子は低階数再誕=M4整合、heritage lax 単調）"
+lean_decl   = "ERIEC.Generation.ProliferationMorphism"
+lean_file   = "formal/ERIEC/Generation.lean"
+julia_api   = "check_proliferation_morphism"
+julia_file  = "src/generation.jl"
+contract_id = "generation.proliferation_morphism"
+owner       = "codex"
+depends_on  = ["VP-GEN-001"]
+status      = "certified"                     # G4: logs/gates/VP-GEN-002/G4-20260711-203524.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GEN-003"
+source      = "category/erie_c_axiom_categorical_memo.md#§11-3"
+claim_ja    = "「系譜は開く」法則の DC 系譜への instantiation（cofinal_implies_freshSem を GenEvent:=増殖射・q:=Φ_rich にインスタンス化）"
+lean_decl   = "ERIEC.Generation.lineage_stays_open"
+lean_file   = "formal/ERIEC/Generation.lean"
+julia_api   = "check_lineage_stays_open"
+julia_file  = "src/generation.jl"
+contract_id = "generation.lineage_stays_open"
+owner       = "codex"
+depends_on  = ["VP-GEN-002"]
+status      = "certified"                     # G4: logs/gates/VP-GEN-003/G4-20260711-203551.log
+pinned      = false
+
+[[vp]]
+id          = "VP-GEN-004"
+source      = "category/erie_c_axiom_categorical_memo.md#§11-3"
+claim_ja    = "世代間の豊かさ遺伝（A-6 単段の増殖射沿い持ち上げ・別 statement）。親の蝶番分岐→子 Φ_rich の lax/strict transport。単段証人=hinge_branch_pump"
+lean_decl   = "ERIEC.Generation.richness_inherits_generational"
+lean_file   = "formal/ERIEC/Generation.lean"
+julia_api   = "check_richness_inherits_generational"
+julia_file  = "src/generation.jl"
+contract_id = "generation.richness_inherits_generational"
+owner       = "codex"
+depends_on  = ["VP-GEN-002", "VP-RICH-002"]
+status      = "certified"                     # G4: logs/gates/VP-GEN-004/G4-20260711-203602.log
+pinned      = false

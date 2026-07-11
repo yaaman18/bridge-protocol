@@ -1,0 +1,2 @@
+no_alphaOnly_hinge_classifier : ¬∃ classify, AlphaOnlyClassifiesHinge classify
+'ERIEC.BridgeFunctor.no_alphaOnly_hinge_classifier' depends on axioms: [propext, Quot.sound]
