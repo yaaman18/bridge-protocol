@@ -3,6 +3,8 @@
 
 [English](README.md) | **日本語** | [Español](README.es.md)
 
+「Bridge」は `DCWorldBridge`（WorldDC.lean）と `bridgeOpen`（Gate.lean）——自己維持と世界の立ち上がりを繋ぐ Lean の型。現象ゲートは常に `bridgeOpen`。`pass` にはなれない。
+
 ---
 
 ## このリポジトリは何か

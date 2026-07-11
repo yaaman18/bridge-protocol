@@ -3,6 +3,8 @@
 
 **English** | [日本語](README.ja.md) | [Español](README.es.md)
 
+`Bridge` comes from `DCWorldBridge` (WorldDC.lean) and `bridgeOpen` (Gate.lean) — the Lean types that connect self-maintenance to world-arising. The phenomenal gate is always `bridgeOpen`; it can never be `pass`.
+
 ---
 
 ## What this repository is

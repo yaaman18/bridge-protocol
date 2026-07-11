@@ -3,6 +3,8 @@
 
 [English](README.md) | [日本語](README.ja.md) | **Español**
 
+`Bridge` viene de `DCWorldBridge` (WorldDC.lean) y `bridgeOpen` (Gate.lean) — los tipos Lean que conectan el automantenimiento con el surgimiento del mundo. La compuerta fenomenológica es siempre `bridgeOpen`; nunca puede ser `pass`.
+
 ---
 
 ## Qué es este repositorio
