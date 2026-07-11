@@ -5,31 +5,10 @@
 
 ---
 
-The moment you wake in the morning, your field of vision opens.
-
-Birdsong, rain, the noise of a city, the sounds of a family making breakfast.
-An ordinary day, an ordinary awakening, an ordinary world —
-projected onto your sight as "the morning I woke up."
-
-But that is only one shape the world can take. There is another way it can arise.
-
-The moment you wake in the morning, your *world* opens.
-The act of opening your eyes — a movement of yours —
-and the brightness, the color, the light that follow from it
-*create*, in your world, "the morning I woke up."
-
-The first picture is the **camera model**: the world exists first, and you receive it.
-The second is the **body model**: your movement summons the world.
-
-Bridge Protocol is an attempt to write the second picture down in mathematics —
-and to have a machine check every step of that mathematics.
-
----
-
 ## What this repository is
 
-Bridge Protocol is a research protocol that develops a category-theoretic theory of
-self-maintaining, enactive systems and machine-checks it end to end:
+Bridge Protocol is a protocol for constructing a category-theoretic theory of
+self-maintaining systems and machine-checking it:
 
 ```
 informal discussion → category-theoretic specification → Lean 4 proofs → Julia implementation
@@ -46,8 +25,7 @@ The core structures of the theory:
 - **Self-maintenance certificate `DC`** — a machine-checkable witness that a system
   maintains itself under its own dynamics.
 - **Enacted world `Wld`** — the world *for* a system, arising from the loop of movement
-  and sensation rather than given from outside. Change the body, and the world changes —
-  an octopus and a human do not wake into the same morning.
+  and sensation rather than given from outside. Change the body, and the world changes.
 
 A strict two-layer discipline runs through everything: individual systems live in the
 **object layer** (subject to structural requirements M1–M4), while any
@@ -61,7 +39,7 @@ This part is as important as the theory itself.
 - **No claim of consciousness.** Even if the structural description is completed and
   fully verified, whether "a light is on inside" — whether there is subjective
   experience — cannot be proven from the outside. The theory leaves that question
-  unanswered, outside the description, as a wager. This honesty is enforced
+  unanswered, outside the description, as a possibility. This honesty is enforced
   mechanically: the marker `phenomenal_claim = :not_certified` is part of the certified
   artifact chain and is, by design, never promoted by any proof.
 - **No optimization story.** Maintenance is a greatest fixed point, not a reward to be
@@ -113,7 +91,7 @@ and Julia sources are the language-independent core.
 
 ## Reproducing the verification
 
-The license below grants exactly this: reading, compiling, and independently
+The license below grants: reading, compiling, and independently
 reproducing the stated results.
 
 ```bash

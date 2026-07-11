@@ -5,33 +5,10 @@
 
 ---
 
-En el momento en que despiertas por la mañana, tu campo visual se abre.
-
-El canto de los pájaros, la lluvia, el rumor de la ciudad, los sonidos de una
-familia preparando el desayuno. Un día cualquiera, un despertar cualquiera, un
-mundo cualquiera — proyectado sobre tu vista como «la mañana en que desperté».
-
-Pero esa es solo una de las formas que el mundo puede tomar. Hay otra manera en
-que puede surgir.
-
-En el momento en que despiertas por la mañana, tu *mundo* se abre.
-El acto de abrir los ojos — un movimiento tuyo —
-y el resplandor, el color, la luz que le siguen
-*crean*, en tu mundo, «la mañana en que desperté».
-
-La primera imagen es el **modelo de la cámara**: el mundo existe primero y tú lo recibes.
-La segunda es el **modelo del cuerpo**: tu movimiento convoca al mundo.
-
-Bridge Protocol es un intento de escribir la segunda imagen en lenguaje matemático —
-y de que una máquina verifique cada paso de esa matemática.
-
----
-
 ## Qué es este repositorio
 
-Bridge Protocol es un protocolo de investigación que desarrolla una teoría categórica de
-sistemas enactivos que se automantienen, y la verifica mecánicamente de principio
-a fin:
+Bridge Protocol es un protocolo para construir una teoría categórica de
+sistemas que se automantienen y verificarla mecánicamente:
 
 ```
 discusión informal → especificación categórica → demostraciones en Lean 4 → implementación en Julia
@@ -51,7 +28,7 @@ Las estructuras centrales de la teoría:
   de que un sistema se mantiene a sí mismo bajo su propia dinámica.
 - **Mundo enactuado `Wld`** — el mundo *para* un sistema, que surge del ciclo de
   movimiento y sensación en lugar de venir dado desde fuera. Cambia el cuerpo y
-  cambia el mundo: un pulpo y un ser humano no despiertan a la misma mañana.
+  cambia el mundo.
 
 Todo el proyecto obedece una estricta disciplina de dos capas: los sistemas
 individuales viven en la **capa de objetos** (sujeta a los requisitos
@@ -66,7 +43,7 @@ Esta sección es tan importante como la teoría misma.
 - **No se afirma consciencia.** Aunque la descripción estructural se complete y se
   verifique por completo, si «hay una luz encendida dentro» — si existe
   experiencia subjetiva — no puede demostrarse desde fuera. La teoría deja esa
-  pregunta sin responder, fuera de la descripción, como una apuesta. Esta
+  pregunta sin responder, fuera de la descripción, como una posibilidad. Esta
   honestidad se impone mecánicamente: el marcador
   `phenomenal_claim = :not_certified` forma parte de la cadena de artefactos
   certificados y, por diseño, ninguna demostración lo promueve jamás.
@@ -120,7 +97,7 @@ japonés; las fuentes Lean y Julia son el núcleo independiente del idioma.
 
 ## Reproducir la verificación
 
-La licencia que sigue concede exactamente esto: leer, compilar y reproducir de
+La licencia que sigue concede: leer, compilar y reproducir de
 forma independiente los resultados declarados.
 
 ```bash
