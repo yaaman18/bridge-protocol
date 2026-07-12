@@ -1,6 +1,7 @@
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.InnerProductSpace.Basic
+import ERIEC.Markers
 
 namespace ERIEC
 
@@ -162,11 +163,38 @@ structure HilbertFrame (A H : Type*) [NormedAddCommGroup H] [InnerProductSpace �
     ∀ v, spectralProjection v ∈ operator.eigenspace eigenvalue
   projection_fixes_eigenspace :
     ∀ v, v ∈ operator.eigenspace eigenvalue → spectralProjection v = v
+  /-- The residual of the projection is orthogonal to the selected
+  eigenspace. Together with the preceding two fields this rules out an
+  arbitrary retraction being presented as a spectral projection. -/
+  projection_residual_orthogonal :
+    ∀ v z, z ∈ operator.eigenspace eigenvalue →
+      Inner.inner ℝ (v - spectralProjection v) z = 0
 
 /-- Nonzero spectral component in a general real Hilbert-space representation. -/
 def HilbertFM4 {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     (F : HilbertFrame A H) (a : A) : Prop :=
   F.spectralProjection (F.representation a) ≠ 0
+
+/-- A full marker frame together with the Hilbert-space data that its FM4
+component denotes. Equality fields prevent the structural marker predicate
+from silently referring to a different representation or projection. -/
+structure HilbertFullMarkerFrame
+    (A E C S W Ω H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H] where
+  marker : Markers.FullMarkerFrame A E C S W Ω H
+  analytic : HilbertFrame A H
+  representation_eq : marker.representation = analytic.representation
+  spectralProjection_eq : marker.spectralProjection = analytic.spectralProjection
+  zero_eq : marker.zero = 0
+
+/-- The structural FM4 component of a linked full marker frame is exactly
+its analytic Hilbert-space FM4 predicate. -/
+theorem hilbert_full_marker_fm4_iff
+    {A E C S W Ω H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (F : HilbertFullMarkerFrame A E C S W Ω H) (a : A) :
+    Markers.FM4 F.marker.toFM4 a ↔ HilbertFM4 F.analytic a := by
+  change F.marker.spectralProjection (F.marker.representation a) ≠ F.marker.zero ↔
+    F.analytic.spectralProjection (F.analytic.representation a) ≠ 0
+  rw [F.representation_eq, F.spectralProjection_eq, F.zero_eq]
 
 /-- A representation isomorphism whose analytic component is a genuine
 Mathlib linear isometry equivalence. -/

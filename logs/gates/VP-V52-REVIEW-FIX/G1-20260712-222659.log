@@ -1,0 +1,136 @@
+⚠ [2723/2772] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2726/2772] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2736/2772] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:342:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:343:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:345:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:356:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:382:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2737/2772] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2747/2772] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2764/2772] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:93:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:113:6: Try `simp at haSig` instead of `simpa using haSig`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:144:8: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:200:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:231:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:244:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:269:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:293:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✖ [2768/2772] Building ERIEC.AnalyticFM4 (8.8s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/bridge-protocol/formal/ERIEC/AnalyticFM4.lean -o /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean/ERIEC/AnalyticFM4.olean -i /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean/ERIEC/AnalyticFM4.ilean -c /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/ir/ERIEC/AnalyticFM4.c --setup /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/ir/ERIEC/AnalyticFM4.setup.json --json
+error: formal/ERIEC/AnalyticFM4.lean:171:12: Application type mismatch: The argument
+  ℝ
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  R2
+of sort `Type` in the application
+  inner ℝ
+error: formal/ERIEC/AnalyticFM4.lean:171:15: Type mismatch
+  v - spectralProjection v
+has type
+  H
+of sort `Type u_2` but is expected to have type
+  R2
+of sort `Type`
+error: formal/ERIEC/AnalyticFM4.lean:194:62: unsolved goals
+A : Type u_1
+E : Type u_2
+C : Type u_3
+S : Type u_4
+W : Type u_5
+Ω : Type u_6
+H : Type u_7
+inst✝¹ : NormedAddCommGroup H
+inst✝ : InnerProductSpace ℝ H
+F : HilbertFullMarkerFrame A E C S W Ω H
+a : A
+⊢ F.marker.toFM4.spectralProjection (F.marker.toFM4.representation a) ≠ F.marker.toFM4.zero ↔
+    F.analytic.spectralProjection (F.analytic.representation a) ≠ 0
+warning: formal/ERIEC/AnalyticFM4.lean:195:38: This simp argument is unused:
+  F.representation_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Markers.FM4, HilbertFM4, F̵.̵r̵e̵p̵r̵e̵s̵e̵n̵t̵a̵t̵i̵o̵n̵_̵e̵q̵,̵F.spectralProjection_eq, F.zero_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/AnalyticFM4.lean:196:4: This simp argument is unused:
+  F.spectralProjection_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Markers.FM4, HilbertFM4, F.representation_eq, F̵.̵s̵p̵e̵c̵t̵r̵a̵l̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵_̵e̵q̵,̵ ̵F.zero_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/AnalyticFM4.lean:196:29: This simp argument is unused:
+  F.zero_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Markers.FM4, HilbertFM4, F.representation_eq,
+  ̵  ̵ ̵ ̵F.spectralProjection_eq,̵ ̵F̵.̵z̵e̵r̵o̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.AnalyticFM4
+error: build failed

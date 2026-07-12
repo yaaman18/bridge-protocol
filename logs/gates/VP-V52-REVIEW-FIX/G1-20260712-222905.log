@@ -1,0 +1,258 @@
+⚠ [2715/2772] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2722/2772] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2736/2772] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:342:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:343:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:345:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:356:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:382:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2737/2772] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2748/2772] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2765/2772] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:93:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:113:6: Try `simp at haSig` instead of `simpa using haSig`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:144:8: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:200:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:231:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:244:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:269:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:293:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✖ [2769/2772] Building ERIEC.RefModelV52 (9.5s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/bridge-protocol/formal/ERIEC/RefModelV52.lean -o /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean/ERIEC/RefModelV52.olean -i /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean/ERIEC/RefModelV52.ilean -c /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/ir/ERIEC/RefModelV52.c --setup /Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/ir/ERIEC/RefModelV52.setup.json --json
+warning: formal/ERIEC/RefModelV52.lean:227:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:231:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:242:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:248:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:252:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:263:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:337:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star, sigmaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:338:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star_induced, alphaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:505:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:508:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:527:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:667:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:671:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:767:4: 'change markerStateEquiv (markerCollapseNext 0) = markerStateEquiv 1' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:772:4: 'change markerStateEquiv (markerCollapseNext 1) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:776:4: 'change markerStateEquiv (markerCollapseNext 2) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: formal/ERIEC/RefModelV52.lean:868:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  markerCollapseNext 0
+in the target expression
+  { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨0, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨0, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨0, ⋯⟩) }
+
+case «0»
+⊢ { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨0, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨0, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨0, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨0, ⋯⟩) }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 3
+  has type
+    3 ≤ 3
+  but is expected to have type
+    2 < 3
+  in the application
+    Nat.le_of_lt (Nat.le_refl 3)
+error: formal/ERIEC/RefModelV52.lean:871:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  markerCollapseNext 1
+in the target expression
+  { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨1, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨1, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨1, ⋯⟩) }
+
+case «1»
+⊢ { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨1, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨1, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨1, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨1, ⋯⟩) }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 3
+  has type
+    3 ≤ 3
+  but is expected to have type
+    2 < 3
+  in the application
+    Nat.le_of_lt (Nat.le_refl 3)
+error: formal/ERIEC/RefModelV52.lean:874:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  markerCollapseNext 2
+in the target expression
+  { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨2, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨2, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨2, ⋯⟩) }
+
+case «2»
+⊢ { kappa := collapseKappa (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)),
+      epsilon := collapseEpsilon (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)),
+      rank := collapseRank (markerCollapseNext ((fun i => i) ⟨2, ⋯⟩)) } =
+    Dynamics.upd collapsePhi collapseTheta collapseDrift
+      { kappa := collapseKappa ((fun i => i) ⟨2, ⋯⟩), epsilon := collapseEpsilon ((fun i => i) ⟨2, ⋯⟩),
+        rank := collapseRank ((fun i => i) ⟨2, ⋯⟩) }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 3
+  has type
+    3 ≤ 3
+  but is expected to have type
+    2 < 3
+  in the application
+    ⟨2, ⋯⟩
+warning: formal/ERIEC/RefModelV52.lean:896:12: declaration uses `sorry`
+error: formal/ERIEC/RefModelV52.lean:1070:4: Type mismatch: After simplification, term
+  euclideanAnalyticSwap.representation_preserves m
+ has type
+  @Eq EuclideanR2 (euclideanAnalyticSwap.U (euclideanAnalyticRepresentation m))
+    (euclideanAnalyticRepresentation (euclideanAnalyticSwap.hA m))
+but is expected to have type
+  @Eq EuclideanR2 (euclideanAnalyticSwap.U (euclideanAnalyticRepresentation m))
+    (euclideanAnalyticRepresentation (swapBool m))
+error: Lean exited with code 1
+Some required targets logged failures:
+- ERIEC.RefModelV52
+error: build failed

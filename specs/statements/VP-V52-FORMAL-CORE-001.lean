@@ -217,6 +217,61 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_stages
 #check ERIEC.RefModelV52.SymmetricDouble.markerInteroception_exchange
 #check ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff
+#check ERIEC.RefModelV52.SymmetricDouble.collapseFrame
+#check ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame
+#check ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+#check ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame
+#check ERIEC.RefModelV52.SymmetricDouble.euclideanHilbertFullMarker
+#check ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall
+#check ERIEC.RefModelV52.NonIsomorphicKernels.RealizationMultiplicityWitness
+#check ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic
+#check ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_same_profile
+
+/-- Frozen statements for the strengthened §22.5 and §25.6 certificates.
+Unlike `#check`, these examples fail if an implementation weakens or changes
+the proposition behind a reserved certificate name. -/
+example :
+    ERIEC.Markers.ConsciousAt
+        ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 ↔
+      ERIEC.Markers.ConsciousAt
+        ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame true 0 :=
+  ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall
+
+example :
+    ERIEC.Invariance.DynamicIso
+        ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso
+        ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.stepInt
+        ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.stepInt
+        ERIEC.RefModelV52.SymmetricDouble.markerInteroception
+        ERIEC.RefModelV52.SymmetricDouble.markerInteroception ∧
+      (∀ c,
+        ERIEC.Invariance.mapConf
+            ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hC
+            ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hE
+            (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update c) =
+          ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update
+            (ERIEC.Invariance.mapConf
+              ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hC
+              ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hE c)) :=
+  ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+
+example :
+    ¬ Nonempty (ERIEC.Invariance.KIso
+      ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.static
+      ERIEC.RefModelV52.NonIsomorphicKernels.doubleProfiledKernel.static) :=
+  ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic
+
+example :
+    ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.profile =
+      ERIEC.RefModelV52.NonIsomorphicKernels.doubleProfiledKernel.profile :=
+  ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_same_profile
+
+example (m : Bool) :
+    ERIEC.Markers.FM4
+        ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame.toFM4 m ↔
+      ERIEC.AnalyticFM4.HilbertFM4
+        ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame m :=
+  ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_fm4_iff m
 #print axioms ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable
 #print axioms ERIEC.RefModelV52.SymmetricDouble.positiveValue_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerConscious_horizontal_wall
@@ -226,6 +281,9 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_terminal
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff
+#print axioms ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+#print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall
+#print axioms ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic
 #print axioms ERIEC.RefModelV52.SymmetricDouble.alpha_sigma_converse
 #print axioms ERIEC.RefModelV52.SymmetricDouble.fm1_false
 

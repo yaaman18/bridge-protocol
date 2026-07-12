@@ -3,6 +3,10 @@ import ERIEC.Gap
 import ERIEC.Gate
 import ERIEC.OpenDynamics
 import ERIEC.RefModel.Basic
+import ERIEC.RefModel.Stable
+import ERIEC.Dynamics
+import ERIEC.Grading
+import ERIEC.Invariance
 import ERIEC.Value
 import ERIEC.Markers
 import ERIEC.AnalyticFM4
@@ -150,6 +154,168 @@ theorem witness_nonisomorphic : ¬ Nonempty (Unit ≃ Bool) :=
 theorem witness_right_has_two :
     witness.rightFalse ≠ witness.rightTrue :=
   witness.rightDistinct
+
+/-- The observable satisfaction profile required by v5.2 §22.5.  The fields
+record the four obligations separately, so equality of profiles cannot be
+mistaken for an isomorphism of their realizing kernels. -/
+structure RealizationProfile where
+  hConv : Bool
+  sig2 : Bool
+  dc : Bool
+  fm1 : Bool
+deriving DecidableEq
+
+def satisfiedProfile : RealizationProfile :=
+  ⟨true, true, true, true⟩
+
+/-- A kernel together with the rank closure and the exact evidence used for
+the §22.5 realization profile. -/
+structure ProfiledKernel (A E C S W : Type*) [LT W] where
+  static : Invariance.StaticFrame A E C S W
+  ranked : Grading.RankedClosure W C
+  threshold : W
+  center : A
+  state : S
+  hConv : ∀ a e, e ∈ static.alphaRel a ↔ a ∈ static.sigmaRel e
+  hConvP : ∀ a c, c ∈ static.piRel a ↔ a ∈ static.rhoRel c
+  sig2 : Grading.sig2 ranked threshold
+  dc : static.DCAt state
+  fm1 : Markers.FM1 static center state
+  profile : RealizationProfile
+  profile_complete : profile = satisfiedProfile
+
+def minimalStaticFrame : Invariance.StaticFrame Unit Unit Unit Unit Bool where
+  alphaRel := fun _ => Set.univ
+  sigmaRel := fun _ => Set.univ
+  piRel := fun _ => Set.univ
+  rhoRel := fun _ => Set.univ
+  kappa := fun _ => Set.univ
+  epsilon := fun _ => Set.univ
+  boundary := Set.univ
+  omega := fun _ => false
+
+def doubleStaticFrame : Invariance.StaticFrame Bool Unit Unit Unit Bool where
+  alphaRel := fun _ => Set.univ
+  sigmaRel := fun _ => Set.univ
+  piRel
+    | false => Set.univ
+    | true => ∅
+  rhoRel := fun _ => {false}
+  kappa := fun _ => Set.univ
+  epsilon := fun _ => Set.univ
+  boundary := Set.univ
+  omega := fun _ => false
+
+/-- Both realizations use the same two-rank closure: the lower rank admits
+the point, while the upper rank eliminates every nonempty post-fixed set. -/
+def profileRankedClosure : Grading.RankedClosure Bool Unit where
+  op := fun w _ => if w then ∅ else Set.univ
+  monotone := by
+    intro w X Y hXY
+    cases w <;> simp
+
+theorem profile_sig2 : Grading.sig2 profileRankedClosure false := by
+  intro w hw Y hY hsubset
+  cases w
+  · simp at hw
+  · obtain ⟨c, hc⟩ := hY
+    simpa [profileRankedClosure] using hsubset hc
+
+theorem minimalStaticFrame_dc : minimalStaticFrame.DCAt () := by
+  constructor
+  · intro c _
+    simp [Invariance.StaticFrame.DCAt, minimalStaticFrame, Closure.Phi,
+      Closure.pi_star, Closure.rho_star]
+  constructor
+  · intro e _
+    simp [Invariance.StaticFrame.DCAt, minimalStaticFrame, Hinge.T_prime,
+      Adj.alpha_star, Adj.sigma_star]
+  constructor
+  · exact ⟨(), by simp [minimalStaticFrame, Hinge.Act, Closure.rho_star,
+      Adj.sigma_star]⟩
+  · exact ⟨(), by simp [minimalStaticFrame]⟩
+
+theorem minimalStaticFrame_fm1 : Markers.FM1 minimalStaticFrame () () := by
+  intro hsubset
+  have hpoint : () ∈ minimalStaticFrame.kappa () := by simp [minimalStaticFrame]
+  have hphi := hsubset hpoint
+  simpa [Markers.phiMinus, minimalStaticFrame, Closure.pi_star,
+    Closure.rho_star] using hphi
+
+theorem doubleStaticFrame_dc : doubleStaticFrame.DCAt () := by
+  constructor
+  · intro c _
+    simp [Invariance.StaticFrame.DCAt, doubleStaticFrame, Closure.Phi,
+      Closure.pi_star, Closure.rho_star]
+  constructor
+  · intro e _
+    simp [Invariance.StaticFrame.DCAt, doubleStaticFrame, Hinge.T_prime,
+      Adj.alpha_star, Adj.sigma_star]
+  constructor
+  · exact ⟨false, by simp [doubleStaticFrame, Hinge.Act, Closure.rho_star,
+      Adj.sigma_star]⟩
+  · exact ⟨(), by simp [doubleStaticFrame]⟩
+
+theorem doubleStaticFrame_fm1 : Markers.FM1 doubleStaticFrame false () := by
+  intro hsubset
+  have hpoint : () ∈ doubleStaticFrame.kappa () := by simp [doubleStaticFrame]
+  have hphi := hsubset hpoint
+  simpa [Markers.phiMinus, doubleStaticFrame, Closure.pi_star,
+    Closure.rho_star] using hphi
+
+def minimalProfiledKernel : ProfiledKernel Unit Unit Unit Unit Bool where
+  static := minimalStaticFrame
+  ranked := profileRankedClosure
+  threshold := false
+  center := ()
+  state := ()
+  hConv := by intro a e; cases a; cases e; simp [minimalStaticFrame]
+  hConvP := by intro a c; cases a; cases c; simp [minimalStaticFrame]
+  sig2 := profile_sig2
+  dc := minimalStaticFrame_dc
+  fm1 := minimalStaticFrame_fm1
+  profile := satisfiedProfile
+  profile_complete := rfl
+
+def doubleProfiledKernel : ProfiledKernel Bool Unit Unit Unit Bool where
+  static := doubleStaticFrame
+  ranked := profileRankedClosure
+  threshold := false
+  center := false
+  state := ()
+  hConv := by intro a e; cases a <;> cases e <;> simp [doubleStaticFrame]
+  hConvP := by intro a c; cases a <;> cases c <;> simp [doubleStaticFrame]
+  sig2 := profile_sig2
+  dc := doubleStaticFrame_dc
+  fm1 := doubleStaticFrame_fm1
+  profile := satisfiedProfile
+  profile_complete := rfl
+
+/-- §22.5: two genuinely different kernels satisfy the same hConv, Sig-2,
+DC, and FM1 profile. Their action carriers have different cardinalities, so
+no `KIso` can exist between the two realizations. -/
+structure RealizationMultiplicityWitness where
+  minimal : ProfiledKernel Unit Unit Unit Unit Bool
+  doubled : ProfiledKernel Bool Unit Unit Unit Bool
+  sameProfile : minimal.profile = doubled.profile
+  nonisomorphic : ¬ Nonempty (Invariance.KIso minimal.static doubled.static)
+
+def realizationMultiplicityWitness : RealizationMultiplicityWitness where
+  minimal := minimalProfiledKernel
+  doubled := doubleProfiledKernel
+  sameProfile := rfl
+  nonisomorphic := by
+    rintro ⟨h⟩
+    exact not_equiv_unit_bool ⟨h.hA⟩
+
+theorem realizationMultiplicity_nonisomorphic :
+    ¬ Nonempty (Invariance.KIso minimalProfiledKernel.static
+      doubleProfiledKernel.static) :=
+  realizationMultiplicityWitness.nonisomorphic
+
+theorem realizationMultiplicity_same_profile :
+    minimalProfiledKernel.profile = doubleProfiledKernel.profile :=
+  realizationMultiplicityWitness.sameProfile
 
 end NonIsomorphicKernels
 
@@ -483,6 +649,9 @@ noncomputable def euclideanAnalyticFrame : AnalyticFM4.HilbertFrame Bool Euclide
   projection_fixes_eigenspace := by
     intro v _hv
     simp [euclideanSpectralProjection, Submodule.starProjection_top]
+  projection_residual_orthogonal := by
+    intro v z _hz
+    simp [euclideanSpectralProjection, Submodule.starProjection_top]
 
 /-- The §25.6 center exchange as a Mathlib `LinearIsometryEquiv`, with the
 operator and spectral projection commuting exactly. -/
@@ -611,6 +780,177 @@ theorem markerCollapseNext_stages :
 def markerInteroception (s : Fin 3) : Bool :=
   s == 0
 
+/-- The actual three-stage configuration used by the symmetric double.  In
+contrast to the earlier static skeleton, its intrinsic and environmental
+components collapse at the terminal state and its rank records the advance
+to the upper stage. -/
+def collapseKappa : Fin 3 → Set Bool
+  | 0 | 1 => Set.univ
+  | 2 => ∅
+
+def collapseEpsilon : Fin 3 → Set Bool :=
+  collapseKappa
+
+def collapseRank : Fin 3 → Bool
+  | 0 => false
+  | 1 | 2 => true
+
+def collapsePhi (w : Bool) (_ : Set Bool) : Set Bool :=
+  if w then ∅ else Set.univ
+
+def collapseTheta : Bool → Set Bool → Set Bool :=
+  collapsePhi
+
+/-- The rank advances to the upper stage and remains there.  The strict
+configuration decrease at that stage is carried by `collapsePhi`. -/
+def collapseDrift (_ : Bool) (_ : Set Bool) : Bool :=
+  true
+
+def collapseNext : Fin 3 → Fin 3
+  | 0 => 1
+  | 1 => 2
+  | 2 => 2
+
+theorem collapseNext_eq_markerCollapseNext : collapseNext = markerCollapseNext := by
+  funext s
+  fin_cases s
+  · exact markerCollapseNext_stages.1
+  · exact markerCollapseNext_stages.2.1
+  · exact markerCollapseNext_stages.2.2
+
+def markerCollapseStep (_ : Bool) (s t : Fin 3) : Prop :=
+  t = collapseNext s
+
+def collapseFrame : Invariance.StaticFrame Bool Bool Bool (Fin 3) Bool where
+  alphaRel := fun a => {e | e = a}
+  sigmaRel := fun e => {a | a = e}
+  piRel := fun a => {c | c = a}
+  rhoRel := fun c => {a | a = c}
+  kappa := collapseKappa
+  epsilon := collapseEpsilon
+  boundary := Set.univ
+  omega := collapseRank
+
+def collapseSwapIso : Invariance.KIso collapseFrame collapseFrame where
+  hA := swapBool
+  hE := swapBool
+  hC := swapBool
+  hS := Equiv.refl (Fin 3)
+  alpha_iff := by
+    intro a e
+    cases a <;> cases e <;> simp [collapseFrame, swapBool]
+  sigma_iff := by
+    intro e a
+    cases e <;> cases a <;> simp [collapseFrame, swapBool]
+  pi_iff := by
+    intro a c
+    cases a <;> cases c <;> simp [collapseFrame, swapBool]
+  rho_iff := by
+    intro c a
+    cases c <;> cases a <;> simp [collapseFrame, swapBool]
+  kappa_image := by
+    intro s
+    fin_cases s <;> ext c <;> cases c <;>
+      simp [collapseFrame, collapseKappa, Invariance.image, swapBool]
+  epsilon_image := by
+    intro s
+    fin_cases s <;> ext e <;> cases e <;>
+      simp [collapseFrame, collapseEpsilon, collapseKappa, Invariance.image, swapBool]
+  boundary_image := by
+    ext c
+    cases c <;> simp [collapseFrame, Invariance.image, swapBool]
+  omega_eq := by
+    intro s
+    fin_cases s <;> rfl
+
+/-- The dynamic frame whose configurations realize the labelled three-stage
+collapse. Its state update is definitionally connected to `markerCollapseNext`. -/
+def collapseDynFrame : Dynamics.DynFrame Bool Bool Bool (Fin 3) where
+  phi := collapsePhi
+  theta := collapseTheta
+  drift := collapseDrift
+  kappa := collapseKappa
+  epsilon := collapseEpsilon
+  omega := collapseRank
+  stepInt := markerCollapseStep false
+  h_int := by
+    intro s t h
+    subst t
+    fin_cases s <;>
+      simp [collapseNext, collapsePhi, collapseTheta, collapseDrift,
+        collapseKappa, collapseEpsilon, collapseRank, Dynamics.upd]
+
+theorem collapseDynFrame_static_kappa (s : Fin 3) :
+    collapseDynFrame.kappa s = collapseFrame.kappa s :=
+  rfl
+
+theorem collapseDynFrame_static_epsilon (s : Fin 3) :
+    collapseDynFrame.epsilon s = collapseFrame.epsilon s :=
+  rfl
+
+theorem collapseDynFrame_static_rank (s : Fin 3) :
+    collapseDynFrame.omega s = collapseFrame.omega s :=
+  rfl
+
+theorem collapse_update_swap_commutes (c : Dynamics.Conf Bool Bool Bool) :
+    Invariance.mapConf swapBool swapBool (collapseDynFrame.update c) =
+      collapseDynFrame.update (Invariance.mapConf swapBool swapBool c) := by
+  apply Invariance.upd_bisim swapBool swapBool
+  · intro w K
+    cases w <;> ext b <;> cases b <;>
+      simp [collapseDynFrame, collapsePhi, Invariance.image]
+  · intro w X
+    cases w <;> ext b <;> cases b <;>
+      simp [collapseDynFrame, collapseTheta, collapsePhi, Invariance.image]
+  · exact { eq := by intro w K; rfl }
+
+def collapseDynamicIso : Invariance.DynamicIso collapseSwapIso
+    (markerCollapseStep false) (markerCollapseStep false)
+    markerInteroception markerInteroception where
+  step_iff := by
+    intro s t
+    rfl
+  observe_eq := by
+    intro s
+    rfl
+
+/-- The strengthened §25.6 witness packages all dynamic data that the
+horizontal-wall result uses: configuration transport, update commutation,
+labelled transition preservation, and observation preservation. -/
+structure SymmetricDynamicWitness where
+  static : Invariance.KIso collapseFrame collapseFrame
+  dynamics : Dynamics.DynFrame Bool Bool Bool (Fin 3)
+  kappa_agrees : ∀ s, dynamics.kappa s = collapseFrame.kappa s
+  epsilon_agrees : ∀ s, dynamics.epsilon s = collapseFrame.epsilon s
+  rank_agrees : ∀ s, dynamics.omega s = collapseFrame.omega s
+  step_agrees : dynamics.stepInt = markerCollapseStep false
+  dynamicIso : Invariance.DynamicIso static dynamics.stepInt dynamics.stepInt
+    markerInteroception markerInteroception
+  update_commutes : ∀ c,
+    Invariance.mapConf static.hC static.hE (dynamics.update c) =
+      dynamics.update (Invariance.mapConf static.hC static.hE c)
+
+def symmetricDynamicWitness : SymmetricDynamicWitness where
+  static := collapseSwapIso
+  dynamics := collapseDynFrame
+  kappa_agrees := collapseDynFrame_static_kappa
+  epsilon_agrees := collapseDynFrame_static_epsilon
+  rank_agrees := collapseDynFrame_static_rank
+  step_agrees := rfl
+  dynamicIso := collapseDynamicIso
+  update_commutes := collapse_update_swap_commutes
+
+/-- This replaces the former successor-only claim: the symmetric double now
+has a full dynamic F-isomorphism witness, including κ/ε/ω, transitions,
+observations, and the total update. -/
+theorem symmetric_double_dynamic_conjugacy :
+    Invariance.DynamicIso collapseSwapIso collapseDynFrame.stepInt
+      collapseDynFrame.stepInt markerInteroception markerInteroception ∧
+      (∀ c, Invariance.mapConf collapseSwapIso.hC collapseSwapIso.hE
+        (collapseDynFrame.update c) = collapseDynFrame.update
+          (Invariance.mapConf collapseSwapIso.hC collapseSwapIso.hE c)) :=
+  ⟨symmetricDynamicWitness.dynamicIso, symmetricDynamicWitness.update_commutes⟩
+
 /-- The two coordinates are exchanged along with the two action centers. -/
 def swapVector : (Bool × Bool) ≃ (Bool × Bool) where
   toFun := fun v => (v.2, v.1)
@@ -685,6 +1025,86 @@ theorem markerBlind_horizontal_wall :
     Markers.BlindAt markerFrame false 0 ↔ Markers.BlindAt markerFrame true 0 :=
   Markers.blindAt_horizontal_wall_of_staticInH markerUsesStaticInH
     markerFixedCenterSymmetry
+
+/-- The §25.6 full marker uses the same Euclidean Hilbert representation and
+orthogonal spectral projection as `euclideanAnalyticFrame`, rather than the
+earlier finite `Bool × Bool` skeleton. Its static and dynamic components are
+the collapsing frame above. -/
+noncomputable def euclideanMarkerFrame :
+    Markers.FullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool EuclideanR2 where
+  static := collapseFrame
+  inH := fun m s => Markers.staticInH collapseFrame m s
+  stepLabel := markerCollapseStep
+  interoception := markerInteroception
+  representation := euclideanAnalyticRepresentation
+  spectralProjection := euclideanSpectralProjection
+  zero := 0
+
+def euclideanMarkerUsesStaticInH : euclideanMarkerFrame.UsesStaticInH :=
+  fun _ _ => Iff.rfl
+
+/-- A formal link prevents the structural `ConsciousAt` predicate from using
+a representation, projection, or zero vector different from the analytic
+Hilbert witness. -/
+noncomputable def euclideanHilbertFullMarker :
+    AnalyticFM4.HilbertFullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool EuclideanR2 where
+  marker := euclideanMarkerFrame
+  analytic := euclideanAnalyticFrame
+  representation_eq := rfl
+  spectralProjection_eq := rfl
+  zero_eq := rfl
+
+noncomputable def euclideanMarkerCoreSwap :
+    Markers.FullMarkerCoreIso euclideanMarkerFrame euclideanMarkerFrame where
+  static := collapseSwapIso
+  hI := Equiv.refl Bool
+  step_iff := by
+    intro m s t
+    rfl
+  interoception_preserves := by
+    intro s
+    rfl
+  hV := euclideanAnalyticSwap.U.toLinearEquiv.toEquiv
+  zero_preserves := by
+    change euclideanAnalyticSwap.U (0 : EuclideanR2) = 0
+    exact euclideanAnalyticSwap.U.map_zero
+  representation_preserves := by
+    intro m
+    change euclideanAnalyticSwap.U (euclideanAnalyticRepresentation m) =
+      euclideanAnalyticRepresentation (swapBool m)
+    simpa [euclideanAnalyticFrame, euclideanAnalyticSwap] using
+      euclideanAnalyticSwap.representation_preserves m
+  projection_preserves := by
+    intro v
+    change euclideanAnalyticSwap.U (euclideanSpectralProjection v) =
+      euclideanSpectralProjection (euclideanAnalyticSwap.U v)
+    simpa [euclideanAnalyticFrame] using
+      AnalyticFM4.hilbert_projection_preserved euclideanAnalyticSwap v
+
+noncomputable def euclideanMarkerFixedCenterSymmetry :
+    Markers.FullMarkerFixedCenterSymmetry euclideanMarkerFrame false true 0 where
+  iso := euclideanMarkerCoreSwap
+  maps_center := rfl
+  fixes_state := rfl
+
+theorem euclideanMarker_fm4_iff (m : Bool) :
+    Markers.FM4 euclideanMarkerFrame.toFM4 m ↔
+      AnalyticFM4.HilbertFM4 euclideanAnalyticFrame m :=
+  AnalyticFM4.hilbert_full_marker_fm4_iff euclideanHilbertFullMarker m
+
+/-- The horizontal wall is now established for the actual analytic Hilbert
+FM4 component and the collapsing dynamic frame used by the model. -/
+theorem euclideanMarkerConscious_horizontal_wall :
+    Markers.ConsciousAt euclideanMarkerFrame false 0 ↔
+      Markers.ConsciousAt euclideanMarkerFrame true 0 :=
+  Markers.consciousAt_horizontal_wall_of_staticInH euclideanMarkerUsesStaticInH
+    euclideanMarkerFixedCenterSymmetry
+
+theorem euclideanMarkerBlind_horizontal_wall :
+    Markers.BlindAt euclideanMarkerFrame false 0 ↔
+      Markers.BlindAt euclideanMarkerFrame true 0 :=
+  Markers.blindAt_horizontal_wall_of_staticInH euclideanMarkerUsesStaticInH
+    euclideanMarkerFixedCenterSymmetry
 
 /-- §25.6: a packaged horizontal-wall witness for the symmetric double. -/
 structure HorizontalWallWitness where

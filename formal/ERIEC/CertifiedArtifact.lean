@@ -958,7 +958,7 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "v52.refmodel.symmetric_double_full_marker"
         leanModule := "ERIEC.RefModelV52"
-        leanName := "markerConscious_horizontal_wall"
+        leanName := "euclideanMarkerConscious_horizontal_wall"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"
@@ -1014,7 +1014,7 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "v52.refmodel.symmetric_double_dynamic_conjugacy"
         leanModule := "ERIEC.RefModelV52"
-        leanName := "markerCollapseNext_conjugates"
+        leanName := "symmetric_double_dynamic_conjugacy"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"
@@ -1030,7 +1030,7 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "v52.refmodel.noniso_multiplicity"
         leanModule := "ERIEC.RefModelV52"
-        leanName := "witness_nonisomorphic"
+        leanName := "realizationMultiplicity_nonisomorphic"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"
