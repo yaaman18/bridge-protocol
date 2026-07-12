@@ -1,0 +1,7 @@
+PASS log=logs/gates/VP-V52-REVIEW-FIX/G3-full-final-20260712-223733.log
+v5.2 Lean formal statement smoke test |   37     37  7.8s
+Test Summary:    | Pass  Total     Time
+Lenia report CLI |   75     75  2m17.7s
+Test Summary:             | Pass  Total   Time
+TRM neural experiment CLI |   40     40  25.2s
+     Testing ERIEC tests passed 

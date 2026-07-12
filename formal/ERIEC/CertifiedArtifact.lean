@@ -1030,7 +1030,7 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "v52.refmodel.noniso_multiplicity"
         leanModule := "ERIEC.RefModelV52"
-        leanName := "realizationMultiplicity_nonisomorphic"
+        leanName := "symmetricDouble_realizationMultiplicity_nonisomorphic"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"

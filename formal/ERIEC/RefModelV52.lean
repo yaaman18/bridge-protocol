@@ -803,8 +803,10 @@ def collapseRank : Fin 3 → Bool
   | 0 => false
   | 1 | 2 => true
 
-def collapsePhi (w : Bool) (_ : Set Bool) : Set Bool :=
-  if w then ∅ else Set.univ
+/-- The dynamic closure is the closure induced by the rank-indexed diagonal
+relations: identity at rank zero and empty at the top rank. -/
+def collapsePhi (w : Bool) (Y : Set Bool) : Set Bool :=
+  if w then ∅ else Y
 
 def collapseTheta : Bool → Set Bool → Set Bool :=
   collapsePhi
@@ -838,6 +840,140 @@ def collapseFrame : Invariance.StaticFrame Bool Bool Bool (Fin 3) Bool where
   epsilon := collapseEpsilon
   boundary := Set.univ
   omega := collapseRank
+
+/-- The rank-indexed relations required by §25.6. `false` is the active
+rank with the two matching pairs, while `true` is the top rank where all four
+relations are empty. `StaticFrame` carries one relation layer, so this data
+is kept explicitly rather than pretending its state-independent fields vary
+with rank. -/
+def rankedAlpha (w : Bool) (a : Bool) : Set Bool :=
+  if w then ∅ else {a}
+
+def rankedSigma (w : Bool) (e : Bool) : Set Bool :=
+  if w then ∅ else {e}
+
+def rankedPi (w : Bool) (a : Bool) : Set Bool :=
+  if w then ∅ else {a}
+
+def rankedRho (w : Bool) (c : Bool) : Set Bool :=
+  if w then ∅ else {c}
+
+/-- The exact rank-indexed closure induced by `rankedPi` and `rankedRho`.
+At the active rank it is the identity; at the top rank it is empty. -/
+def rankedCoreClosure : Grading.RankedClosure Bool Bool where
+  op := fun w Y => if w then ∅ else Y
+  monotone := by
+    intro w X Y hXY
+    cases w <;> simp [hXY]
+
+theorem rankedAlpha_sigma_converse (w a e : Bool) :
+    e ∈ rankedAlpha w a ↔ a ∈ rankedSigma w e := by
+  cases w <;> cases a <;> cases e <;>
+    simp [rankedAlpha, rankedSigma]
+
+theorem rankedPi_rho_converse (w a c : Bool) :
+    c ∈ rankedPi w a ↔ a ∈ rankedRho w c := by
+  cases w <;> cases a <;> cases c <;>
+    simp [rankedPi, rankedRho]
+
+theorem rankedCoreClosure_eq_phi (w : Bool) (Y : Set Bool) :
+    rankedCoreClosure.op w Y = Closure.Phi (rankedPi w) (rankedRho w) Y := by
+  cases w
+  · ext c
+    cases c <;> simp [rankedCoreClosure, rankedPi, rankedRho, Closure.Phi,
+      Closure.pi_star, Closure.rho_star]
+  · ext c
+    cases c <;> simp [rankedCoreClosure, rankedPi, rankedRho, Closure.Phi,
+      Closure.pi_star, Closure.rho_star]
+
+theorem collapsePhi_eq_rankedCoreClosure (w : Bool) (Y : Set Bool) :
+    collapsePhi w Y = rankedCoreClosure.op w Y := by
+  cases w <;> simp [collapsePhi, rankedCoreClosure]
+
+theorem rankedCore_sig2 : Grading.sig2 rankedCoreClosure false := by
+  intro w hw Y hY hsubset
+  cases w
+  · simp at hw
+  · obtain ⟨c, hc⟩ := hY
+    simpa [rankedCoreClosure] using hsubset hc
+
+theorem ranked_top_relations_empty (a e c : Bool) :
+    rankedAlpha true a = ∅ ∧ rankedSigma true e = ∅ ∧
+      rankedPi true a = ∅ ∧ rankedRho true c = ∅ := by
+  simp [rankedAlpha, rankedSigma, rankedPi, rankedRho]
+
+theorem collapseFrame_relations_are_rank_zero (a e c : Bool) :
+    collapseFrame.alphaRel a = rankedAlpha false a ∧
+      collapseFrame.sigmaRel e = rankedSigma false e ∧
+      collapseFrame.piRel a = rankedPi false a ∧
+      collapseFrame.rhoRel c = rankedRho false c := by
+  simp [collapseFrame, rankedAlpha, rankedSigma, rankedPi, rankedRho]
+
+/-- The initial configuration has both core and environment elements, the
+full boundary, and the lower rank required by §25.6. -/
+theorem collapseFrame_zero_data :
+    collapseFrame.kappa 0 = Set.univ ∧
+      collapseFrame.epsilon 0 = Set.univ ∧
+      collapseFrame.boundary = Set.univ ∧ collapseFrame.omega 0 = false := by
+  simp [collapseFrame, collapseKappa, collapseEpsilon, collapseRank]
+
+theorem collapseFrame_dc_zero : collapseFrame.DCAt 0 := by
+  constructor
+  · intro c _
+    simp [collapseFrame, collapseKappa, collapseEpsilon,
+      Closure.Phi, Closure.pi_star, Closure.rho_star]
+  constructor
+  · intro e _
+    simp [collapseFrame, collapseKappa, collapseEpsilon,
+      Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+  constructor
+  · exact ⟨false, by
+      simp [collapseFrame, collapseKappa, collapseEpsilon, Hinge.Act,
+        Closure.rho_star, Adj.sigma_star]⟩
+  · exact ⟨false, by simp [collapseFrame, collapseKappa]⟩
+
+theorem collapseFrame_hinge_zero :
+    Hinge.Act collapseFrame.rhoRel collapseFrame.sigmaRel
+      collapseFrame.kappa collapseFrame.epsilon 0 = Set.univ := by
+  ext a
+  cases a <;>
+    simp [collapseFrame, collapseKappa, collapseEpsilon, Hinge.Act,
+      Closure.rho_star, Adj.sigma_star]
+
+/-- Complete discrete portion of the §25.6 symmetric-double specification.
+It records the rank-indexed four relations, Sig-2, the active DC witness,
+and the required two-center hinge before adding observation/lab/representation
+compatibility in the full marker frame. -/
+structure RankedSymmetricDoubleWitness where
+  hConv : ∀ w a e, e ∈ rankedAlpha w a ↔ a ∈ rankedSigma w e
+  hConvP : ∀ w a c, c ∈ rankedPi w a ↔ a ∈ rankedRho w c
+  closure_eq : ∀ w Y, rankedCoreClosure.op w Y =
+    Closure.Phi (rankedPi w) (rankedRho w) Y
+  sig2 : Grading.sig2 rankedCoreClosure false
+  top_empty : ∀ a e c, rankedAlpha true a = ∅ ∧ rankedSigma true e = ∅ ∧
+    rankedPi true a = ∅ ∧ rankedRho true c = ∅
+  rank_zero_agrees : ∀ a e c,
+    collapseFrame.alphaRel a = rankedAlpha false a ∧
+      collapseFrame.sigmaRel e = rankedSigma false e ∧
+      collapseFrame.piRel a = rankedPi false a ∧
+      collapseFrame.rhoRel c = rankedRho false c
+  zero_data : collapseFrame.kappa 0 = Set.univ ∧
+    collapseFrame.epsilon 0 = Set.univ ∧
+    collapseFrame.boundary = Set.univ ∧ collapseFrame.omega 0 = false
+  dc_zero : collapseFrame.DCAt 0
+  hinge_zero : Hinge.Act collapseFrame.rhoRel collapseFrame.sigmaRel
+    collapseFrame.kappa collapseFrame.epsilon 0 = Set.univ
+
+def rankedSymmetricDoubleWitness : RankedSymmetricDoubleWitness where
+  hConv := rankedAlpha_sigma_converse
+  hConvP := rankedPi_rho_converse
+  closure_eq := rankedCoreClosure_eq_phi
+  sig2 := rankedCore_sig2
+  top_empty := ranked_top_relations_empty
+  rank_zero_agrees := collapseFrame_relations_are_rank_zero
+  zero_data := collapseFrame_zero_data
+  dc_zero := collapseFrame_dc_zero
+  hinge_zero := collapseFrame_hinge_zero
 
 def collapseSwapIso : Invariance.KIso collapseFrame collapseFrame where
   hA := swapBool
@@ -928,6 +1064,7 @@ labelled transition preservation, and observation preservation. -/
 structure SymmetricDynamicWitness where
   static : Invariance.KIso collapseFrame collapseFrame
   dynamics : Dynamics.DynFrame Bool Bool Bool (Fin 3)
+  closure_agrees : ∀ w Y, dynamics.phi w Y = rankedCoreClosure.op w Y
   kappa_agrees : ∀ s, dynamics.kappa s = collapseFrame.kappa s
   epsilon_agrees : ∀ s, dynamics.epsilon s = collapseFrame.epsilon s
   rank_agrees : ∀ s, dynamics.omega s = collapseFrame.omega s
@@ -941,6 +1078,7 @@ structure SymmetricDynamicWitness where
 def symmetricDynamicWitness : SymmetricDynamicWitness where
   static := collapseSwapIso
   dynamics := collapseDynFrame
+  closure_agrees := collapsePhi_eq_rankedCoreClosure
   kappa_agrees := collapseDynFrame_static_kappa
   epsilon_agrees := collapseDynFrame_static_epsilon
   rank_agrees := collapseDynFrame_static_rank
@@ -1042,7 +1180,8 @@ noncomputable def euclideanMarkerFrame :
     Markers.FullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool EuclideanR2 where
   static := collapseFrame
   inH := fun m s => Markers.staticInH collapseFrame m s
-  stepLabel := markerCollapseStep
+  -- The labelled trace stops at `s₂`; the dynamic update may stutter there.
+  stepLabel := markerStep
   interoception := markerInteroception
   representation := euclideanAnalyticRepresentation
   spectralProjection := euclideanSpectralProjection
@@ -1068,25 +1207,21 @@ noncomputable def euclideanMarkerCoreSwap :
   hI := Equiv.refl Bool
   step_iff := by
     intro m s t
-    rfl
+    simp [euclideanMarkerFrame, markerStep, collapseSwapIso, swapBool]
   interoception_preserves := by
     intro s
     rfl
   hV := euclideanAnalyticSwap.U.toLinearEquiv.toEquiv
   zero_preserves := by
-    change euclideanAnalyticSwap.U (0 : EuclideanR2) = 0
-    exact euclideanAnalyticSwap.U.map_zero
+    simpa [euclideanMarkerFrame] using euclideanAnalyticSwap.U.map_zero
   representation_preserves := by
     intro m
-    change euclideanAnalyticSwap.U (euclideanAnalyticRepresentation m) =
-      euclideanAnalyticRepresentation (swapBool m)
-    simpa [euclideanAnalyticFrame, euclideanAnalyticSwap] using
+    simpa [euclideanMarkerFrame, euclideanAnalyticFrame, euclideanAnalyticSwap,
+      collapseSwapIso, swapBool] using
       euclideanAnalyticSwap.representation_preserves m
   projection_preserves := by
     intro v
-    change euclideanAnalyticSwap.U (euclideanSpectralProjection v) =
-      euclideanSpectralProjection (euclideanAnalyticSwap.U v)
-    simpa [euclideanAnalyticFrame] using
+    simpa [euclideanMarkerFrame, euclideanAnalyticFrame] using
       AnalyticFM4.hilbert_projection_preserved euclideanAnalyticSwap v
 
 noncomputable def euclideanMarkerFixedCenterSymmetry :
@@ -1098,7 +1233,9 @@ noncomputable def euclideanMarkerFixedCenterSymmetry :
 theorem euclideanMarker_fm4_iff (m : Bool) :
     Markers.FM4 euclideanMarkerFrame.toFM4 m ↔
       AnalyticFM4.HilbertFM4 euclideanAnalyticFrame m :=
-  AnalyticFM4.hilbert_full_marker_fm4_iff euclideanHilbertFullMarker m
+  by
+    simpa [euclideanHilbertFullMarker] using
+      AnalyticFM4.hilbert_full_marker_fm4_iff euclideanHilbertFullMarker m
 
 /-- The horizontal wall is now established for the actual analytic Hilbert
 FM4 component and the collapsing dynamic frame used by the model. -/
@@ -1113,6 +1250,147 @@ theorem euclideanMarkerBlind_horizontal_wall :
       Markers.BlindAt euclideanMarkerFrame true 0 :=
   Markers.blindAt_horizontal_wall_of_staticInH euclideanMarkerUsesStaticInH
     euclideanMarkerFixedCenterSymmetry
+
+/-- The actual symmetric-double static frame has the FM1 witness required
+for the second realization in §22.5. -/
+theorem collapseFrame_fm1_false : Markers.FM1 collapseFrame false 0 := by
+  intro hsubset
+  have hfalse : false ∈ collapseFrame.kappa 0 := by
+    simp [collapseFrame, collapseKappa]
+  have hphi := hsubset hfalse
+  simpa [Markers.phiMinus, collapseFrame, collapseKappa, Closure.pi_star,
+    Closure.rho_star] using hphi
+
+theorem collapseFrame_not_fm2_false : ¬ Markers.FM2 collapseFrame false 0 := by
+  rintro ⟨e₁, e₂, he₁, he₂, hne⟩
+  simp [Markers.FM2, Richness.Branch, collapseFrame] at he₁ he₂
+  exact hne (he₁.trans he₂.symm)
+
+theorem collapseFrame_staticInH_false : Markers.staticInH collapseFrame false 0 := by
+  change false ∈ Hinge.Act collapseFrame.rhoRel collapseFrame.sigmaRel
+    collapseFrame.kappa collapseFrame.epsilon 0
+  rw [collapseFrame_hinge_zero]
+  simp
+
+theorem euclideanMarker_fm4_false : Markers.FM4 euclideanMarkerFrame.toFM4 false :=
+  (euclideanMarker_fm4_iff false).mpr euclidean_hilbert_fm4_false
+
+/-- The symmetric double is a concrete blindsight analogue at the left
+center: its hinge, FM1, and Hilbert FM4 components hold, while its diagonal
+sensorimotor relation makes FM2 fail. -/
+theorem euclideanMarker_blind_false : Markers.BlindAt euclideanMarkerFrame false 0 := by
+  refine ⟨?_, collapseFrame_fm1_false, euclideanMarker_fm4_false, ?_⟩
+  · simpa [euclideanMarkerFrame] using collapseFrame_staticInH_false
+  · intro h
+    exact collapseFrame_not_fm2_false h.1
+
+theorem euclideanMarker_not_conscious_false :
+    ¬ Markers.ConsciousAt euclideanMarkerFrame false 0 := by
+  intro h
+  exact collapseFrame_not_fm2_false h.2.2.1
+
+theorem euclideanMarker_blind_true : Markers.BlindAt euclideanMarkerFrame true 0 :=
+  euclideanMarkerBlind_horizontal_wall.mp euclideanMarker_blind_false
+
+theorem euclideanMarker_not_conscious_true :
+    ¬ Markers.ConsciousAt euclideanMarkerFrame true 0 := by
+  intro h
+  exact euclideanMarker_not_conscious_false
+    (euclideanMarkerConscious_horizontal_wall.mpr h)
+
+/-- §22.5's second profiled kernel is the concrete §25.6 symmetric double,
+not merely another two-element carrier. -/
+def symmetricDoubleProfiledKernel : NonIsomorphicKernels.ProfiledKernel
+    Bool Bool Bool (Fin 3) Bool where
+  static := collapseFrame
+  ranked := rankedCoreClosure
+  threshold := false
+  center := false
+  state := 0
+  hConv := by
+    intro a e
+    simpa [collapseFrame, rankedAlpha, rankedSigma] using
+      (rankedAlpha_sigma_converse false a e)
+  hConvP := by
+    intro a c
+    simpa [collapseFrame, rankedPi, rankedRho] using
+      (rankedPi_rho_converse false a c)
+  sig2 := rankedCore_sig2
+  ranked_supports_state := by
+    intro c hc
+    simpa [collapseFrame, collapseKappa, collapseRank, rankedCoreClosure] using hc
+  dc := collapseFrame_dc_zero
+  fm1 := collapseFrame_fm1_false
+  profile := NonIsomorphicKernels.satisfiedProfile
+  profile_complete := rfl
+
+/-- The original one-point model and the full §25.6 symmetric double have
+the same §22.5 profile but cannot be structurally isomorphic. -/
+structure SymmetricDoubleMultiplicityWitness where
+  minimal : NonIsomorphicKernels.ProfiledKernel Unit Unit Unit Unit Bool
+  symmetric : NonIsomorphicKernels.ProfiledKernel Bool Bool Bool (Fin 3) Bool
+  sameProfile : minimal.profile = symmetric.profile
+  nonisomorphic : ¬ Nonempty (Invariance.KIso minimal.static symmetric.static)
+
+def symmetricDoubleMultiplicityWitness : SymmetricDoubleMultiplicityWitness where
+  minimal := NonIsomorphicKernels.minimalProfiledKernel
+  symmetric := symmetricDoubleProfiledKernel
+  sameProfile := rfl
+  nonisomorphic := by
+    rintro ⟨h⟩
+    exact not_equiv_unit_bool ⟨h.hA⟩
+
+theorem symmetricDouble_realizationMultiplicity_nonisomorphic :
+    ¬ Nonempty (Invariance.KIso
+      NonIsomorphicKernels.minimalProfiledKernel.static
+      symmetricDoubleProfiledKernel.static) :=
+  symmetricDoubleMultiplicityWitness.nonisomorphic
+
+theorem symmetricDouble_realizationMultiplicity_same_profile :
+    NonIsomorphicKernels.minimalProfiledKernel.profile =
+      symmetricDoubleProfiledKernel.profile :=
+  symmetricDoubleMultiplicityWitness.sameProfile
+
+/-- The complete §25.6 realization. This is deliberately a witness rather
+than a new target-layer axiom: it packages the rank-indexed discrete model,
+the three-stage dynamic F-isomorphism, and the Euclidean unitary full-marker
+symmetry as evidence for one finite construction. -/
+structure SymmetricDoubleCompleteWitness where
+  ranked : RankedSymmetricDoubleWitness
+  dynamics : SymmetricDynamicWitness
+  labelledCollapse : ThreeStageCollapse
+  markerLabel_is_three_stage : euclideanMarkerFrame.stepLabel = markerStep
+  analyticMarker : AnalyticFM4.HilbertFullMarkerFrame
+    Bool Bool Bool (Fin 3) Bool Bool EuclideanR2
+  analyticMarker_is_euclidean : analyticMarker = euclideanHilbertFullMarker
+  centerSymmetry : Markers.FullMarkerFixedCenterSymmetry
+    euclideanMarkerFrame false true 0
+  multiplicity : SymmetricDoubleMultiplicityWitness
+  blind_false : Markers.BlindAt euclideanMarkerFrame false 0
+  not_conscious_false : ¬ Markers.ConsciousAt euclideanMarkerFrame false 0
+  conscious_horizontal_wall :
+    Markers.ConsciousAt euclideanMarkerFrame false 0 ↔
+      Markers.ConsciousAt euclideanMarkerFrame true 0
+  blind_horizontal_wall :
+    Markers.BlindAt euclideanMarkerFrame false 0 ↔
+      Markers.BlindAt euclideanMarkerFrame true 0
+
+noncomputable def symmetricDoubleCompleteWitness : SymmetricDoubleCompleteWitness where
+  ranked := rankedSymmetricDoubleWitness
+  dynamics := symmetricDynamicWitness
+  labelledCollapse := threeStageCollapse
+  markerLabel_is_three_stage := rfl
+  analyticMarker := euclideanHilbertFullMarker
+  analyticMarker_is_euclidean := rfl
+  centerSymmetry := euclideanMarkerFixedCenterSymmetry
+  multiplicity := symmetricDoubleMultiplicityWitness
+  blind_false := euclideanMarker_blind_false
+  not_conscious_false := euclideanMarker_not_conscious_false
+  conscious_horizontal_wall := euclideanMarkerConscious_horizontal_wall
+  blind_horizontal_wall := euclideanMarkerBlind_horizontal_wall
+
+theorem symmetric_double_complete : Nonempty SymmetricDoubleCompleteWitness :=
+  ⟨symmetricDoubleCompleteWitness⟩
 
 /-- §25.6: a packaged horizontal-wall witness for the symmetric double. -/
 structure HorizontalWallWitness where

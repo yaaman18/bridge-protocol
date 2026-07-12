@@ -218,11 +218,30 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.SymmetricDouble.markerInteroception_exchange
 #check ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff
 #check ERIEC.RefModelV52.SymmetricDouble.collapseFrame
+#check ERIEC.RefModelV52.SymmetricDouble.rankedAlpha
+#check ERIEC.RefModelV52.SymmetricDouble.rankedSigma
+#check ERIEC.RefModelV52.SymmetricDouble.rankedPi
+#check ERIEC.RefModelV52.SymmetricDouble.rankedRho
+#check ERIEC.RefModelV52.SymmetricDouble.rankedCoreClosure
+#check ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure
+#check ERIEC.RefModelV52.SymmetricDouble.rankedSymmetricDoubleWitness
+#check ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty
+#check ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data
 #check ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame
 #check ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
 #check ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame
 #check ERIEC.RefModelV52.SymmetricDouble.euclideanHilbertFullMarker
 #check ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall
+#check ERIEC.RefModelV52.SymmetricDouble.collapseFrame_fm1_false
+#check ERIEC.RefModelV52.SymmetricDouble.collapseFrame_not_fm2_false
+#check ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false
+#check ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false
+#check ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleProfiledKernel
+#check ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleMultiplicityWitness
+#check ERIEC.RefModelV52.SymmetricDouble.symmetricDouble_realizationMultiplicity_nonisomorphic
+#check ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness
+#check ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness
+#check ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete
 #check ERIEC.RefModelV52.NonIsomorphicKernels.RealizationMultiplicityWitness
 #check ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic
 #check ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_same_profile
@@ -272,6 +291,46 @@ example (m : Bool) :
       ERIEC.AnalyticFM4.HilbertFM4
         ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame m :=
   ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_fm4_iff m
+
+example (a e c : Bool) :
+    ERIEC.RefModelV52.SymmetricDouble.rankedAlpha true a = ∅ ∧
+      ERIEC.RefModelV52.SymmetricDouble.rankedSigma true e = ∅ ∧
+      ERIEC.RefModelV52.SymmetricDouble.rankedPi true a = ∅ ∧
+      ERIEC.RefModelV52.SymmetricDouble.rankedRho true c = ∅ :=
+  ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty a e c
+
+example (w : Bool) (Y : Set Bool) :
+    ERIEC.RefModelV52.SymmetricDouble.collapsePhi w Y =
+      ERIEC.RefModelV52.SymmetricDouble.rankedCoreClosure.op w Y :=
+  ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure w Y
+
+example :
+    ERIEC.RefModelV52.SymmetricDouble.collapseFrame.kappa 0 = Set.univ ∧
+      ERIEC.RefModelV52.SymmetricDouble.collapseFrame.epsilon 0 = Set.univ ∧
+      ERIEC.RefModelV52.SymmetricDouble.collapseFrame.boundary = Set.univ ∧
+      ERIEC.RefModelV52.SymmetricDouble.collapseFrame.omega 0 = false :=
+  ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data
+
+example : Nonempty
+    ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness :=
+  ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete
+
+example : ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame.stepLabel =
+    ERIEC.RefModelV52.SymmetricDouble.markerStep :=
+  ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness.markerLabel_is_three_stage
+
+example : ERIEC.Markers.BlindAt
+    ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 :=
+  ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false
+
+example : ¬ ERIEC.Markers.ConsciousAt
+    ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 :=
+  ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false
+
+example : ¬ Nonempty (ERIEC.Invariance.KIso
+    ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.static
+    ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleProfiledKernel.static) :=
+  ERIEC.RefModelV52.SymmetricDouble.symmetricDouble_realizationMultiplicity_nonisomorphic
 #print axioms ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable
 #print axioms ERIEC.RefModelV52.SymmetricDouble.positiveValue_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerConscious_horizontal_wall
@@ -282,6 +341,14 @@ example (m : Bool) :
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff
 #print axioms ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+#print axioms ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty
+#print axioms ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure
+#print axioms ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data
+#print axioms ERIEC.RefModelV52.SymmetricDouble.collapseFrame_fm1_false
+#print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false
+#print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false
+#print axioms ERIEC.RefModelV52.SymmetricDouble.symmetricDouble_realizationMultiplicity_nonisomorphic
+#print axioms ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete
 #print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall
 #print axioms ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic
 #print axioms ERIEC.RefModelV52.SymmetricDouble.alpha_sigma_converse
