@@ -179,6 +179,8 @@ structure ProfiledKernel (A E C S W : Type*) [LT W] where
   hConv : ∀ a e, e ∈ static.alphaRel a ↔ a ∈ static.sigmaRel e
   hConvP : ∀ a c, c ∈ static.piRel a ↔ a ∈ static.rhoRel c
   sig2 : Grading.sig2 ranked threshold
+  ranked_supports_state :
+    static.kappa state ⊆ ranked.op (static.omega state) (static.kappa state)
   dc : static.DCAt state
   fm1 : Markers.FM1 static center state
   profile : RealizationProfile
@@ -272,6 +274,9 @@ def minimalProfiledKernel : ProfiledKernel Unit Unit Unit Unit Bool where
   hConv := by intro a e; cases a; cases e; simp [minimalStaticFrame]
   hConvP := by intro a c; cases a; cases c; simp [minimalStaticFrame]
   sig2 := profile_sig2
+  ranked_supports_state := by
+    intro c hc
+    simp [minimalStaticFrame, profileRankedClosure]
   dc := minimalStaticFrame_dc
   fm1 := minimalStaticFrame_fm1
   profile := satisfiedProfile
@@ -286,6 +291,9 @@ def doubleProfiledKernel : ProfiledKernel Bool Unit Unit Unit Bool where
   hConv := by intro a e; cases a <;> cases e <;> simp [doubleStaticFrame]
   hConvP := by intro a c; cases a <;> cases c <;> simp [doubleStaticFrame]
   sig2 := profile_sig2
+  ranked_supports_state := by
+    intro c hc
+    simp [doubleStaticFrame, profileRankedClosure]
   dc := doubleStaticFrame_dc
   fm1 := doubleStaticFrame_fm1
   profile := satisfiedProfile
