@@ -147,12 +147,30 @@ theorem sigma_star_eq_induced_iff_singleton {M E : Type*}
       exact (by
         simpa [Adj.sigma_star] using ⟨e, heX, haσ⟩)
 
+/-- v5.2 §21.2 public name: disappearance of the ∃/∀ gap is exactly
+single-valued degeneracy of every action image. -/
+theorem degenerate_iff {M E : Type*}
+    {alphaRel : M → Set E} {sigmaRel : E → Set M}
+    (hConv : ∀ a e, e ∈ alphaRel a ↔ a ∈ sigmaRel e) :
+    Adj.sigma_star sigmaRel = Adj.sigma_star_induced alphaRel ↔
+      ∀ a, SingletonImage alphaRel a :=
+  sigma_star_eq_induced_iff_singleton hConv
+
 theorem identification_forces_singleton {M E : Type*}
     {alphaRel : M → Set E} {sigmaRel : E → Set M}
     (hConv : ∀ a e, e ∈ alphaRel a ↔ a ∈ sigmaRel e)
     (hEq : Adj.sigma_star sigmaRel = Adj.sigma_star_induced alphaRel)
     (a : M) : SingletonImage alphaRel a :=
   (sigma_star_eq_induced_iff_singleton hConv).mp hEq a
+
+/-- v5.2 §21.4 public name: identifying the existential and universal lifts
+forces pointwise degeneracy. -/
+theorem identification_forces_degeneracy {M E : Type*}
+    {alphaRel : M → Set E} {sigmaRel : E → Set M}
+    (hConv : ∀ a e, e ∈ alphaRel a ↔ a ∈ sigmaRel e)
+    (hEq : Adj.sigma_star sigmaRel = Adj.sigma_star_induced alphaRel) :
+    ∀ a, SingletonImage alphaRel a :=
+  (degenerate_iff hConv).mp hEq
 
 theorem no_gapUp_under_identification {M E : Type*}
     {alphaRel : M → Set E} {sigmaRel : E → Set M}
@@ -296,6 +314,20 @@ theorem gapUp_alpha_two {M E : Type*}
     {a : M} (hgap : GapUp alphaRel sigmaRel a) :
     ∃ e₁ e₂, e₁ ∈ alphaRel a ∧ e₂ ∈ alphaRel a ∧ e₁ ≠ e₂ := by
   exact (gapUp_iff_branch hConv a).mp hgap
+
+/-- v5.2 §21.3 public name for the upward gap characterization. -/
+theorem gapUp_iff {M E : Type*}
+    {alphaRel : M → Set E} {sigmaRel : E → Set M}
+    (hConv : ∀ a e, e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+    GapUp alphaRel sigmaRel a ↔ Richness.Branch alphaRel a :=
+  gapUp_iff_branch hConv a
+
+/-- v5.2 §21.3 public name for the downward gap characterization. -/
+theorem gapDn_iff {M E : Type*}
+    {alphaRel : M → Set E} {sigmaRel : E → Set M}
+    (hConv : ∀ a e, e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+    GapDn alphaRel sigmaRel a ↔ alphaRel a = ∅ :=
+  gapDn_iff_empty hConv a
 
 end Gap
 end ERIEC

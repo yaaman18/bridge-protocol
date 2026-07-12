@@ -1,0 +1,12 @@
+formal/ERIEC/Markers.lean:415:6: error: Type mismatch: After simplification, term
+  hm
+ has type
+  staticInH F m s
+but is expected to have type
+  m ∈ Hinge.Act F.rhoRel F.sigmaRel F.kappa F.epsilon s
+formal/ERIEC/Markers.lean:421:6: error: Type mismatch: After simplification, term
+  hm
+ has type
+  staticInH F' (h.hA m) (h.hS s)
+but is expected to have type
+  h.hA m ∈ Hinge.Act F'.rhoRel F'.sigmaRel F'.kappa F'.epsilon (h.hS s)

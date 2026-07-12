@@ -1,0 +1,117 @@
+⚠ [2715/2772] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2722/2772] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2736/2772] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:342:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:343:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:345:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:356:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:382:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2737/2772] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2748/2772] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2765/2772] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:93:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:113:6: Try `simp at haSig` instead of `simpa using haSig`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:144:8: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:200:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:231:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:244:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:269:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:293:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2769/2772] Replayed ERIEC.RefModelV52
+warning: formal/ERIEC/RefModelV52.lean:169:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star, sigmaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:170:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star_induced, alphaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:322:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:325:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:463:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:467:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [2770/2772] Built ERIEC.CertifiedArtifact (6.8s)
+✔ [2771/2772] Built ERIEC (5.8s)
+Build completed successfully (2772 jobs).

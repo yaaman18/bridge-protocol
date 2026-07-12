@@ -119,6 +119,13 @@ theorem dec_eq_or_strict {C : Type*} {F : Set C → Set C}
   · exact Or.inl (D.fixed_of_postfixed hpost)
   · exact Or.inr (D.strict_of_not_postfixed hpost)
 
+/-- v5.2 §22.4 public name: abstract decay either leaves a postfixed core
+unchanged or strictly collapses the candidate. -/
+theorem abstract_collapse {C : Type*} {F : Set C → Set C}
+    (D : DecayStructure F) (Y : Set C) :
+    D.dec Y = Y ∨ D.dec Y ⊂ Y :=
+  dec_eq_or_strict D Y
+
 theorem nu_fixed {C : Type*} {F : Set C → Set C}
     (D : DecayStructure F) (hmono : Monotone F) :
     D.dec (Closure.nu F) = Closure.nu F :=
@@ -128,6 +135,13 @@ theorem psi_recovers_fixed {C : Type*} {F : Set C → Set C}
     (hmono : Monotone F) :
     (psi_isDecay (C := C) hmono).dec (Closure.nu F) = Closure.nu F :=
   nu_fixed (psi_isDecay hmono) hmono
+
+/-- v5.2 §22.4′ public name: the canonical contraction recovers the
+Knaster--Tarski core as a fixed point. -/
+theorem collapse_of_psi {C : Type*} {F : Set C → Set C}
+    (hmono : Monotone F) :
+    (psi_isDecay (C := C) hmono).dec (Closure.nu F) = Closure.nu F :=
+  psi_recovers_fixed hmono
 
 end Decay
 end ERIEC

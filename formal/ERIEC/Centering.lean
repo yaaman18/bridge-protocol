@@ -323,6 +323,15 @@ theorem dcAt_horizontal_wall_of_any_strength {τ : Strength}
     F.DCAt s ↔ F.DCAt s :=
   dcAt_horizontal_wall φ.toStatF
 
+/-- v5.2 §25.5 public name for the horizontal-wall specialization currently
+implemented for the certified static DC predicate family. -/
+theorem horizontal_wall {τ : Strength}
+    {A E C S W : Type u} {F : Invariance.StaticFrame A E C S W}
+    {m m' : A} {s : S}
+    (φ : FixedCenterSymmetry τ F m m' s) :
+    F.DCAt s ↔ F.DCAt s :=
+  dcAt_horizontal_wall_of_any_strength φ
+
 end Centering
 
 end ERIEC

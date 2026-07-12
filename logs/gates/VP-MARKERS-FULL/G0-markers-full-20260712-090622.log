@@ -1,0 +1,15 @@
+formal/ERIEC/Markers.lean:1:0: error: unknown module prefix 'ERIEC'
+
+No directory 'ERIEC' or file 'ERIEC.olean' in the search path entries:
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Cli/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/batteries/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/Qq/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/aesop/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/proofwidgets/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/importGraph/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/LeanSearchClient/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/plausible/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/packages/mathlib/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/bridge-protocol/.lake/build/lib/lean
+/Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/lib/lean
+/Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/lib/lean

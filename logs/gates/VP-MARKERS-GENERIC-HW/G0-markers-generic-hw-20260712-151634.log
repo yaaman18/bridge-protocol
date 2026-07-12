@@ -1,0 +1,6 @@
+formal/ERIEC/Markers.lean:590:2: error: Type mismatch: After simplification, term
+  Pred.invariant (φ.iso.toFullMarkerIso hF hF) m s
+ has type
+  Pred.Pred F m s ↔ Pred.Pred F ((φ.iso.toFullMarkerIso hF hF).static.hA m) ((φ.iso.toFullMarkerIso hF hF).static.hS s)
+but is expected to have type
+  Pred.Pred F m s ↔ Pred.Pred F m' s

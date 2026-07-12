@@ -183,6 +183,13 @@ def GateAssignment.gate {Idx : Type u} {𝒢 : GateFrame Idx}
     (assignment : GateAssignment 𝒢) : Idx → Gv :=
   fun i => eraseEvidence (assignment.ev i)
 
+/-- v5.2 §24.3 public name: the displayed gate value is uniquely determined
+by the carried propagated evidence. -/
+theorem gate_unique {Idx : Type u} {𝒢 : GateFrame Idx}
+    (assignment : GateAssignment 𝒢) (i : Idx) :
+    assignment.gate i = eraseEvidence (assignment.ev i) :=
+  rfl
+
 /-- A frame with no dependency edges: raw evidence is promoted componentwise. -/
 def rawOnlyFrame (Idx : Type u) (Claim : Idx → Prop)
     (raw : ∀ i, RawEv (Claim i)) : GateFrame Idx where

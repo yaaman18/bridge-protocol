@@ -1,0 +1,174 @@
+┌ Warning: The project dependencies or compat requirements have changed since the manifest was last resolved.
+│ It is recommended to `Pkg.resolve()` or consider `Pkg.update()` if necessary.
+└ @ Pkg.API /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Pkg/src/API.jl:1206
+     Testing ERIEC
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_3rn06z/Project.toml`
+  [f6f58f5d] ERIEC v0.1.0 `~/bridge-protocol`
+  [f6369f11] ForwardDiff v1.4.1
+  [0f8b85d8] JSON3 v1.14.3
+  [37e2e46d] LinearAlgebra v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v0.7.0
+  [fa267f1f] TOML v1.0.3
+  [8dfed614] Test v1.11.0
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_3rn06z/Manifest.toml`
+  [bbf7d656] CommonSubexpressions v0.3.1
+  [163ba53b] DiffResults v1.1.0
+  [b552c78f] DiffRules v1.16.0
+  [ffbed154] DocStringExtensions v0.9.5
+  [f6f58f5d] ERIEC v0.1.0 `~/bridge-protocol`
+  [f6369f11] ForwardDiff v1.4.1
+  [92d709cd] IrrationalConstants v0.2.6
+  [692b3bcd] JLLWrappers v1.8.0
+  [0f8b85d8] JSON3 v1.14.3
+  [2ab3a3ac] LogExpFunctions v1.0.1
+  [1914dd2f] MacroTools v0.5.16
+  [77ba4419] NaNMath v1.1.4
+  [69de0a69] Parsers v2.8.6
+⌅ [aea7be01] PrecompileTools v1.2.1
+  [21216c6a] Preferences v1.5.2
+  [276daf66] SpecialFunctions v2.8.0
+  [1e83bf80] StaticArraysCore v1.4.4
+  [856f2bd8] StructTypes v1.11.0
+  [efe28fd5] OpenSpecFun_jll v0.5.6+0
+  [56f22d72] Artifacts v1.11.0
+  [2a0f44e3] Base64 v1.11.0
+  [ade2ca70] Dates v1.11.0
+  [b77e0a4c] InteractiveUtils v1.11.0
+  [8f399da3] Libdl v1.11.0
+  [37e2e46d] LinearAlgebra v1.11.0
+  [56ddb016] Logging v1.11.0
+  [d6f4376e] Markdown v1.11.0
+  [a63ad114] Mmap v1.11.0
+  [de0858da] Printf v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v0.7.0
+  [9e88b42a] Serialization v1.11.0
+  [fa267f1f] TOML v1.0.3
+  [8dfed614] Test v1.11.0
+  [cf7118a7] UUIDs v1.11.0
+  [4ec0a83e] Unicode v1.11.0
+  [e66e0078] CompilerSupportLibraries_jll v1.1.1+0
+  [4536629a] OpenBLAS_jll v0.3.27+1
+  [05823500] OpenLibm_jll v0.8.5+0
+  [8e850b90] libblastrampoline_jll v5.11.0+0
+        Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading.
+     Testing Running tests...
+Running 45 ERIEC test files in 4 isolated processes, then 2 exclusive file(s)
+
+===== ERIEC parallel test group 1/4 (estimated 84.0s) =====
+Test Summary:                | Pass  Total     Time
+field coupled system adapter |  151    151  2m19.9s
+
+===== ERIEC parallel test group 2/4 (estimated 68.0s) =====
+Test Summary:                                     | Pass  Total   Time
+ordered reachability graded dynamics and boundary |   52     52  47.4s
+Test Summary: | Pass  Total   Time
+worlddc       |   48     48  12.5s
+Test Summary:            | Pass  Total  Time
+category update pipeline |   66     66  9.0s
+Test Summary:        | Pass  Total  Time
+finite open dynamics |   12     12  3.5s
+Test Summary:      | Pass  Total  Time
+finite audit layer |    7      7  2.1s
+Test Summary:        | Pass  Total  Time
+finite lineage layer |    9      9  0.4s
+Test Summary:                            | Pass  Total  Time
+finite theory translation and guarantees |    4      4  0.2s
+Test Summary:            | Pass  Total   Time
+experiment visualization |   28     28  13.8s
+Test Summary:        | Pass  Total  Time
+weighted sensitivity |    6      6  0.6s
+Test Summary:               | Pass  Total  Time
+bridge functor obstructions |   94     94  1.7s
+Test Summary: | Pass  Total  Time
+closure       |   17     17  0.9s
+Test Summary:                | Pass  Total  Time
+terminal and mutation guards |    4      4  0.2s
+Test Summary: | Pass  Total  Time
+reachability  |    7      7  0.1s
+Test Summary:   | Pass  Total  Time
+finite dynamics |   21     21  3.2s
+Test Summary:          | Pass  Total  Time
+claim ledger integrity |  395    395  0.6s
+Test Summary: | Pass  Total  Time
+Richness      |    6      6  1.3s
+Test Summary:     | Pass  Total  Time
+copair uniqueness |    2      2  0.0s
+
+===== ERIEC parallel test group 3/4 (estimated 68.0s) =====
+Test Summary:               | Pass  Total     Time
+minimal policy and topology |  201    201  1m11.7s
+Test Summary: | Pass  Total  Time
+world         |   47     47  6.9s
+Test Summary:       | Pass  Total   Time
+Lean Julia contract |  979    979  14.3s
+Test Summary: | Pass  Total  Time
+sensitivity   |    6      6  1.8s
+Test Summary:  | Pass  Total  Time
+system adapter |   13     13  3.4s
+Test Summary: | Pass  Total  Time
+adjunction    |   11     11  1.4s
+Test Summary:              | Pass  Total  Time
+official TRM Python bridge |    3      3  1.2s
+Test Summary:                | Pass  Total  Time
+viability closure object map |   36     36  1.9s
+Test Summary: | Pass  Total  Time
+hinge         |   11     11  0.5s
+Test Summary: | Pass  Total  Time
+consume       |    4      4  0.1s
+Test Summary:         | Pass  Total  Time
+experiment acceptance |   18     18  0.6s
+Test Summary:       | Pass  Total  Time
+update bisimulation |    2      2  0.0s
+Test Summary:    | Pass  Total  Time
+reference models |   11     11  1.9s
+Test Summary:      | Pass  Total  Time
+functional markers |   11     11  0.6s
+Test Summary:            | Pass  Total  Time
+ranked relation presheaf |    2      2  0.1s
+Test Summary:                | Pass  Total  Time
+critical rank collapse bound |    2      2  0.1s
+
+===== ERIEC parallel test group 4/4 (estimated 67.5s) =====
+Test Summary:               | Pass  Total     Time
+Lenia experiment management |  138    138  2m47.2s
+Test Summary: | Pass  Total   Time
+body          |   33     33  16.6s
+Test Summary:           | Pass  Total  Time
+observation artifact v1 |   32     32  4.5s
+Test Summary:        | Pass  Total  Time
+toy recurrent system |   28     28  5.4s
+Test Summary:                   | Pass  Total  Time
+benchmarks collapse and reports |   40     40  3.6s
+Test Summary: | Pass  Total  Time
+checkpoints   |   17     17  2.6s
+Test Summary: | Pass  Total  Time
+value         |   25     25  1.9s
+Test Summary:                 | Pass  Total  Time
+finite relation linearization |   14     14  4.6s
+Test Summary:           | Pass  Total  Time
+three-layer composition |   17     17  1.0s
+Test Summary: | Pass  Total  Time
+dc            |    8      8  0.3s
+Test Summary:                | Pass  Total  Time
+critical certification bound |    3      3  0.0s
+Test Summary:       | Pass  Total  Time
+observation summary |    8      8  0.0s
+Test Summary:    | Pass  Total  Time
+critical slowing |   11     11  0.3s
+Test Summary:            | Pass  Total  Time
+Lean module architecture |   11     11  0.7s
+Test Summary: | Pass  Total  Time
+Frozen wagers |   19     19  3.7s
+Test Summary:                | Pass  Total  Time
+umwelt comparison and series |    4      4  0.2s
+
+===== ERIEC exclusive test group 1/1 (estimated 37.0s) =====
+Test Summary:                         | Pass  Total  Time
+v5.2 Lean formal statement smoke test |   37     37  7.9s
+Test Summary:    | Pass  Total     Time
+Lenia report CLI |   75     75  2m19.2s
+Test Summary:             | Pass  Total   Time
+TRM neural experiment CLI |   40     40  27.1s
+     Testing ERIEC tests passed 

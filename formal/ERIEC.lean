@@ -22,6 +22,7 @@ import ERIEC.Decomp
 import ERIEC.Grading
 import ERIEC.MetaSelection
 import ERIEC.Markers
+import ERIEC.AnalyticFM4
 import ERIEC.Invariance
 import ERIEC.RefModel
 import ERIEC.Wager

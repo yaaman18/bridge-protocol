@@ -2,6 +2,7 @@ import Mathlib.Data.Finset.Card
 import Mathlib.Data.Rat.Cast.Order
 import ERIEC.Closure
 import ERIEC.DC
+import ERIEC.Centering
 
 namespace ERIEC
 
@@ -97,6 +98,60 @@ noncomputable def relationalNormalizedV [Fintype C]
   normalized_V (finiteNuPhi piRel rhoRel)
     (finiteContribution sigmaRel piRel) e
 
+/-- The universe-polymorphic positive-value predicate underlying
+`0 < relationalNormalizedV`.  It avoids a finiteness assumption by stating
+directly that the coupling contribution meets the greatest viable core. -/
+def PositiveRelationalValue
+    (sigmaRel : E → Set M) (piRel : M → Set C) (rhoRel : C → Set M)
+    (e : E) : Prop :=
+  (Closure.nu (Closure.Phi piRel rhoRel) ∩
+    Closure.pi_star piRel (sigmaRel e)).Nonempty
+
+private theorem positiveRelationalValue_forward
+    {A E C S A' E' C' S' W : Type*}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') (e : E)
+    (hPos : PositiveRelationalValue F.sigmaRel F.piRel F.rhoRel e) :
+    PositiveRelationalValue F'.sigmaRel F'.piRel F'.rhoRel (h.hE e) := by
+  rcases hPos with ⟨c, hNu, hContribution⟩
+  refine ⟨h.hC c, ?_, ?_⟩
+  · have hcImage : h.hC c ∈ Invariance.image h.hC
+        (Closure.nu (Closure.Phi F.piRel F.rhoRel)) :=
+      ⟨c, hNu, rfl⟩
+    rw [(Invariance.static_closure_bisim h).2.1] at hcImage
+    exact hcImage
+  · rcases (by
+      simpa [Closure.pi_star] using hContribution :
+        ∃ a, a ∈ F.sigmaRel e ∧ c ∈ F.piRel a) with ⟨a, ha, hc⟩
+    simp [Closure.pi_star]
+    exact ⟨h.hA a, (h.sigma_iff e a).mp ha, (h.pi_iff a c).mp hc⟩
+
+/-- v5.2 Theorem 25.4(7): positivity of the endogenous value is preserved by
+every static frame isomorphism. -/
+theorem positiveRelationalValue_invariant
+    {A E C S A' E' C' S' W : Type*}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') (e : E) :
+    PositiveRelationalValue F.sigmaRel F.piRel F.rhoRel e ↔
+      PositiveRelationalValue F'.sigmaRel F'.piRel F'.rhoRel (h.hE e) := by
+  constructor
+  · exact positiveRelationalValue_forward h e
+  · intro hPos
+    have hBack := positiveRelationalValue_forward h.symm (h.hE e) hPos
+    simpa only [Invariance.KIso.symm, Equiv.symm_apply_apply] using hBack
+
+/-- The `E × S` invariant-family packaging of Theorem 25.4(7).  A
+`StaticFrame` represents one rank slice, so the state argument only selects
+that slice and does not otherwise enter the predicate. -/
+def positiveValue_inv : Centering.InvariantFamilyE Centering.Strength.statF where
+  Pred := fun F e _ =>
+    PositiveRelationalValue F.sigmaRel F.piRel F.rhoRel e
+  invariant := by
+    intro A E C S A' E' C' S' W F F' h e _s
+    exact positiveRelationalValue_invariant h.static e
+
 /-- §7.2: equal `sigma`, `pi`, and `rho` relations determine equal normalized
 value; there is no external target or environmental image argument. -/
 theorem V_endogenous [Fintype C]
@@ -141,6 +196,48 @@ of "structural weight" or "viability contribution", not mattering. -/
 def HasStructuralWeight (nuPhi : Finset C) (contribution : E → Finset C)
     (e : E) : Prop :=
   0 < viabilityContribution nuPhi contribution e
+
+/-- On finite carriers, `PositiveRelationalValue` is exactly positivity of the
+cardinality numerator used by `relationalNormalizedV`. -/
+theorem positiveRelationalValue_iff_hasStructuralWeight [Fintype C]
+    (sigmaRel : E → Set M) (piRel : M → Set C) (rhoRel : C → Set M)
+    (e : E) :
+    PositiveRelationalValue sigmaRel piRel rhoRel e ↔
+      HasStructuralWeight (finiteNuPhi piRel rhoRel)
+        (finiteContribution sigmaRel piRel) e := by
+  classical
+  rw [HasStructuralWeight, viabilityContribution, Finset.card_pos]
+  constructor
+  · rintro ⟨c, hcNu, hcContribution⟩
+    refine ⟨c, Finset.mem_filter.mpr ⟨?_, ?_⟩⟩
+    · simpa [finiteContribution] using hcContribution
+    · simpa [finiteNuPhi] using hcNu
+  · rintro ⟨c, hc⟩
+    rcases Finset.mem_filter.mp hc with ⟨hcContribution, hcNu⟩
+    exact ⟨c, by simpa [finiteNuPhi] using hcNu,
+      by simpa [finiteContribution] using hcContribution⟩
+
+/-- If the greatest viable core is nonempty, the structural nonempty
+intersection is equivalent to strict positivity of the normalized value. -/
+theorem positiveRelationalValue_iff_normalized_pos [Fintype C]
+    (sigmaRel : E → Set M) (piRel : M → Set C) (rhoRel : C → Set M)
+    (e : E) (hNu : (finiteNuPhi piRel rhoRel).Nonempty) :
+    PositiveRelationalValue sigmaRel piRel rhoRel e ↔
+      0 < relationalNormalizedV sigmaRel piRel rhoRel e := by
+  rw [positiveRelationalValue_iff_hasStructuralWeight,
+    HasStructuralWeight, relationalNormalizedV, normalized_V]
+  have hDenNat : 0 < (finiteNuPhi piRel rhoRel).card := Finset.card_pos.mpr hNu
+  have hDenRat : (0 : ℚ) < ((finiteNuPhi piRel rhoRel).card : ℚ) := by
+    exact_mod_cast hDenNat
+  constructor
+  · intro hNumNat
+    apply div_pos
+    · exact_mod_cast hNumNat
+    · exact hDenRat
+  · intro hNormalized
+    rcases (div_pos_iff.mp hNormalized) with hPositive | hNegative
+    · exact_mod_cast hPositive.1
+    · exact (False.elim ((not_lt_of_ge hDenRat.le) hNegative.2))
 
 /-- Phenomenal mattering is intentionally a separate predicate. -/
 abbrev PhenomenalMattering (E : Type*) := E → Prop
