@@ -42,6 +42,12 @@ theorem erase_maps_witness (f : Hom G H) {s t : G.State} {kind : EdgeKind Port}
     ∃ p : Path H (f.mapState s) (f.mapState t), Audit.UsesOnly kind p :=
   (erase f).maps edge
 
+/-- R-4 migration: constructive open simulations are the direct certificate
+payload accepted by `Audit.AuditMap`. -/
+def certify (f : Hom G H) : Audit.CertifiedSimulation G H where
+  mapState := f.mapState
+  mapEdge := f.mapEdge
+
 /-- The constructive identity simulation sends each edge to the one-edge path. -/
 def id (G : OpenGraph.{u, v} Port) : Hom G G where
   mapState := _root_.id
@@ -140,7 +146,7 @@ end Hom
 /-- The identity audit map for a formal open frame, using no extra assumptions. -/
 def identityAuditMap {Port : Type u} (O : OpenFrame.{u, v} Port) :
     Audit.AuditMap O O (OpenFrame.{u, v} Port) (OpenFrame.{u, v} Port) where
-  simulation := Hom.erase (Hom.id O.graph)
+  simulation := Hom.certify (Hom.id O.graph)
   initPres := by
     intro s hs
     exact hs
@@ -151,8 +157,8 @@ def identityAuditMap {Port : Type u} (O : OpenFrame.{u, v} Port) :
   assumptions := []
 
 theorem identityAuditMap_simulation {Port : Type u} (O : OpenFrame.{u, v} Port) :
-    (identityAuditMap O).simulation = Audit.Simulation.id O.graph :=
-  Hom.erase_id O.graph
+    (identityAuditMap O).simulation = Audit.CertifiedSimulation.id O.graph :=
+  rfl
 
 theorem identityAuditMap_initPres {Port : Type u} (O : OpenFrame.{u, v} Port)
     {s : O.graph.State} (hs : O.init s) :

@@ -484,6 +484,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "check_label_preserving_simulation"
       },
       {
+        id := "audit.certified_simulation"
+        leanModule := "ERIEC.Audit"
+        leanName := "CertifiedSimulation"
+        leanKind := "structure"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "lineage.core"
         leanModule := "ERIEC.Lineage"
         leanName := "Lineage"
@@ -780,6 +788,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "-"
       },
       {
+        id := "v52.kernelopen.action_gap"
+        leanModule := "ERIEC.KernelOpen"
+        leanName := "action_gapUp"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "v52.centering.horizontal_wall"
         leanModule := "ERIEC.Centering"
         leanName := "horizontal_wall"
@@ -932,6 +948,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "-"
       },
       {
+        id := "v52.analyticfm4.complex_full_marker_link"
+        leanModule := "ERIEC.AnalyticFM4"
+        leanName := "complex_hilbert_full_marker_fm4_iff"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "v52.traceability.vocabulary"
         leanModule := "ERIEC.Traceability"
         leanName := "vocabularyStatus_complete"
@@ -951,6 +975,22 @@ def certifiedArtifact : CertifiedArtifact :=
         id := "v52.refmodel.symmetric_double"
         leanModule := "ERIEC.RefModelV52"
         leanName := "dcAt_zero_center_indistinguishable"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.recurrent_gate_viability"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "recurrent_viability_passes"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.standard_gate_profile"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "standard_gate_phenomenal_bridgeOpen"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"
@@ -991,6 +1031,14 @@ def certifiedArtifact : CertifiedArtifact :=
         id := "v52.refmodel.symmetric_double_complex_hilbert_fm4"
         leanModule := "ERIEC.RefModelV52"
         leanName := "complex_hilbert_fm4_swapped"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_complex_full_marker"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "symmetric_double_complete"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"
@@ -1151,6 +1199,14 @@ def certifiedArtifact : CertifiedArtifact :=
         id := "v52.refmodel.nondegenerate_recur_full"
         leanModule := "ERIEC.RefModelV52"
         leanName := "fullWitness_has_recur"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.nondegenerate_recur_integrated"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "integratedWitness_has_recur"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"

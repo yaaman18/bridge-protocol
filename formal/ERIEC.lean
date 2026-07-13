@@ -32,6 +32,7 @@ import ERIEC.Generation
 import ERIEC.Lineage
 import ERIEC.TemporalDC
 import ERIEC.OpenDynamics
+import ERIEC.KernelOpen
 import ERIEC.Audit
 import ERIEC.TheoryTranslation
 import ERIEC.TRMTopologyTransition

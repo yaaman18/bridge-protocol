@@ -303,6 +303,27 @@ def ComplexHilbertFM4 {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ 
     (F : ComplexHilbertFrame A H) (a : A) : Prop :=
   F.spectralProjection (F.representation a) ≠ 0
 
+/-- A full marker frame linked to a complex Hilbert FM4 frame. The equality
+fields ensure that the structural marker cannot use a different projection or
+representation than the complex analytic witness. -/
+structure ComplexHilbertFullMarkerFrame
+    (A E C S W Ω H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] where
+  marker : Markers.FullMarkerFrame A E C S W Ω H
+  analytic : ComplexHilbertFrame A H
+  representation_eq : marker.representation = analytic.representation
+  spectralProjection_eq : marker.spectralProjection = analytic.spectralProjection
+  zero_eq : marker.zero = 0
+
+/-- The structural and complex analytic FM4 predicates agree on a linked
+full marker frame. -/
+theorem complex_hilbert_full_marker_fm4_iff
+    {A E C S W Ω H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    (F : ComplexHilbertFullMarkerFrame A E C S W Ω H) (a : A) :
+    Markers.FM4 F.marker.toFM4 a ↔ ComplexHilbertFM4 F.analytic a := by
+  change F.marker.spectralProjection (F.marker.representation a) ≠ F.marker.zero ↔
+    F.analytic.spectralProjection (F.analytic.representation a) ≠ 0
+  rw [F.representation_eq, F.spectralProjection_eq, F.zero_eq]
+
 /-- A unitary analytic isomorphism between complex Hilbert FM4 frames. -/
 structure ComplexHilbertIso {A A' H H' : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H]

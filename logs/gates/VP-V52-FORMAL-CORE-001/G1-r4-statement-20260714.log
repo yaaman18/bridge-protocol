@@ -1,0 +1,768 @@
+ERIEC.Gate.Gv : Type
+ERIEC.Gate.RawEv (P : Prop) : Type
+ERIEC.Gate.GateEv (P : Prop) : Type
+ERIEC.Gate.GateFrame.{u} (Idx : Type u) : Type u
+ERIEC.Gate.GateAssignment.gate.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx}
+  (assignment : ERIEC.Gate.GateAssignment 𝒢) : Idx → ERIEC.Gate.Gv
+ERIEC.Gate.raw_pass_sound {P : Prop} {raw : ERIEC.Gate.RawEv P}
+  (h : ERIEC.Gate.eraseRawEvidence raw = ERIEC.Gate.Gv.pass) : P
+ERIEC.Gate.raw_fail_sound {P : Prop} {raw : ERIEC.Gate.RawEv P}
+  (h : ERIEC.Gate.eraseRawEvidence raw = ERIEC.Gate.Gv.fail) : ¬P
+ERIEC.Gate.gate_pass_sound {P : Prop} {ev : ERIEC.Gate.GateEv P}
+  (h : ERIEC.Gate.eraseEvidence ev = ERIEC.Gate.Gv.pass) : P
+ERIEC.Gate.gate_fail_sound {P : Prop} {ev : ERIEC.Gate.GateEv P}
+  (h : ERIEC.Gate.eraseEvidence ev = ERIEC.Gate.Gv.fail) : ¬P
+ERIEC.Gate.raw_ne_na {P : Prop} (raw : ERIEC.Gate.RawEv P) : ERIEC.Gate.eraseRawEvidence raw ≠ ERIEC.Gate.Gv.na
+ERIEC.Gate.gate_unique.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx} (assignment : ERIEC.Gate.GateAssignment 𝒢)
+  (i : Idx) : assignment.gate i = ERIEC.Gate.eraseEvidence (assignment.ev i)
+ERIEC.Gate.na_propagates.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx} (gate : ERIEC.Gate.GateAssignment 𝒢)
+  {j i : Idx} (path : ERIEC.Gate.DepPath 𝒢.dep j i)
+  (hblock : ERIEC.Gate.Blocks (ERIEC.Gate.eraseEvidence (gate.ev j))) :
+  ERIEC.Gate.eraseEvidence (gate.ev i) = ERIEC.Gate.Gv.na
+ERIEC.Gate.gate_na_propagates.{u} {Idx : Type u} {𝒢 : ERIEC.Gate.GateFrame Idx}
+  (assignment : ERIEC.Gate.GateAssignment 𝒢) {j i : Idx} (path : ERIEC.Gate.DepPath 𝒢.dep j i)
+  (hblock : ERIEC.Gate.Blocks (assignment.gate j)) : assignment.gate i = ERIEC.Gate.Gv.na
+'ERIEC.Gate.na_propagates' depends on axioms: [propext]
+ERIEC.Gap.second_gc.{u_1, u_2} {M : Type u_1} {E : Type u_2} (sigmaRel : E → Set M) :
+  GaloisConnection (ERIEC.Adj.sigma_star sigmaRel) (ERIEC.Gap.alpha_forall sigmaRel)
+ERIEC.Gap.SingletonImage.{u_1, u_2} {M : Type u_1} {E : Type u_2} (alphaRel : M → Set E) (a : M) : Prop
+ERIEC.Gap.sigma_star_eq_induced_iff_singleton.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E}
+  {sigmaRel : E → Set M} (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) :
+  ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel ↔ ∀ (a : M), ERIEC.Gap.SingletonImage alphaRel a
+ERIEC.Gap.degenerate_iff.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) :
+  ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel ↔ ∀ (a : M), ERIEC.Gap.SingletonImage alphaRel a
+ERIEC.Gap.identification_forces_singleton.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E}
+  {sigmaRel : E → Set M} (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e)
+  (hEq : ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel) (a : M) :
+  ERIEC.Gap.SingletonImage alphaRel a
+ERIEC.Gap.identification_forces_degeneracy.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E}
+  {sigmaRel : E → Set M} (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e)
+  (hEq : ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel) (a : M) :
+  ERIEC.Gap.SingletonImage alphaRel a
+ERIEC.Gap.gapUp_iff_branch.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ERIEC.Gap.GapUp alphaRel sigmaRel a ↔ ERIEC.Richness.Branch alphaRel a
+ERIEC.Gap.gapUp_iff.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ERIEC.Gap.GapUp alphaRel sigmaRel a ↔ ERIEC.Richness.Branch alphaRel a
+ERIEC.Gap.gapDn_iff.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ERIEC.Gap.GapDn alphaRel sigmaRel a ↔ alphaRel a = ∅
+ERIEC.Gap.gapUp_alpha_two.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) {a : M} (hgap : ERIEC.Gap.GapUp alphaRel sigmaRel a) :
+  ∃ e₁ e₂, e₁ ∈ alphaRel a ∧ e₂ ∈ alphaRel a ∧ e₁ ≠ e₂
+ERIEC.Gap.no_gapUp_under_identification.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E}
+  {sigmaRel : E → Set M} (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e)
+  (hEq : ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel) (a : M) :
+  ¬ERIEC.Gap.GapUp alphaRel sigmaRel a
+ERIEC.Gap.no_gapDn_under_identification.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E}
+  {sigmaRel : E → Set M} (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e)
+  (hEq : ERIEC.Adj.sigma_star sigmaRel = ERIEC.Adj.sigma_star_induced alphaRel) (a : M) :
+  ¬ERIEC.Gap.GapDn alphaRel sigmaRel a
+ERIEC.Gap.no_gap_iff_singleton.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ¬ERIEC.Gap.GapUp alphaRel sigmaRel a ∧ ¬ERIEC.Gap.GapDn alphaRel sigmaRel a ↔ ERIEC.Gap.SingletonImage alphaRel a
+ERIEC.Gap.gap_trichotomy.{u_1, u_2} {M : Type u_1} {E : Type u_2} {alphaRel : M → Set E} {sigmaRel : E → Set M}
+  (hConv : ∀ (a : M) (e : E), e ∈ alphaRel a ↔ a ∈ sigmaRel e) (a : M) :
+  ERIEC.Gap.GapDn alphaRel sigmaRel a ∨ ERIEC.Gap.SingletonImage alphaRel a ∨ ERIEC.Gap.GapUp alphaRel sigmaRel a
+'ERIEC.Gap.gapUp_iff_branch' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Decay.DecayStructure.{u_1} {C : Type u_1} (F : Set C → Set C) : Type u_1
+ERIEC.Decay.psi_isDecay.{u_1} {C : Type u_1} {F : Set C → Set C} (hmono : Monotone F) : ERIEC.Decay.DecayStructure F
+ERIEC.Decay.psi2_isDecay.{u_1} {C : Type u_1} {F : Set C → Set C} (hmono : Monotone F) : ERIEC.Decay.DecayStructure F
+ERIEC.Decay.psi_strict_of_not_postfixed.{u_1} {C : Type u_1} {F : Set C → Set C} {Y : Set C} (hnot : ¬Y ⊆ F Y) :
+  ERIEC.Decay.psi F Y ⊂ Y
+ERIEC.Decay.dec_eq_or_strict.{u_1} {C : Type u_1} {F : Set C → Set C} (D : ERIEC.Decay.DecayStructure F) (Y : Set C) :
+  D.dec Y = Y ∨ D.dec Y ⊂ Y
+ERIEC.Decay.abstract_collapse.{u_1} {C : Type u_1} {F : Set C → Set C} (D : ERIEC.Decay.DecayStructure F) (Y : Set C) :
+  D.dec Y = Y ∨ D.dec Y ⊂ Y
+ERIEC.Decay.collapse_of_psi.{u_1} {C : Type u_1} {F : Set C → Set C} (hmono : Monotone F) :
+  (ERIEC.Decay.psi_isDecay hmono).dec (ERIEC.Closure.nu F) = ERIEC.Closure.nu F
+'ERIEC.Decay.psi_isDecay' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.OpenSimC.Hom.{u, v, w} {Port : Type u} (G : ERIEC.OpenDynamics.OpenGraph Port)
+  (H : ERIEC.OpenDynamics.OpenGraph Port) : Type (max (max u v) w)
+ERIEC.OpenSimC.Hom.erase.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H) : ERIEC.Audit.Simulation G H
+ERIEC.OpenSimC.Hom.certify.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H) : ERIEC.Audit.CertifiedSimulation G H
+ERIEC.OpenSimC.Hom.mapPath_comp.{u, v, w, x} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} {K : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H)
+  (g : ERIEC.OpenSimC.Hom H K) {s t : G.State} (p : ERIEC.OpenDynamics.Path G s t) :
+  (f.comp g).mapPath p = g.mapPath (f.mapPath p)
+ERIEC.OpenSimC.Hom.mapPath_id_comp.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H) {s t : G.State}
+  (p : ERIEC.OpenDynamics.Path G s t) : ((ERIEC.OpenSimC.Hom.id G).comp f).mapPath p = f.mapPath p
+ERIEC.OpenSimC.Hom.mapPath_comp_id.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.OpenSimC.Hom G H) {s t : G.State}
+  (p : ERIEC.OpenDynamics.Path G s t) : (f.comp (ERIEC.OpenSimC.Hom.id H)).mapPath p = f.mapPath p
+ERIEC.OpenSimC.identityAuditMap.{u, v} {Port : Type u} (O : ERIEC.OpenDynamics.OpenFrame Port) :
+  ERIEC.Audit.AuditMap O O (ERIEC.OpenDynamics.OpenFrame Port) (ERIEC.OpenDynamics.OpenFrame Port)
+ERIEC.OpenSimC.identityAuditMap_noAssumptions.{u, v} {Port : Type u} (O : ERIEC.OpenDynamics.OpenFrame Port) :
+  (ERIEC.OpenSimC.identityAuditMap O).assumptions = []
+'ERIEC.OpenSimC.Hom.mapPath_comp' depends on axioms: [propext]
+ERIEC.Audit.CertifiedSimulation.{u, v, w} {Port : Type u} (G : ERIEC.OpenDynamics.OpenGraph Port)
+  (H : ERIEC.OpenDynamics.OpenGraph Port) : Type (max (max u v) w)
+ERIEC.Audit.CertifiedSimulation.mapPath.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.Audit.CertifiedSimulation G H) {s t : G.State} :
+  ERIEC.OpenDynamics.Path G s t → ERIEC.OpenDynamics.Path H (f.mapState s) (f.mapState t)
+ERIEC.Audit.CertifiedSimulation.mapPath_usesOnly.{u, v, w} {Port : Type u} {G : ERIEC.OpenDynamics.OpenGraph Port}
+  {H : ERIEC.OpenDynamics.OpenGraph Port} (f : ERIEC.Audit.CertifiedSimulation G H) {s t : G.State}
+  {kind : ERIEC.OpenDynamics.EdgeKind Port} {p : ERIEC.OpenDynamics.Path G s t} (hp : ERIEC.Audit.UsesOnly kind p) :
+  ERIEC.Audit.UsesOnly kind (f.mapPath p)
+'ERIEC.Audit.noTerminalInit_sound' does not depend on any axioms
+ERIEC.KernelOpen.Frame.{u, v, w} {A : Type u} {E : Type v} {Port : Type w} (alphaRel : A → Set E) (sigmaRel : E → Set A)
+  (O : ERIEC.OpenDynamics.OpenFrame Port) : Type (max u v)
+ERIEC.KernelOpen.action_gapUp.{u, v, w} {A : Type u} {E : Type v} {Port : Type w} {alphaRel : A → Set E}
+  {sigmaRel : E → Set A} {O : ERIEC.OpenDynamics.OpenFrame Port} (F : ERIEC.KernelOpen.Frame alphaRel sigmaRel O)
+  (s : O.graph.State) : ERIEC.Gap.GapUp alphaRel sigmaRel (F.action s)
+ERIEC.Centering.InvariantFamily.{u} (τ : ERIEC.Centering.Strength) : Type (u + 1)
+ERIEC.Centering.InvariantFamilyE.{u} (τ : ERIEC.Centering.Strength) : Type (u + 1)
+ERIEC.Centering.InvariantFamilyC.{u} (τ : ERIEC.Centering.Strength) : Type (u + 1)
+ERIEC.Centering.CompatibleIso.toStatF.{u} {τ : ERIEC.Centering.Strength} {A E C S A' E' C' S' W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Centering.CompatibleIso τ F F') : ERIEC.Centering.CompatibleIso ERIEC.Centering.Strength.statF F F'
+ERIEC.Centering.andFamilyE.{u_1} {τ : ERIEC.Centering.Strength} (P Q : ERIEC.Centering.InvariantFamilyE τ) :
+  ERIEC.Centering.InvariantFamilyE τ
+ERIEC.Centering.iffFamilyC.{u_1} {τ : ERIEC.Centering.Strength} (P Q : ERIEC.Centering.InvariantFamilyC τ) :
+  ERIEC.Centering.InvariantFamilyC τ
+ERIEC.Centering.invariant_fixed.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} (Pred : ERIEC.Centering.InvariantFamily τ)
+  (h : ERIEC.Centering.CompatibleIso τ F F) {m m' : A} {s : S} (hm : h.static.hA m = m') (hs : h.static.hS s = s) :
+  Pred.Pred F m s ↔ Pred.Pred F m' s
+ERIEC.Centering.invariantE_fixed.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} (Pred : ERIEC.Centering.InvariantFamilyE τ)
+  (h : ERIEC.Centering.CompatibleIso τ F F) {e e' : E} {s : S} (he : h.static.hE e = e') (hs : h.static.hS s = s) :
+  Pred.Pred F e s ↔ Pred.Pred F e' s
+ERIEC.Centering.invariantC_fixed.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} (Pred : ERIEC.Centering.InvariantFamilyC τ)
+  (h : ERIEC.Centering.CompatibleIso τ F F) {c c' : C} {s : S} (hc : h.static.hC c = c') (hs : h.static.hS s = s) :
+  Pred.Pred F c s ↔ Pred.Pred F c' s
+ERIEC.Centering.indist_fixed.{u} {τ : ERIEC.Centering.Strength} {A E C S W : Type u}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} (Pred : ERIEC.Centering.InvariantFamily τ) {m m' : A} {s : S}
+  (φ : ERIEC.Centering.FixedCenterSymmetry τ F m m' s) : Pred.Pred F m s ↔ Pred.Pred F m' s
+ERIEC.Centering.dcAtFamily.{u_1} : ERIEC.Centering.InvariantFamily ERIEC.Centering.Strength.statF
+ERIEC.Centering.dcAt_horizontal_wall.{u} {A E C S W : Type u} {F : ERIEC.Invariance.StaticFrame A E C S W} {m m' : A}
+  {s : S} (φ : ERIEC.Centering.FixedCenterSymmetry ERIEC.Centering.Strength.statF F m m' s) : F.DCAt s ↔ F.DCAt s
+ERIEC.Centering.horizontal_wall.{u} {A E C S W : Type u} {F : ERIEC.Invariance.StaticFrame A E C S W} {m m' : A} {s : S}
+  (φ : ERIEC.Centering.FixedCenterSymmetry ERIEC.Centering.Strength.statF F m m' s) : F.DCAt s ↔ F.DCAt s
+'ERIEC.Centering.dcAt_horizontal_wall' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Value.PositiveRelationalValue.{u_1, u_2, u_3} {E : Type u_1} {C : Type u_2} {M : Type u_3} (sigmaRel : E → Set M)
+  (piRel : M → Set C) (rhoRel : C → Set M) (e : E) : Prop
+ERIEC.Value.positiveRelationalValue_invariant.{u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11} {A : Type u_3}
+  {E : Type u_4} {C : Type u_5} {S : Type u_6} {A' : Type u_7} {E' : Type u_8} {C' : Type u_9} {S' : Type u_10}
+  {W : Type u_11} {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (e : E) :
+  ERIEC.Value.PositiveRelationalValue F.sigmaRel F.piRel F.rhoRel e ↔
+    ERIEC.Value.PositiveRelationalValue F'.sigmaRel F'.piRel F'.rhoRel (h.hE e)
+ERIEC.Value.positiveValue_inv.{u_3} : ERIEC.Centering.InvariantFamilyE ERIEC.Centering.Strength.statF
+ERIEC.Value.positiveRelationalValue_iff_hasStructuralWeight.{u_1, u_2, u_3} {E : Type u_1} {C : Type u_2}
+  [DecidableEq C] {M : Type u_3} [Fintype C] (sigmaRel : E → Set M) (piRel : M → Set C) (rhoRel : C → Set M) (e : E) :
+  ERIEC.Value.PositiveRelationalValue sigmaRel piRel rhoRel e ↔
+    ERIEC.Value.HasStructuralWeight (ERIEC.Value.finiteNuPhi piRel rhoRel)
+      (ERIEC.Value.finiteContribution sigmaRel piRel) e
+ERIEC.Value.positiveRelationalValue_iff_normalized_pos.{u_1, u_2, u_3} {E : Type u_1} {C : Type u_2} [DecidableEq C]
+  {M : Type u_3} [Fintype C] (sigmaRel : E → Set M) (piRel : M → Set C) (rhoRel : C → Set M) (e : E)
+  (hNu : (ERIEC.Value.finiteNuPhi piRel rhoRel).Nonempty) :
+  ERIEC.Value.PositiveRelationalValue sigmaRel piRel rhoRel e ↔
+    0 < ERIEC.Value.relationalNormalizedV sigmaRel piRel rhoRel e
+'ERIEC.Value.positiveRelationalValue_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Value.positiveRelationalValue_iff_normalized_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Markers.phiMinus.{u_1, u_2, u_3, u_4, u_5} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  {W : Type u_5} (F : ERIEC.Invariance.StaticFrame A E C S W) (m : A) (Y : Set C) : Set C
+ERIEC.Markers.FM1.{u_1, u_2, u_3, u_4, u_5} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {W : Type u_5}
+  (F : ERIEC.Invariance.StaticFrame A E C S W) (m : A) (s : S) : Prop
+ERIEC.Markers.FM2.{u_1, u_2, u_3, u_4, u_5} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {W : Type u_5}
+  (F : ERIEC.Invariance.StaticFrame A E C S W) (m : A) (_s : S) : Prop
+ERIEC.Markers.staticInH.{u_1, u_2, u_3, u_4, u_5} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  {W : Type u_5} (F : ERIEC.Invariance.StaticFrame A E C S W) (m : A) (s : S) : Prop
+ERIEC.Markers.FM3Frame.{u_1, u_2, u_3, u_4, u_5, u_6} (A : Type u_1) (E : Type u_2) (C : Type u_3) (S : Type u_4)
+  (W : Type u_5) (Ωι : Type u_6) : Type (max (max (max (max (max u_1 u_2) u_3) u_4) u_5) u_6)
+ERIEC.Markers.FM3Iso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {Ωι : Type u_10} {Ωι' : Type u_11} (F : ERIEC.Markers.FM3Frame A E C S W Ωι)
+  (F' : ERIEC.Markers.FM3Frame A' E' C' S' W Ωι') :
+  Type (max (max (max (max (max (max (max (max (max u_1 u_10) u_11) u_2) u_3) u_4) u_5) u_6) u_7) u_8)
+ERIEC.Markers.FM3.{u_1, u_2, u_3, u_4, u_5, u_6} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  {W : Type u_5} {Ωι : Type u_6} (F : ERIEC.Markers.FM3Frame A E C S W Ωι) (m : A) (s : S) : Prop
+ERIEC.Markers.DynLabInvariantFamily.{u} : Type (u + 1)
+ERIEC.Markers.FM4Frame.{u_1, u_2, u_3, u_4, u_5, u_6} (A : Type u_1) (E : Type u_2) (C : Type u_3) (S : Type u_4)
+  (W : Type u_5) (V : Type u_6) : Type (max (max (max (max (max u_1 u_2) u_3) u_4) u_5) u_6)
+ERIEC.Markers.FM4Iso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {V : Type u_10} {V' : Type u_11} (F : ERIEC.Markers.FM4Frame A E C S W V)
+  (F' : ERIEC.Markers.FM4Frame A' E' C' S' W V') :
+  Type (max (max (max (max (max (max (max (max (max u_1 u_10) u_11) u_2) u_3) u_4) u_5) u_6) u_7) u_8)
+ERIEC.Markers.FM4.{u_1, u_2, u_3, u_4, u_5, u_6} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  {W : Type u_5} {V : Type u_6} (F : ERIEC.Markers.FM4Frame A E C S W V) (m : A) : Prop
+ERIEC.Markers.DynRepInvariantFamily.{u} : Type (u + 1)
+ERIEC.Markers.FullMarkerFrame.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} (A : Type u_1) (E : Type u_2) (C : Type u_3)
+  (S : Type u_4) (W : Type u_5) (Ωι : Type u_6) (V : Type u_7) :
+  Type (max (max (max (max (max (max u_1 u_2) u_3) u_4) u_5) u_6) u_7)
+ERIEC.Markers.FullMarkerIso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13} {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V) (F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V') :
+  Type
+    (max (max (max (max (max (max (max (max (max (max (max u_1 u_10) u_11) u_12) u_13) u_2) u_3) u_4) u_5) u_6) u_7)
+        u_8)
+ERIEC.Markers.FullMarkerCoreIso.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13} {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V) (F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V') :
+  Type
+    (max (max (max (max (max (max (max (max (max (max (max u_1 u_10) u_11) u_12) u_13) u_2) u_3) u_4) u_5) u_6) u_7)
+        u_8)
+ERIEC.Markers.FullMarkerCenterSymmetry.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} {W : Type u_5} {Ωι : Type u_6} {V : Type u_7} (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V)
+  (m m' : A) : Type (max (max (max (max (max u_1 u_2) u_3) u_4) u_6) u_7)
+ERIEC.Markers.FullMarkerFixedCenterSymmetry.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {W : Type u_5} {Ωι : Type u_6} {V : Type u_7}
+  (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V) (m m' : A) (s : S) :
+  Type (max (max (max (max (max u_1 u_2) u_3) u_4) u_6) u_7)
+ERIEC.Markers.ConsciousAt.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} {W : Type u_5} {Ωι : Type u_6} {V : Type u_7} (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V)
+  (m : A) (s : S) : Prop
+ERIEC.Markers.BlindAt.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  {W : Type u_5} {Ωι : Type u_6} {V : Type u_7} (F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V) (m : A) (s : S) :
+  Prop
+ERIEC.Markers.DynLabRepInvariantFamily.{u} : Type (u + 1)
+ERIEC.Markers.andDynLabRepFamily.{u_1} (P Q : ERIEC.Markers.DynLabRepInvariantFamily) :
+  ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.orDynLabRepFamily.{u_1} (P Q : ERIEC.Markers.DynLabRepInvariantFamily) :
+  ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.notDynLabRepFamily.{u_1} (P : ERIEC.Markers.DynLabRepInvariantFamily) :
+  ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.impDynLabRepFamily.{u_1} (P Q : ERIEC.Markers.DynLabRepInvariantFamily) :
+  ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.iffDynLabRepFamily.{u_1} (P Q : ERIEC.Markers.DynLabRepInvariantFamily) :
+  ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.trueDynLabRepFamily.{u_1} : ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.falseDynLabRepFamily.{u_1} : ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.phiMinus_bisim.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (m : A) (Y : Set C) :
+  ERIEC.Invariance.image h.hC (ERIEC.Markers.phiMinus F m Y) =
+    ERIEC.Markers.phiMinus F' (h.hA m) (ERIEC.Invariance.image h.hC Y)
+ERIEC.Markers.fm1_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (m : A) (s : S) : ERIEC.Markers.FM1 F m s ↔ ERIEC.Markers.FM1 F' (h.hA m) (h.hS s)
+ERIEC.Markers.fm2_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (m : A) (s : S) : ERIEC.Markers.FM2 F m s ↔ ERIEC.Markers.FM2 F' (h.hA m) (h.hS s)
+ERIEC.Markers.staticInH_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {F : ERIEC.Invariance.StaticFrame A E C S W} {F' : ERIEC.Invariance.StaticFrame A' E' C' S' W}
+  (h : ERIEC.Invariance.KIso F F') (m : A) (s : S) :
+  ERIEC.Markers.staticInH F m s ↔ ERIEC.Markers.staticInH F' (h.hA m) (h.hS s)
+ERIEC.Markers.fm3_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {Ωι : Type u_10} {Ωι' : Type u_11} {F : ERIEC.Markers.FM3Frame A E C S W Ωι}
+  {F' : ERIEC.Markers.FM3Frame A' E' C' S' W Ωι'} (h : ERIEC.Markers.FM3Iso F F') (m : A) (s : S) :
+  ERIEC.Markers.FM3 F m s ↔ ERIEC.Markers.FM3 F' (h.static.hA m) (h.static.hS s)
+ERIEC.Markers.fm4_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8} {W : Type u_9}
+  {V : Type u_10} {V' : Type u_11} {F : ERIEC.Markers.FM4Frame A E C S W V}
+  {F' : ERIEC.Markers.FM4Frame A' E' C' S' W V'} (h : ERIEC.Markers.FM4Iso F F') (m : A) :
+  ERIEC.Markers.FM4 F m ↔ ERIEC.Markers.FM4 F' (h.static.hA m)
+ERIEC.Markers.consciousAt_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13} {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V'}
+  (h : ERIEC.Markers.FullMarkerIso F F') (m : A) (s : S) :
+  ERIEC.Markers.ConsciousAt F m s ↔ ERIEC.Markers.ConsciousAt F' (h.static.hA m) (h.static.hS s)
+ERIEC.Markers.blindAt_invariant.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13} {A : Type u_1}
+  {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7} {S' : Type u_8}
+  {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V'}
+  (h : ERIEC.Markers.FullMarkerIso F F') (m : A) (s : S) :
+  ERIEC.Markers.BlindAt F m s ↔ ERIEC.Markers.BlindAt F' (h.static.hA m) (h.static.hS s)
+ERIEC.Markers.consciousAt_invariant_of_staticInH.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13}
+  {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7}
+  {S' : Type u_8} {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V'}
+  (h : ERIEC.Markers.FullMarkerCoreIso F F') (hF : F.UsesStaticInH) (hF' : F'.UsesStaticInH) (m : A) (s : S) :
+  ERIEC.Markers.ConsciousAt F m s ↔ ERIEC.Markers.ConsciousAt F' (h.static.hA m) (h.static.hS s)
+ERIEC.Markers.blindAt_invariant_of_staticInH.{u_1, u_2, u_3, u_4, u_5, u_6, u_7, u_8, u_9, u_10, u_11, u_12, u_13}
+  {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4} {A' : Type u_5} {E' : Type u_6} {C' : Type u_7}
+  {S' : Type u_8} {W : Type u_9} {Ωι : Type u_10} {Ωι' : Type u_11} {V : Type u_12} {V' : Type u_13}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {F' : ERIEC.Markers.FullMarkerFrame A' E' C' S' W Ωι' V'}
+  (h : ERIEC.Markers.FullMarkerCoreIso F F') (hF : F.UsesStaticInH) (hF' : F'.UsesStaticInH) (m : A) (s : S) :
+  ERIEC.Markers.BlindAt F m s ↔ ERIEC.Markers.BlindAt F' (h.static.hA m) (h.static.hS s)
+ERIEC.Markers.dynLabRep_fixed_of_staticInH.{u} (Pred : ERIEC.Markers.DynLabRepInvariantFamily) {A E C S W Ωι V : Type u}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {m m' : A} {s : S} (hF : F.UsesStaticInH)
+  (φ : ERIEC.Markers.FullMarkerFixedCenterSymmetry F m m' s) : Pred.Pred F m s ↔ Pred.Pred F m' s
+ERIEC.Markers.consciousAt_horizontal_wall_of_staticInH.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {W : Type u_5} {Ωι : Type u_6} {V : Type u_7}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {m m' : A} {s : S} (hF : F.UsesStaticInH)
+  (φ : ERIEC.Markers.FullMarkerFixedCenterSymmetry F m m' s) :
+  ERIEC.Markers.ConsciousAt F m s ↔ ERIEC.Markers.ConsciousAt F m' s
+ERIEC.Markers.blindAt_horizontal_wall_of_staticInH.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {W : Type u_5} {Ωι : Type u_6} {V : Type u_7}
+  {F : ERIEC.Markers.FullMarkerFrame A E C S W Ωι V} {m m' : A} {s : S} (hF : F.UsesStaticInH)
+  (φ : ERIEC.Markers.FullMarkerFixedCenterSymmetry F m m' s) :
+  ERIEC.Markers.BlindAt F m s ↔ ERIEC.Markers.BlindAt F m' s
+ERIEC.Markers.fm1_inv.{u_1} : ERIEC.Centering.InvariantFamily ERIEC.Centering.Strength.statF
+ERIEC.Markers.fm2_inv.{u_1} : ERIEC.Centering.InvariantFamily ERIEC.Centering.Strength.statF
+ERIEC.Markers.fm3_inv.{u_1} : ERIEC.Markers.DynLabInvariantFamily
+ERIEC.Markers.fm4_inv.{u_1} : ERIEC.Markers.DynRepInvariantFamily
+ERIEC.Markers.consciousAt_inv.{u_1} : ERIEC.Markers.DynLabRepInvariantFamily
+ERIEC.Markers.blindAt_inv.{u_1} : ERIEC.Markers.DynLabRepInvariantFamily
+'ERIEC.Markers.fm1_invariant' depends on axioms: [propext, Quot.sound]
+'ERIEC.Markers.fm2_invariant' depends on axioms: [Quot.sound]
+'ERIEC.Markers.staticInH_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Markers.fm3_invariant' depends on axioms: [propext, Quot.sound]
+'ERIEC.Markers.fm4_invariant' depends on axioms: [Quot.sound]
+'ERIEC.Markers.consciousAt_invariant' depends on axioms: [propext, Quot.sound]
+'ERIEC.Markers.blindAt_invariant' depends on axioms: [propext, Quot.sound]
+'ERIEC.Markers.consciousAt_invariant_of_staticInH' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Markers.blindAt_invariant_of_staticInH' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Markers.dynLabRep_fixed_of_staticInH' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Markers.consciousAt_horizontal_wall_of_staticInH' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Markers.blindAt_horizontal_wall_of_staticInH' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.AnalyticFM4.R2 : Type
+ERIEC.AnalyticFM4.coordinateSwap : ERIEC.AnalyticFM4.R2 ≃ₗ[ℝ] ERIEC.AnalyticFM4.R2
+ERIEC.AnalyticFM4.IsUnitary (U : ERIEC.AnalyticFM4.R2 ≃ₗ[ℝ] ERIEC.AnalyticFM4.R2) : Prop
+ERIEC.AnalyticFM4.coordinateSwap_unitary : ERIEC.AnalyticFM4.IsUnitary ERIEC.AnalyticFM4.coordinateSwap
+ERIEC.AnalyticFM4.coordinateSwap_normSq (x : ERIEC.AnalyticFM4.R2) :
+  ERIEC.AnalyticFM4.normSq (ERIEC.AnalyticFM4.coordinateSwap x) = ERIEC.AnalyticFM4.normSq x
+ERIEC.AnalyticFM4.Frame.{u_1} (A : Type u_1) : Type u_1
+ERIEC.AnalyticFM4.FM4.{u_1} {A : Type u_1} (F : ERIEC.AnalyticFM4.Frame A) (a : A) : Prop
+ERIEC.AnalyticFM4.Iso.{u_1, u_2} {A : Type u_1} {A' : Type u_2} (F : ERIEC.AnalyticFM4.Frame A)
+  (F' : ERIEC.AnalyticFM4.Frame A') : Type (max u_1 u_2)
+ERIEC.AnalyticFM4.eigenspace_preserved.{u_1, u_2} {A : Type u_1} {A' : Type u_2} {F : ERIEC.AnalyticFM4.Frame A}
+  {F' : ERIEC.AnalyticFM4.Frame A'} (h : ERIEC.AnalyticFM4.Iso F F') (v : ERIEC.AnalyticFM4.R2) :
+  v ∈ F.operator.eigenspace F.eigenvalue ↔ h.U v ∈ F'.operator.eigenspace F'.eigenvalue
+ERIEC.AnalyticFM4.projection_preserved.{u_1, u_2} {A : Type u_1} {A' : Type u_2} {F : ERIEC.AnalyticFM4.Frame A}
+  {F' : ERIEC.AnalyticFM4.Frame A'} (h : ERIEC.AnalyticFM4.Iso F F') (v : ERIEC.AnalyticFM4.R2) :
+  h.U (F.spectralProjection v) = F'.spectralProjection (h.U v)
+ERIEC.AnalyticFM4.fm4_invariant.{u_1, u_2} {A : Type u_1} {A' : Type u_2} {F : ERIEC.AnalyticFM4.Frame A}
+  {F' : ERIEC.AnalyticFM4.Frame A'} (h : ERIEC.AnalyticFM4.Iso F F') (a : A) :
+  ERIEC.AnalyticFM4.FM4 F a ↔ ERIEC.AnalyticFM4.FM4 F' (h.hA a)
+ERIEC.AnalyticFM4.HilbertFrame.{u_1, u_2} (A : Type u_1) (H : Type u_2) [NormedAddCommGroup H] [InnerProductSpace ℝ H] :
+  Type (max u_1 u_2)
+ERIEC.AnalyticFM4.HilbertFM4.{u_1, u_2} {A : Type u_2} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+  (F : ERIEC.AnalyticFM4.HilbertFrame A H) (a : A) : Prop
+ERIEC.AnalyticFM4.HilbertIso.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3} {H' : Type u_4}
+  [NormedAddCommGroup H] [InnerProductSpace ℝ H] [NormedAddCommGroup H'] [InnerProductSpace ℝ H']
+  (F : ERIEC.AnalyticFM4.HilbertFrame A H) (F' : ERIEC.AnalyticFM4.HilbertFrame A' H') :
+  Type (max (max (max u_1 u_2) u_3) u_4)
+ERIEC.AnalyticFM4.hilbert_eigenspace_preserved.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3}
+  {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [NormedAddCommGroup H'] [InnerProductSpace ℝ H']
+  {F : ERIEC.AnalyticFM4.HilbertFrame A H} {F' : ERIEC.AnalyticFM4.HilbertFrame A' H'}
+  (h : ERIEC.AnalyticFM4.HilbertIso F F') (v : H) :
+  v ∈ F.operator.eigenspace F.eigenvalue ↔ h.U v ∈ F'.operator.eigenspace F'.eigenvalue
+ERIEC.AnalyticFM4.hilbert_projection_preserved.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3}
+  {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [NormedAddCommGroup H'] [InnerProductSpace ℝ H']
+  {F : ERIEC.AnalyticFM4.HilbertFrame A H} {F' : ERIEC.AnalyticFM4.HilbertFrame A' H'}
+  (h : ERIEC.AnalyticFM4.HilbertIso F F') (v : H) : h.U (F.spectralProjection v) = F'.spectralProjection (h.U v)
+ERIEC.AnalyticFM4.hilbert_fm4_invariant.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3}
+  {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [NormedAddCommGroup H'] [InnerProductSpace ℝ H']
+  {F : ERIEC.AnalyticFM4.HilbertFrame A H} {F' : ERIEC.AnalyticFM4.HilbertFrame A' H'}
+  (h : ERIEC.AnalyticFM4.HilbertIso F F') (a : A) :
+  ERIEC.AnalyticFM4.HilbertFM4 F a ↔ ERIEC.AnalyticFM4.HilbertFM4 F' (h.hA a)
+ERIEC.AnalyticFM4.ComplexHilbertFrame.{u_1, u_2} (A : Type u_1) (H : Type u_2) [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] : Type (max u_1 u_2)
+ERIEC.AnalyticFM4.ComplexHilbertFM4.{u_1, u_2} {A : Type u_2} {H : Type u_1} [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] (F : ERIEC.AnalyticFM4.ComplexHilbertFrame A H) (a : A) : Prop
+ERIEC.AnalyticFM4.ComplexHilbertIso.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3} {H' : Type u_4}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+  (F : ERIEC.AnalyticFM4.ComplexHilbertFrame A H) (F' : ERIEC.AnalyticFM4.ComplexHilbertFrame A' H') :
+  Type (max (max (max u_1 u_2) u_3) u_4)
+ERIEC.AnalyticFM4.ComplexHilbertFullMarkerFrame.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} (A : Type u_1) (E : Type u_2)
+  (C : Type u_3) (S : Type u_4) (W : Type u_5) (Ω : Type u_6) (H : Type u_7) [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] : Type (max (max (max (max (max (max u_1 u_2) u_3) u_4) u_5) u_6) u_7)
+ERIEC.AnalyticFM4.complex_hilbert_eigenspace_preserved.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2}
+  {H : Type u_3} {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup H']
+  [InnerProductSpace ℂ H'] {F : ERIEC.AnalyticFM4.ComplexHilbertFrame A H}
+  {F' : ERIEC.AnalyticFM4.ComplexHilbertFrame A' H'} (h : ERIEC.AnalyticFM4.ComplexHilbertIso F F') (v : H) :
+  v ∈ F.operator.eigenspace F.eigenvalue ↔ h.U v ∈ F'.operator.eigenspace F'.eigenvalue
+ERIEC.AnalyticFM4.complex_hilbert_projection_preserved.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2}
+  {H : Type u_3} {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup H']
+  [InnerProductSpace ℂ H'] {F : ERIEC.AnalyticFM4.ComplexHilbertFrame A H}
+  {F' : ERIEC.AnalyticFM4.ComplexHilbertFrame A' H'} (h : ERIEC.AnalyticFM4.ComplexHilbertIso F F') (v : H) :
+  h.U (F.spectralProjection v) = F'.spectralProjection (h.U v)
+ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant.{u_1, u_2, u_3, u_4} {A : Type u_1} {A' : Type u_2} {H : Type u_3}
+  {H' : Type u_4} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+  {F : ERIEC.AnalyticFM4.ComplexHilbertFrame A H} {F' : ERIEC.AnalyticFM4.ComplexHilbertFrame A' H'}
+  (h : ERIEC.AnalyticFM4.ComplexHilbertIso F F') (a : A) :
+  ERIEC.AnalyticFM4.ComplexHilbertFM4 F a ↔ ERIEC.AnalyticFM4.ComplexHilbertFM4 F' (h.hA a)
+ERIEC.AnalyticFM4.complex_hilbert_full_marker_fm4_iff.{u_1, u_2, u_3, u_4, u_5, u_6, u_7} {A : Type u_1} {E : Type u_2}
+  {C : Type u_3} {S : Type u_4} {W : Type u_5} {Ω : Type u_6} {H : Type u_7} [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] (F : ERIEC.AnalyticFM4.ComplexHilbertFullMarkerFrame A E C S W Ω H) (a : A) :
+  ERIEC.Markers.FM4 F.marker.toFM4 a ↔ ERIEC.AnalyticFM4.ComplexHilbertFM4 F.analytic a
+'ERIEC.AnalyticFM4.coordinateSwap_unitary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.AnalyticFM4.eigenspace_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.AnalyticFM4.fm4_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.AnalyticFM4.hilbert_fm4_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.AnalyticFM4.complex_hilbert_full_marker_fm4_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Traceability.Stmt : Type
+ERIEC.Traceability.DocumentAnchored (doc : ERIEC.Traceability.Document) : Prop
+ERIEC.Traceability.vocabularyStatus.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) : ERIEC.Traceability.VocabularyStatus
+ERIEC.Traceability.vocabularyStatus_complete.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) :
+  ERIEC.Traceability.ProofAnchored T text ∨ ERIEC.Traceability.ExceedsTranslation T text
+ERIEC.Traceability.vocabularyStatus_sound.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) :
+  match ERIEC.Traceability.vocabularyStatus T text with
+  | ERIEC.Traceability.VocabularyStatus.proofAnchored => ERIEC.Traceability.ProofAnchored T text
+  | ERIEC.Traceability.VocabularyStatus.exceedsTranslation => ERIEC.Traceability.ExceedsTranslation T text
+ERIEC.Traceability.vocabularyStatus_cases.{u, v} {Text : Type u} {FormulaNF : Type v} [DecidableEq FormulaNF]
+  (T : ERIEC.Traceability.VocabularyTest Text FormulaNF) (text : Text) :
+  ERIEC.Traceability.vocabularyStatus T text = ERIEC.Traceability.VocabularyStatus.proofAnchored ∧
+      ERIEC.Traceability.ProofAnchored T text ∨
+    ERIEC.Traceability.vocabularyStatus T text = ERIEC.Traceability.VocabularyStatus.exceedsTranslation ∧
+      ERIEC.Traceability.ExceedsTranslation T text
+'ERIEC.Traceability.vocabularyStatus_complete' does not depend on any axioms
+ERIEC.RefModelV52.minimalGateAssignment : ERIEC.Gate.GateAssignment ERIEC.RefModelV52.minimalGateFrame
+ERIEC.RefModelV52.minimal_gate_phenomenal_na :
+  ERIEC.RefModelV52.minimalGateAssignment.gate ERIEC.RefModelV52.GuaranteeIdx.phenomenal = ERIEC.Gate.Gv.na
+ERIEC.RefModelV52.recurrentGateAssignment : ERIEC.Gate.GateAssignment ERIEC.RefModelV52.recurrentGateFrame
+ERIEC.RefModelV52.recurrent_viability_passes :
+  ERIEC.RefModelV52.recurrentGateAssignment.gate ERIEC.RefModelV52.GuaranteeIdx.viability = ERIEC.Gate.Gv.pass
+ERIEC.RefModelV52.recurrent_phenomenal_bridgeOpen :
+  ERIEC.RefModelV52.recurrentGateAssignment.gate ERIEC.RefModelV52.GuaranteeIdx.phenomenal = ERIEC.Gate.Gv.bridgeOpen
+ERIEC.RefModelV52.standardDependency : ERIEC.RefModelV52.GuaranteeIdx → ERIEC.RefModelV52.GuaranteeIdx → Prop
+ERIEC.RefModelV52.standardDependency_iff (j i : ERIEC.RefModelV52.GuaranteeIdx) :
+  ERIEC.RefModelV52.standardDependency j i ↔
+    j = ERIEC.RefModelV52.GuaranteeIdx.core ∧
+        (i = ERIEC.RefModelV52.GuaranteeIdx.audit ∨
+          i = ERIEC.RefModelV52.GuaranteeIdx.viability ∨
+            i = ERIEC.RefModelV52.GuaranteeIdx.generative ∨ i = ERIEC.RefModelV52.GuaranteeIdx.translation) ∨
+      (j = ERIEC.RefModelV52.GuaranteeIdx.audit ∨ j = ERIEC.RefModelV52.GuaranteeIdx.translation) ∧
+        i = ERIEC.RefModelV52.GuaranteeIdx.phenomenal
+ERIEC.RefModelV52.standardGateAssignment : ERIEC.Gate.GateAssignment ERIEC.RefModelV52.standardGateFrame
+ERIEC.RefModelV52.standard_gate_phenomenal_bridgeOpen :
+  ERIEC.RefModelV52.standardGateAssignment.gate ERIEC.RefModelV52.GuaranteeIdx.phenomenal = ERIEC.Gate.Gv.bridgeOpen
+ERIEC.RefModelV52.NonDegenerateRecur.IntegratedWitness : Type
+ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness : ERIEC.RefModelV52.NonDegenerateRecur.IntegratedWitness
+ERIEC.RefModelV52.NonDegenerateRecur.recurKernelOpen :
+  ERIEC.KernelOpen.Frame ERIEC.RefModelV52.NonDegenerateRecur.alphaRel ERIEC.RefModelV52.NonDegenerateRecur.sigmaRel
+    ERIEC.OpenDynamics.ReferenceModels.recurFrame
+ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_gapUp (s : ERIEC.OpenDynamics.ReferenceModels.TwoState) :
+  ERIEC.Gap.GapUp ERIEC.RefModelV52.NonDegenerateRecur.alphaRel ERIEC.RefModelV52.NonDegenerateRecur.sigmaRel
+    (ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness.kernelOpen.action s)
+ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_coupling :
+  ERIEC.OpenDynamics.ReferenceModels.recurGraph.step ERIEC.OpenDynamics.ReferenceModels.TwoState.b
+    (ERIEC.OpenDynamics.EdgeKind.coupling ()) ERIEC.OpenDynamics.ReferenceModels.TwoState.a
+ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_recur :
+  ERIEC.OpenDynamics.ReferenceModels.recurFrame.FiniteInternalHorizon ∧
+    ERIEC.OpenDynamics.ReferenceModels.recurFrame.PossibleLive
+ERIEC.RefModelV52.SymmetricDouble.alpha_sigma_converse (a e : Bool) :
+  e ∈ ERIEC.RefModelV52.SymmetricDouble.frame.alphaRel a ↔ a ∈ ERIEC.RefModelV52.SymmetricDouble.frame.sigmaRel e
+ERIEC.RefModelV52.SymmetricDouble.pi_rho_converse (a c : Bool) :
+  c ∈ ERIEC.RefModelV52.SymmetricDouble.frame.piRel a ↔ a ∈ ERIEC.RefModelV52.SymmetricDouble.frame.rhoRel c
+ERIEC.RefModelV52.SymmetricDouble.upperRank_full (s : Fin 3) :
+  ERIEC.RefModelV52.SymmetricDouble.frame.kappa s = Set.univ ∧
+    ERIEC.RefModelV52.SymmetricDouble.frame.epsilon s = Set.univ
+ERIEC.RefModelV52.SymmetricDouble.fm1_false : ERIEC.Markers.FM1 ERIEC.RefModelV52.SymmetricDouble.frame false 0
+ERIEC.RefModelV52.NonIsomorphicKernels.witness : ERIEC.RefModelV52.NonIsomorphicKernels.Witness
+ERIEC.RefModelV52.NonIsomorphicKernels.witness_nonisomorphic : ¬Nonempty (Unit ≃ Bool)
+ERIEC.RefModelV52.NonDegenerateRecur.witness : ERIEC.RefModelV52.NonDegenerateRecur.Witness
+ERIEC.RefModelV52.NonDegenerateRecur.fullWitness : ERIEC.RefModelV52.NonDegenerateRecur.FullWitness
+ERIEC.RefModelV52.NonDegenerateRecur.fullWitness_has_recur :
+  ERIEC.OpenDynamics.ReferenceModels.recurFrame.FiniteInternalHorizon ∧
+    ERIEC.OpenDynamics.ReferenceModels.recurFrame.PossibleLive
+ERIEC.RefModelV52.NonDegenerateRecur.gapUp_has_two_alpha :
+  ∃ e₁ e₂,
+    e₁ ∈ ERIEC.RefModelV52.NonDegenerateRecur.alphaRel () ∧
+      e₂ ∈ ERIEC.RefModelV52.NonDegenerateRecur.alphaRel () ∧ e₁ ≠ e₂
+ERIEC.RefModelV52.SymmetricDouble.fixedCenterSymmetry :
+  ERIEC.Centering.FixedCenterSymmetry ERIEC.Centering.Strength.statF ERIEC.RefModelV52.SymmetricDouble.frame false true
+    0
+ERIEC.RefModelV52.SymmetricDouble.horizontalWallWitness : ERIEC.RefModelV52.SymmetricDouble.HorizontalWallWitness
+ERIEC.RefModelV52.SymmetricDouble.horizontalWallWitness_indistinguishable :
+  ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame false 0 ↔
+    ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame true 0
+ERIEC.RefModelV52.SymmetricDouble.dc_at_all (s : Fin 3) : ERIEC.RefModelV52.SymmetricDouble.frame.DCAt s
+ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable :
+  ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame false 0 ↔
+    ERIEC.Centering.dcAtFamily.Pred ERIEC.RefModelV52.SymmetricDouble.frame true 0
+ERIEC.RefModelV52.SymmetricDouble.positiveValue_false :
+  ERIEC.Value.PositiveRelationalValue ERIEC.RefModelV52.SymmetricDouble.frame.sigmaRel
+    ERIEC.RefModelV52.SymmetricDouble.frame.piRel ERIEC.RefModelV52.SymmetricDouble.frame.rhoRel false
+ERIEC.RefModelV52.SymmetricDouble.positiveValue_swapped :
+  ERIEC.Value.PositiveRelationalValue ERIEC.RefModelV52.SymmetricDouble.frame.sigmaRel
+      ERIEC.RefModelV52.SymmetricDouble.frame.piRel ERIEC.RefModelV52.SymmetricDouble.frame.rhoRel false ↔
+    ERIEC.Value.PositiveRelationalValue ERIEC.RefModelV52.SymmetricDouble.frame.sigmaRel
+      ERIEC.RefModelV52.SymmetricDouble.frame.piRel ERIEC.RefModelV52.SymmetricDouble.frame.rhoRel true
+ERIEC.RefModelV52.SymmetricDouble.positiveValue_true :
+  ERIEC.Value.PositiveRelationalValue ERIEC.RefModelV52.SymmetricDouble.frame.sigmaRel
+    ERIEC.RefModelV52.SymmetricDouble.frame.piRel ERIEC.RefModelV52.SymmetricDouble.frame.rhoRel true
+ERIEC.RefModelV52.SymmetricDouble.markerFrame :
+  ERIEC.Markers.FullMarkerFrame Bool Bool Bool (Fin 3) ℕ Bool (Bool × Bool)
+ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap :
+  ERIEC.Markers.FullMarkerCoreIso ERIEC.RefModelV52.SymmetricDouble.markerFrame
+    ERIEC.RefModelV52.SymmetricDouble.markerFrame
+ERIEC.RefModelV52.SymmetricDouble.markerFixedCenterSymmetry :
+  ERIEC.Markers.FullMarkerFixedCenterSymmetry ERIEC.RefModelV52.SymmetricDouble.markerFrame false true 0
+ERIEC.RefModelV52.SymmetricDouble.markerConscious_horizontal_wall :
+  ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.markerFrame false 0 ↔
+    ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.markerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.markerBlind_horizontal_wall :
+  ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.markerFrame false 0 ↔
+    ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.markerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.analyticFrame : ERIEC.AnalyticFM4.Frame Bool
+ERIEC.RefModelV52.SymmetricDouble.analyticSwap :
+  ERIEC.AnalyticFM4.Iso ERIEC.RefModelV52.SymmetricDouble.analyticFrame ERIEC.RefModelV52.SymmetricDouble.analyticFrame
+ERIEC.RefModelV52.SymmetricDouble.analytic_eigenspace_swapped (v : ERIEC.AnalyticFM4.R2) :
+  v ∈
+      ERIEC.RefModelV52.SymmetricDouble.analyticFrame.operator.eigenspace
+        ERIEC.RefModelV52.SymmetricDouble.analyticFrame.eigenvalue ↔
+    ERIEC.RefModelV52.SymmetricDouble.analyticSwap.U v ∈
+      ERIEC.RefModelV52.SymmetricDouble.analyticFrame.operator.eigenspace
+        ERIEC.RefModelV52.SymmetricDouble.analyticFrame.eigenvalue
+ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_false :
+  ERIEC.AnalyticFM4.FM4 ERIEC.RefModelV52.SymmetricDouble.analyticFrame false
+ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_swapped :
+  ERIEC.AnalyticFM4.FM4 ERIEC.RefModelV52.SymmetricDouble.analyticFrame false ↔
+    ERIEC.AnalyticFM4.FM4 ERIEC.RefModelV52.SymmetricDouble.analyticFrame true
+ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_true :
+  ERIEC.AnalyticFM4.FM4 ERIEC.RefModelV52.SymmetricDouble.analyticFrame true
+ERIEC.RefModelV52.SymmetricDouble.EuclideanR2 : Type
+ERIEC.RefModelV52.SymmetricDouble.euclideanCoordinateSwapIndices : Fin 2 ≃ Fin 2
+ERIEC.RefModelV52.SymmetricDouble.euclideanCoordinateSwap :
+  ERIEC.RefModelV52.SymmetricDouble.EuclideanR2 ≃ₗᵢ[ℝ] ERIEC.RefModelV52.SymmetricDouble.EuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection :
+  Module.End ℝ ERIEC.RefModelV52.SymmetricDouble.EuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection_eq_id :
+  ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection = LinearMap.id
+ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame :
+  ERIEC.AnalyticFM4.HilbertFrame Bool ERIEC.RefModelV52.SymmetricDouble.EuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticSwap :
+  ERIEC.AnalyticFM4.HilbertIso ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame
+    ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame
+ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_eigenspace_swapped
+  (v : ERIEC.RefModelV52.SymmetricDouble.EuclideanR2) :
+  v ∈
+      ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame.operator.eigenspace
+        ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame.eigenvalue ↔
+    ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticSwap.U v ∈
+      ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame.operator.eigenspace
+        ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame.eigenvalue
+ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_false :
+  ERIEC.AnalyticFM4.HilbertFM4 ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame false
+ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_swapped :
+  ERIEC.AnalyticFM4.HilbertFM4 ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame false ↔
+    ERIEC.AnalyticFM4.HilbertFM4 ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame true
+ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_true :
+  ERIEC.AnalyticFM4.HilbertFM4 ERIEC.RefModelV52.SymmetricDouble.euclideanAnalyticFrame true
+ERIEC.RefModelV52.SymmetricDouble.ComplexEuclideanR2 : Type
+ERIEC.RefModelV52.SymmetricDouble.complexSpectralProjection_eq_id :
+  ERIEC.RefModelV52.SymmetricDouble.complexSpectralProjection = LinearMap.id
+ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame :
+  ERIEC.AnalyticFM4.ComplexHilbertFrame Bool ERIEC.RefModelV52.SymmetricDouble.ComplexEuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.complexAnalyticSwap :
+  ERIEC.AnalyticFM4.ComplexHilbertIso ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame
+    ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame
+ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped :
+  ERIEC.AnalyticFM4.ComplexHilbertFM4 ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame false ↔
+    ERIEC.AnalyticFM4.ComplexHilbertFM4 ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame true
+ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame :
+  ERIEC.Markers.FullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool ERIEC.RefModelV52.SymmetricDouble.ComplexEuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.complexHilbertFullMarker :
+  ERIEC.AnalyticFM4.ComplexHilbertFullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool
+    ERIEC.RefModelV52.SymmetricDouble.ComplexEuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.complexMarkerCoreSwap :
+  ERIEC.Markers.FullMarkerCoreIso ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame
+    ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame
+ERIEC.RefModelV52.SymmetricDouble.complexMarkerFixedCenterSymmetry :
+  ERIEC.Markers.FullMarkerFixedCenterSymmetry ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false true 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarker_fm4_iff (m : Bool) :
+  ERIEC.Markers.FM4 ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame.toFM4 m ↔
+    ERIEC.AnalyticFM4.ComplexHilbertFM4 ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame m
+ERIEC.RefModelV52.SymmetricDouble.complexMarkerConscious_horizontal_wall :
+  ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0 ↔
+    ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarkerBlind_horizontal_wall :
+  ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0 ↔
+    ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_false :
+  ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarker_not_conscious_false :
+  ¬ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_true :
+  ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.complexMarker_not_conscious_true :
+  ¬ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness : Type
+ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness :
+  ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness
+ERIEC.RefModelV52.SymmetricDouble.markerStep : Bool → (s t : Fin 3) → Prop
+ERIEC.RefModelV52.SymmetricDouble.ThreeStageCollapse : Prop
+ERIEC.RefModelV52.SymmetricDouble.threeStageCollapse : ERIEC.RefModelV52.SymmetricDouble.ThreeStageCollapse
+ERIEC.RefModelV52.SymmetricDouble.markerStep_zero_one (m : Bool) : ERIEC.RefModelV52.SymmetricDouble.markerStep m 0 1
+ERIEC.RefModelV52.SymmetricDouble.markerStep_one_two (m : Bool) : ERIEC.RefModelV52.SymmetricDouble.markerStep m 1 2
+ERIEC.RefModelV52.SymmetricDouble.markerStep_terminal (m : Bool) (t : Fin 3) :
+  ¬ERIEC.RefModelV52.SymmetricDouble.markerStep m 2 t
+ERIEC.RefModelV52.SymmetricDouble.markerStateEquiv : Fin 3 ≃ ERIEC.RefModel.RefState
+ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext : Fin 3 → Fin 3
+ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates (s : Fin 3) :
+  ERIEC.RefModelV52.SymmetricDouble.markerStateEquiv (ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext s) =
+    ERIEC.RefModel.next (ERIEC.RefModelV52.SymmetricDouble.markerStateEquiv s)
+ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_stages :
+  ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext 0 = 1 ∧
+    ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext 1 = 2 ∧
+      ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext 2 = 2
+ERIEC.RefModelV52.SymmetricDouble.markerInteroception_exchange (s : Fin 3) :
+  ERIEC.RefModelV52.SymmetricDouble.markerFrame.interoception
+      (ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap.static.hS s) =
+    ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap.hI (ERIEC.RefModelV52.SymmetricDouble.markerFrame.interoception s)
+ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff (m : Bool) (s t : Fin 3) :
+  ERIEC.RefModelV52.SymmetricDouble.markerFrame.stepLabel m s t ↔
+    ERIEC.RefModelV52.SymmetricDouble.markerFrame.stepLabel
+      (ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap.static.hA m)
+      (ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap.static.hS s)
+      (ERIEC.RefModelV52.SymmetricDouble.markerCoreSwap.static.hS t)
+ERIEC.RefModelV52.SymmetricDouble.collapseFrame : ERIEC.Invariance.StaticFrame Bool Bool Bool (Fin 3) Bool
+ERIEC.RefModelV52.SymmetricDouble.rankedAlpha (w a : Bool) : Set Bool
+ERIEC.RefModelV52.SymmetricDouble.rankedSigma (w e : Bool) : Set Bool
+ERIEC.RefModelV52.SymmetricDouble.rankedPi (w a : Bool) : Set Bool
+ERIEC.RefModelV52.SymmetricDouble.rankedRho (w c : Bool) : Set Bool
+ERIEC.RefModelV52.SymmetricDouble.rankedCoreClosure : ERIEC.Grading.RankedClosure Bool Bool
+ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure (w : Bool) (Y : Set Bool) :
+  ERIEC.RefModelV52.SymmetricDouble.collapsePhi w Y = ERIEC.RefModelV52.SymmetricDouble.rankedCoreClosure.op w Y
+ERIEC.RefModelV52.SymmetricDouble.rankedSymmetricDoubleWitness :
+  ERIEC.RefModelV52.SymmetricDouble.RankedSymmetricDoubleWitness
+ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty (a e c : Bool) :
+  ERIEC.RefModelV52.SymmetricDouble.rankedAlpha true a = ∅ ∧
+    ERIEC.RefModelV52.SymmetricDouble.rankedSigma true e = ∅ ∧
+      ERIEC.RefModelV52.SymmetricDouble.rankedPi true a = ∅ ∧ ERIEC.RefModelV52.SymmetricDouble.rankedRho true c = ∅
+ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data :
+  ERIEC.RefModelV52.SymmetricDouble.collapseFrame.kappa 0 = Set.univ ∧
+    ERIEC.RefModelV52.SymmetricDouble.collapseFrame.epsilon 0 = Set.univ ∧
+      ERIEC.RefModelV52.SymmetricDouble.collapseFrame.boundary = Set.univ ∧
+        ERIEC.RefModelV52.SymmetricDouble.collapseFrame.omega 0 = false
+ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame : ERIEC.Dynamics.DynFrame Bool Bool Bool (Fin 3)
+ERIEC.RefModelV52.SymmetricDouble.collapse_update_iterate_swap_commutes (n : ℕ)
+  (c : ERIEC.Dynamics.Conf Bool Bool Bool) :
+  ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.swapBool ERIEC.RefModelV52.SymmetricDouble.swapBool
+      (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n] c) =
+    ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n]
+      (ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.swapBool ERIEC.RefModelV52.SymmetricDouble.swapBool c)
+ERIEC.RefModelV52.SymmetricDouble.collapse_conf_swap_invariant (s : Fin 3) :
+  ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.swapBool ERIEC.RefModelV52.SymmetricDouble.swapBool
+      (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf s) =
+    ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf s
+ERIEC.RefModelV52.SymmetricDouble.collapse_initial_trajectory_swap_invariant (n : ℕ) :
+  ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.swapBool ERIEC.RefModelV52.SymmetricDouble.swapBool
+      (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n]
+        (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf 0)) =
+    ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n]
+      (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf 0)
+ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy :
+  ERIEC.Invariance.DynamicIso ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso
+      ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.stepInt
+      ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.stepInt ERIEC.RefModelV52.SymmetricDouble.markerInteroception
+      ERIEC.RefModelV52.SymmetricDouble.markerInteroception ∧
+    ∀ (c : ERIEC.Dynamics.Conf Bool Bool Bool),
+      ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hC
+          ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hE
+          (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update c) =
+        ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update
+          (ERIEC.Invariance.mapConf ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hC
+            ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hE c)
+ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame :
+  ERIEC.Markers.FullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool ERIEC.RefModelV52.SymmetricDouble.EuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.euclideanHilbertFullMarker :
+  ERIEC.AnalyticFM4.HilbertFullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool
+    ERIEC.RefModelV52.SymmetricDouble.EuclideanR2
+ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall :
+  ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 ↔
+    ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame true 0
+ERIEC.RefModelV52.SymmetricDouble.collapseFrame_fm1_false :
+  ERIEC.Markers.FM1 ERIEC.RefModelV52.SymmetricDouble.collapseFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.collapseFrame_not_fm2_false :
+  ¬ERIEC.Markers.FM2 ERIEC.RefModelV52.SymmetricDouble.collapseFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false :
+  ERIEC.Markers.BlindAt ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false :
+  ¬ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0
+ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleProfiledKernel :
+  ERIEC.RefModelV52.NonIsomorphicKernels.ProfiledKernel Bool Bool Bool (Fin 3) Bool
+ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleMultiplicityWitness : Type
+ERIEC.RefModelV52.SymmetricDouble.symmetricDouble_realizationMultiplicity_nonisomorphic :
+  ¬Nonempty
+      (ERIEC.Invariance.KIso ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.static
+        ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleProfiledKernel.static)
+ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness : Type
+ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness :
+  ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness
+ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete :
+  Nonempty ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness
+ERIEC.RefModelV52.NonIsomorphicKernels.RealizationMultiplicityWitness : Type
+ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic :
+  ¬Nonempty
+      (ERIEC.Invariance.KIso ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.static
+        ERIEC.RefModelV52.NonIsomorphicKernels.doubleProfiledKernel.static)
+ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_same_profile :
+  ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.profile =
+    ERIEC.RefModelV52.NonIsomorphicKernels.doubleProfiledKernel.profile
+'ERIEC.RefModelV52.SymmetricDouble.dcAt_zero_center_indistinguishable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.positiveValue_swapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.markerConscious_horizontal_wall' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_swapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_swapped' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.complexMarker_fm4_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.complexMarkerConscious_horizontal_wall' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.complexMarkerBlind_horizontal_wall' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_recur' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection_eq_id' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.markerStep_terminal' depends on axioms: [propext]
+'ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.collapse_initial_trajectory_swap_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty' depends on axioms: [propext]
+'ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.collapseFrame_fm1_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.symmetricDouble_realizationMultiplicity_nonisomorphic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerConscious_horizontal_wall' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.NonIsomorphicKernels.realizationMultiplicity_nonisomorphic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.alpha_sigma_converse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.RefModelV52.SymmetricDouble.fm1_false' depends on axioms: [propext, Classical.choice, Quot.sound]

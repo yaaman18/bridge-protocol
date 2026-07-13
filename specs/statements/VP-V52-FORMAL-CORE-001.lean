@@ -44,12 +44,21 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 
 #check ERIEC.OpenSimC.Hom
 #check ERIEC.OpenSimC.Hom.erase
+#check ERIEC.OpenSimC.Hom.certify
 #check ERIEC.OpenSimC.Hom.mapPath_comp
 #check ERIEC.OpenSimC.Hom.mapPath_id_comp
 #check ERIEC.OpenSimC.Hom.mapPath_comp_id
 #check ERIEC.OpenSimC.identityAuditMap
 #check ERIEC.OpenSimC.identityAuditMap_noAssumptions
 #print axioms ERIEC.OpenSimC.Hom.mapPath_comp
+
+#check ERIEC.Audit.CertifiedSimulation
+#check ERIEC.Audit.CertifiedSimulation.mapPath
+#check ERIEC.Audit.CertifiedSimulation.mapPath_usesOnly
+#print axioms ERIEC.Audit.noTerminalInit_sound
+
+#check ERIEC.KernelOpen.Frame
+#check ERIEC.KernelOpen.action_gapUp
 
 #check ERIEC.Centering.InvariantFamily
 #check ERIEC.Centering.InvariantFamilyE
@@ -153,14 +162,17 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.AnalyticFM4.ComplexHilbertFrame
 #check ERIEC.AnalyticFM4.ComplexHilbertFM4
 #check ERIEC.AnalyticFM4.ComplexHilbertIso
+#check ERIEC.AnalyticFM4.ComplexHilbertFullMarkerFrame
 #check ERIEC.AnalyticFM4.complex_hilbert_eigenspace_preserved
 #check ERIEC.AnalyticFM4.complex_hilbert_projection_preserved
 #check ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant
+#check ERIEC.AnalyticFM4.complex_hilbert_full_marker_fm4_iff
 #print axioms ERIEC.AnalyticFM4.coordinateSwap_unitary
 #print axioms ERIEC.AnalyticFM4.eigenspace_preserved
 #print axioms ERIEC.AnalyticFM4.fm4_invariant
 #print axioms ERIEC.AnalyticFM4.hilbert_fm4_invariant
 #print axioms ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant
+#print axioms ERIEC.AnalyticFM4.complex_hilbert_full_marker_fm4_iff
 
 #check ERIEC.Traceability.Stmt
 #check ERIEC.Traceability.DocumentAnchored
@@ -172,6 +184,19 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 
 #check ERIEC.RefModelV52.minimalGateAssignment
 #check ERIEC.RefModelV52.minimal_gate_phenomenal_na
+#check ERIEC.RefModelV52.recurrentGateAssignment
+#check ERIEC.RefModelV52.recurrent_viability_passes
+#check ERIEC.RefModelV52.recurrent_phenomenal_bridgeOpen
+#check ERIEC.RefModelV52.standardDependency
+#check ERIEC.RefModelV52.standardDependency_iff
+#check ERIEC.RefModelV52.standardGateAssignment
+#check ERIEC.RefModelV52.standard_gate_phenomenal_bridgeOpen
+#check ERIEC.RefModelV52.NonDegenerateRecur.IntegratedWitness
+#check ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness
+#check ERIEC.RefModelV52.NonDegenerateRecur.recurKernelOpen
+#check ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_gapUp
+#check ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_coupling
+#check ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_recur
 #check ERIEC.RefModelV52.SymmetricDouble.alpha_sigma_converse
 #check ERIEC.RefModelV52.SymmetricDouble.pi_rho_converse
 #check ERIEC.RefModelV52.SymmetricDouble.upperRank_full
@@ -217,6 +242,19 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame
 #check ERIEC.RefModelV52.SymmetricDouble.complexAnalyticSwap
 #check ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame
+#check ERIEC.RefModelV52.SymmetricDouble.complexHilbertFullMarker
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarkerCoreSwap
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarkerFixedCenterSymmetry
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarker_fm4_iff
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarkerConscious_horizontal_wall
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarkerBlind_horizontal_wall
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_false
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarker_not_conscious_false
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_true
+#check ERIEC.RefModelV52.SymmetricDouble.complexMarker_not_conscious_true
+#check ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness
+#check ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness
 #check ERIEC.RefModelV52.SymmetricDouble.markerStep
 #check ERIEC.RefModelV52.SymmetricDouble.ThreeStageCollapse
 #check ERIEC.RefModelV52.SymmetricDouble.threeStageCollapse
@@ -344,6 +382,22 @@ example : ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame.stepLabel =
     ERIEC.RefModelV52.SymmetricDouble.markerStep :=
   ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness.markerLabel_is_three_stage
 
+example :
+  ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness.complexAnalyticMarker =
+      ERIEC.RefModelV52.SymmetricDouble.complexHilbertFullMarker :=
+  ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness.complexAnalyticMarker_is_complex
+    ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness
+
+example :
+    ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0 ↔
+      ERIEC.Markers.ConsciousAt ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame true 0 :=
+  ERIEC.RefModelV52.SymmetricDouble.SymmetricDoubleCompleteWitness.complex_conscious_horizontal_wall
+    ERIEC.RefModelV52.SymmetricDouble.symmetricDoubleCompleteWitness
+
+example : ERIEC.Markers.BlindAt
+    ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame false 0 :=
+  ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_false
+
 example : ERIEC.Markers.BlindAt
     ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 :=
   ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_blind_false
@@ -351,6 +405,12 @@ example : ERIEC.Markers.BlindAt
 example : ¬ ERIEC.Markers.ConsciousAt
     ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame false 0 :=
   ERIEC.RefModelV52.SymmetricDouble.euclideanMarker_not_conscious_false
+
+example (m : Bool) :
+    ERIEC.Markers.FM4 ERIEC.RefModelV52.SymmetricDouble.complexMarkerFrame.toFM4 m ↔
+      ERIEC.AnalyticFM4.ComplexHilbertFM4
+        ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame m :=
+  ERIEC.RefModelV52.SymmetricDouble.complexMarker_fm4_iff m
 
 example : ¬ Nonempty (ERIEC.Invariance.KIso
     ERIEC.RefModelV52.NonIsomorphicKernels.minimalProfiledKernel.static
@@ -362,6 +422,12 @@ example : ¬ Nonempty (ERIEC.Invariance.KIso
 #print axioms ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped
+#print axioms ERIEC.RefModelV52.SymmetricDouble.complexMarker_fm4_iff
+#print axioms ERIEC.RefModelV52.SymmetricDouble.complexMarkerConscious_horizontal_wall
+#print axioms ERIEC.RefModelV52.SymmetricDouble.complexMarkerBlind_horizontal_wall
+#print axioms ERIEC.RefModelV52.SymmetricDouble.complexMarker_blind_false
+#print axioms ERIEC.RefModelV52.NonDegenerateRecur.integratedWitness_has_recur
+#print axioms ERIEC.RefModelV52.SymmetricDouble.symmetric_double_complete
 #print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection_eq_id
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_terminal
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates

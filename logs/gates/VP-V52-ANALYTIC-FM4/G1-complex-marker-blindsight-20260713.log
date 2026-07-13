@@ -1,0 +1,155 @@
+⚠ [2681/2698] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:93:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:113:6: Try `simp at haSig` instead of `simpa using haSig`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:144:8: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:200:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:231:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:244:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:269:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:293:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2694/2698] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:342:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:343:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:345:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:356:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:382:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2698/2698] Built ERIEC.RefModelV52 (12s)
+warning: formal/ERIEC/RefModelV52.lean:229:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:233:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:244:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:250:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:254:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:265:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:345:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star, sigmaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:346:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star_induced, alphaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:513:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:516:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:535:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:675:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:679:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:763:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:767:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:855:4: 'change markerStateEquiv (markerCollapseNext 0) = markerStateEquiv 1' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:860:4: 'change markerStateEquiv (markerCollapseNext 1) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:864:4: 'change markerStateEquiv (markerCollapseNext 2) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:1340:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1415:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1457:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1462:8: This simp argument is unused:
+  Markers.FM2
+
+Hint: Omit it from the simp argument list.
+  simp [M̵a̵r̵k̵e̵r̵s̵.̵F̵M̵2̵,̵ ̵Richness.Branch, collapseFrame] at he₁ he₂
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:1462:21: This simp argument is unused:
+  Richness.Branch
+
+Hint: Omit it from the simp argument list.
+  simp [Markers.FM2, R̵i̵c̵h̵n̵e̵s̵s̵.̵B̵r̵a̵n̵c̵h̵,̵ ̵collapseFrame] at he₁ he₂
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:1542:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Build completed successfully (2698 jobs).

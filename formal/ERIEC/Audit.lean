@@ -105,6 +105,47 @@ theorem assoc (f : Simulation G H) (g : Simulation H K)
 
 end Simulation
 
+/-- R-4 repaired simulation used by audit certificates. Every source edge
+stores its target path and its label-preservation proof directly. The legacy
+`Simulation` category remains below only as a compatibility layer. -/
+structure CertifiedSimulation {Port : Type u}
+    (G : OpenGraph.{u, v} Port) (H : OpenGraph.{u, w} Port) where
+  mapState : G.State → H.State
+  mapEdge : ∀ {s t kind}, G.step s kind t →
+    {p : Path H (mapState s) (mapState t) // UsesOnly kind p}
+
+namespace CertifiedSimulation
+
+variable {Port : Type u}
+  {G : OpenGraph.{u, v} Port}
+  {H : OpenGraph.{u, w} Port}
+
+def mapPath (f : CertifiedSimulation G H) :
+    {s t : G.State} → Path G s t → Path H (f.mapState s) (f.mapState t)
+  | _, _, .nil s => .nil (f.mapState s)
+  | _, _, .cons edge rest => (f.mapEdge edge).1.append (f.mapPath rest)
+
+theorem mapPath_usesOnly (f : CertifiedSimulation G H) {s t : G.State}
+    {kind : EdgeKind Port} {p : Path G s t} (hp : UsesOnly kind p) :
+    UsesOnly kind (f.mapPath p) := by
+  induction p with
+  | nil =>
+      change True
+      trivial
+  | @cons _ _ _ actual edge rest ih =>
+      change actual = kind ∧ UsesOnly kind rest at hp
+      exact usesOnly_append
+        (by simpa [hp.1] using (f.mapEdge edge).2)
+        (ih hp.2)
+
+def id (G : OpenGraph.{u, v} Port) : CertifiedSimulation G G where
+  mapState := _root_.id
+  mapEdge := by
+    intro s t kind edge
+    exact ⟨Path.single edge, ⟨rfl, trivial⟩⟩
+
+end CertifiedSimulation
+
 /-! Theorem 18.2: open graphs and label-preserving simulations form a category. -/
 
 section OpenSimCategory
@@ -128,7 +169,7 @@ Fingerprint, scope notes, and assumptions remain explicit certificate data. -/
 structure AuditMap {Port : Type u}
     (I : OpenFrame.{u, v} Port) (M : OpenFrame.{u, w} Port)
     (Fingerprint Assumption : Type x) where
-  simulation : Simulation I.graph M.graph
+  simulation : CertifiedSimulation I.graph M.graph
   initPres : ∀ {s}, I.init s → M.init (simulation.mapState s)
   scopeSurj : ∀ {m}, M.ReachInit m →
     ∃ i, I.ReachInit i ∧ simulation.mapState i = m

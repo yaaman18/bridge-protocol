@@ -2,6 +2,7 @@ import ERIEC.Centering
 import ERIEC.Gap
 import ERIEC.Gate
 import ERIEC.OpenDynamics
+import ERIEC.KernelOpen
 import ERIEC.RefModel.Basic
 import ERIEC.RefModel.Stable
 import ERIEC.Dynamics
@@ -112,6 +113,96 @@ theorem open_phenomenal_bridgeOpen :
 
 theorem open_gate_phenomenal_bridgeOpen :
     openPhenomenalGateAssignment.gate .phenomenal = Gv.bridgeOpen := by
+  rfl
+
+/-- The standard §24.2 dependency diagram. It is data, rather than a global
+constraint on every guarantee profile. -/
+def standardDependency : GuaranteeIdx → GuaranteeIdx → Prop
+  | .core, .audit => True
+  | .core, .viability => True
+  | .core, .generative => True
+  | .core, .translation => True
+  | .audit, .phenomenal => True
+  | .translation, .phenomenal => True
+  | _, _ => False
+
+theorem standardDependency_iff (j i : GuaranteeIdx) :
+    standardDependency j i ↔
+      (j = .core ∧ (i = .audit ∨ i = .viability ∨ i = .generative ∨ i = .translation)) ∨
+      ((j = .audit ∨ j = .translation) ∧ i = .phenomenal) := by
+  cases j <;> cases i <;> simp [standardDependency]
+
+/-- The §24.6 minimal certificate evaluated over the standard dependency
+diagram. Failed viability is recorded, but does not block the phenomenal
+bridge unless that extra dependency is explicitly selected. -/
+def standardGateFrame : GateFrame GuaranteeIdx where
+  Claim := minimalClaim
+  dep := standardDependency
+  raw := minimalGateFrame.raw
+
+def standardGateAssignment : GateAssignment standardGateFrame where
+  ev
+    | .core => GateEv.pass trivial
+    | .audit => GateEv.pass trivial
+    | .viability => GateEv.fail (by intro h; exact h)
+    | .generative => GateEv.fail (by intro h; exact h)
+    | .translation => GateEv.unk
+    | .phenomenal => GateEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
+  local_na := by
+    intro j i hdep hblock
+    cases j <;> cases i <;>
+      simp [standardGateFrame, standardDependency, Blocks, eraseEvidence] at hdep hblock
+
+theorem standard_gate_phenomenal_bridgeOpen :
+    standardGateAssignment.gate .phenomenal = Gv.bridgeOpen := by
+  rfl
+
+theorem standard_gate_viability_fails :
+    standardGateAssignment.gate .viability = Gv.fail := by
+  rfl
+
+/-- §24.6's non-degenerate branch uses the concrete open recurrence witness
+for viability. It keeps the phenomenal bridge open rather than certifying it. -/
+def recurrentClaim : GuaranteeIdx → Prop
+  | .core => True
+  | .audit => True
+  | .viability => OpenDynamics.ReferenceModels.recurFrame.PossibleLive
+  | .generative => False
+  | .translation => True
+  | .phenomenal => True
+
+def recurrentGateFrame : GateFrame GuaranteeIdx where
+  Claim := recurrentClaim
+  dep
+    | .viability, .phenomenal => True
+    | _, _ => False
+  raw
+    | .core => RawEv.pass trivial
+    | .audit => RawEv.pass trivial
+    | .viability => RawEv.pass OpenDynamics.ReferenceModels.recur_possibleLive
+    | .generative => RawEv.fail (by intro h; exact h)
+    | .translation => RawEv.unk
+    | .phenomenal => RawEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
+
+def recurrentGateAssignment : GateAssignment recurrentGateFrame where
+  ev
+    | .core => GateEv.pass trivial
+    | .audit => GateEv.pass trivial
+    | .viability => GateEv.pass OpenDynamics.ReferenceModels.recur_possibleLive
+    | .generative => GateEv.fail (by intro h; exact h)
+    | .translation => GateEv.unk
+    | .phenomenal => GateEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
+  local_na := by
+    intro j i hdep hblock
+    cases j <;> cases i <;>
+      simp [recurrentGateFrame, Blocks, eraseEvidence] at hdep hblock
+
+theorem recurrent_viability_passes :
+    recurrentGateAssignment.gate .viability = Gv.pass := by
+  rfl
+
+theorem recurrent_phenomenal_bridgeOpen :
+    recurrentGateAssignment.gate .phenomenal = Gv.bridgeOpen := by
   rfl
 
 /-- §22.5 support: the one-point carrier and the two-point carrier cannot be
@@ -413,6 +504,73 @@ theorem fullWitness_has_recur :
     OpenDynamics.ReferenceModels.recurFrame.FiniteInternalHorizon ∧
       OpenDynamics.ReferenceModels.recurFrame.PossibleLive :=
   ⟨fullWitness.base.finiteInternalHorizon, fullWitness.base.possibleLive⟩
+
+/-- The finite open recurrence states are interpreted over the same action
+carrier as the multivalent kernel. This is an explicit interface witness, not
+a new target-layer object or an implicit identification of the two layers. -/
+def stateAction (_ : OpenDynamics.ReferenceModels.TwoState) : Unit := ()
+
+theorem stateAction_gapUp (s : OpenDynamics.ReferenceModels.TwoState) :
+    Gap.GapUp alphaRel sigmaRel (stateAction s) := by
+  simpa [stateAction] using gapUp
+
+theorem recur_initial :
+    OpenDynamics.ReferenceModels.recurFrame.init .a :=
+  rfl
+
+theorem recur_coupling_return :
+    OpenDynamics.ReferenceModels.recurGraph.step .b (.coupling ()) .a :=
+  trivial
+
+/-- The coupling return stays over the same multivalent action kernel. -/
+theorem recur_coupling_alpha_preserved :
+    alphaRel (stateAction .b) = alphaRel (stateAction .a) :=
+  rfl
+
+def recurKernelOpen : KernelOpen.Frame alphaRel sigmaRel
+    OpenDynamics.ReferenceModels.recurFrame where
+  action := stateAction
+  gapUp := stateAction_gapUp
+
+/-- §23.4 in integrated form: one finite witness contains the multivalent
+kernel, its state-to-action interface, an actual coupling return, and the
+open recurrence certificates. -/
+structure IntegratedWitness where
+  base : FullWitness
+  kernelOpen : KernelOpen.Frame alphaRel sigmaRel
+    OpenDynamics.ReferenceModels.recurFrame
+  actionOf_eq : kernelOpen.action = stateAction
+  initial : OpenDynamics.ReferenceModels.recurFrame.init .a
+  coupling_return :
+    OpenDynamics.ReferenceModels.recurGraph.step .b (.coupling ()) .a
+  coupling_alpha_preserved :
+    alphaRel (kernelOpen.action .b) = alphaRel (kernelOpen.action .a)
+  finiteInternalHorizon :
+    OpenDynamics.ReferenceModels.recurFrame.FiniteInternalHorizon
+  possibleLive : OpenDynamics.ReferenceModels.recurFrame.PossibleLive
+
+def integratedWitness : IntegratedWitness where
+  base := fullWitness
+  kernelOpen := recurKernelOpen
+  actionOf_eq := rfl
+  initial := recur_initial
+  coupling_return := recur_coupling_return
+  coupling_alpha_preserved := recur_coupling_alpha_preserved
+  finiteInternalHorizon := OpenDynamics.ReferenceModels.recur_finiteInternalHorizon
+  possibleLive := OpenDynamics.ReferenceModels.recur_possibleLive
+
+theorem integratedWitness_has_gapUp (s : OpenDynamics.ReferenceModels.TwoState) :
+    Gap.GapUp alphaRel sigmaRel (integratedWitness.kernelOpen.action s) :=
+  KernelOpen.action_gapUp integratedWitness.kernelOpen s
+
+theorem integratedWitness_has_coupling :
+    OpenDynamics.ReferenceModels.recurGraph.step .b (.coupling ()) .a :=
+  integratedWitness.coupling_return
+
+theorem integratedWitness_has_recur :
+    OpenDynamics.ReferenceModels.recurFrame.FiniteInternalHorizon ∧
+      OpenDynamics.ReferenceModels.recurFrame.PossibleLive :=
+  ⟨integratedWitness.finiteInternalHorizon, integratedWitness.possibleLive⟩
 
 end NonDegenerateRecur
 
@@ -1375,6 +1533,78 @@ theorem euclideanMarkerBlind_horizontal_wall :
   Markers.blindAt_horizontal_wall_of_staticInH euclideanMarkerUsesStaticInH
     euclideanMarkerFixedCenterSymmetry
 
+/-- The same collapsing full marker interpreted over the complex Hilbert
+representation. It shares all static, dynamic, and observational data with
+the real frame and changes only the certified analytic carrier. -/
+noncomputable def complexMarkerFrame :
+    Markers.FullMarkerFrame Bool Bool Bool (Fin 3) Bool Bool ComplexEuclideanR2 where
+  static := collapseFrame
+  inH := fun m s => Markers.staticInH collapseFrame m s
+  stepLabel := markerStep
+  interoception := markerInteroception
+  representation := complexAnalyticRepresentation
+  spectralProjection := complexSpectralProjection
+  zero := 0
+
+def complexMarkerUsesStaticInH : complexMarkerFrame.UsesStaticInH :=
+  fun _ _ => Iff.rfl
+
+noncomputable def complexHilbertFullMarker :
+    AnalyticFM4.ComplexHilbertFullMarkerFrame
+      Bool Bool Bool (Fin 3) Bool Bool ComplexEuclideanR2 where
+  marker := complexMarkerFrame
+  analytic := complexAnalyticFrame
+  representation_eq := rfl
+  spectralProjection_eq := rfl
+  zero_eq := rfl
+
+noncomputable def complexMarkerCoreSwap :
+    Markers.FullMarkerCoreIso complexMarkerFrame complexMarkerFrame where
+  static := collapseSwapIso
+  hI := Equiv.refl Bool
+  step_iff := by
+    intro m s t
+    simp [complexMarkerFrame, markerStep, collapseSwapIso, swapBool]
+  interoception_preserves := by
+    intro s
+    rfl
+  hV := complexAnalyticSwap.U.toLinearEquiv.toEquiv
+  zero_preserves := by
+    simpa [complexMarkerFrame] using complexAnalyticSwap.U.map_zero
+  representation_preserves := by
+    intro m
+    simpa [complexMarkerFrame, complexAnalyticFrame, complexAnalyticSwap,
+      collapseSwapIso, swapBool] using
+      complexAnalyticSwap.representation_preserves m
+  projection_preserves := by
+    intro v
+    simpa [complexMarkerFrame, complexAnalyticFrame] using
+      AnalyticFM4.complex_hilbert_projection_preserved complexAnalyticSwap v
+
+noncomputable def complexMarkerFixedCenterSymmetry :
+    Markers.FullMarkerFixedCenterSymmetry complexMarkerFrame false true 0 where
+  iso := complexMarkerCoreSwap
+  maps_center := rfl
+  fixes_state := rfl
+
+theorem complexMarker_fm4_iff (m : Bool) :
+    Markers.FM4 complexMarkerFrame.toFM4 m ↔
+      AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame m := by
+  simpa [complexHilbertFullMarker] using
+    AnalyticFM4.complex_hilbert_full_marker_fm4_iff complexHilbertFullMarker m
+
+theorem complexMarkerConscious_horizontal_wall :
+    Markers.ConsciousAt complexMarkerFrame false 0 ↔
+      Markers.ConsciousAt complexMarkerFrame true 0 :=
+  Markers.consciousAt_horizontal_wall_of_staticInH complexMarkerUsesStaticInH
+    complexMarkerFixedCenterSymmetry
+
+theorem complexMarkerBlind_horizontal_wall :
+    Markers.BlindAt complexMarkerFrame false 0 ↔
+      Markers.BlindAt complexMarkerFrame true 0 :=
+  Markers.blindAt_horizontal_wall_of_staticInH complexMarkerUsesStaticInH
+    complexMarkerFixedCenterSymmetry
+
 /-- The actual symmetric-double static frame has the FM1 witness required
 for the second realization in §22.5. -/
 theorem collapseFrame_fm1_false : Markers.FM1 collapseFrame false 0 := by
@@ -1421,6 +1651,31 @@ theorem euclideanMarker_not_conscious_true :
   intro h
   exact euclideanMarker_not_conscious_false
     (euclideanMarkerConscious_horizontal_wall.mpr h)
+
+/-- The complex analytic realization has the same structural blindsight
+classification: only the representation carrier differs from the real model. -/
+theorem complexMarker_fm4_false : Markers.FM4 complexMarkerFrame.toFM4 false :=
+  (complexMarker_fm4_iff false).mpr complex_hilbert_fm4_false
+
+theorem complexMarker_blind_false : Markers.BlindAt complexMarkerFrame false 0 := by
+  refine ⟨?_, collapseFrame_fm1_false, complexMarker_fm4_false, ?_⟩
+  · simpa [complexMarkerFrame] using collapseFrame_staticInH_false
+  · intro h
+    exact collapseFrame_not_fm2_false h.1
+
+theorem complexMarker_not_conscious_false :
+    ¬ Markers.ConsciousAt complexMarkerFrame false 0 := by
+  intro h
+  exact collapseFrame_not_fm2_false h.2.2.1
+
+theorem complexMarker_blind_true : Markers.BlindAt complexMarkerFrame true 0 :=
+  complexMarkerBlind_horizontal_wall.mp complexMarker_blind_false
+
+theorem complexMarker_not_conscious_true :
+    ¬ Markers.ConsciousAt complexMarkerFrame true 0 := by
+  intro h
+  exact complexMarker_not_conscious_false
+    (complexMarkerConscious_horizontal_wall.mpr h)
 
 /-- §22.5's second profiled kernel is the concrete §25.6 symmetric double,
 not merely another two-element carrier. -/
@@ -1487,17 +1742,30 @@ structure SymmetricDoubleCompleteWitness where
   analyticMarker : AnalyticFM4.HilbertFullMarkerFrame
     Bool Bool Bool (Fin 3) Bool Bool EuclideanR2
   analyticMarker_is_euclidean : analyticMarker = euclideanHilbertFullMarker
+  complexAnalyticMarker : AnalyticFM4.ComplexHilbertFullMarkerFrame
+    Bool Bool Bool (Fin 3) Bool Bool ComplexEuclideanR2
+  complexAnalyticMarker_is_complex : complexAnalyticMarker = complexHilbertFullMarker
   centerSymmetry : Markers.FullMarkerFixedCenterSymmetry
     euclideanMarkerFrame false true 0
+  complexCenterSymmetry : Markers.FullMarkerFixedCenterSymmetry
+    complexMarkerFrame false true 0
   multiplicity : SymmetricDoubleMultiplicityWitness
   blind_false : Markers.BlindAt euclideanMarkerFrame false 0
   not_conscious_false : ¬ Markers.ConsciousAt euclideanMarkerFrame false 0
+  complex_blind_false : Markers.BlindAt complexMarkerFrame false 0
+  complex_not_conscious_false : ¬ Markers.ConsciousAt complexMarkerFrame false 0
   conscious_horizontal_wall :
     Markers.ConsciousAt euclideanMarkerFrame false 0 ↔
       Markers.ConsciousAt euclideanMarkerFrame true 0
   blind_horizontal_wall :
     Markers.BlindAt euclideanMarkerFrame false 0 ↔
       Markers.BlindAt euclideanMarkerFrame true 0
+  complex_conscious_horizontal_wall :
+    Markers.ConsciousAt complexMarkerFrame false 0 ↔
+      Markers.ConsciousAt complexMarkerFrame true 0
+  complex_blind_horizontal_wall :
+    Markers.BlindAt complexMarkerFrame false 0 ↔
+      Markers.BlindAt complexMarkerFrame true 0
 
 noncomputable def symmetricDoubleCompleteWitness : SymmetricDoubleCompleteWitness where
   ranked := rankedSymmetricDoubleWitness
@@ -1506,12 +1774,19 @@ noncomputable def symmetricDoubleCompleteWitness : SymmetricDoubleCompleteWitnes
   markerLabel_is_three_stage := rfl
   analyticMarker := euclideanHilbertFullMarker
   analyticMarker_is_euclidean := rfl
+  complexAnalyticMarker := complexHilbertFullMarker
+  complexAnalyticMarker_is_complex := rfl
   centerSymmetry := euclideanMarkerFixedCenterSymmetry
+  complexCenterSymmetry := complexMarkerFixedCenterSymmetry
   multiplicity := symmetricDoubleMultiplicityWitness
   blind_false := euclideanMarker_blind_false
   not_conscious_false := euclideanMarker_not_conscious_false
+  complex_blind_false := complexMarker_blind_false
+  complex_not_conscious_false := complexMarker_not_conscious_false
   conscious_horizontal_wall := euclideanMarkerConscious_horizontal_wall
   blind_horizontal_wall := euclideanMarkerBlind_horizontal_wall
+  complex_conscious_horizontal_wall := complexMarkerConscious_horizontal_wall
+  complex_blind_horizontal_wall := complexMarkerBlind_horizontal_wall
 
 theorem symmetric_double_complete : Nonempty SymmetricDoubleCompleteWitness :=
   ⟨symmetricDoubleCompleteWitness⟩
