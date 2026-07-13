@@ -1,0 +1,11 @@
+ERIEC.Generation.ProliferationMorphism.{u} {M E C S M' E' C' S' : Type u} (parent : ERIEC.DC M E C S)
+  (child : ERIEC.DC M' E' C' S') : Type (u + 1)
+ERIEC.Generation.ProliferationMorphism.toGenerationWitness.{u} {M E C S M' E' C' S' : Type u}
+  {parent : ERIEC.DC M E C S} {child : ERIEC.DC M' E' C' S'} (f : ERIEC.Generation.ProliferationMorphism parent child) :
+  ERIEC.OpenEvolution.GenerationWitness (ERIEC.Generation.dcToOpenSystem parent) (ERIEC.Generation.dcToOpenSystem child)
+    f.Record f.Heritage (ERIEC.Generation.dcViable parent) (ERIEC.Generation.dcViable child) f.parentHeritage
+    f.childHeritage f.heritageRelated
+ERIEC.Generation.ProliferationEvent.{u} : ERIEC.OpenEvolution.GenEvent
+ERIEC.Generation.RichnessWitness.{u} {M E C S : Type u} (dc : ERIEC.DC M E C S) : Prop
+ERIEC.Generation.phi_rich.{u} {M E C S : Type u} (dc : ERIEC.DC M E C S) : ℕ
+'ERIEC.Generation.ProliferationMorphism' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -483,11 +483,11 @@ def swapIso : KIso frame frame where
     intro s
     rfl
 
-def compatibleSwap : Centering.CompatibleIso Centering.Strength.dynLabRep frame frame where
+def compatibleSwap : Centering.CompatibleIso Centering.Strength.statF frame frame where
   static := swapIso
 
 def fixedCenterSymmetry :
-    Centering.FixedCenterSymmetry Centering.Strength.dynLabRep frame false true 0 where
+    Centering.FixedCenterSymmetry Centering.Strength.statF frame false true 0 where
   iso := compatibleSwap
   maps_center := rfl
   fixes_state := rfl
@@ -505,7 +505,7 @@ theorem center_fixes_state_zero :
 
 theorem dcAt_zero_center_indistinguishable :
     Centering.dcAtFamily.Pred frame false 0 ↔ Centering.dcAtFamily.Pred frame true 0 :=
-  Centering.dcAt_horizontal_wall_of_any_strength fixedCenterSymmetry
+  Centering.dcAt_horizontal_wall fixedCenterSymmetry
 
 theorem dc_at_all (s : Fin 3) : frame.DCAt s := by
   constructor
@@ -709,6 +709,86 @@ theorem euclidean_hilbert_fm4_swapped :
 theorem euclidean_hilbert_fm4_true :
     AnalyticFM4.HilbertFM4 euclideanAnalyticFrame true :=
   euclidean_hilbert_fm4_swapped.mp euclidean_hilbert_fm4_false
+
+/-- The complex Hilbert carrier used to make the analytic unitary statement
+literal over `C²`, while retaining the real `R²` witness above. -/
+abbrev ComplexEuclideanR2 := EuclideanSpace ℂ (Fin 2)
+
+noncomputable def complexEuclideanCoordinateSwap :
+    ComplexEuclideanR2 ≃ₗᵢ[ℂ] ComplexEuclideanR2 :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ euclideanCoordinateSwapIndices
+
+noncomputable def complexAnalyticRepresentation : Bool → ComplexEuclideanR2
+  | false => EuclideanSpace.single 0 1
+  | true => EuclideanSpace.single 1 1
+
+/-- The top eigenspace of the identity loop has Mathlib's actual orthogonal
+projection, not a merely abstract retraction. -/
+noncomputable def complexSpectralProjection : Module.End ℂ ComplexEuclideanR2 :=
+  ((⊤ : Submodule ℂ ComplexEuclideanR2).starProjection).toLinearMap
+
+theorem complexSpectralProjection_eq_id :
+    complexSpectralProjection = (LinearMap.id : Module.End ℂ ComplexEuclideanR2) := by
+  simp [complexSpectralProjection, Submodule.starProjection_top]
+
+noncomputable def complexAnalyticFrame :
+    AnalyticFM4.ComplexHilbertFrame Bool ComplexEuclideanR2 where
+  representation := complexAnalyticRepresentation
+  operator := (LinearMap.id : Module.End ℂ ComplexEuclideanR2)
+  eigenvalue := 1
+  spectralProjection := complexSpectralProjection
+  operator_self_adjoint := by
+    intro x y
+    simp
+  projection_mem_eigenspace := by
+    intro v
+    rw [Module.End.mem_eigenspace_iff]
+    simp [complexSpectralProjection, Submodule.starProjection_top]
+  projection_fixes_eigenspace := by
+    intro v _hv
+    simp [complexSpectralProjection, Submodule.starProjection_top]
+  projection_residual_orthogonal := by
+    intro v z _hz
+    simp [complexSpectralProjection, Submodule.starProjection_top]
+
+noncomputable def complexAnalyticSwap :
+    AnalyticFM4.ComplexHilbertIso complexAnalyticFrame complexAnalyticFrame where
+  hA := swapBool
+  U := complexEuclideanCoordinateSwap
+  representation_preserves := by
+    intro a
+    cases a
+    · change complexEuclideanCoordinateSwap (EuclideanSpace.single 0 1) =
+        EuclideanSpace.single 1 1
+      simpa [complexEuclideanCoordinateSwap, euclideanCoordinateSwapIndices] using
+        (EuclideanSpace.piLpCongrLeft_single euclideanCoordinateSwapIndices 0 (1 : ℂ))
+    · change complexEuclideanCoordinateSwap (EuclideanSpace.single 1 1) =
+        EuclideanSpace.single 0 1
+      simpa [complexEuclideanCoordinateSwap, euclideanCoordinateSwapIndices] using
+        (EuclideanSpace.piLpCongrLeft_single euclideanCoordinateSwapIndices 1 (1 : ℂ))
+  eigenvalue_preserves := rfl
+  operator_commutes := by
+    simp [complexAnalyticFrame]
+  projection_commutes := by
+    simp [complexAnalyticFrame, complexSpectralProjection_eq_id]
+
+theorem complex_hilbert_fm4_false :
+    AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame false := by
+  simp [AnalyticFM4.ComplexHilbertFM4, complexAnalyticFrame,
+    complexAnalyticRepresentation, complexSpectralProjection_eq_id]
+
+/-- The complex `C²` analytic witness is invariant under the coordinate
+exchange unitary. -/
+theorem complex_hilbert_fm4_swapped :
+    AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame false ↔
+      AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame true := by
+  change AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame false ↔
+    AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame (complexAnalyticSwap.hA false)
+  exact AnalyticFM4.complex_hilbert_fm4_invariant complexAnalyticSwap false
+
+theorem complex_hilbert_fm4_true :
+    AnalyticFM4.ComplexHilbertFM4 complexAnalyticFrame true :=
+  complex_hilbert_fm4_swapped.mp complex_hilbert_fm4_false
 
 /-- The finite labelling data used to realize the dyn+lab fields of §25.6.
 It is the required three-state collapse chain `s₀ → s₁ → s₂`. -/
@@ -1048,6 +1128,38 @@ theorem collapse_update_swap_commutes (c : Dynamics.Conf Bool Bool Bool) :
       simp [collapseDynFrame, collapseTheta, collapsePhi, Invariance.image]
   · exact { eq := by intro w K; rfl }
 
+/-- Center exchange commutes with every finite iterate of the total collapse
+update, not merely with its first step. -/
+theorem collapse_update_iterate_swap_commutes (n : Nat)
+    (c : Dynamics.Conf Bool Bool Bool) :
+    Invariance.mapConf swapBool swapBool ((collapseDynFrame.update^[n]) c) =
+      (collapseDynFrame.update^[n]) (Invariance.mapConf swapBool swapBool c) := by
+  exact Invariance.iterate_bisim (Invariance.mapConf swapBool swapBool)
+    collapseDynFrame.update collapseDynFrame.update collapse_update_swap_commutes n c
+
+/-- Every named configuration in the collapse frame is fixed by exchanging
+the two symmetric centers. -/
+theorem collapse_conf_swap_invariant (s : Fin 3) :
+    Invariance.mapConf swapBool swapBool (collapseDynFrame.conf s) =
+      collapseDynFrame.conf s := by
+  change Dynamics.Conf.mk (Invariance.image swapBool (collapseDynFrame.kappa s))
+      (Invariance.image swapBool (collapseDynFrame.epsilon s))
+      (collapseDynFrame.omega s) =
+        Dynamics.Conf.mk (collapseDynFrame.kappa s) (collapseDynFrame.epsilon s)
+          (collapseDynFrame.omega s)
+  fin_cases s <;>
+    congr 1 <;>
+      ext b <;> cases b <;>
+        simp [collapseDynFrame, collapseKappa, collapseEpsilon, Invariance.image]
+
+/-- Hence the full update trajectory from the initial configuration is fixed
+under center exchange at every finite time. -/
+theorem collapse_initial_trajectory_swap_invariant (n : Nat) :
+    Invariance.mapConf swapBool swapBool
+      ((collapseDynFrame.update^[n]) (collapseDynFrame.conf 0)) =
+        (collapseDynFrame.update^[n]) (collapseDynFrame.conf 0) := by
+  rw [collapse_update_iterate_swap_commutes, collapse_conf_swap_invariant]
+
 def collapseDynamicIso : Invariance.DynamicIso collapseSwapIso
     (markerCollapseStep false) (markerCollapseStep false)
     markerInteroception markerInteroception where
@@ -1074,6 +1186,15 @@ structure SymmetricDynamicWitness where
   update_commutes : ∀ c,
     Invariance.mapConf static.hC static.hE (dynamics.update c) =
       dynamics.update (Invariance.mapConf static.hC static.hE c)
+  update_iterates_commute : ∀ n c,
+    Invariance.mapConf static.hC static.hE ((dynamics.update^[n]) c) =
+      (dynamics.update^[n]) (Invariance.mapConf static.hC static.hE c)
+  configurations_fixed : ∀ s,
+    Invariance.mapConf static.hC static.hE (dynamics.conf s) = dynamics.conf s
+  initial_trajectory_fixed : ∀ n,
+    Invariance.mapConf static.hC static.hE
+      ((dynamics.update^[n]) (dynamics.conf 0)) =
+        (dynamics.update^[n]) (dynamics.conf 0)
 
 def symmetricDynamicWitness : SymmetricDynamicWitness where
   static := collapseSwapIso
@@ -1085,6 +1206,9 @@ def symmetricDynamicWitness : SymmetricDynamicWitness where
   step_agrees := rfl
   dynamicIso := collapseDynamicIso
   update_commutes := collapse_update_swap_commutes
+  update_iterates_commute := collapse_update_iterate_swap_commutes
+  configurations_fixed := collapse_conf_swap_invariant
+  initial_trajectory_fixed := collapse_initial_trajectory_swap_invariant
 
 /-- This replaces the former successor-only claim: the symmetric double now
 has a full dynamic F-isomorphism witness, including κ/ε/ω, transitions,
@@ -1395,7 +1519,7 @@ theorem symmetric_double_complete : Nonempty SymmetricDoubleCompleteWitness :=
 /-- §25.6: a packaged horizontal-wall witness for the symmetric double. -/
 structure HorizontalWallWitness where
   symmetry :
-    Centering.FixedCenterSymmetry Centering.Strength.dynLabRep frame false true 0
+    Centering.FixedCenterSymmetry Centering.Strength.statF frame false true 0
   centersDistinct : false ≠ true
   mapsCenter : symmetry.toCenterSymmetry.iso.static.hA false = true
   fixesState : symmetry.toCenterSymmetry.iso.static.hS 0 = 0

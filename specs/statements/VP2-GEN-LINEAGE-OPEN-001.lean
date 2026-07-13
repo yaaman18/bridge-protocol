@@ -13,4 +13,8 @@ namespace ERIECV2.Statement.VP2_GEN_LINEAGE_OPEN_001
 
 #print axioms ERIEC.Generation.lineage_stays_open
 
+#check ERIEC.Generation.PhiRich
+#check ERIEC.Generation.lineage_stays_open_phi_rich
+#print axioms ERIEC.Generation.lineage_stays_open_phi_rich
+
 end ERIECV2.Statement.VP2_GEN_LINEAGE_OPEN_001

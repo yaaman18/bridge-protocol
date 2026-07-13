@@ -4,6 +4,10 @@ open ERIEC.Invariance
 
 namespace ERIECV2.Statement.VP2_INV_UNITARY_001
 
+#check ERIEC.Invariance.eigenspace_unitary
+#check ERIEC.Invariance.wld_band_unitary
+#check ERIEC.Invariance.eigenvalue_unitary
+
 #check (ERIEC.Invariance.unitary_conj :
   ∀ {m n : Nat} [NeZero m] [NeZero n]
     (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))

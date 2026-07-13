@@ -68,7 +68,33 @@ private theorem lambdaMax_unitary {m n : Nat} [NeZero m] [NeZero n]
         exact (unitary_rayleigh U L x).symm
       _ ≤ ⨆ y, g y := le_ciSup hg _
 
-private theorem band_unitary {m n : Nat}
+/-- A unitary equivalence transports the whole `lambda` eigenspace, not only
+the proposition that the eigenspace contains a nonzero vector. -/
+theorem eigenspace_unitary {m n : Nat}
+    (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+    (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m))
+    (lambda : ℝ) :
+    Submodule.map U.toLinearEquiv.toLinearMap (Module.End.eigenspace L.toLinearMap lambda) =
+      Module.End.eigenspace (unitaryConjugate U L).toLinearMap lambda := by
+  apply le_antisymm
+  · rintro y ⟨x, hx, rfl⟩
+    apply Module.End.mem_eigenspace_iff.mpr
+    change unitaryConjugate U L (U x) = lambda • U x
+    rw [unitaryConjugate_apply]
+    simpa using congrArg (fun z => U z) (Module.End.mem_eigenspace_iff.mp hx)
+  · intro y hy
+    apply Submodule.mem_map.mpr
+    refine ⟨U.symm y, ?_, by simp⟩
+    apply Module.End.mem_eigenspace_iff.mpr
+    apply U.injective
+    calc
+      U (L (U.symm y)) = unitaryConjugate U L y := by
+        simpa using (unitaryConjugate_apply U L (U.symm y)).symm
+      _ = lambda • y := Module.End.mem_eigenspace_iff.mp hy
+      _ = U (lambda • U.symm y) := by simp
+
+/-- A unitary equivalence transports the complete near-unit spectral band. -/
+theorem wld_band_unitary {m n : Nat}
     (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
     (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m))
     (eta : ℝ) :
@@ -91,7 +117,7 @@ private theorem band_unitary {m n : Nat}
     apply U.injective
     simpa [hEigen] using (unitaryConjugate_apply U L (U.symm y)).symm
 
-private theorem eigenvalue_unitary {m n : Nat}
+theorem eigenvalue_unitary {m n : Nat}
     (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
     (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m))
     (lambda : ℝ) :
@@ -131,7 +157,7 @@ theorem unitary_conj {m n : Nat} [NeZero m] [NeZero n]
           World.Wld_band (unitaryConjugate U L) eta ∧
       World.chi (unitaryConjugate U L) = World.chi L ∧
       (World.WldNontrivial (unitaryConjugate U L) ↔ World.WldNontrivial L) := by
-  refine ⟨eigenvalue_unitary U L, band_unitary U L eta, ?_, ?_⟩
+  refine ⟨eigenvalue_unitary U L, wld_band_unitary U L eta, ?_, ?_⟩
   · simp [World.chi, lambdaMax_unitary U L]
   · constructor
     · rintro ⟨y, hy, hfix⟩

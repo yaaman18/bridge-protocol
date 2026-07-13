@@ -62,9 +62,9 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.Centering.invariantC_fixed
 #check ERIEC.Centering.indist_fixed
 #check ERIEC.Centering.dcAtFamily
-#check ERIEC.Centering.dcAt_horizontal_wall_of_any_strength
+#check ERIEC.Centering.dcAt_horizontal_wall
 #check ERIEC.Centering.horizontal_wall
-#print axioms ERIEC.Centering.dcAt_horizontal_wall_of_any_strength
+#print axioms ERIEC.Centering.dcAt_horizontal_wall
 
 #check ERIEC.Value.PositiveRelationalValue
 #check ERIEC.Value.positiveRelationalValue_invariant
@@ -150,10 +150,17 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.AnalyticFM4.hilbert_eigenspace_preserved
 #check ERIEC.AnalyticFM4.hilbert_projection_preserved
 #check ERIEC.AnalyticFM4.hilbert_fm4_invariant
+#check ERIEC.AnalyticFM4.ComplexHilbertFrame
+#check ERIEC.AnalyticFM4.ComplexHilbertFM4
+#check ERIEC.AnalyticFM4.ComplexHilbertIso
+#check ERIEC.AnalyticFM4.complex_hilbert_eigenspace_preserved
+#check ERIEC.AnalyticFM4.complex_hilbert_projection_preserved
+#check ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant
 #print axioms ERIEC.AnalyticFM4.coordinateSwap_unitary
 #print axioms ERIEC.AnalyticFM4.eigenspace_preserved
 #print axioms ERIEC.AnalyticFM4.fm4_invariant
 #print axioms ERIEC.AnalyticFM4.hilbert_fm4_invariant
+#print axioms ERIEC.AnalyticFM4.complex_hilbert_fm4_invariant
 
 #check ERIEC.Traceability.Stmt
 #check ERIEC.Traceability.DocumentAnchored
@@ -205,6 +212,11 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_false
 #check ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_swapped
 #check ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_true
+#check ERIEC.RefModelV52.SymmetricDouble.ComplexEuclideanR2
+#check ERIEC.RefModelV52.SymmetricDouble.complexSpectralProjection_eq_id
+#check ERIEC.RefModelV52.SymmetricDouble.complexAnalyticFrame
+#check ERIEC.RefModelV52.SymmetricDouble.complexAnalyticSwap
+#check ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped
 #check ERIEC.RefModelV52.SymmetricDouble.markerStep
 #check ERIEC.RefModelV52.SymmetricDouble.ThreeStageCollapse
 #check ERIEC.RefModelV52.SymmetricDouble.threeStageCollapse
@@ -228,6 +240,9 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty
 #check ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data
 #check ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame
+#check ERIEC.RefModelV52.SymmetricDouble.collapse_update_iterate_swap_commutes
+#check ERIEC.RefModelV52.SymmetricDouble.collapse_conf_swap_invariant
+#check ERIEC.RefModelV52.SymmetricDouble.collapse_initial_trajectory_swap_invariant
 #check ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
 #check ERIEC.RefModelV52.SymmetricDouble.euclideanMarkerFrame
 #check ERIEC.RefModelV52.SymmetricDouble.euclideanHilbertFullMarker
@@ -273,6 +288,16 @@ example :
               ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hC
               ERIEC.RefModelV52.SymmetricDouble.collapseSwapIso.hE c)) :=
   ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+
+example (n : Nat) :
+    ERIEC.Invariance.mapConf
+        ERIEC.RefModelV52.SymmetricDouble.swapBool
+        ERIEC.RefModelV52.SymmetricDouble.swapBool
+        ((ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n])
+          (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf 0)) =
+      (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.update^[n])
+        (ERIEC.RefModelV52.SymmetricDouble.collapseDynFrame.conf 0) :=
+  ERIEC.RefModelV52.SymmetricDouble.collapse_initial_trajectory_swap_invariant n
 
 example :
     ¬ Nonempty (ERIEC.Invariance.KIso
@@ -336,11 +361,13 @@ example : ¬ Nonempty (ERIEC.Invariance.KIso
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerConscious_horizontal_wall
 #print axioms ERIEC.RefModelV52.SymmetricDouble.analytic_fm4_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.euclidean_hilbert_fm4_swapped
+#print axioms ERIEC.RefModelV52.SymmetricDouble.complex_hilbert_fm4_swapped
 #print axioms ERIEC.RefModelV52.SymmetricDouble.euclideanSpectralProjection_eq_id
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_terminal
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerCollapseNext_conjugates
 #print axioms ERIEC.RefModelV52.SymmetricDouble.markerStep_exchange_iff
 #print axioms ERIEC.RefModelV52.SymmetricDouble.symmetric_double_dynamic_conjugacy
+#print axioms ERIEC.RefModelV52.SymmetricDouble.collapse_initial_trajectory_swap_invariant
 #print axioms ERIEC.RefModelV52.SymmetricDouble.ranked_top_relations_empty
 #print axioms ERIEC.RefModelV52.SymmetricDouble.collapsePhi_eq_rankedCoreClosure
 #print axioms ERIEC.RefModelV52.SymmetricDouble.collapseFrame_zero_data

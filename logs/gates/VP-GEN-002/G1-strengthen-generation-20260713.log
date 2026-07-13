@@ -1,0 +1,16 @@
+formal/ERIEC/Generation.lean:45:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (RichnessWitness dc)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/ERIEC/Generation.lean:53:4: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  OpenEvolution.SemanticEquivalence
+has type `Type (u + 1)` which does not have the necessary form.
+formal/ERIEC/Generation.lean:142:46: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  q
+has type `PhiRich` which does not have the necessary form.
+formal/ERIEC/Generation.lean:144:27: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  q
+has type `PhiRich` which does not have the necessary form.
+formal/ERIEC/Generation.lean:144:35: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  q
+has type `PhiRich` which does not have the necessary form.

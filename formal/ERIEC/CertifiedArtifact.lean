@@ -924,6 +924,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "-"
       },
       {
+        id := "v52.analyticfm4.complex_hilbert_unitary_invariant"
+        leanModule := "ERIEC.AnalyticFM4"
+        leanName := "complex_hilbert_fm4_invariant"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "v52.traceability.vocabulary"
         leanModule := "ERIEC.Traceability"
         leanName := "vocabularyStatus_complete"
@@ -980,6 +988,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "-"
       },
       {
+        id := "v52.refmodel.symmetric_double_complex_hilbert_fm4"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "complex_hilbert_fm4_swapped"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "v52.refmodel.symmetric_double_three_stage_dynamics"
         leanModule := "ERIEC.RefModelV52"
         leanName := "markerStep_terminal"
@@ -1015,6 +1031,102 @@ def certifiedArtifact : CertifiedArtifact :=
         id := "v52.refmodel.symmetric_double_dynamic_conjugacy"
         leanModule := "ERIEC.RefModelV52"
         leanName := "symmetric_double_dynamic_conjugacy"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_dynamic_orbit_invariance"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "collapse_initial_trajectory_swap_invariant"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.markers.analytic_fm4_unitary"
+        leanModule := "ERIEC.AnalyticFM4"
+        leanName := "hilbert_fm4_invariant"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.analytic_symmetric_double"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "analytic_fm4_swapped"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.full_marker_analytic_fm4"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "euclideanMarker_fm4_iff"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_dynamics"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "symmetric_double_dynamic_conjugacy"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_dynamic_iso"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "collapseDynamicIso"
+        leanKind := "def"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_update_bisim"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "collapse_update_iterate_swap_commutes"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_full_witness"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "symmetricDoubleCompleteWitness"
+        leanKind := "def"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.full_marker_conscious_wall"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "euclideanMarkerConscious_horizontal_wall"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.full_marker_blind_wall"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "euclideanMarkerBlind_horizontal_wall"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_blind"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "euclideanMarker_blind_false"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.refmodel.symmetric_double_not_conscious"
+        leanModule := "ERIEC.RefModelV52"
+        leanName := "euclideanMarker_not_conscious_false"
         leanKind := "theorem"
         juliaSymbol := "-"
         juliaChecker := "-"

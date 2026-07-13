@@ -1,0 +1,17 @@
+ERIEC.Invariance.eigenspace_unitary {m n : ℕ} (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (lambda : ℝ) :
+  Submodule.map (↑U.toLinearEquiv) (Module.End.eigenspace (↑L) lambda) =
+    Module.End.eigenspace (↑(unitaryConjugate U L)) lambda
+ERIEC.Invariance.wld_band_unitary {m n : ℕ} (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (eta : ℝ) :
+  Submodule.map (↑U.toLinearEquiv) (ERIEC.World.Wld_band L eta) = ERIEC.World.Wld_band (unitaryConjugate U L) eta
+ERIEC.Invariance.eigenvalue_unitary {m n : ℕ} (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (lambda : ℝ) :
+  Module.End.HasEigenvalue (↑L) lambda ↔ Module.End.HasEigenvalue (↑(unitaryConjugate U L)) lambda
+fun {m n} [NeZero m] [NeZero n] =>
+  unitary_conj : ∀ {m n : ℕ} [NeZero m] [NeZero n] (U : EuclideanSpace ℝ (Fin m) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n))
+  (L : EuclideanSpace ℝ (Fin m) →L[ℝ] EuclideanSpace ℝ (Fin m)) (eta : ℝ),
+  (∀ (lambda : ℝ), Module.End.HasEigenvalue (↑L) lambda ↔ Module.End.HasEigenvalue (↑(unitaryConjugate U L)) lambda) ∧
+    Submodule.map (↑U.toLinearEquiv) (ERIEC.World.Wld_band L eta) = ERIEC.World.Wld_band (unitaryConjugate U L) eta ∧
+      ERIEC.World.chi (unitaryConjugate U L) = ERIEC.World.chi L ∧
+        (ERIEC.World.WldNontrivial (unitaryConjugate U L) ↔ ERIEC.World.WldNontrivial L)

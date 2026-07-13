@@ -279,6 +279,111 @@ theorem hilbert_fm4_invariant {A A' H H' : Type*}
         (hilbert_projection_preserved h (F.representation a)).symm
       _ = 0 := by simp [hzero]
 
+/-- Complex Hilbert refinement of FM4. The self-adjointness field is stated
+directly as the adjoint inner-product law, while the residual condition keeps
+the designated spectral projection orthogonal to its eigenspace. -/
+structure ComplexHilbertFrame (A H : Type*)
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] where
+  representation : A → H
+  operator : Module.End ℂ H
+  eigenvalue : ℂ
+  spectralProjection : Module.End ℂ H
+  operator_self_adjoint : ∀ x y,
+    Inner.inner ℂ (operator x) y = Inner.inner ℂ x (operator y)
+  projection_mem_eigenspace :
+    ∀ v, spectralProjection v ∈ operator.eigenspace eigenvalue
+  projection_fixes_eigenspace :
+    ∀ v, v ∈ operator.eigenspace eigenvalue → spectralProjection v = v
+  projection_residual_orthogonal :
+    ∀ v z, z ∈ operator.eigenspace eigenvalue →
+      Inner.inner ℂ (v - spectralProjection v) z = 0
+
+/-- Nonzero spectral component in a complex Hilbert representation. -/
+def ComplexHilbertFM4 {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    (F : ComplexHilbertFrame A H) (a : A) : Prop :=
+  F.spectralProjection (F.representation a) ≠ 0
+
+/-- A unitary analytic isomorphism between complex Hilbert FM4 frames. -/
+structure ComplexHilbertIso {A A' H H' : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+    (F : ComplexHilbertFrame A H) (F' : ComplexHilbertFrame A' H') where
+  hA : A ≃ A'
+  U : H ≃ₗᵢ[ℂ] H'
+  representation_preserves :
+    ∀ a, U (F.representation a) = F'.representation (hA a)
+  eigenvalue_preserves : F.eigenvalue = F'.eigenvalue
+  operator_commutes :
+    U.toLinearEquiv.toLinearMap.comp F.operator =
+      F'.operator.comp U.toLinearEquiv.toLinearMap
+  projection_commutes :
+    U.toLinearEquiv.toLinearMap.comp F.spectralProjection =
+      F'.spectralProjection.comp U.toLinearEquiv.toLinearMap
+
+/-- A complex unitary transports the selected eigenspace. -/
+theorem complex_hilbert_eigenspace_preserved {A A' H H' : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+    {F : ComplexHilbertFrame A H} {F' : ComplexHilbertFrame A' H'}
+    (h : ComplexHilbertIso F F') (v : H) :
+    v ∈ F.operator.eigenspace F.eigenvalue ↔
+      h.U v ∈ F'.operator.eigenspace F'.eigenvalue := by
+  rw [Module.End.mem_eigenspace_iff, Module.End.mem_eigenspace_iff]
+  constructor
+  · intro hv
+    calc
+      F'.operator (h.U v) = h.U (F.operator v) := by
+        exact (LinearMap.congr_fun h.operator_commutes v).symm
+      _ = h.U (F.eigenvalue • v) := by rw [hv]
+      _ = F'.eigenvalue • h.U v := by
+        simpa only [h.eigenvalue_preserves] using h.U.map_smul F.eigenvalue v
+  · intro hv
+    apply h.U.injective
+    calc
+      h.U (F.operator v) = F'.operator (h.U v) :=
+        LinearMap.congr_fun h.operator_commutes v
+      _ = F'.eigenvalue • h.U v := hv
+      _ = h.U (F.eigenvalue • v) := by
+        simpa only [h.eigenvalue_preserves] using (h.U.map_smul F.eigenvalue v).symm
+
+/-- Complex spectral projections commute with the designated unitary. -/
+theorem complex_hilbert_projection_preserved {A A' H H' : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+    {F : ComplexHilbertFrame A H} {F' : ComplexHilbertFrame A' H'}
+    (h : ComplexHilbertIso F F') (v : H) :
+    h.U (F.spectralProjection v) = F'.spectralProjection (h.U v) :=
+  LinearMap.congr_fun h.projection_commutes v
+
+/-- Complex analytic FM4 is invariant under a unitary isomorphism. -/
+theorem complex_hilbert_fm4_invariant {A A' H H' : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
+    {F : ComplexHilbertFrame A H} {F' : ComplexHilbertFrame A' H'}
+    (h : ComplexHilbertIso F F') (a : A) :
+    ComplexHilbertFM4 F a ↔ ComplexHilbertFM4 F' (h.hA a) := by
+  unfold ComplexHilbertFM4
+  constructor
+  · intro hfm4 hzero
+    apply hfm4
+    apply h.U.injective
+    calc
+      h.U (F.spectralProjection (F.representation a)) =
+          F'.spectralProjection (h.U (F.representation a)) :=
+        complex_hilbert_projection_preserved h (F.representation a)
+      _ = F'.spectralProjection (F'.representation (h.hA a)) := by
+        rw [h.representation_preserves a]
+      _ = h.U 0 := by simp [hzero]
+  · intro hfm4 hzero
+    apply hfm4
+    calc
+      F'.spectralProjection (F'.representation (h.hA a)) =
+          F'.spectralProjection (h.U (F.representation a)) := by
+        rw [h.representation_preserves a]
+      _ = h.U (F.spectralProjection (F.representation a)) :=
+        (complex_hilbert_projection_preserved h (F.representation a)).symm
+      _ = 0 := by simp [hzero]
+
 end AnalyticFM4
 
 end ERIEC

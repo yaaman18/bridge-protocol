@@ -1,0 +1,8 @@
+formal/ERIEC/Generation.lean:145:56: error: Application type mismatch: The argument
+  hcofinal
+has type
+  OpenEvolution.Lineage.Cofinal.{u, 0} q.score L
+but is expected to have type
+  OpenEvolution.Lineage.Cofinal.{u, u} ?m.10 L
+in the application
+  lineage_stays_open sem L ?m.10 (fun {left right} => ?m.15) hcofinal

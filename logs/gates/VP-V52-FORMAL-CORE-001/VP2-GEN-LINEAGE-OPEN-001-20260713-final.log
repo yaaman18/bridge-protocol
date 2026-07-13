@@ -1,0 +1,12 @@
+fun {Q} [PartialOrder Q] =>
+  ERIEC.Generation.lineage_stays_open : ∀ {Q : Type} [inst : PartialOrder Q]
+  (sem : ERIEC.OpenEvolution.SemanticEquivalence) (L : ERIEC.OpenEvolution.Lineage ERIEC.Generation.ProliferationEvent)
+  (q : ERIEC.OpenEvolution.OpenSystem → Q),
+  (∀ {left right : ERIEC.OpenEvolution.OpenSystem}, sem.rel left right → q left = q right) →
+    ERIEC.OpenEvolution.Lineage.Cofinal q L → ERIEC.OpenEvolution.Lineage.FreshSem sem L
+'ERIEC.Generation.lineage_stays_open' depends on axioms: [propext, Classical.choice, Quot.sound]
+ERIEC.Generation.PhiRich.{u} (sem : ERIEC.OpenEvolution.SemanticEquivalence) : Type (u + 1)
+ERIEC.Generation.lineage_stays_open_phi_rich.{u} (sem : ERIEC.OpenEvolution.SemanticEquivalence)
+  (L : ERIEC.OpenEvolution.Lineage ERIEC.Generation.ProliferationEvent) (q : ERIEC.Generation.PhiRich sem)
+  (hcofinal : ERIEC.OpenEvolution.Lineage.Cofinal q.score L) : ERIEC.OpenEvolution.Lineage.FreshSem sem L
+'ERIEC.Generation.lineage_stays_open_phi_rich' depends on axioms: [propext, Classical.choice, Quot.sound]
