@@ -17,26 +17,101 @@ inductive Strength where
   | dynLabRep
 deriving DecidableEq, Repr
 
+/-- Dynamic compatibility carried by all non-static strengths. -/
+structure DynamicCompatibility
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') where
+  step : S → S → Prop
+  step' : S' → S' → Prop
+  step_iff : ∀ s t, step s t ↔ step' (h.hS s) (h.hS t)
+
+/-- Observation compatibility for the `dyn+obs` strength. -/
+structure ObservationCompatibility
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') extends DynamicCompatibility h where
+  observe : S → W
+  observe' : S' → W
+  observe_eq : ∀ s, observe' (h.hS s) = observe s
+
+/-- Action-labelled transition and internal-observation compatibility. -/
+structure LabelCompatibility
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') extends DynamicCompatibility h where
+  stepLabel : A → S → S → Prop
+  stepLabel' : A' → S' → S' → Prop
+  label_iff : ∀ m s t,
+    stepLabel m s t ↔ stepLabel' (h.hA m) (h.hS s) (h.hS t)
+  observeInternal : S → W
+  observeInternal' : S' → W
+  observeInternal_eq : ∀ s,
+    observeInternal' (h.hS s) = observeInternal s
+
+/-- Finite-dimensional unitary representation compatibility for `dyn+rep`. -/
+structure RepresentationCompatibility
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') extends DynamicCompatibility h where
+  n : Nat
+  n' : Nat
+  representation : A → EuclideanSpace ℝ (Fin n)
+  representation' : A' → EuclideanSpace ℝ (Fin n')
+  loop : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)
+  loop' : EuclideanSpace ℝ (Fin n') →L[ℝ] EuclideanSpace ℝ (Fin n')
+  unitary : EuclideanSpace ℝ (Fin n) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n')
+  representation_eq : ∀ m, unitary (representation m) = representation' (h.hA m)
+  loop_intertwines : ∀ v, unitary (loop v) = loop' (unitary v)
+
+/-- Full compatibility required by the combined labelled/representation layer. -/
+structure LabelRepresentationCompatibility
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') where
+  lab : LabelCompatibility h
+  rep : RepresentationCompatibility h
+
+def CompatibilityData (τ : Strength)
+    {A E C S A' E' C' S' W : Type u}
+    {F : Invariance.StaticFrame A E C S W}
+    {F' : Invariance.StaticFrame A' E' C' S' W}
+    (h : Invariance.KIso F F') : Type u :=
+  match τ with
+  | .statK | .statF => PUnit
+  | .dyn => DynamicCompatibility h
+  | .dynObs => ObservationCompatibility h
+  | .dynLab => LabelCompatibility h
+  | .dynRep => RepresentationCompatibility h
+  | .dynLabRep => LabelRepresentationCompatibility h
+
 /-- §25.2: a strength-indexed compatible isomorphism.
 
 The common static core is `Invariance.KIso`. Higher-strength compatibilities
-are carried as fields on later refinements, rather than by changing `KIso`.
+are selected by `CompatibilityData`; stronger tags cannot be inhabited from a
+static `KIso` alone.
 -/
 structure CompatibleIso (τ : Strength)
     {A E C S A' E' C' S' W : Type u}
     (F : Invariance.StaticFrame A E C S W)
     (F' : Invariance.StaticFrame A' E' C' S' W) where
   static : Invariance.KIso F F'
+  compatibility : CompatibilityData τ static
 
 /-- Forget any stronger compatibility data down to the static `𝔽` level.
-At present `CompatibleIso` stores only the shared static core; future stronger
-fields can be forgotten here without changing users of static invariance. -/
+All stronger fields are intentionally forgotten by this projection. -/
 def CompatibleIso.toStatF {τ : Strength}
     {A E C S A' E' C' S' W : Type u}
     {F : Invariance.StaticFrame A E C S W}
     {F' : Invariance.StaticFrame A' E' C' S' W}
     (h : CompatibleIso τ F F') : CompatibleIso Strength.statF F F' where
   static := h.static
+  compatibility := PUnit.unit
 
 /-- Static `𝔎` forgetful projection, separated from `toStatF` to avoid
 assuming an unformalized global strength lattice. -/
@@ -46,6 +121,7 @@ def CompatibleIso.toStatK {τ : Strength}
     {F' : Invariance.StaticFrame A' E' C' S' W}
     (h : CompatibleIso τ F F') : CompatibleIso Strength.statK F F' where
   static := h.static
+  compatibility := PUnit.unit
 
 /-- §25.1: an invariant predicate family over the `A × S` carrier. -/
 structure InvariantFamily (τ : Strength) where
@@ -286,6 +362,56 @@ def iffFamily {τ : Strength} (P Q : InvariantFamily τ) : InvariantFamily τ wh
     intro A E C S A' E' C' S' W F F' h m s
     exact Iff.iff (P.invariant h m s) (Q.invariant h m s)
 
+/-- Invariance is closed under universal quantification over action centers. -/
+def forallActionFamily {τ : Strength} (P : InvariantFamily τ) : InvariantFamily τ where
+  Pred := fun F _ s ↦ ∀ m, P.Pred F m s
+  invariant := by
+    intro A E C S A' E' C' S' W F F' h m s
+    constructor
+    · intro hAll m'
+      have hm := (P.invariant h (h.static.hA.symm m') s).mp
+        (hAll (h.static.hA.symm m'))
+      simpa using hm
+    · intro hAll m₀
+      exact (P.invariant h m₀ s).mpr (hAll (h.static.hA m₀))
+
+/-- Invariance is closed under existential quantification over action centers. -/
+def existsActionFamily {τ : Strength} (P : InvariantFamily τ) : InvariantFamily τ where
+  Pred := fun F _ s ↦ ∃ m, P.Pred F m s
+  invariant := by
+    intro A E C S A' E' C' S' W F F' h m s
+    constructor
+    · rintro ⟨m₀, hm₀⟩
+      exact ⟨h.static.hA m₀, (P.invariant h m₀ s).mp hm₀⟩
+    · rintro ⟨m', hm'⟩
+      refine ⟨h.static.hA.symm m', ?_⟩
+      exact (P.invariant h (h.static.hA.symm m') s).mpr (by simpa using hm')
+
+/-- Invariance is closed under universal quantification over states. -/
+def forallStateFamily {τ : Strength} (P : InvariantFamily τ) : InvariantFamily τ where
+  Pred := fun F m _ ↦ ∀ s, P.Pred F m s
+  invariant := by
+    intro A E C S A' E' C' S' W F F' h m s
+    constructor
+    · intro hAll s'
+      have hs := (P.invariant h m (h.static.hS.symm s')).mp
+        (hAll (h.static.hS.symm s'))
+      simpa using hs
+    · intro hAll s₀
+      exact (P.invariant h m s₀).mpr (hAll (h.static.hS s₀))
+
+/-- Invariance is closed under existential quantification over states. -/
+def existsStateFamily {τ : Strength} (P : InvariantFamily τ) : InvariantFamily τ where
+  Pred := fun F m _ ↦ ∃ s, P.Pred F m s
+  invariant := by
+    intro A E C S A' E' C' S' W F F' h m s
+    constructor
+    · rintro ⟨s₀, hs₀⟩
+      exact ⟨h.static.hS s₀, (P.invariant h m s₀).mp hs₀⟩
+    · rintro ⟨s', hs'⟩
+      refine ⟨h.static.hS.symm s', ?_⟩
+      exact (P.invariant h m (h.static.hS.symm s')).mpr (by simpa using hs')
+
 /-- A trivially true invariant predicate family. -/
 def trueFamily (τ : Strength) : InvariantFamily τ where
   Pred := fun _ _ _ => True
@@ -317,7 +443,9 @@ theorem dcAt_horizontal_wall
   indist_fixed dcAtFamily φ
 
 /-- v5.2 §25.5 public name for the horizontal-wall specialization currently
-implemented for the certified static DC predicate family. -/
+implemented for the certified static DC predicate family.  Higher-strength
+marker predicates use their own compatibility records in `ERIEC.Markers`; a
+`CompatibleIso` alone must not be treated as evidence for them. -/
 theorem horizontal_wall
     {A E C S W : Type u} {F : Invariance.StaticFrame A E C S W}
     {m m' : A} {s : S}

@@ -7,6 +7,8 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.Gate.GateEv
 #check ERIEC.Gate.GateFrame
 #check ERIEC.Gate.GateAssignment.gate
+#check ERIEC.Gate.gate_existsUnique
+#check ERIEC.Gate.computedAssignment
 #check ERIEC.Gate.raw_pass_sound
 #check ERIEC.Gate.raw_fail_sound
 #check ERIEC.Gate.gate_pass_sound
@@ -38,6 +40,8 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.Decay.psi2_isDecay
 #check ERIEC.Decay.psi_strict_of_not_postfixed
 #check ERIEC.Decay.dec_eq_or_strict
+#check ERIEC.Decay.upd_dec
+#check ERIEC.Decay.collapseMeasure_upd_dec_lt
 #check ERIEC.Decay.abstract_collapse
 #check ERIEC.Decay.collapse_of_psi
 #print axioms ERIEC.Decay.psi_isDecay
@@ -48,6 +52,8 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.OpenSimC.Hom.mapPath_comp
 #check ERIEC.OpenSimC.Hom.mapPath_id_comp
 #check ERIEC.OpenSimC.Hom.mapPath_comp_id
+#check ERIEC.OpenSimC.Object
+#check ERIEC.OpenSimC.eraseFunctor
 #check ERIEC.OpenSimC.identityAuditMap
 #check ERIEC.OpenSimC.identityAuditMap_noAssumptions
 #print axioms ERIEC.OpenSimC.Hom.mapPath_comp
@@ -63,6 +69,7 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.Centering.InvariantFamily
 #check ERIEC.Centering.InvariantFamilyE
 #check ERIEC.Centering.InvariantFamilyC
+#check ERIEC.Centering.CompatibilityData
 #check ERIEC.Centering.CompatibleIso.toStatF
 #check ERIEC.Centering.andFamilyE
 #check ERIEC.Centering.iffFamilyC
@@ -73,6 +80,8 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.Centering.dcAtFamily
 #check ERIEC.Centering.dcAt_horizontal_wall
 #check ERIEC.Centering.horizontal_wall
+#check ERIEC.Centering.forallActionFamily
+#check ERIEC.Centering.existsStateFamily
 #print axioms ERIEC.Centering.dcAt_horizontal_wall
 
 #check ERIEC.Value.PositiveRelationalValue
@@ -207,6 +216,7 @@ namespace ERIECV52.Statement.VP_V52_FORMAL_CORE_001
 #check ERIEC.RefModelV52.NonDegenerateRecur.fullWitness
 #check ERIEC.RefModelV52.NonDegenerateRecur.fullWitness_has_recur
 #check ERIEC.RefModelV52.NonDegenerateRecur.gapUp_has_two_alpha
+#check ERIEC.NonDegenerateRecur.fullWitness_has_recur
 #check ERIEC.RefModelV52.SymmetricDouble.fixedCenterSymmetry
 #check ERIEC.RefModelV52.SymmetricDouble.horizontalWallWitness
 #check ERIEC.RefModelV52.SymmetricDouble.horizontalWallWitness_indistinguishable
