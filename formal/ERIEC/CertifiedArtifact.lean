@@ -788,6 +788,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "-"
       },
       {
+        id := "v52.opensimc.erase_functor"
+        leanModule := "ERIEC.OpenSimC"
+        leanName := "eraseFunctor"
+        leanKind := "def"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
         id := "v52.kernelopen.action_gap"
         leanModule := "ERIEC.KernelOpen"
         leanName := "action_gapUp"
@@ -807,6 +815,22 @@ def certifiedArtifact : CertifiedArtifact :=
         id := "v52.centering.fixed_specialization"
         leanModule := "ERIEC.Centering"
         leanName := "invariantE_fixed"
+        leanKind := "def"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.centering.strength_data"
+        leanModule := "ERIEC.Centering"
+        leanName := "CompatibilityData"
+        leanKind := "def"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "v52.centering.quantified_closure"
+        leanModule := "ERIEC.Centering"
+        leanName := "forallActionFamily"
         leanKind := "def"
         juliaSymbol := "-"
         juliaChecker := "-"

@@ -28,7 +28,7 @@ inductive GuaranteeIdx where
   | generative
   | translation
   | phenomenal
-deriving DecidableEq, Repr
+deriving DecidableEq, Fintype, Repr
 
 open GuaranteeIdx
 
@@ -40,52 +40,63 @@ def minimalClaim : GuaranteeIdx → Prop
   | .translation => True
   | .phenomenal => True
 
+def guaranteeDepth : GuaranteeIdx → Nat
+  | .phenomenal => 1
+  | _ => 0
+
+def minimalDep : GuaranteeIdx → GuaranteeIdx → Prop
+  | .viability, .phenomenal => True
+  | _, _ => False
+
+theorem minimalDep_depth {j i : GuaranteeIdx} (h : minimalDep j i) :
+    guaranteeDepth j < guaranteeDepth i := by
+  cases j <;> cases i <;> simp [minimalDep, guaranteeDepth] at h ⊢
+
 /-- §24.6: a profile where failed viability blocks the phenomenal component. -/
 def minimalGateFrame : GateFrame GuaranteeIdx where
   Claim := minimalClaim
-  dep
-    | .viability, .phenomenal => True
-    | _, _ => False
+  dep := minimalDep
   raw
     | .core => RawEv.pass trivial
     | .audit => RawEv.pass trivial
     | .viability => RawEv.fail (by intro h; exact h)
     | .generative => RawEv.fail (by intro h; exact h)
-    | .translation => RawEv.unk
+    | .translation => RawEv.unk ⟨"translation evidence is not yet available"⟩
     | .phenomenal => RawEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
+  finite := inferInstance
+  wf := Subrelation.wf minimalDep_depth (measure guaranteeDepth).wf
+  phenomenal := fun i ↦ i = .phenomenal
+  phenomenal_raw := by
+    intro i hi
+    subst i
+    exact ⟨⟨"phenomenal bridge remains open"⟩, rfl⟩
 
-def minimalGateAssignment : GateAssignment minimalGateFrame where
-  ev
-    | .core => GateEv.pass trivial
-    | .audit => GateEv.pass trivial
-    | .viability => GateEv.fail (by intro h; exact h)
-    | .generative => GateEv.fail (by intro h; exact h)
-    | .translation => GateEv.unk
-    | .phenomenal => GateEv.na
-  local_na := by
-    intro j i hdep _hblock
-    cases j <;> cases i <;> simp [minimalGateFrame, eraseEvidence] at hdep ⊢
+noncomputable def minimalGateAssignment : GateAssignment minimalGateFrame :=
+  computedAssignment minimalGateFrame
 
 theorem minimal_viability_fails :
     eraseEvidence (minimalGateAssignment.ev .viability) = Gv.fail := by
-  rfl
+  change eraseEvidence (gateEv minimalGateFrame .viability) = Gv.fail
+  rw [gateEv_eq]
+  simp [gateStep, HasBlockedPredecessor, minimalGateFrame, minimalDep,
+    promoteRaw, eraseEvidence]
 
 theorem minimal_gate_viability_fails :
     minimalGateAssignment.gate .viability = Gv.fail := by
-  rfl
+  exact minimal_viability_fails
 
 theorem minimal_phenomenal_na_by_propagation :
     eraseEvidence (minimalGateAssignment.ev .phenomenal) = Gv.na := by
   exact na_propagates minimalGateAssignment
     (DepPath.single (j := GuaranteeIdx.viability) (i := GuaranteeIdx.phenomenal)
-      (by simp [minimalGateFrame]))
-    (by simp [Blocks, minimalGateAssignment, eraseEvidence])
+      (by simp [minimalGateFrame, minimalDep]))
+    (by simpa [minimal_viability_fails] using blocks_fail)
 
 theorem minimal_gate_phenomenal_na :
     minimalGateAssignment.gate .phenomenal = Gv.na := by
   exact gate_na_propagates minimalGateAssignment
     (DepPath.single (j := GuaranteeIdx.viability) (i := GuaranteeIdx.phenomenal)
-      (by simp [minimalGateFrame]))
+      (by simp [minimalGateFrame, minimalDep]))
     (by simp [minimal_gate_viability_fails, Blocks])
 
 /-- §24.6: the same raw phenomenal evidence remains open when no dependency
@@ -94,26 +105,31 @@ def openPhenomenalGateFrame : GateFrame GuaranteeIdx where
   Claim := minimalClaim
   dep := fun _ _ => False
   raw := minimalGateFrame.raw
+  finite := inferInstance
+  wf := by
+    refine ⟨fun i ↦ Acc.intro i ?_⟩
+    intro j h
+    exact False.elim h
+  phenomenal := fun i ↦ i = .phenomenal
+  phenomenal_raw := by
+    intro i hi
+    subst i
+    exact ⟨⟨"phenomenal bridge remains open"⟩, rfl⟩
 
-def openPhenomenalGateAssignment : GateAssignment openPhenomenalGateFrame where
-  ev
-    | .core => GateEv.pass trivial
-    | .audit => GateEv.pass trivial
-    | .viability => GateEv.fail (by intro h; exact h)
-    | .generative => GateEv.fail (by intro h; exact h)
-    | .translation => GateEv.unk
-    | .phenomenal => GateEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
-  local_na := by
-    intro j i hdep _hblock
-    cases j <;> cases i <;> simp [openPhenomenalGateFrame] at hdep
+noncomputable def openPhenomenalGateAssignment :
+    GateAssignment openPhenomenalGateFrame :=
+  computedAssignment openPhenomenalGateFrame
 
 theorem open_phenomenal_bridgeOpen :
     eraseEvidence (openPhenomenalGateAssignment.ev .phenomenal) = Gv.bridgeOpen := by
-  rfl
+  change eraseEvidence (gateEv openPhenomenalGateFrame .phenomenal) = Gv.bridgeOpen
+  rw [gateEv_eq]
+  simp [gateStep, HasBlockedPredecessor, openPhenomenalGateFrame,
+    minimalGateFrame, promoteRaw, eraseEvidence]
 
 theorem open_gate_phenomenal_bridgeOpen :
     openPhenomenalGateAssignment.gate .phenomenal = Gv.bridgeOpen := by
-  rfl
+  exact open_phenomenal_bridgeOpen
 
 /-- The standard §24.2 dependency diagram. It is data, rather than a global
 constraint on every guarantee profile. -/
@@ -132,6 +148,15 @@ theorem standardDependency_iff (j i : GuaranteeIdx) :
       ((j = .audit ∨ j = .translation) ∧ i = .phenomenal) := by
   cases j <;> cases i <;> simp [standardDependency]
 
+def standardDepth : GuaranteeIdx → Nat
+  | .core => 0
+  | .phenomenal => 2
+  | _ => 1
+
+theorem standardDependency_depth {j i : GuaranteeIdx} (h : standardDependency j i) :
+    standardDepth j < standardDepth i := by
+  cases j <;> cases i <;> simp [standardDependency, standardDepth] at h ⊢
+
 /-- The §24.6 minimal certificate evaluated over the standard dependency
 diagram. Failed viability is recorded, but does not block the phenomenal
 bridge unless that extra dependency is explicitly selected. -/
@@ -139,6 +164,13 @@ def standardGateFrame : GateFrame GuaranteeIdx where
   Claim := minimalClaim
   dep := standardDependency
   raw := minimalGateFrame.raw
+  finite := inferInstance
+  wf := Subrelation.wf standardDependency_depth (measure standardDepth).wf
+  phenomenal := fun i ↦ i = .phenomenal
+  phenomenal_raw := by
+    intro i hi
+    subst i
+    exact ⟨⟨"phenomenal bridge remains open"⟩, rfl⟩
 
 def standardGateAssignment : GateAssignment standardGateFrame where
   ev
@@ -146,7 +178,7 @@ def standardGateAssignment : GateAssignment standardGateFrame where
     | .audit => GateEv.pass trivial
     | .viability => GateEv.fail (by intro h; exact h)
     | .generative => GateEv.fail (by intro h; exact h)
-    | .translation => GateEv.unk
+    | .translation => GateEv.unk ⟨"translation evidence is not yet available"⟩
     | .phenomenal => GateEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
   local_na := by
     intro j i hdep hblock
@@ -173,16 +205,21 @@ def recurrentClaim : GuaranteeIdx → Prop
 
 def recurrentGateFrame : GateFrame GuaranteeIdx where
   Claim := recurrentClaim
-  dep
-    | .viability, .phenomenal => True
-    | _, _ => False
+  dep := minimalDep
   raw
     | .core => RawEv.pass trivial
     | .audit => RawEv.pass trivial
     | .viability => RawEv.pass OpenDynamics.ReferenceModels.recur_possibleLive
     | .generative => RawEv.fail (by intro h; exact h)
-    | .translation => RawEv.unk
+    | .translation => RawEv.unk ⟨"translation evidence is not yet available"⟩
     | .phenomenal => RawEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
+  finite := inferInstance
+  wf := Subrelation.wf minimalDep_depth (measure guaranteeDepth).wf
+  phenomenal := fun i ↦ i = .phenomenal
+  phenomenal_raw := by
+    intro i hi
+    subst i
+    exact ⟨⟨"phenomenal bridge remains open"⟩, rfl⟩
 
 def recurrentGateAssignment : GateAssignment recurrentGateFrame where
   ev
@@ -190,12 +227,12 @@ def recurrentGateAssignment : GateAssignment recurrentGateFrame where
     | .audit => GateEv.pass trivial
     | .viability => GateEv.pass OpenDynamics.ReferenceModels.recur_possibleLive
     | .generative => GateEv.fail (by intro h; exact h)
-    | .translation => GateEv.unk
+    | .translation => GateEv.unk ⟨"translation evidence is not yet available"⟩
     | .phenomenal => GateEv.bridgeOpen ⟨"phenomenal bridge remains open"⟩
   local_na := by
     intro j i hdep hblock
     cases j <;> cases i <;>
-      simp [recurrentGateFrame, Blocks, eraseEvidence] at hdep hblock
+      simp [recurrentGateFrame, minimalDep, Blocks, eraseEvidence] at hdep hblock
 
 theorem recurrent_viability_passes :
     recurrentGateAssignment.gate .viability = Gv.pass := by
@@ -643,6 +680,7 @@ def swapIso : KIso frame frame where
 
 def compatibleSwap : Centering.CompatibleIso Centering.Strength.statF frame frame where
   static := swapIso
+  compatibility := PUnit.unit
 
 def fixedCenterSymmetry :
     Centering.FixedCenterSymmetry Centering.Strength.statF frame false true 0 where

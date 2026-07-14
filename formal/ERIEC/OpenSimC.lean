@@ -1,4 +1,5 @@
 import ERIEC.Audit
+import Mathlib.CategoryTheory.Functor.Basic
 
 namespace ERIEC
 
@@ -131,6 +132,42 @@ theorem mapPath_comp_id (f : Hom G H) {s t : G.State}
     (comp f (id H)).mapPath p = f.mapPath p := by
   rw [mapPath_comp, mapPath_id]
 
+/-- Two constructive simulations are equal when their state maps and every
+carried target path agree. -/
+@[ext] theorem ext {f g : Hom G H} (hState : f.mapState = g.mapState)
+    (hEdge : ∀ {s t kind} (edge : G.step s kind t),
+      HEq (f.mapEdge edge).1 (g.mapEdge edge).1) : f = g := by
+  cases f with
+  | mk fState fEdge =>
+      cases g with
+      | mk gState gEdge =>
+          dsimp at hState
+          subst gState
+          congr
+          funext s t kind edge
+          apply Subtype.ext
+          exact eq_of_heq (hEdge edge)
+
+theorem id_comp (f : Hom G H) : comp (id G) f = f := by
+  apply ext
+  · rfl
+  · intro s t kind edge
+    exact heq_of_eq (mapPath_single f edge)
+
+theorem comp_id (f : Hom G H) : comp f (id H) = f := by
+  apply ext
+  · rfl
+  · intro s t kind edge
+    exact heq_of_eq (mapPath_id (f.mapEdge edge).1)
+
+theorem assoc (f : Hom G H) (g : Hom H K)
+    {L : OpenGraph.{u, x} Port} (h : Hom K L) :
+    comp (comp f g) h = comp f (comp g h) := by
+  apply ext
+  · rfl
+  · intro s t kind edge
+    exact heq_of_eq (mapPath_comp g h (f.mapEdge edge).1).symm
+
 theorem erase_id (G : OpenGraph.{u, v} Port) :
     erase (id G) = Audit.Simulation.id G := by
   apply Audit.Simulation.ext
@@ -142,6 +179,36 @@ theorem erase_comp (f : Hom G H) (g : Hom H K) :
   rfl
 
 end Hom
+
+/-- Object wrapper separating the constructive simulation category from the
+legacy category instance on bare `OpenGraph` values. -/
+structure Object (Port : Type u) where
+  graph : OpenGraph.{u, v} Port
+
+namespace Object
+
+open CategoryTheory
+
+instance category (Port : Type u) : CategoryTheory.Category (Object.{u, v} Port) where
+  Hom X Y := Hom X.graph Y.graph
+  id X := Hom.id X.graph
+  comp f g := Hom.comp f g
+  id_comp := Hom.id_comp
+  comp_id := Hom.comp_id
+  assoc := fun f g h ↦ Hom.assoc f g h
+
+end Object
+
+open CategoryTheory
+
+/-- §23.5′: erasure of carried paths is a functor to the legacy open
+simulation category. -/
+noncomputable def eraseFunctor (Port : Type u) :
+    Object.{u, v} Port ⥤ OpenGraph.{u, v} Port where
+  obj X := X.graph
+  map f := Hom.erase f
+  map_id X := Hom.erase_id X.graph
+  map_comp f g := Hom.erase_comp f g
 
 /-- The identity audit map for a formal open frame, using no extra assumptions. -/
 def identityAuditMap {Port : Type u} (O : OpenFrame.{u, v} Port) :

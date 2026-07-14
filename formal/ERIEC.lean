@@ -42,5 +42,6 @@ import ERIEC.Gap
 import ERIEC.Decay
 import ERIEC.OpenSimC
 import ERIEC.Centering
+import ERIEC.NonDegenerateRecur
 import ERIEC.Traceability
 import ERIEC.RefModelV52

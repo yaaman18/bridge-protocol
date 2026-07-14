@@ -1,5 +1,6 @@
 import Mathlib.CategoryTheory.Category.Basic
-import ERIEC.TemporalDC
+import Mathlib.Data.Nat.Order.Lemmas
+import Lean.Elab.Tactic.Omega
 
 namespace ERIEC
 
