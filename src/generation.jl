@@ -64,3 +64,34 @@ function check_richness_inherits_generational(;
 )
     proliferation_morphism && parent_branch && child_branch_transport && child_pump && phi_rich_lax
 end
+
+"""
+    check_rich_lineage_cofinal(N, bound;
+        step_certificates=fill(true, N), scores=collect(1:(N + 1)),
+        semantic_invariant=true)
+
+Check the executable finite-prefix boundary for VP-GEN-005.  The checker
+requires one proliferation certificate for every adjacent pair in generations
+`0:N`, the reference score law `score(n) = n + 1`, semantic invariance of the
+reported score, and a generation whose score exceeds `bound`.
+
+This finite audit does not claim to prove the infinite cofinality theorem; that
+claim belongs to Lean.
+"""
+function check_rich_lineage_cofinal(
+    N::Integer,
+    bound::Integer;
+    step_certificates=fill(true, N),
+    scores=collect(1:(N + 1)),
+    semantic_invariant::Bool=true,
+)
+    N >= 0 || throw(ArgumentError("N must be nonnegative"))
+    bound >= 0 || throw(ArgumentError("bound must be nonnegative"))
+    length(step_certificates) == N || return false
+    length(scores) == N + 1 || return false
+
+    all(step_certificates) &&
+        semantic_invariant &&
+        all(n -> scores[n + 1] == n + 1, 0:N) &&
+        any(score -> bound < score, scores)
+end

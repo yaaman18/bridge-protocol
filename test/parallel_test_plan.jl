@@ -29,6 +29,7 @@ const ERIEC_TEST_PLAN = [
     ("test_reference_models.jl", 0.5),
     ("test_wager.jl", 0.5),
     ("test_richness.jl", 0.5),
+    ("test_generation.jl", 0.5),
     ("test_markers.jl", 0.5),
     ("test_umwelt_experiments.jl", 0.5),
     ("test_policy_topology.jl", 40.0),

@@ -874,7 +874,7 @@
         ),
         (
             file="RefModel.lean",
-            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean"],
+            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean", "RefModel/LineageWitness.lean"],
             lean=[
                 "RefState", "next", "reference_models", "StableReferenceWitness",
                 "stable_reference_model",
@@ -890,12 +890,22 @@
                 "arbitrarily_large_ax_core_discrete_model",
                 "LargeThreeLayerReferenceWitness",
                 "arbitrarily_large_three_layer_reference_model",
+                "richLineageDC", "richLineageDC_act_eq_univ",
+                "richLineageDC_not_richnessWitness",
+                "richLineageDC_phi_rich_eq_zero", "richLineageStep",
+                "cardSem", "cardPhiRich", "richLineage",
+                "cardPhiRich_score_richLineage",
+                "richLineage_score_eq_hinge_card", "richLineage_cofinal",
+                "RichLineageWitness", "rich_lineage_reference_model",
+                "rich_lineage_freshSem",
+                "rich_lineage_not_eventuallyPeriodic",
             ],
             julia=[
                 :check_reference_models,
                 :check_arbitrarily_large_nondegenerate_models,
                 :check_arbitrarily_large_ax_core_discrete_models,
                 :check_arbitrarily_large_three_layer_reference_models,
+                :check_rich_lineage_cofinal,
             ],
         ),
         (
@@ -1119,6 +1129,7 @@
         "generation.proliferation_morphism",
         "generation.lineage_stays_open",
         "generation.richness_inherits_generational",
+        "generation.rich_lineage_cofinal",
         "v52.gate.propagation",
         "v52.gate.soundness",
         "v52.gate.unique",
@@ -1266,4 +1277,27 @@
         for dependency in graph.lean_dependencies
     )
     @test any(edge.relation == :lean_dependency for edge in graph.edges)
+
+    rich_lineage_envelope = certified_artifact_envelope(
+        (
+            kind=:rich_lineage,
+            lean_contracts=["generation.rich_lineage_cofinal"],
+            julia_checkers=[:check_rich_lineage_cofinal],
+            numeric_assumptions=NamedTuple(),
+        ),
+        artifact_check,
+    )
+    rich_lineage_graph = certificate_dependency_graph(rich_lineage_envelope)
+    @test any(
+        dependency.contract == "generation.rich_lineage_cofinal" &&
+            dependency.lean_module == "ERIEC.RefModel.LineageWitness" &&
+            dependency.declaration == "rich_lineage_reference_model"
+        for dependency in rich_lineage_graph.lean_dependencies
+    )
+    @test any(
+        edge.from == "generation.rich_lineage_cofinal" &&
+            edge.to == "ERIEC.RefModel.LineageWitness.rich_lineage_reference_model" &&
+            edge.relation == :lean_dependency
+        for edge in rich_lineage_graph.edges
+    )
 end

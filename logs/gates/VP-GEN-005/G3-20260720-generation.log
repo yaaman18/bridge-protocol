@@ -1,0 +1,16 @@
+ERROR: LoadError: Some tests did not pass: 19 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_generation.jl:4
+generation boundary audits: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_generation.jl:23
+  Expression: !(check_rich_lineage_cofinal(5, 5))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_generation.jl:23 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_generation.jl:5
+Test Summary:              | Pass  Fail  Total  Time
+generation boundary audits |   19     1     20  2.2s

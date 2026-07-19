@@ -692,6 +692,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "check_richness_inherits_generational"
       },
       {
+        id := "generation.rich_lineage_cofinal"
+        leanModule := "ERIEC.RefModel.LineageWitness"
+        leanName := "rich_lineage_reference_model"
+        leanKind := "theorem"
+        juliaSymbol := "check_rich_lineage_cofinal"
+        juliaChecker := "check_rich_lineage_cofinal"
+      },
+      {
         id := "v52.gate.propagation"
         leanModule := "ERIEC.Gate"
         leanName := "gate_na_propagates"

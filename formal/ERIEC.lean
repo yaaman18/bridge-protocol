@@ -29,6 +29,7 @@ import ERIEC.Wager
 import ERIEC.Richness
 import ERIEC.OpenEvolution
 import ERIEC.Generation
+import ERIEC.RefModel.LineageWitness
 import ERIEC.Lineage
 import ERIEC.TemporalDC
 import ERIEC.OpenDynamics

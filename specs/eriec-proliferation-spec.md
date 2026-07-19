@@ -100,7 +100,7 @@ theorem ERIEC.Generation.lineage_stays_open ... :
     Cofinal Φ_rich L → FreshSem sem L
 ```
 
-証人: 富モデル（義務 1.6 強化系）が cofinal な `Φ_rich` を持つこと（別 VP・後続）。
+証人: 富モデル（義務 1.6 強化系）が cofinal な `Φ_rich` を持つこと（VP-GEN-005 で履行）。
 
 ### VP-GEN-004 — 世代間の豊かさ遺伝（A-6 単段の持ち上げ・別 statement）
 
@@ -115,12 +115,94 @@ theorem ERIEC.Generation.richness_inherits_generational
       Φ_rich f.targetDC > Φ_rich f.sourceDC   -- あるいは ≥、遺伝契約の採り方に従う
 ```
 
+### VP-GEN-005 — 富モデル系譜の具体証人（cofinal Φ_rich、VP-GEN-003 の証人義務履行）
+
+起票 2026-07-14（ユーザー承認済み・改訂順 A）。VP-GEN-003 の「証人: 別 VP・後続」を払う。
+`ProliferationEvent` 上の具体的な系譜であって、意味論不変な富スコアが cofinal になる
+（⇒ `lineage_stays_open_phi_rich` により FreshSem = 系譜は意味論的に開く）ものを構成する。
+
+#### 設計上の障害 2 点と、それを避ける構成（statement の根拠）
+
+1. **`Generation.phi_rich` は {0,1} 値**（[Generation.lean:44](../formal/ERIEC/Generation.lean#L44)）。
+   `Cofinal q L` は「∀ bound, ∃ n, bound < q(系 n)」を要求するので、{0,1} 値の量は
+   原理的に cofinal になれない。∴ 本 VP は phi_rich の cofinality を**主張しない**（不可能）。
+   cofinal にするのは別の意味論不変スカラー（下記 score、蝶番濃度の代理）。
+2. **アダプタ `dcToOpenSystem` は `Fast=Slow=Env=S` へ忘却する**
+   （[Generation.lean:13](../formal/ERIEC/Generation.lean#L13)）。既存の静的富モデル族
+   `parameterizedRichDC k` は状態型が全 k で共通（`RefState`）なので、翻訳後の
+   OpenSystem が世代間で区別できず、いかなる意味論不変スコアも定数になる。
+   ∴ 証人族は**富を状態型に運ぶ**必要がある: 第 n 世代の状態型と蝶番濃度をともに
+   n+1 にする新しい有限 DC 族を `RefModel` に立てる。アダプタ自体を M を運ぶ形へ
+   精緻化する案は certified な VP-GEN-001 の変更を要するため本 VP に含めない（別研究判断）。
+
+#### 予約する Lean 宣言（namespace `ERIEC.RefModel`、新規ファイル `formal/ERIEC/RefModel/LineageWitness.lean`）
+
+正確な型は codex が G0 で凍結（`ParameterizedRichReferenceWitness` の前例に倣い
+witness structure + `Nonempty` 定理の形）。以下は claude 側の型スケッチ。
+
+```
+-- 系譜用の富 DC 族: 第 n 世代は状態型・蝶番濃度ともに n+1
+-- （parameterizedRichDC の S=RefState 固定を S=Fin (n+1) に置き換えた変種）
+def ERIEC.RefModel.richLineageDC (n : ℕ) : DC (Fin (n+1)) Unit Unit (Fin (n+1))
+
+-- 隣接世代を結ぶ増殖射（E=Unit なので Branch は空 → branch_transport は空虚に成立、
+-- phi_rich は両辺 0 → phi_rich_lax 成立。heritage/rank は witness データとして供給）
+def ERIEC.RefModel.richLineageStep (n : ℕ) :
+    Generation.ProliferationMorphism (richLineageDC n) (richLineageDC (n+1))
+
+-- 選ぶ意味論: Fast 型の等濃 sem.rel a b :↔ Nonempty (a.Fast ≃ b.Fast)
+def ERIEC.RefModel.cardSem : OpenEvolution.SemanticEquivalence
+
+-- 選ぶスコア: score sys := Nat.card sys.Fast（cardSem 不変は定義から）
+def ERIEC.RefModel.cardPhiRich : Generation.PhiRich cardSem
+
+-- 証人 structure（前例 ParameterizedRichReferenceWitness に倣う）
+structure ERIEC.RefModel.RichLineageWitness where
+  lineage : OpenEvolution.Lineage Generation.ProliferationEvent
+  system_eq : ∀ n, lineage.system n = Generation.dcToOpenSystem (richLineageDC n)
+  -- スコアと DC 側蝶番濃度の整合（score が蝶番濃度の忠実な代理であることの証明義務）
+  score_eq_hinge_card : ∀ n,
+    cardPhiRich.score (lineage.system n)
+      = (Hinge.Act (richLineageDC n).rhoRel (richLineageDC n).sigmaRel
+          (richLineageDC n).kappa (richLineageDC n).epsilon (richLineageDC n).s).ncard
+  cofinal : OpenEvolution.Lineage.Cofinal cardPhiRich.score lineage
+
+-- 台帳照合対象（G1）: 証人の存在
+theorem ERIEC.RefModel.rich_lineage_reference_model : Nonempty RichLineageWitness
+
+-- 系: 系譜は意味論的に開く（VP-GEN-003 の instantiation を実モデルで発火）
+theorem ERIEC.RefModel.rich_lineage_freshSem (w : RichLineageWitness) :
+    OpenEvolution.Lineage.FreshSem cardSem w.lineage :=
+  Generation.lineage_stays_open_phi_rich cardSem w.lineage cardPhiRich w.cofinal
+
+-- 系: 最終的周期性の排除（freshSem_not_eventuallyPeriodicSem の発火）
+theorem ERIEC.RefModel.rich_lineage_not_eventuallyPeriodic (w : RichLineageWitness) :
+    ¬ OpenEvolution.Lineage.EventuallyPeriodicSem cardSem w.lineage
+```
+
+#### 未確定事項との関係（明示・混在させない）
+
+- **Φ_rich 重みづけ（memo §11 未確定 1）は本 VP で固定しない**。`cardPhiRich` は
+  「意味論不変スカラーを 1 つ供給する existential 証人」であり、Φ_div 成分（蝶番濃度）
+  の代理。ユーザーが (Φ_depth, Φ_div, Φ_level) の合成を確定したら `PhiRich` バンドル
+  を差し替えるだけで本 statement の形は保たれる。
+- 証人族は E=Unit（分岐なし・phi_rich=0）で cofinality を払う設計。「分岐あり
+  （phi_rich=1）かつ cofinal」の強化版は VP-RICH-001/002 の Branch 実装後に別途
+  検討可能だが、本 VP の義務ではない。
+
+#### Julia 側（有限接頭辞チェッカ）
+
+`check_rich_lineage_cofinal(N, bound)`: 世代 0..N について (i) 隣接増殖射 certificate、
+(ii) score(系 n) = n+1、(iii) bound < N+1 なる bound に対し score が bound を超える世代の
+実在、を検査。無限主張自体は Lean 側のみが払う（既存の arbitrarily_large 系 VP と同じ分界）。
+
 ## 実装順序（codex）
 
 1. VP-GEN-001（adapter/翻訳 witness）を先に固定 — 実装側はこれが無いと動けない（codex 要請）。
 2. VP-GEN-002（増殖射）。
 3. VP-GEN-003（開放性の instantiation）。
 4. VP-GEN-004（世代間遺伝）。
+5. VP-GEN-005（富系譜の具体証人。1〜4 は certified 済みなので単独で着手可）。
 
 ## 不変条項チェック（設計段階・偽C）
 
@@ -129,3 +211,11 @@ theorem ERIEC.Generation.richness_inherits_generational
 - Σ-purity: `𝒮` は増殖射集合の上で選択するが選択値を個体トレースへ write-back しない。✓
 - 灯り: `phenomenal_claim = :not_certified` 不接触。増殖しても各対象は not_certified。✓
 - 同一視の禁止: `DC⇒viable` は一方向 translation witness のみ。逆向き禁止を維持。✓
+
+VP-GEN-005 固有:
+
+- 層分離: 証人族 `richLineageDC` は対象層の**具体モデル構成**（RefModel の前例どおり）で
+  あり、対象層への公理追加ではない。系譜・スコアはメタ層。✓
+- M4: 系譜は ω 型で終対象（極限対象）を**足さない**。スコアの非有界成長は witness 族の
+  事実であって、個体内に最大化勾配・set point を注入しない（各世代の DC は独立に M1〜M4 充足）。✓
+- 灯り: FreshSem は構造的主張。`phenomenal_claim = :not_certified` 不接触。✓

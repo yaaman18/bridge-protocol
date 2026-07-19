@@ -700,3 +700,17 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002", "VP-RICH-002"]
 status      = "certified"                     # G4: logs/gates/VP-GEN-004/G4-20260711-203602.log
 pinned      = false
+
+[[vp]]
+id          = "VP-GEN-005"
+source      = "specs/eriec-proliferation-spec.md#VP-GEN-005"
+claim_ja    = "富モデル系譜の具体証人（VP-GEN-003 の証人義務履行）: 状態型・蝶番濃度が世代とともに n+1 で成長する DC 族の ProliferationEvent 系譜と意味論不変スコア（蝶番濃度の代理・Φ_rich 合成は未確定のまま固定しない）の組が存在し Cofinal ⇒ FreshSem（系譜は開く）"
+lean_decl   = "ERIEC.RefModel.rich_lineage_reference_model"
+lean_file   = "formal/ERIEC/RefModel/LineageWitness.lean"
+julia_api   = "check_rich_lineage_cofinal"
+julia_file  = "src/generation.jl"
+contract_id = "generation.rich_lineage_cofinal"
+owner       = "codex"
+depends_on  = ["VP-GEN-002", "VP-GEN-003"]
+status      = "certified"                    # G4: logs/gates/VP-GEN-005/G4-20260720-retry1.log
+pinned      = false                           # 2026-07-20 ユーザー凍結レビュー通過（G1 着手可）
