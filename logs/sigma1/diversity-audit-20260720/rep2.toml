@@ -1,0 +1,118 @@
+null_rejection_rate = 0.024509803921568627
+replicate = 2
+seed = 20260722
+selected_rejection_rate = 0.013786764705882353
+
+[initial]
+cap_fraction = 0.703125
+cap_replaced = 45
+individuals = 64
+pure = true
+within_size_finite = true
+
+    [[initial.by_size]]
+    cap_fraction = 0.0
+    cap_replaced = 0
+    individuals = 19
+    pair_iqr = 1.0
+    pair_median = 1.0
+    pair_nonzero_fraction = 0.5146198830409356
+    pairs = 171
+    size = 2
+    [[initial.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 15
+    individuals = 15
+    pair_iqr = 0.9999999999999994
+    pair_median = 1.0
+    pair_nonzero_fraction = 0.9428571428571428
+    pairs = 105
+    size = 3
+    [[initial.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 17
+    individuals = 17
+    pair_iqr = 0.643277073211509
+    pair_median = 1.7237632924860429
+    pair_nonzero_fraction = 1.0
+    pairs = 136
+    size = 8
+    [[initial.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 13
+    individuals = 13
+    pair_iqr = 4.385164807134504
+    pair_median = 1.5714904291745793
+    pair_nonzero_fraction = 1.0
+    pairs = 78
+    size = 32
+
+[null]
+cap_fraction = 0.6666666666666666
+cap_replaced = 6
+individuals = 9
+pure = true
+within_size_finite = true
+
+    [[null.by_size]]
+    cap_fraction = 0.0
+    cap_replaced = 0
+    individuals = 3
+    pair_iqr = 0.0
+    pair_median = 1.0
+    pair_nonzero_fraction = 1.0
+    pairs = 3
+    size = 2
+    [[null.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 6
+    individuals = 6
+    pair_iqr = 0.578196277418149
+    pair_median = 1.7320508075688774
+    pair_nonzero_fraction = 1.0
+    pairs = 15
+    size = 8
+
+[selected]
+cap_fraction = 0.8888888888888888
+cap_replaced = 8
+individuals = 9
+pure = true
+within_size_finite = true
+
+    [[selected.by_size]]
+    cap_fraction = 0.0
+    cap_replaced = 0
+    individuals = 1
+    pair_iqr = 0.0
+    pair_median = 0.0
+    pair_nonzero_fraction = 0.0
+    pairs = 0
+    size = 2
+    [[selected.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 3
+    individuals = 3
+    pair_iqr = 0.41421356237309526
+    pair_median = 1.0
+    pair_nonzero_fraction = 1.0
+    pairs = 3
+    size = 3
+    [[selected.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 3
+    individuals = 3
+    pair_iqr = 0.7888543819998327
+    pair_median = 1.530639455540443
+    pair_nonzero_fraction = 1.0
+    pairs = 3
+    size = 8
+    [[selected.by_size]]
+    cap_fraction = 1.0
+    cap_replaced = 2
+    individuals = 2
+    pair_iqr = 0.0
+    pair_median = 5.220153254455276
+    pair_nonzero_fraction = 1.0
+    pairs = 1
+    size = 32

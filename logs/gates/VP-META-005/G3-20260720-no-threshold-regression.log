@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4809.2 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary:                     | Pass  Total   Time
+Sigma1 diversity resolution audit |   15     15  16.7s
