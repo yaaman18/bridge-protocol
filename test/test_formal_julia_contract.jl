@@ -28,6 +28,7 @@
         "RefModel",
         "Wager",
         "Generation",
+        "TemporalDC",
         "OpenDynamics",
         "Audit",
         "Lineage",
@@ -874,7 +875,7 @@
         ),
         (
             file="RefModel.lean",
-            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean", "RefModel/LineageWitness.lean"],
+            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean", "RefModel/LineageWitness.lean", "RefModel/CollapseTrace.lean"],
             lean=[
                 "RefState", "next", "reference_models", "StableReferenceWitness",
                 "stable_reference_model",
@@ -899,6 +900,9 @@
                 "RichLineageWitness", "rich_lineage_reference_model",
                 "rich_lineage_freshSem",
                 "rich_lineage_not_eventuallyPeriodic",
+                "CollapseTraceWitness", "collapse_trace_reference_model",
+                "collapse_trace_precarious", "AllMortalWitness",
+                "all_mortal_reference_model",
             ],
             julia=[
                 :check_reference_models,
@@ -906,6 +910,9 @@
                 :check_arbitrarily_large_ax_core_discrete_models,
                 :check_arbitrarily_large_three_layer_reference_models,
                 :check_rich_lineage_cofinal,
+                :check_collapse_trace_termination,
+                :check_precarious_prefix,
+                :check_no_escape_prefix,
             ],
         ),
         (
@@ -964,6 +971,47 @@
                 :check_proliferation_morphism,
                 :check_lineage_stays_open,
                 :check_richness_inherits_generational,
+            ],
+        ),
+        (
+            file="TemporalDC.lean",
+            lean=[
+                "CertificationObservation",
+                "GapAt",
+                "ObservedTerminationStep",
+                "observedTermination_is_termination",
+                "observedTermination_not_gap",
+                "PermanentTerminationStep",
+                "NeverCertified",
+                "permanent_no_resume",
+                "permanentTermination_not_neverCertified",
+                "Precarious",
+                "NoInternalEscape",
+            ],
+            julia=[
+                :TemporalDCTrace,
+                :check_observed_termination,
+                :check_permanent_termination_prefix,
+            ],
+        ),
+        (
+            file="MetaSelection.lean",
+            lean=[
+                "SigmaPure",
+                "trace_preserved_of_sigmaPure",
+                "m4_preserved_of_sigmaPure",
+                "M4SafeMutation",
+            ],
+            julia=[
+                :QDCandidate,
+                :QDArchive,
+                :SigmaPurityExperiment,
+                :Sigma1ExperimentPlan,
+                :qd_selection_step,
+                :check_sigma_purity,
+                :check_selection_nondegenerate,
+                :run_sigma1_experiment,
+                :sigma1_observe_candidate,
             ],
         ),
         (
@@ -1130,6 +1178,15 @@
         "generation.lineage_stays_open",
         "generation.richness_inherits_generational",
         "generation.rich_lineage_cofinal",
+        "temporaldc.observed_termination",
+        "temporaldc.permanent_termination",
+        "temporaldc.collapse_trace",
+        "temporaldc.precarious",
+        "temporaldc.no_escape",
+        "meta.sigma_purity",
+        "meta.qd_selection",
+        "meta.sigma1_experiment",
+        "meta.individual_adapter",
         "v52.gate.propagation",
         "v52.gate.soundness",
         "v52.gate.unique",
@@ -1300,4 +1357,84 @@
             edge.relation == :lean_dependency
         for edge in rich_lineage_graph.edges
     )
+
+    for temporal_contract in [
+        (
+            id="temporaldc.observed_termination",
+            checker=:check_observed_termination,
+            lean_module="ERIEC.TemporalDC",
+            declaration="ObservedTerminationStep",
+        ),
+        (
+            id="temporaldc.permanent_termination",
+            checker=:check_permanent_termination_prefix,
+            lean_module="ERIEC.TemporalDC",
+            declaration="PermanentTerminationStep",
+        ),
+        (
+            id="temporaldc.collapse_trace",
+            checker=:check_collapse_trace_termination,
+            lean_module="ERIEC.RefModel.CollapseTrace",
+            declaration="collapse_trace_reference_model",
+        ),
+        (
+            id="temporaldc.precarious",
+            checker=:check_precarious_prefix,
+            lean_module="ERIEC.RefModel.CollapseTrace",
+            declaration="collapse_trace_precarious",
+        ),
+        (
+            id="temporaldc.no_escape",
+            checker=:check_no_escape_prefix,
+            lean_module="ERIEC.RefModel.CollapseTrace",
+            declaration="all_mortal_reference_model",
+        ),
+        (
+            id="meta.sigma_purity",
+            checker=:check_sigma_purity,
+            lean_module="ERIEC.MetaSelection",
+            declaration="m4_preserved_of_sigmaPure",
+        ),
+        (
+            id="meta.qd_selection",
+            checker=:check_selection_nondegenerate,
+            lean_module="ERIEC.MetaSelection",
+            declaration="SigmaPure",
+        ),
+        (
+            id="meta.sigma1_experiment",
+            checker=:run_sigma1_experiment,
+            lean_module="ERIEC.MetaSelection",
+            declaration="trace_preserved_of_sigmaPure",
+        ),
+        (
+            id="meta.individual_adapter",
+            checker=:sigma1_observe_candidate,
+            lean_module="ERIEC.MetaSelection",
+            declaration="M4SafeMutation",
+        ),
+    ]
+        temporal_envelope = certified_artifact_envelope(
+            (
+                kind=:temporaldc,
+                lean_contracts=[temporal_contract.id],
+                julia_checkers=[temporal_contract.checker],
+                numeric_assumptions=NamedTuple(),
+            ),
+            artifact_check,
+        )
+        temporal_graph = certificate_dependency_graph(temporal_envelope)
+        @test any(
+            dependency.contract == temporal_contract.id &&
+                dependency.lean_module == temporal_contract.lean_module &&
+                dependency.declaration == temporal_contract.declaration
+            for dependency in temporal_graph.lean_dependencies
+        )
+        @test any(
+            edge.from == temporal_contract.id &&
+                edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" &&
+                edge.relation == :lean_dependency
+            for edge in temporal_graph.edges
+        )
+    end
 end

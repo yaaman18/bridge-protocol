@@ -714,3 +714,137 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002", "VP-GEN-003"]
 status      = "certified"                    # G4: logs/gates/VP-GEN-005/G4-20260720-retry1.log
 pinned      = false                           # 2026-07-20 ユーザー凍結レビュー通過（G1 着手可）
+
+# ---- 機能終了ライン（specs/eriec-termination-spec.md、2026-07-20 起票・ユーザー実装指示）----
+# 目的関数: 外部公理を追加しない限り機能終了を構造的に外せないことの明示（反セルフハック）。
+# 命名規律: 形式層で「死」を使わず「機能終了」で運用（灯り条項）。
+
+[[vp]]
+id          = "VP-TMP-001"
+source      = "specs/eriec-termination-spec.md#VP-TMP-001"
+claim_ja    = "認証観測層: dcHolds 単一述語では区別できない『DC 実喪失』と『観測欠損』を、ActionObservation と同型の read-only 観測構造（CertificationObservation）で分離し、機能終了の主張を観測された生起上に限定する"
+lean_decl   = "ERIEC.TemporalDC.Certification.ObservedTerminationStep"
+lean_file   = "formal/ERIEC/TemporalDC.lean"
+julia_api   = "check_observed_termination"
+julia_file  = "src/temporal_dc.jl"
+contract_id = "temporaldc.observed_termination"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-TMP-001/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-TMP-002"
+source      = "specs/eriec-termination-spec.md#VP-TMP-002"
+claim_ja    = "永続機能終了の分類子: PermanentTerminationStep（終了ステップ以後の全到達生起で再認証なし — 永続性は定理不可能なので定義に組込）、未生（NeverCertified）との区別、永続終了後の全 ResumesAlong 不成立（排他性）"
+lean_decl   = "ERIEC.TemporalDC.Certification.PermanentTerminationStep"
+lean_file   = "formal/ERIEC/TemporalDC.lean"
+julia_api   = "check_permanent_termination_prefix"
+julia_file  = "src/temporal_dc.jl"
+contract_id = "temporaldc.permanent_termination"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-TMP-002/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-TMP-003"
+source      = "specs/eriec-termination-spec.md#VP-TMP-003"
+claim_ja    = "崩壊参照 trace（TemporalDC–Decay 接続）: upd_dec 崩壊力学の反復を GeneratedTrace に載せ、abstract_collapse の吸収性と hBound（κ空構成に DC certificate 不在）により永続機能終了の具体証人を構成 — 不可逆性の構造的担保"
+lean_decl   = "ERIEC.RefModel.collapse_trace_reference_model"
+lean_file   = "formal/ERIEC/RefModel/CollapseTrace.lean"
+julia_api   = "check_collapse_trace_termination"
+julia_file  = "src/temporal_dc.jl"
+contract_id = "temporaldc.collapse_trace"
+owner       = "codex"
+depends_on  = ["VP-TMP-002"]
+status      = "certified"                     # G4: logs/gates/VP-TMP-003/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-TMP-004"
+source      = "specs/eriec-termination-spec.md#VP-TMP-004"
+claim_ja    = "precariousness の trace 形式化（M1 可死性成分）: 全認証生起から機能終了ステップへ到達可能（Precarious 分類子）＋崩壊証人がこれを満たすことの証明。『全 M1 系は Precarious』は公理化しない（層分離）"
+lean_decl   = "ERIEC.RefModel.collapse_trace_precarious"
+lean_file   = "formal/ERIEC/RefModel/CollapseTrace.lean"
+julia_api   = "check_precarious_prefix"
+julia_file  = "src/temporal_dc.jl"
+contract_id = "temporaldc.precarious"
+owner       = "codex"
+depends_on  = ["VP-TMP-003"]
+status      = "certified"                     # G4: logs/gates/VP-TMP-004/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-TMP-005"
+source      = "specs/eriec-termination-spec.md#VP-TMP-005"
+claim_ja    = "全系可死参照モデル（内部脱出の非導出性）: 全認証生起が永続機能終了へ到達する M1〜M4 無矛盾モデルの実在（AllMortalWitness）⇒『機能終了の内部回避』は対象理論の定理でなく、脱出は外部公理注入のみ — 反セルフハックの核"
+lean_decl   = "ERIEC.RefModel.all_mortal_reference_model"
+lean_file   = "formal/ERIEC/RefModel/CollapseTrace.lean"
+julia_api   = "check_no_escape_prefix"
+julia_file  = "src/temporal_dc.jl"
+contract_id = "temporaldc.no_escape"
+owner       = "codex"
+depends_on  = ["VP-TMP-003"]
+status      = "certified"                     # G4: logs/gates/VP-TMP-005/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+# ---- Σ1 実験ライン（specs/eriec-sigma1-experiment-spec.md、2026-07-20 起票・ユーザー実装指示）----
+# 改訂B: Σ1 実験仕様の6項目（kernel・初期分布・Φ_rich観測・非退化測度・Σ-purity検問・反例基準）を
+# 実装契約として固定。実走（改訂C）は VP-META-003 certified 後に別途ユーザー承認。
+
+[[vp]]
+id          = "VP-META-001"
+source      = "specs/eriec-sigma1-experiment-spec.md#VP-META-001"
+claim_ja    = "Σ-purity 二段検問の実装: (a) 静的 — 選択 namespace から個体 sink（νΦ/V/D/action trace 更新）への呼び出し到達不能、(b) 動的 — 𝒮 内部状態を摂動した2走行で個体観測トレースの直列化ハッシュ bit 同一。検問失敗は実験全体を invalid とする"
+lean_decl   = "ERIEC.MetaSelection.m4_preserved_of_sigmaPure"
+lean_file   = "formal/ERIEC/MetaSelection.lean"
+julia_api   = "check_sigma_purity"
+julia_file  = "src/sigma_selection.jl"
+contract_id = "meta.sigma_purity"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-META-001/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-META-002"
+source      = "specs/eriec-sigma1-experiment-spec.md#VP-META-002"
+claim_ja    = "QD 選択 kernel（MAP-Elites 8×8: diversity=umwelt_relative_diff×Φ_depth、quality=蝶番濃度）と非退化測度（帰無=選択無効化系、Mann–Whitney U α'=0.025 ∧ Cliff's delta ≥ 0.474 の両充足）。変異は admission check（check_DC ∧ M4-safe ∧ 蝶番非空）通過のみ"
+lean_decl   = "ERIEC.MetaSelection.SigmaPure"
+lean_file   = "formal/ERIEC/MetaSelection.lean"
+julia_api   = "check_selection_nondegenerate"
+julia_file  = "src/sigma_selection.jl"
+contract_id = "meta.qd_selection"
+owner       = "codex"
+depends_on  = []
+status      = "certified"                     # G4: logs/gates/VP-META-002/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-META-003"
+source      = "specs/eriec-sigma1-experiment-spec.md#VP-META-003"
+claim_ja    = "Σ1 実験ハーネス実走契約: 初期分布（参照族16+ランダム48、seed=Xoshiro(20260720+k) k=0..9 固定）、Φ_rich 成分別観測（Φ_depth・Φ_div のみ、Φ_level は v1 対象外、合成禁止）、反例基準 R1〜R4 の事前登録判定。E1 再判断・重みづけ確定はユーザー専権のまま"
+lean_decl   = "ERIEC.MetaSelection.trace_preserved_of_sigmaPure"
+lean_file   = "formal/ERIEC/MetaSelection.lean"
+julia_api   = "run_sigma1_experiment"
+julia_file  = "src/sigma_selection.jl"
+contract_id = "meta.sigma1_experiment"
+owner       = "codex"
+depends_on  = ["VP-META-001", "VP-META-002"]
+status      = "certified"                     # G4: logs/gates/VP-META-003/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+
+[[vp]]
+id          = "VP-META-004"
+source      = "specs/eriec-sigma1-experiment-spec.md#VP-META-004"
+claim_ja    = "Σ1 個体 adapter: DC 認証ユニット担体（carrier は G0 凍結）と carrier→QDCandidate の read-only adapter、参照族16個体の構築時 admission 自己認証（is_DC ∧ 蝶番非空 ∧ M4-safe、hard error）、非縮退証人（初期 QD 格子占有 ≥5 セル ∧ k=2 群単独 ≥2 セル）、二段 diversity adapter（有限最大 M_f を先に計算し Inf を M_f へ置換・certified の 1.5×max 規則不変更）、初期集団は案B（各 replicate の承認済み seed から生成・新規 seed 禁止）"
+lean_decl   = "ERIEC.MetaSelection.M4SafeMutation"
+lean_file   = "formal/ERIEC/MetaSelection.lean"
+julia_api   = "sigma1_observe_candidate"
+julia_file  = "src/sigma1_run.jl"
+contract_id = "meta.individual_adapter"
+owner       = "codex"
+depends_on  = ["VP-META-002"]
+status      = "certified"                     # G4: logs/gates/VP-META-004/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 ユーザー起票承認（codex challenge 由来の分離 VP）

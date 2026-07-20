@@ -30,6 +30,7 @@ import ERIEC.Richness
 import ERIEC.OpenEvolution
 import ERIEC.Generation
 import ERIEC.RefModel.LineageWitness
+import ERIEC.RefModel.CollapseTrace
 import ERIEC.Lineage
 import ERIEC.TemporalDC
 import ERIEC.OpenDynamics

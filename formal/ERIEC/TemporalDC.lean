@@ -80,6 +80,24 @@ structure ActionObservation {A : OpenSystem.{u}}
     (T : GeneratedTrace.{u, v} A) where
   executes : T.Occurrence → Prop
 
+/-- Read-only evidence that an occurrence was observed by the certification
+layer.  Absence of evidence is an observation gap, not evidence of either DC
+retention or DC loss. -/
+structure CertificationObservation {A : OpenSystem.{u}}
+    (T : GeneratedTrace.{u, v} A) where
+  observed : T.Occurrence → Prop
+
+namespace CertificationObservation
+
+variable {A : OpenSystem.{u}} {T : GeneratedTrace.{u, v} A}
+  (O : CertificationObservation T)
+
+/-- The certification layer has no observation at this occurrence. -/
+def GapAt (x : T.Occurrence) : Prop :=
+  ¬ O.observed x
+
+end CertificationObservation
+
 /-- A path whose initial occurrence and every appended occurrence retain DC. -/
 inductive DCPreservingReachable {A : OpenSystem.{u}}
     {T : GeneratedTrace.{u, v} A} (C : Certification T) :
@@ -157,6 +175,32 @@ variable {A : OpenSystem.{u}} {T : GeneratedTrace.{u, v} A}
 def FunctionalTerminationStep (x y : T.Occurrence) : Prop :=
   T.next x y ∧ C.dcHolds x ∧ ¬ C.dcHolds y
 
+/-- A functional-termination claim restricted to two observed endpoints. -/
+def ObservedTerminationStep (O : CertificationObservation T)
+    (x y : T.Occurrence) : Prop :=
+  C.FunctionalTerminationStep x y ∧ O.observed x ∧ O.observed y
+
+theorem observedTermination_is_termination (O : CertificationObservation T)
+    {x y : T.Occurrence} (h : C.ObservedTerminationStep O x y) :
+    C.FunctionalTerminationStep x y :=
+  h.1
+
+theorem observedTermination_not_gap (O : CertificationObservation T)
+    {x y : T.Occurrence} (h : C.ObservedTerminationStep O x y) :
+    ¬ O.GapAt x ∧ ¬ O.GapAt y := by
+  exact ⟨fun hx => hx h.2.1, fun hy => hy h.2.2⟩
+
+/-- Functional termination followed by absence of DC at every occurrence
+reachable from its target.  Permanence is data of this classifier; it is not
+derived for arbitrary functional-termination steps. -/
+def PermanentTerminationStep (x y : T.Occurrence) : Prop :=
+  C.FunctionalTerminationStep x y ∧
+    ∀ z, Reachable T.next y z → ¬ C.dcHolds z
+
+/-- No occurrence on the trace has ever been certified as retaining DC. -/
+def NeverCertified : Prop :=
+  ∀ x, ¬ C.dcHolds x
+
 /-- Dormancy-like classification: DC capability remains, but this occurrence
 is not an action tick.  It is derived, not a new lifecycle state. -/
 def OperationalPauseAt (O : ActionObservation T) (x : T.Occurrence) : Prop :=
@@ -176,6 +220,32 @@ theorem resumes_not_terminated (O : ActionObservation T) {x y : T.Occurrence}
     (h : C.ResumesAlong O x y) : ¬ C.FunctionalTerminationStep x y := by
   intro ht
   exact ht.2.2 (C.resumes_target_dc O h)
+
+theorem permanent_no_resume (O : ActionObservation T)
+    {x y z w : T.Occurrence}
+    (hperm : C.PermanentTerminationStep x y)
+    (hyz : Reachable T.next y z) :
+    ¬ C.ResumesAlong O z w := by
+  intro hresume
+  exact hperm.2 z hyz hresume.1.1
+
+theorem permanentTermination_not_neverCertified
+    {x y : T.Occurrence} (hperm : C.PermanentTerminationStep x y) :
+    ¬ C.NeverCertified := by
+  intro hnever
+  exact hnever x hperm.1.2.1
+
+/-- Every certified occurrence can reach the source of a functional-
+termination step on the same generated trace. -/
+def Precarious : Prop :=
+  ∀ x, C.dcHolds x →
+    ∃ y z, Reachable T.next x y ∧ C.FunctionalTerminationStep y z
+
+/-- Every certified occurrence can reach the source of a permanent functional-
+termination step on the same generated trace. -/
+def NoInternalEscape : Prop :=
+  ∀ x, C.dcHolds x →
+    ∃ y z, Reachable T.next x y ∧ C.PermanentTerminationStep y z
 
 end Certification
 

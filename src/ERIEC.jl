@@ -46,8 +46,11 @@ include("reference_models.jl")
 include("wager.jl")
 include("richness.jl")
 include("generation.jl")
+include("temporal_dc.jl")
+include("sigma_selection.jl")
 include("certification.jl")
 include("observation_artifact.jl")
+include("sigma1_run.jl")
 include("trm_experiments.jl")
 include("trm_python_bridge.jl")
 include("boundary.jl")
@@ -502,6 +505,28 @@ export Relation,
     generative_observed,
     generative_fresh,
     generative_cofinal,
+    TemporalDCTrace,
+    check_observed_termination,
+    check_permanent_termination_prefix,
+    check_collapse_trace_termination,
+    check_precarious_prefix,
+    check_no_escape_prefix,
+    QDCandidate,
+    QDArchive,
+    SigmaPurityExperiment,
+    Sigma1ExperimentPlan,
+    qd_selection_step,
+    check_sigma_purity,
+    check_selection_nondegenerate,
+    run_sigma1_experiment,
+    sigma1_reference_individual,
+    sigma1_random_individual,
+    sigma1_initial_population,
+    sigma1_mutate,
+    sigma1_observe_candidate,
+    sigma1_observe_trace,
+    sigma1_execute_replicate,
+    sigma1_run_all,
     TranslationGuarantee,
     translation_none,
     translation_glossary,

@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   5012.3 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary:             | Pass  Total   Time
+Sigma1 individual adapter |   28     28  38.8s

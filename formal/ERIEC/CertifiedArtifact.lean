@@ -31,6 +31,7 @@ import ERIEC.OpenSimC
 import ERIEC.Centering
 import ERIEC.Traceability
 import ERIEC.RefModelV52
+import ERIEC.TemporalDC
 
 namespace ERIEC
 
@@ -698,6 +699,78 @@ def certifiedArtifact : CertifiedArtifact :=
         leanKind := "theorem"
         juliaSymbol := "check_rich_lineage_cofinal"
         juliaChecker := "check_rich_lineage_cofinal"
+      },
+      {
+        id := "temporaldc.observed_termination"
+        leanModule := "ERIEC.TemporalDC"
+        leanName := "ObservedTerminationStep"
+        leanKind := "def"
+        juliaSymbol := "check_observed_termination"
+        juliaChecker := "check_observed_termination"
+      },
+      {
+        id := "temporaldc.permanent_termination"
+        leanModule := "ERIEC.TemporalDC"
+        leanName := "PermanentTerminationStep"
+        leanKind := "def"
+        juliaSymbol := "check_permanent_termination_prefix"
+        juliaChecker := "check_permanent_termination_prefix"
+      },
+      {
+        id := "temporaldc.collapse_trace"
+        leanModule := "ERIEC.RefModel.CollapseTrace"
+        leanName := "collapse_trace_reference_model"
+        leanKind := "theorem"
+        juliaSymbol := "check_collapse_trace_termination"
+        juliaChecker := "check_collapse_trace_termination"
+      },
+      {
+        id := "temporaldc.precarious"
+        leanModule := "ERIEC.RefModel.CollapseTrace"
+        leanName := "collapse_trace_precarious"
+        leanKind := "theorem"
+        juliaSymbol := "check_precarious_prefix"
+        juliaChecker := "check_precarious_prefix"
+      },
+      {
+        id := "temporaldc.no_escape"
+        leanModule := "ERIEC.RefModel.CollapseTrace"
+        leanName := "all_mortal_reference_model"
+        leanKind := "theorem"
+        juliaSymbol := "check_no_escape_prefix"
+        juliaChecker := "check_no_escape_prefix"
+      },
+      {
+        id := "meta.sigma_purity"
+        leanModule := "ERIEC.MetaSelection"
+        leanName := "m4_preserved_of_sigmaPure"
+        leanKind := "theorem"
+        juliaSymbol := "check_sigma_purity"
+        juliaChecker := "check_sigma_purity"
+      },
+      {
+        id := "meta.qd_selection"
+        leanModule := "ERIEC.MetaSelection"
+        leanName := "SigmaPure"
+        leanKind := "def"
+        juliaSymbol := "check_selection_nondegenerate"
+        juliaChecker := "check_selection_nondegenerate"
+      },
+      {
+        id := "meta.sigma1_experiment"
+        leanModule := "ERIEC.MetaSelection"
+        leanName := "trace_preserved_of_sigmaPure"
+        leanKind := "theorem"
+        juliaSymbol := "run_sigma1_experiment"
+        juliaChecker := "run_sigma1_experiment"
+      },
+      {
+        id := "meta.individual_adapter"
+        leanModule := "ERIEC.MetaSelection"
+        leanName := "M4SafeMutation"
+        leanKind := "def"
+        juliaSymbol := "sigma1_observe_candidate"
+        juliaChecker := "sigma1_observe_candidate"
       },
       {
         id := "v52.gate.propagation"
