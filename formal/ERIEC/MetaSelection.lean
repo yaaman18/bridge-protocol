@@ -126,6 +126,21 @@ def M4SafeMutation
     InternalTrace.M4 (observe s i) →
       InternalTrace.M4 (observe s (evolve s i))
 
+/-- A numerical diversity audit is read-only when the protected traces of the
+audited population are identical before and after the audit.  The audit result
+itself is deliberately absent from this predicate: no numerical diagnostic is
+allowed to write back into an individual. -/
+def DiversityAuditPure
+    (observe : Individual → ProtectedTrace External NuPhi Value Obj Action)
+    (before after : List Individual) : Prop :=
+  before.map observe = after.map observe
+
+theorem diversityAuditPure_refl
+    (observe : Individual → ProtectedTrace External NuPhi Value Obj Action)
+    (individuals : List Individual) :
+    DiversityAuditPure observe individuals individuals :=
+  rfl
+
 /-- Selector noninterference plus mutation safety transports the complete
 protected trace through a population-level selection step. -/
 theorem trace_preserved_of_sigmaPure

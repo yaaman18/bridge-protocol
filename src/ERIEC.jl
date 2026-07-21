@@ -51,6 +51,7 @@ include("sigma_selection.jl")
 include("certification.jl")
 include("observation_artifact.jl")
 include("sigma1_run.jl")
+include("sigma1_diversity_audit.jl")
 include("trm_experiments.jl")
 include("trm_python_bridge.jl")
 include("boundary.jl")
@@ -377,6 +378,7 @@ export Relation,
     check_lineage_stays_open,
     check_richness_inherits_generational,
     check_rich_lineage_cofinal,
+    check_branched_rich_lineage_cofinal,
     ReferenceBenchmarkCase,
     FourReferenceBenchmark,
     benchmark_passed,
@@ -527,6 +529,8 @@ export Relation,
     sigma1_observe_trace,
     sigma1_execute_replicate,
     sigma1_run_all,
+    check_sigma1_diversity_resolution,
+    sigma1_run_diversity_audit,
     TranslationGuarantee,
     translation_none,
     translation_glossary,

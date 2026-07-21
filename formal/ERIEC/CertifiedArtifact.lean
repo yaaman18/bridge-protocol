@@ -701,6 +701,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "check_rich_lineage_cofinal"
       },
       {
+        id := "generation.branched_rich_lineage_cofinal"
+        leanModule := "ERIEC.RefModel.LineageWitness"
+        leanName := "branched_rich_lineage_reference_model"
+        leanKind := "theorem"
+        juliaSymbol := "check_branched_rich_lineage_cofinal"
+        juliaChecker := "check_branched_rich_lineage_cofinal"
+      },
+      {
         id := "temporaldc.observed_termination"
         leanModule := "ERIEC.TemporalDC"
         leanName := "ObservedTerminationStep"
@@ -771,6 +779,14 @@ def certifiedArtifact : CertifiedArtifact :=
         leanKind := "def"
         juliaSymbol := "sigma1_observe_candidate"
         juliaChecker := "sigma1_observe_candidate"
+      },
+      {
+        id := "meta.sigma1_diversity_audit"
+        leanModule := "ERIEC.MetaSelection"
+        leanName := "DiversityAuditPure"
+        leanKind := "def"
+        juliaSymbol := "check_sigma1_diversity_resolution"
+        juliaChecker := "check_sigma1_diversity_resolution"
       },
       {
         id := "v52.gate.propagation"

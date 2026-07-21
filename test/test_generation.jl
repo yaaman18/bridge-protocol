@@ -26,4 +26,12 @@ using ERIEC
     @test !check_rich_lineage_cofinal(5, 4; scores=[1, 2, 3, 4, 5, 5])
     @test_throws ArgumentError check_rich_lineage_cofinal(-1, 0)
     @test_throws ArgumentError check_rich_lineage_cofinal(1, -1)
+
+    @test check_branched_rich_lineage_cofinal(5, 4)
+    @test !check_branched_rich_lineage_cofinal(5, 4;
+        branch_witnesses=[true, true, false, true, true, true])
+    @test !check_branched_rich_lineage_cofinal(5, 4;
+        branch_transports=[true, true, false, true, true])
+    @test !check_branched_rich_lineage_cofinal(5, 6)
+    @test_throws ArgumentError check_branched_rich_lineage_cofinal(-1, 0)
 end

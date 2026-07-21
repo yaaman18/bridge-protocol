@@ -163,5 +163,146 @@ theorem rich_lineage_not_eventuallyPeriodic (w : RichLineageWitness) :
   Lineage.freshSem_not_eventuallyPeriodicSem cardSem w.lineage
     (rich_lineage_freshSem w)
 
+/-- A growing DC family with an actual two-point environment branch at every
+generation.  All relations are full, so the active hinge is the whole motor
+carrier and branch transport is constructive rather than vacuous. -/
+def branchedRichLineageDC (n : ℕ) :
+    DC (Fin (n + 1)) (Fin 2) Unit (Fin (n + 1)) where
+  alphaRel := fun _ => Set.univ
+  sigmaRel := fun _ => Set.univ
+  piRel := fun _ => Set.univ
+  rhoRel := fun _ => Set.univ
+  kappa := fun _ => Set.univ
+  epsilon := fun _ => Set.univ
+  boundary := Set.univ
+  s := 0
+  hSelf := by
+    intro c _
+    simp [Closure.Phi, Closure.pi_star, Closure.rho_star]
+  hSMC := by
+    intro e _
+    simp [Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+  hAct := by
+    exact ⟨0, by simp [Hinge.Act, Closure.rho_star, Adj.sigma_star]⟩
+  hBound := by simp
+
+theorem branchedRichLineageDC_act_eq_univ (n : ℕ) :
+    Hinge.Act (branchedRichLineageDC n).rhoRel
+      (branchedRichLineageDC n).sigmaRel
+      (branchedRichLineageDC n).kappa
+      (branchedRichLineageDC n).epsilon
+      (branchedRichLineageDC n).s = Set.univ := by
+  ext m
+  simp [branchedRichLineageDC, Hinge.Act, Closure.rho_star, Adj.sigma_star]
+
+theorem branchedRichLineageDC_branch (n : ℕ) (m : Fin (n + 1)) :
+    Richness.Branch (branchedRichLineageDC n).alphaRel m := by
+  exact ⟨0, 1, by simp [branchedRichLineageDC], by simp [branchedRichLineageDC], by decide⟩
+
+theorem branchedRichLineageDC_richnessWitness (n : ℕ) :
+    Generation.RichnessWitness (branchedRichLineageDC n) := by
+  exact ⟨0, by simp [branchedRichLineageDC_act_eq_univ],
+    branchedRichLineageDC_branch n 0⟩
+
+theorem branchedRichLineageDC_phi_rich_eq_one (n : ℕ) :
+    Generation.phi_rich (branchedRichLineageDC n) = 1 := by
+  simp [Generation.phi_rich, branchedRichLineageDC_richnessWitness]
+
+/-- Adjacent branched generations are connected by a non-vacuous
+proliferation witness. -/
+def branchedRichLineageStep (n : ℕ) :
+    Generation.ProliferationMorphism
+      (branchedRichLineageDC n) (branchedRichLineageDC (n + 1)) where
+  Record := Unit
+  Heritage := Unit
+  parent_config :=
+    ((branchedRichLineageDC n).s,
+      ((branchedRichLineageDC n).s, (branchedRichLineageDC n).s))
+  child_config :=
+    ((branchedRichLineageDC (n + 1)).s,
+      ((branchedRichLineageDC (n + 1)).s, (branchedRichLineageDC (n + 1)).s))
+  record := ()
+  parent_viable := rfl
+  child_viable := rfl
+  parentHeritage := fun _ => ()
+  childHeritage := fun _ => ()
+  heritageRelated := fun _ _ => True
+  heritage_lax := trivial
+  Rank := Unit
+  rank_preorder := inferInstance
+  parent_rank := ()
+  child_rank := ()
+  wstar := ()
+  child_rank_le_wstar := le_rfl
+  phi_rich_lax := by
+    rw [branchedRichLineageDC_phi_rich_eq_one,
+      branchedRichLineageDC_phi_rich_eq_one]
+  branch_transport := by
+    intro _m _hm _hbranch
+    exact ⟨0, by simp [branchedRichLineageDC_act_eq_univ],
+      branchedRichLineageDC_branch (n + 1) 0⟩
+
+/-- The concrete lineage of adjacent branched finite DC systems. -/
+def branchedRichLineage : Lineage Generation.ProliferationEvent where
+  system := fun n => Generation.dcToOpenSystem (branchedRichLineageDC n)
+  event := by
+    intro n
+    exact ⟨Fin (n + 1), Fin 2, Unit, Fin (n + 1),
+      Fin (n + 1 + 1), Fin 2, Unit, Fin (n + 1 + 1),
+      branchedRichLineageDC n, branchedRichLineageDC (n + 1), rfl, rfl,
+      ⟨branchedRichLineageStep n⟩⟩
+
+theorem cardPhiRich_score_branchedRichLineage (n : ℕ) :
+    cardPhiRich.score (branchedRichLineage.system n) = n + 1 := by
+  simp [cardPhiRich, branchedRichLineage, Generation.dcToOpenSystem]
+
+theorem branchedRichLineage_score_eq_hinge_card (n : ℕ) :
+    cardPhiRich.score (branchedRichLineage.system n) =
+      (Hinge.Act (branchedRichLineageDC n).rhoRel
+        (branchedRichLineageDC n).sigmaRel
+        (branchedRichLineageDC n).kappa
+        (branchedRichLineageDC n).epsilon
+        (branchedRichLineageDC n).s).ncard := by
+  rw [cardPhiRich_score_branchedRichLineage, branchedRichLineageDC_act_eq_univ]
+  simp
+
+theorem branchedRichLineage_cofinal :
+    Lineage.Cofinal cardPhiRich.score branchedRichLineage := by
+  intro bound
+  exact ⟨bound, by simp [cardPhiRich_score_branchedRichLineage]⟩
+
+/-- A branch-bearing lineage whose structural score is unbounded. -/
+structure BranchedRichLineageWitness : Type 1 where
+  lineage : Lineage Generation.ProliferationEvent
+  system_eq : ∀ n, lineage.system n =
+    Generation.dcToOpenSystem (branchedRichLineageDC n)
+  step : ∀ n, Generation.ProliferationMorphism
+    (branchedRichLineageDC n) (branchedRichLineageDC (n + 1))
+  branch_each : ∀ n, Generation.RichnessWitness (branchedRichLineageDC n)
+  score_eq_hinge_card : ∀ n,
+    cardPhiRich.score (lineage.system n) =
+      (Hinge.Act (branchedRichLineageDC n).rhoRel
+        (branchedRichLineageDC n).sigmaRel
+        (branchedRichLineageDC n).kappa
+        (branchedRichLineageDC n).epsilon
+        (branchedRichLineageDC n).s).ncard
+  cofinal : Lineage.Cofinal cardPhiRich.score lineage
+
+/-- VP-GEN-006: a non-vacuously branched cofinal lineage exists. -/
+theorem branched_rich_lineage_reference_model :
+    Nonempty BranchedRichLineageWitness := by
+  exact ⟨{
+    lineage := branchedRichLineage
+    system_eq := fun _ => rfl
+    step := branchedRichLineageStep
+    branch_each := branchedRichLineageDC_richnessWitness
+    score_eq_hinge_card := branchedRichLineage_score_eq_hinge_card
+    cofinal := branchedRichLineage_cofinal
+  }⟩
+
+theorem branched_rich_lineage_freshSem (w : BranchedRichLineageWitness) :
+    Lineage.FreshSem cardSem w.lineage :=
+  Generation.lineage_stays_open_phi_rich cardSem w.lineage cardPhiRich w.cofinal
+
 end RefModel
 end ERIEC

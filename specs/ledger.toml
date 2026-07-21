@@ -623,8 +623,8 @@ julia_file  = "src/richness.jl"
 contract_id = "richness.branch"
 owner       = "codex"
 depends_on  = []
-status      = "proposed"
-pinned      = true                            # 起票直後の人間凍結レビュー用（LOOP.md 品質退避口）
+status      = "certified"                     # G4: logs/gates/VP-RICH-001/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 Codex直接セッション「では実装開始」により凍結レビュー通過
 
 [[vp]]
 id          = "VP-RICH-002"
@@ -637,8 +637,8 @@ julia_file  = "src/richness.jl"
 contract_id = "richness.hinge_branch_pump"
 owner       = "codex"
 depends_on  = ["VP-RICH-001"]
-status      = "proposed"
-pinned      = true                            # 起票直後の人間凍結レビュー用
+status      = "certified"                     # G4: logs/gates/VP-RICH-002/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 Codex直接セッション「では実装開始」により凍結レビュー通過
 
 # ---- 検証点 GEN: 増殖射（誕生半球・§11-3）。批准 2026-07-08。設計 specs/eriec-proliferation-spec.md ----
 # アーキテクチャ: GenEvent を DC→DC に持ち替えず、DC→OpenSystem 翻訳 witness を新設し
@@ -714,6 +714,20 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002", "VP-GEN-003"]
 status      = "certified"                    # G4: logs/gates/VP-GEN-005/G4-20260720-retry1.log
 pinned      = false                           # 2026-07-20 ユーザー凍結レビュー通過（G1 着手可）
+
+[[vp]]
+id          = "VP-GEN-006"
+source      = "specs/eriec-proliferation-spec.md#VP-GEN-006"
+claim_ja    = "分岐あり cofinal 系譜の具体証人: 全世代で RichnessWitness、隣接増殖射で非空虚 branch transport、意味論不変 score = |Act| = n+1 が cofinal、したがって FreshSem。対象層公理・Φ_rich重みづけは追加しない"
+lean_decl   = "ERIEC.RefModel.branched_rich_lineage_reference_model"
+lean_file   = "formal/ERIEC/RefModel/LineageWitness.lean"
+julia_api   = "check_branched_rich_lineage_cofinal"
+julia_file  = "src/generation.jl"
+contract_id = "generation.branched_rich_lineage_cofinal"
+owner       = "codex"
+depends_on  = ["VP-GEN-005", "VP-RICH-001", "VP-RICH-002"]
+status      = "certified"                     # G4: logs/gates/VP-GEN-006/G4-20260720-certification.log
+pinned      = false                           # 2026-07-20 Codex直接セッション「当分自分でVPの起票」＋継続実装指示
 
 # ---- 機能終了ライン（specs/eriec-termination-spec.md、2026-07-20 起票・ユーザー実装指示）----
 # 目的関数: 外部公理を追加しない限り機能終了を構造的に外せないことの明示（反セルフハック）。
@@ -848,3 +862,17 @@ owner       = "codex"
 depends_on  = ["VP-META-002"]
 status      = "certified"                     # G4: logs/gates/VP-META-004/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー起票承認（codex challenge 由来の分離 VP）
+
+[[vp]]
+id          = "VP-META-005"
+source      = "specs/eriec-sigma1-experiment-spec.md#VP-META-005"
+claim_ja    = "Σ1 diversity飽和のread-only診断: 初期・selected・nullをsize別に層別化し、同一size内全ペアprojection距離の中央値/IQR/非零率と、i_ref次元不一致によるInf→M_f置換率を報告。既存kernel・seed・tol・判定規則は変更しない"
+lean_decl   = "ERIEC.MetaSelection.DiversityAuditPure"
+lean_file   = "formal/ERIEC/MetaSelection.lean"
+julia_api   = "check_sigma1_diversity_resolution"
+julia_file  = "src/sigma1_diversity_audit.jl"
+contract_id = "meta.sigma1_diversity_audit"
+owner       = "codex"
+depends_on  = ["VP-META-004"]
+status      = "certified"                     # G4 regression: logs/gates/VP-META-005/G4-20260720-no-threshold-regression.log
+pinned      = false                           # 2026-07-20 Codex直接セッション「自分でVP起票」＋「一気に実装」指示

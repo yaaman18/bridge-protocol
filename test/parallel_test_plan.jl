@@ -33,6 +33,7 @@ const ERIEC_TEST_PLAN = [
     ("test_temporal_dc.jl", 0.5),
     ("test_sigma_selection.jl", 1.0),
     ("test_sigma1_run.jl", 3.0),
+    ("test_sigma1_diversity_audit.jl", 3.0),
     ("test_markers.jl", 0.5),
     ("test_umwelt_experiments.jl", 0.5),
     ("test_policy_topology.jl", 40.0),

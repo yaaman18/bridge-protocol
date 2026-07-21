@@ -95,3 +95,34 @@ function check_rich_lineage_cofinal(
         all(n -> scores[n + 1] == n + 1, 0:N) &&
         any(score -> bound < score, scores)
 end
+
+"""
+    check_branched_rich_lineage_cofinal(N, bound; ...)
+
+Finite-prefix audit for VP-GEN-006. In addition to the GEN-005 score law and
+cofinal witness, every generation must carry a branch and every adjacent step
+must carry a non-vacuous branch-transport certificate.
+"""
+function check_branched_rich_lineage_cofinal(
+    N::Integer,
+    bound::Integer;
+    step_certificates=fill(true, N),
+    branch_witnesses=fill(true, N + 1),
+    branch_transports=fill(true, N),
+    scores=collect(1:(N + 1)),
+    semantic_invariant::Bool=true,
+)
+    N >= 0 || throw(ArgumentError("N must be nonnegative"))
+    bound >= 0 || throw(ArgumentError("bound must be nonnegative"))
+    length(step_certificates) == N || return false
+    length(branch_witnesses) == N + 1 || return false
+    length(branch_transports) == N || return false
+    length(scores) == N + 1 || return false
+
+    all(step_certificates) &&
+        all(branch_witnesses) &&
+        all(branch_transports) &&
+        semantic_invariant &&
+        all(n -> scores[n + 1] == n + 1, 0:N) &&
+        any(score -> bound < score, scores)
+end

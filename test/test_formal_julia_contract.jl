@@ -900,6 +900,10 @@
                 "RichLineageWitness", "rich_lineage_reference_model",
                 "rich_lineage_freshSem",
                 "rich_lineage_not_eventuallyPeriodic",
+                "branchedRichLineageDC", "branchedRichLineageStep",
+                "branchedRichLineage", "BranchedRichLineageWitness",
+                "branched_rich_lineage_reference_model",
+                "branched_rich_lineage_freshSem",
                 "CollapseTraceWitness", "collapse_trace_reference_model",
                 "collapse_trace_precarious", "AllMortalWitness",
                 "all_mortal_reference_model",
@@ -910,6 +914,7 @@
                 :check_arbitrarily_large_ax_core_discrete_models,
                 :check_arbitrarily_large_three_layer_reference_models,
                 :check_rich_lineage_cofinal,
+                :check_branched_rich_lineage_cofinal,
                 :check_collapse_trace_termination,
                 :check_precarious_prefix,
                 :check_no_escape_prefix,
@@ -1001,6 +1006,7 @@
                 "trace_preserved_of_sigmaPure",
                 "m4_preserved_of_sigmaPure",
                 "M4SafeMutation",
+                "DiversityAuditPure",
             ],
             julia=[
                 :QDCandidate,
@@ -1012,6 +1018,7 @@
                 :check_selection_nondegenerate,
                 :run_sigma1_experiment,
                 :sigma1_observe_candidate,
+                :check_sigma1_diversity_resolution,
             ],
         ),
         (
@@ -1178,6 +1185,7 @@
         "generation.lineage_stays_open",
         "generation.richness_inherits_generational",
         "generation.rich_lineage_cofinal",
+        "generation.branched_rich_lineage_cofinal",
         "temporaldc.observed_termination",
         "temporaldc.permanent_termination",
         "temporaldc.collapse_trace",
@@ -1187,6 +1195,7 @@
         "meta.qd_selection",
         "meta.sigma1_experiment",
         "meta.individual_adapter",
+        "meta.sigma1_diversity_audit",
         "v52.gate.propagation",
         "v52.gate.soundness",
         "v52.gate.unique",
@@ -1358,6 +1367,29 @@
         for edge in rich_lineage_graph.edges
     )
 
+    branched_rich_lineage_envelope = certified_artifact_envelope(
+        (
+            kind=:branched_rich_lineage,
+            lean_contracts=["generation.branched_rich_lineage_cofinal"],
+            julia_checkers=[:check_branched_rich_lineage_cofinal],
+            numeric_assumptions=NamedTuple(),
+        ),
+        artifact_check,
+    )
+    branched_rich_lineage_graph = certificate_dependency_graph(branched_rich_lineage_envelope)
+    @test any(
+        dependency.contract == "generation.branched_rich_lineage_cofinal" &&
+            dependency.lean_module == "ERIEC.RefModel.LineageWitness" &&
+            dependency.declaration == "branched_rich_lineage_reference_model"
+        for dependency in branched_rich_lineage_graph.lean_dependencies
+    )
+    @test any(
+        edge.from == "generation.branched_rich_lineage_cofinal" &&
+            edge.to == "ERIEC.RefModel.LineageWitness.branched_rich_lineage_reference_model" &&
+            edge.relation == :lean_dependency
+        for edge in branched_rich_lineage_graph.edges
+    )
+
     for temporal_contract in [
         (
             id="temporaldc.observed_termination",
@@ -1412,6 +1444,12 @@
             checker=:sigma1_observe_candidate,
             lean_module="ERIEC.MetaSelection",
             declaration="M4SafeMutation",
+        ),
+        (
+            id="meta.sigma1_diversity_audit",
+            checker=:check_sigma1_diversity_resolution,
+            lean_module="ERIEC.MetaSelection",
+            declaration="DiversityAuditPure",
         ),
     ]
         temporal_envelope = certified_artifact_envelope(

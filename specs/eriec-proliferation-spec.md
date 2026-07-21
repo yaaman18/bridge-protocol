@@ -196,6 +196,25 @@ theorem ERIEC.RefModel.rich_lineage_not_eventuallyPeriodic (w : RichLineageWitne
 (ii) score(系 n) = n+1、(iii) bound < N+1 なる bound に対し score が bound を超える世代の
 実在、を検査。無限主張自体は Lean 側のみが払う（既存の arbitrarily_large 系 VP と同じ分界）。
 
+### VP-GEN-006 — 分岐あり cofinal 系譜の具体証人
+
+VP-GEN-005 の E=Unit による空虚な branch transport を強化する。第 n 世代を
+`DC (Fin (n+1)) (Fin 2) Unit (Fin (n+1))` とし、α・σ・π・ρを対応する全関係に取る。
+これにより全世代で Act は全体、任意の action の α 像は `Fin 2` 全体となるため、
+`Generation.RichnessWitness` と `Richness.hinge_branch_pump` が非空虚に発火する。
+
+- 固定 Lean 宣言: `ERIEC.RefModel.branched_rich_lineage_reference_model`
+- 配置: `formal/ERIEC/RefModel/LineageWitness.lean`
+- 証人義務: 全世代の branch、隣接世代の非空虚 branch transport、
+  `cardPhiRich.score = |Act| = n+1`、cofinality、したがって `FreshSem`
+- 固定 Julia API: `check_branched_rich_lineage_cofinal`
+- contract: `generation.branched_rich_lineage_cofinal`
+- 依存: VP-GEN-005, VP-RICH-001, VP-RICH-002
+
+Julia checker は有限接頭辞について branch witness・branch transport・score law・cofinal witnessを
+検査する。無限 cofinality と `FreshSem` はLeanのみが証明する。Φ_rich三成分の重みづけは固定せず、
+対象層へ公理を追加しない。
+
 ## 実装順序（codex）
 
 1. VP-GEN-001（adapter/翻訳 witness）を先に固定 — 実装側はこれが無いと動けない（codex 要請）。
@@ -203,6 +222,7 @@ theorem ERIEC.RefModel.rich_lineage_not_eventuallyPeriodic (w : RichLineageWitne
 3. VP-GEN-003（開放性の instantiation）。
 4. VP-GEN-004（世代間遺伝）。
 5. VP-GEN-005（富系譜の具体証人。1〜4 は certified 済みなので単独で着手可）。
+6. VP-GEN-006（分岐あり cofinal 強化。VP-GEN-005 と VP-RICH-001/002 の後）。
 
 ## 不変条項チェック（設計段階・偽C）
 
