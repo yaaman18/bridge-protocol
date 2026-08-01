@@ -1,0 +1,34 @@
+✔ [655/679] Built ProofCarryingIntersubjectivity.Disclosure (2.4s)
+✔ [656/679] Built ProofCarryingIntersubjectivity.DisclosurePresentation (2.2s)
+✔ [657/679] Built ProofCarryingIntersubjectivity (2.3s)
+✔ [658/679] Built Test.Universe (2.9s)
+✔ [659/679] Built Test.Core (2.0s)
+✔ [660/679] Built Test.Stage2 (2.0s)
+✔ [661/679] Built Test.Translation (3.0s)
+✔ [662/679] Built Test.RegistryComplete (3.3s)
+✔ [663/679] Built Test.Causal (2.7s)
+✔ [664/679] Built Test.RegistryAnchor (2.7s)
+✔ [665/679] Built Test.Representation (3.1s)
+✔ [666/679] Built PciTools.LayerLintInput (8.2s)
+✔ [667/679] Built Test.Authorization (2.7s)
+✔ [668/679] Built Test.Judgment (2.7s)
+✔ [669/679] Built Test.PerturbationAttestation (2.7s)
+⚠ [670/679] Built Test.AdequacyBundle (2.8s)
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [671/679] Built PciTools.LayerLint (3.9s)
+✔ [672/679] Built Test.PropertyVerdict (2.4s)
+✔ [673/679] Built Test.Certificate (2.2s)
+✔ [674/679] Built Test.EvidenceGrowth (2.6s)
+✖ [675/679] Building Test.Disclosure (2.5s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/Test/Disclosure.lean -o /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.olean -i /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.ilean -c /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.c --setup /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.setup.json --json
+error: Test/Disclosure.lean:32:2: Tactic `decide` proved that the proposition
+  (renderDisclosure completeDisclosure).length = 10
+is false
+error: Lean exited with code 1
+✔ [676/679] Built Test.Noninterference (2.5s)
+✔ [677/679] Built Test.PartialCertificate (2.7s)
+Some required targets logged failures:
+- Test.Disclosure
+error: build failed

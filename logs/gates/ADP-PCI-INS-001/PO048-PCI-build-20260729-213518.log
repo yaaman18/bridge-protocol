@@ -1,0 +1,10 @@
+⚠ [662/679] Replayed Test.AdequacyBundle
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [674/679] Built PciTools.LayerPolicy (8.9s)
+✔ [675/679] Built PciTools.Fixtures.Policy (1.0s)
+✔ [676/679] Built PciTools.LayerLintInput (6.6s)
+✔ [677/679] Built PciTools.LayerLint (3.4s)
+✔ [678/679] Built Test.Main (3.1s)
+Build completed successfully (679 jobs).

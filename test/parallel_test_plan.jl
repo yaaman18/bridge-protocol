@@ -26,6 +26,7 @@ const ERIEC_TEST_PLAN = [
     ("test_invariance.jl", 0.5),
     ("test_lean_architecture.jl", 0.5),
     ("test_claim_ledger.jl", 0.5),
+    ("test_ledger_consistency.jl", 0.5),
     ("test_reference_models.jl", 0.5),
     ("test_wager.jl", 0.5),
     ("test_richness.jl", 0.5),

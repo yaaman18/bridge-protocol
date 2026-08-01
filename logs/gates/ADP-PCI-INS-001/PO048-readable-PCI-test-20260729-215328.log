@@ -1,0 +1,13 @@
+⚠ [652/1126] Replayed Test.AdequacyBundle
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [1341/1342] Built Test.Disclosure:c.o (216ms)
+✔ [1342/1342] Built pci_tests:exe (2.2s)
+PASS current tree
+PASS allowed graph fixture
+PASS direct import fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS transitive helper fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS unclassified helper fixture rejected (PciTools.ViolationKind.missingPolicy)
+PASS abbrev alias fixture rejected (PciTools.ViolationKind.forbiddenExpr)
+PASS facade leak fixture rejected (PciTools.ViolationKind.facadeLeak)

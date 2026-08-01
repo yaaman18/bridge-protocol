@@ -1,0 +1,1 @@
+error: dependency 'proof_carrying_intersubjectivity' not in manifest; use `lake update proof_carrying_intersubjectivity` to add it

@@ -1,0 +1,362 @@
+⚠ [2715/2807] Replayed ERIEC.BridgeFunctor
+warning: formal/ERIEC/BridgeFunctor.lean:41:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵Closure.rho_star, Adj.sigma_star, rhoFull, sigmaRel, carrier]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:75:10: This simp argument is unused:
+  HingeWitness
+
+Hint: Omit it from the simp argument list.
+  simp [̵H̵i̵n̵g̵e̵W̵i̵t̵n̵e̵s̵s̵,̵ ̵C̵l̵o̵s̵u̵r̵e̵.̵r̵h̵o̵_̵s̵t̵a̵r̵,̵[̲C̲l̲o̲s̲u̲r̲e̲.̲r̲h̲o̲_̲s̲t̲a̲r̲,̲ Adj.sigma_star, rhoRel, sigmaRel, kappa, epsilon]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/BridgeFunctor.lean:115:6: Try `simp at hx` instead of `simpa using hx`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2722/2807] Replayed ERIEC.ViabilityClosure
+warning: formal/ERIEC/ViabilityClosure.lean:326:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:327:22: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: formal/ERIEC/ViabilityClosure.lean:328:24: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [2736/2807] Replayed ERIEC.Value
+warning: formal/ERIEC/Value.lean:342:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:343:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:345:4: Try `simp at he` instead of `simpa using he`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:356:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Value.lean:382:14: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2737/2807] Replayed ERIEC.WorldDC
+warning: formal/ERIEC/WorldDC.lean:117:7: Variable name `dc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [2748/2807] Replayed ERIEC.Wager.Independence
+warning: formal/ERIEC/Wager/Independence.lean:52:2: Try `simp at hmem` instead of `simpa using hmem`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2764/2807] Replayed ERIEC.Gap
+warning: formal/ERIEC/Gap.lean:93:27: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:113:6: Try `simp at haSig` instead of `simpa using haSig`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:144:8: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:200:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:231:2: Try `simp at hnonempty` instead of `simpa using hnonempty`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:244:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:269:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/Gap.lean:293:31: Try `simp at h` instead of `simpa using h`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2772/2807] Replayed ERIEC.RefModelV52
+warning: formal/ERIEC/RefModelV52.lean:357:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:361:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵m̵i̵n̵i̵m̵a̵l̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲m̲i̲n̲i̲m̲a̲l̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:372:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:378:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:382:10: This simp argument is unused:
+  Invariance.StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [̵I̵n̵v̵a̵r̵i̵a̵n̵c̵e̵.̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵d̵o̵u̵b̵l̵e̵S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵,̵[̲d̲o̲u̲b̲l̲e̲S̲t̲a̲t̲i̲c̲F̲r̲a̲m̲e̲,̲ Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:393:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:473:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star, sigmaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:474:10: This simp argument is unused:
+  Gap.GapUp
+
+Hint: Omit it from the simp argument list.
+  simp [G̵a̵p̵.̵G̵a̵p̵U̵p̵,̵ ̵Adj.sigma_star_induced, alphaRel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:709:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Closure.Phi, Closure.pi_star, Closure.rho_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:712:10: This simp argument is unused:
+  StaticFrame.DCAt
+
+Hint: Omit it from the simp argument list.
+  simp [S̵t̵a̵t̵i̵c̵F̵r̵a̵m̵e̵.̵D̵C̵A̵t̵,̵ ̵frame, Hinge.T_prime, Adj.alpha_star, Adj.sigma_star]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:731:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:871:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:875:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:959:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:963:6: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1051:4: 'change markerStateEquiv (markerCollapseNext 0) = markerStateEquiv 1' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:1056:4: 'change markerStateEquiv (markerCollapseNext 1) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:1060:4: 'change markerStateEquiv (markerCollapseNext 2) = markerStateEquiv 2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: formal/ERIEC/RefModelV52.lean:1536:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1611:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1653:2: Try `simp at hphi` instead of `simpa using hphi`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: formal/ERIEC/RefModelV52.lean:1658:8: This simp argument is unused:
+  Markers.FM2
+
+Hint: Omit it from the simp argument list.
+  simp [M̵a̵r̵k̵e̵r̵s̵.̵F̵M̵2̵,̵ ̵Richness.Branch, collapseFrame] at he₁ he₂
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:1658:21: This simp argument is unused:
+  Richness.Branch
+
+Hint: Omit it from the simp argument list.
+  simp [Markers.FM2, R̵i̵c̵h̵n̵e̵s̵s̵.̵B̵r̵a̵n̵c̵h̵,̵ ̵collapseFrame] at he₁ he₂
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: formal/ERIEC/RefModelV52.lean:1738:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [2773/2807] Replayed ERIEC.NonDegenerateRecur
+warning: formal/ERIEC/NonDegenerateRecur.lean:77:8: This simp argument is unused:
+  Dynamics.DynFrame.conf
+
+Hint: Omit it from the simp argument list.
+  simp [stepInt, stateCore, stateEpsilon, phi, theta, drift, D̵y̵n̵a̵m̵i̵c̵s̵.̵D̵y̵n̵F̵r̵a̵m̵e̵.̵c̵o̵n̵f̵,̵ ̵Dynamics.upd] at h ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [2805/2807] Built ERIEC.CertifiedArtifact (27s)
+✔ [2806/2807] Built ERIEC (4.1s)
+Build completed successfully (2807 jobs).
+ERIEC_CERTIFIED_ARTIFACT	1	erie-c-certified-boundary
+contract	adjunction.system	ERIEC.Adjunction	ERIESystem	structure	ERIEStructure	check_erie_structure
+contract	adjunction.rigidity	ERIEC.Adjunction	rigidity_of_gc	theorem	ERIEStructure	check_relational_rigidity
+contract	interface.relation_linearization	ERIEC.InterfaceLinearization	convSystem_linearization_eq_adjoint	theorem	relation_incidence_matrix	check_converse_adjoint
+contract	interface.sensitivity_realization	ERIEC.InterfaceLinearization	converse_linearization_eq_sensitivity_adjoint	theorem	check_relation_sensitivity_bridge	check_relation_sensitivity_bridge
+contract	interface.relation_naturality	ERIEC.InterfaceLinearization	relationMatrix_reindex_natural	theorem	check_relation_linearization_naturality	check_relation_linearization_naturality
+contract	interface.relation_lax_naturality	ERIEC.InterfaceLinearization	relationMatrix_lax_natural	theorem	check_relation_hom_lax_naturality	check_relation_hom_lax_naturality
+contract	interface.strict_naturality_counterexample	ERIEC.InterfaceLinearization	strict_naturality_fails_for_relationHom	theorem	strict_relation_hom_naturality_counterexample	strict_relation_hom_naturality_counterexample
+contract	bridge.alpha_only_counterexample	ERIEC.BridgeFunctor	no_alphaOnly_hinge_classifier	theorem	alpha_only_hinge_counterexample	alpha_only_hinge_counterexample
+contract	bridge.raw_gram_counterexample	ERIEC.BridgeFunctor	raw_gram_bridge_counterexample	theorem	raw_gram_bridge_counterexample	raw_gram_bridge_counterexample
+contract	bridge.hinge_object_classifier	ERIEC.BridgeFunctor	hingeClassifyingLoop_nontrivial_iff	theorem	hinge_classifying_loop	check_hinge_classifying_loop
+contract	bridge.hinge_lax_map	ERIEC.BridgeFunctor	hingeClassifyingLoop_lax	theorem	hinge_classifying_loop	check_hinge_classifying_loop_lax
+contract	bridge.hinge_thin_functor	ERIEC.BridgeFunctor	hingeClassifierFunctor_nontrivial_iff	theorem	check_hinge_classifier_functor_laws	check_hinge_classifier_functor_laws
+contract	bridge.hinge_strict_functor	ERIEC.BridgeFunctor	strictHingeClassifier_identity_intertwines	theorem	check_strict_hinge_classifier_intertwining	check_strict_hinge_classifier_intertwining
+contract	bridge.hinge_hilbert_functor	ERIEC.BridgeFunctor	strictHingeHilbertFunctor_nontrivial_iff	theorem	check_hinge_hilbert_functor	check_hinge_hilbert_functor
+contract	bridge.hinge_structural_functor	ERIEC.StructuralHinge	structuralHingeHilbertFunctor_nontrivial_iff	theorem	structural_hinge_isomorphism_witness	structural_hinge_isomorphism_witness
+contract	viability.closure_object	ERIEC.ViabilityClosure	viabilityClosureImage_left_fixed	theorem	successor_closure	check_viability_closure
+contract	viability.closure_functor	ERIEC.ViabilityClosure	viabilityClosureFunctor_left_natural	theorem	check_viability_closure_naturality	check_viability_closure_naturality
+contract	viability.relational_frame	ERIEC.ViabilityClosure	viabilityRelationalFrame_left_fixed	theorem	check_viability_relational_frame	check_viability_relational_frame
+contract	viability.relational_functor	ERIEC.ViabilityClosure	viabilityRelationalFunctor_kappa_natural	theorem	check_viability_relational_functor	check_viability_relational_functor
+contract	layers.viable_to_hilbert	ERIEC.LayerComposition	viableToHilbert_nontrivial_iff	theorem	check_layer_composition	check_layer_composition
+contract	layers.nonfaithful_counterexample	ERIEC.LayerComposition	viableToHilbert_not_faithful	theorem	layer_composition_nonfaithful_witness	layer_composition_nonfaithful_witness
+contract	grading.const_presheaf_antitone	ERIEC.Grading	constPresheaf_iff_antitone	theorem	check_const_presheaf_antitone	check_const_presheaf_antitone
+contract	grading.critical_rank	ERIEC.Grading	nuPhi_empty_above	theorem	check_sig2_collapse_bound	check_sig2_collapse_bound
+contract	closure.nu_phi	ERIEC.Closure	NuPhi	structure	NuPhiResult	check_nu_phi_fixedpoint
+contract	closure.knaster_tarski	ERIEC.Closure	finalCoalgebra	theorem	NuPhiResult	check_final_coalgebra
+contract	hinge.act	ERIEC.Hinge	Act	def	Act	check_hinge
+contract	collapse.critical_slowing	ERIEC.Collapse	hingeCollapse	theorem	critical_slowing_score	critical_slowing_score
+contract	dynamics.finite_collapse	ERIEC.Dynamics	collapse	theorem	check_finite_collapse	check_finite_collapse
+contract	dc.system	ERIEC.DC	DC	structure	DCResult	check_DC
+contract	certification.critical_bound	ERIEC.DC	crit_bound	theorem	DCResult	check_critical_bound
+contract	sensitivity.dual_symmetry	ERIEC.Sensitivity	dualSymmetry	theorem	sensitivity_tensor	check_dual_symmetry
+contract	sensitivity.no_order_unit	ERIEC.Sensitivity	not_id_le_adjoint_comp	theorem	sensitivity_tensor	check_adjoint_unit_counterexample
+contract	world.spectral_band	ERIEC.World	Wld_band	def	world_band	world_band
+contract	world.lambda_max	ERIEC.World	lambdaMax_eq_normSq_T	theorem	dominant_world_eigenvalue	dominant_world_eigenvalue
+contract	value.endogenous	ERIEC.Value	V_endogenous	theorem	check_value_endogenous	check_value_endogenous
+contract	world.actuated	ERIEC.World	WldNontrivial	def	actuated_world	world_nontrivial
+contract	worlddc.bridge	ERIEC.WorldDC	DCWorldBridge	structure	DCWorldBridge	check_worlddc_bridge
+contract	worlddc.no_unconditional_equivalence	ERIEC.WorldDC	no_forward_unconditional	theorem	check_no_unconditional_worlddc	check_no_unconditional_worlddc
+contract	worlddc.no_backward_unconditional	ERIEC.WorldDC	no_backward_unconditional	theorem	check_backward_worlddc_counterexample	check_backward_worlddc_counterexample
+contract	worlddc.representation.forward	ERIEC.WorldDCRep	wldNontrivial_of_intertwining	theorem	-	-
+contract	graded.presheaf_transition_coproduct	ERIEC.Graded	PresheafTransitionCoproduct	structure	PresheafTransitionCoproduct	check_presheaf_transition_coproduct
+contract	decomp.copair_unique	ERIEC.Decomp	copair_unique	theorem	copair	check_copair_unique
+contract	graded.presheaf_transition_naturality	ERIEC.Graded	presheafTransition_naturality	theorem	-	check_presheaf_transition_naturality
+contract	graded.presheaf_transition_output_copair_unique	ERIEC.Graded	presheafTransitionOutputCopair_unique	theorem	-	check_presheaf_transition_coproduct
+contract	body.no_terminal_setpoint	ERIEC.Body	NoTerminalSetPoint	def	SetPointDiagram	check_m4_no_terminal_setpoint
+contract	guard.terminal_iff	ERIEC.Guard	hasTStar_iff_terminal	theorem	check_terminal_guard	check_terminal_guard
+contract	markers.fm_classification	ERIEC.Markers	FMMarkers	structure	FMMarkers	classify_action_markers
+contract	opendynamics.open_graph	ERIEC.OpenDynamics	OpenGraph	structure	FiniteOpenGraph	check_open_path
+contract	audit.simulation	ERIEC.Audit	Simulation	structure	FiniteSimulation	check_label_preserving_simulation
+contract	audit.certified_simulation	ERIEC.Audit	CertifiedSimulation	structure	-	-
+contract	lineage.core	ERIEC.Lineage	Lineage	structure	FiniteLineage	check_lineage
+contract	theorytr.phenomenal_guard	ERIEC.TheoryTranslation	phenomenal_notCertified	theorem	GuaranteeProfile	GuaranteeProfile
+contract	invariance.update_bisimulation	ERIEC.Invariance	upd_bisim	theorem	check_update_bisimulation	check_update_bisimulation
+contract	reference_models.v5_1	ERIEC.RefModel	reference_models	theorem	check_reference_models	check_reference_models
+contract	reference_models.stable_v2	ERIEC.RefModel	stable_reference_model	theorem	check_reference_models	check_reference_models
+contract	reference_models.dynamic_v2	ERIEC.RefModel	dynamic_reference_model	theorem	check_reference_models	check_reference_models
+contract	reference_models.nondegenerate_v2	ERIEC.RefModel	nondegenerate_reference_model	theorem	check_reference_models	check_reference_models
+contract	reference_models.arbitrarily_large_dc	ERIEC.RefModel	arbitrarily_large_nondegenerate_dc	theorem	check_arbitrarily_large_nondegenerate_models	check_arbitrarily_large_nondegenerate_models
+contract	reference_models.arbitrarily_large_ax_core_discrete	ERIEC.RefModel	arbitrarily_large_ax_core_discrete_model	theorem	check_arbitrarily_large_ax_core_discrete_models	check_arbitrarily_large_ax_core_discrete_models
+contract	reference_models.arbitrarily_large_three_layer	ERIEC.RefModel	arbitrarily_large_three_layer_reference_model	theorem	check_arbitrarily_large_three_layer_reference_models	check_arbitrarily_large_three_layer_reference_models
+contract	wager.frozen_independence	ERIEC.Wager	W6_indep	theorem	check_wager_independence	check_wager_independence
+contract	wager.w5_independence_family	ERIEC.Wager	W5_indep_all	theorem	check_w5_independence_family	check_w5_independence_family
+contract	wager.conservative_extension	ERIEC.Wager	W1_identification_conservative	theorem	check_wager_conservative_extension	check_wager_conservative_extension
+contract	wager.global_protocol_invariant	ERIEC.Wager	global_frozen_protocol_invariant	theorem	check_frozen_protocol_invariant	check_frozen_protocol_invariant
+contract	wager.named_models	ERIEC.Wager	named_frozen_models_boundary	theorem	check_wager_named_models	check_wager_named_models
+contract	wager.w6_cycle_soundness	ERIEC.Wager	W6_of_dc_cycle	theorem	check_w6_cycle_soundness	check_w6_cycle_soundness
+contract	wager.interpretive_model_checker	ERIEC.Wager	frozen_interpretive_checker_soundness	theorem	check_frozen_wager_interpretive_model	check_frozen_wager_interpretive_model
+contract	wager.finite_model_checker	ERIEC.Wager	frozen_model_checker_soundness	theorem	check_frozen_wager_model	check_frozen_wager_model
+contract	wager.full_model_checker	ERIEC.Wager	frozen_full_model_checker_soundness	theorem	check_frozen_wager_full_model	check_frozen_wager_full_model
+contract	richness.branch	ERIEC.Richness	Branch	def	is_branch_point	is_branch_point
+contract	richness.hinge_branch_pump	ERIEC.Richness	hinge_branch_pump	theorem	check_hinge_branch_pump	check_hinge_branch_pump
+contract	generation.dc_viable_translation	ERIEC.Generation	dcViableTranslation	def	check_dc_viable_translation	check_dc_viable_translation
+contract	generation.proliferation_morphism	ERIEC.Generation	ProliferationMorphism	structure	check_proliferation_morphism	check_proliferation_morphism
+contract	generation.lineage_stays_open	ERIEC.Generation	lineage_stays_open	theorem	check_lineage_stays_open	check_lineage_stays_open
+contract	generation.richness_inherits_generational	ERIEC.Generation	richness_inherits_generational	theorem	check_richness_inherits_generational	check_richness_inherits_generational
+contract	generation.rich_lineage_cofinal	ERIEC.RefModel.LineageWitness	rich_lineage_reference_model	theorem	check_rich_lineage_cofinal	check_rich_lineage_cofinal
+contract	generation.branched_rich_lineage_cofinal	ERIEC.RefModel.LineageWitness	branched_rich_lineage_reference_model	theorem	check_branched_rich_lineage_cofinal	check_branched_rich_lineage_cofinal
+contract	temporaldc.observed_termination	ERIEC.TemporalDC	ObservedTerminationStep	def	check_observed_termination	check_observed_termination
+contract	temporaldc.permanent_termination	ERIEC.TemporalDC	PermanentTerminationStep	def	check_permanent_termination_prefix	check_permanent_termination_prefix
+contract	temporaldc.collapse_trace	ERIEC.RefModel.CollapseTrace	collapse_trace_reference_model	theorem	check_collapse_trace_termination	check_collapse_trace_termination
+contract	temporaldc.precarious	ERIEC.RefModel.CollapseTrace	collapse_trace_precarious	theorem	check_precarious_prefix	check_precarious_prefix
+contract	temporaldc.no_escape	ERIEC.RefModel.CollapseTrace	all_mortal_reference_model	theorem	check_no_escape_prefix	check_no_escape_prefix
+contract	meta.sigma_purity	ERIEC.MetaSelection	m4_preserved_of_sigmaPure	theorem	check_sigma_purity	check_sigma_purity
+contract	meta.qd_selection	ERIEC.MetaSelection	SigmaPure	def	check_selection_nondegenerate	check_selection_nondegenerate
+contract	meta.sigma1_experiment	ERIEC.MetaSelection	trace_preserved_of_sigmaPure	theorem	run_sigma1_experiment	run_sigma1_experiment
+contract	meta.individual_adapter	ERIEC.MetaSelection	M4SafeMutation	def	sigma1_observe_candidate	sigma1_observe_candidate
+contract	meta.sigma1_diversity_audit	ERIEC.MetaSelection	DiversityAuditPure	def	check_sigma1_diversity_resolution	check_sigma1_diversity_resolution
+contract	v52.gate.propagation	ERIEC.Gate	gate_na_propagates	theorem	-	-
+contract	v52.gate.soundness	ERIEC.Gate	gate_pass_sound	theorem	-	-
+contract	v52.gate.unique	ERIEC.Gate	gate_unique	theorem	-	-
+contract	v52.gap.branch	ERIEC.Gap	gapUp_iff_branch	theorem	-	-
+contract	v52.gap.degeneracy	ERIEC.Gap	identification_forces_degeneracy	theorem	-	-
+contract	v52.gap.trichotomy	ERIEC.Gap	gap_trichotomy	theorem	-	-
+contract	v52.decay.psi	ERIEC.Decay	psi_strict_of_not_postfixed	theorem	-	-
+contract	v52.decay.abstract_collapse	ERIEC.Decay	abstract_collapse	theorem	-	-
+contract	v52.decay.collapse_of_psi	ERIEC.Decay	collapse_of_psi	theorem	-	-
+contract	v52.decay.psi2	ERIEC.Decay	psi2_isDecay	def	-	-
+contract	v52.opensimc.identity_audit	ERIEC.OpenSimC	identityAuditMap	def	-	-
+contract	v52.opensimc.path_units	ERIEC.OpenSimC	mapPath_id_comp	theorem	-	-
+contract	v52.opensimc.erase_functor	ERIEC.OpenSimC	eraseFunctor	def	-	-
+contract	v52.kernelopen.action_gap	ERIEC.KernelOpen	action_gapUp	theorem	-	-
+contract	v52.centering.horizontal_wall	ERIEC.Centering	horizontal_wall	theorem	-	-
+contract	v52.centering.fixed_specialization	ERIEC.Centering	invariantE_fixed	def	-	-
+contract	v52.centering.strength_data	ERIEC.Centering	CompatibilityData	def	-	-
+contract	v52.centering.quantified_closure	ERIEC.Centering	forallActionFamily	def	-	-
+contract	v52.value.positive_static_invariant	ERIEC.Value	positiveRelationalValue_invariant	theorem	-	-
+contract	v52.markers.fm1_static_invariant	ERIEC.Markers	fm1_invariant	theorem	-	-
+contract	v52.markers.fm2_static_invariant	ERIEC.Markers	fm2_invariant	theorem	-	-
+contract	v52.markers.static_hinge_invariant	ERIEC.Markers	staticInH_invariant	theorem	-	-
+contract	v52.markers.fm3_dynlab_invariant	ERIEC.Markers	fm3_invariant	theorem	-	-
+contract	v52.markers.fm4_dynrep_invariant	ERIEC.Markers	fm4_invariant	theorem	-	-
+contract	v52.markers.conscious_dynlabrep_invariant	ERIEC.Markers	consciousAt_invariant	theorem	-	-
+contract	v52.markers.blind_dynlabrep_invariant	ERIEC.Markers	blindAt_invariant	theorem	-	-
+contract	v52.markers.conscious_static_hinge_dynlabrep_invariant	ERIEC.Markers	consciousAt_invariant_of_staticInH	theorem	-	-
+contract	v52.markers.blind_static_hinge_dynlabrep_invariant	ERIEC.Markers	blindAt_invariant_of_staticInH	theorem	-	-
+contract	v52.markers.dynlabrep_static_hinge_fixed_specialization	ERIEC.Markers	dynLabRep_fixed_of_staticInH	def	-	-
+contract	v52.markers.conscious_static_hinge_horizontal_wall	ERIEC.Markers	consciousAt_horizontal_wall_of_staticInH	theorem	-	-
+contract	v52.markers.blind_static_hinge_horizontal_wall	ERIEC.Markers	blindAt_horizontal_wall_of_staticInH	theorem	-	-
+contract	v52.analyticfm4.coordinate_swap_unitary	ERIEC.AnalyticFM4	coordinateSwap_unitary	theorem	-	-
+contract	v52.analyticfm4.eigenspace_transport	ERIEC.AnalyticFM4	eigenspace_preserved	theorem	-	-
+contract	v52.analyticfm4.hilbert_unitary_invariant	ERIEC.AnalyticFM4	hilbert_fm4_invariant	theorem	-	-
+contract	v52.analyticfm4.complex_hilbert_unitary_invariant	ERIEC.AnalyticFM4	complex_hilbert_fm4_invariant	theorem	-	-
+contract	v52.analyticfm4.complex_full_marker_link	ERIEC.AnalyticFM4	complex_hilbert_full_marker_fm4_iff	theorem	-	-
+contract	v52.traceability.vocabulary	ERIEC.Traceability	vocabularyStatus_complete	theorem	-	-
+contract	v52.traceability.soundness	ERIEC.Traceability	vocabularyStatus_sound	theorem	-	-
+contract	v52.refmodel.symmetric_double	ERIEC.RefModelV52	dcAt_zero_center_indistinguishable	theorem	-	-
+contract	v52.refmodel.recurrent_gate_viability	ERIEC.RefModelV52	recurrent_viability_passes	theorem	-	-
+contract	v52.refmodel.standard_gate_profile	ERIEC.RefModelV52	standard_gate_phenomenal_bridgeOpen	theorem	-	-
+contract	v52.refmodel.symmetric_double_positive_value	ERIEC.RefModelV52	positiveValue_swapped	theorem	-	-
+contract	v52.refmodel.symmetric_double_full_marker	ERIEC.RefModelV52	euclideanMarkerConscious_horizontal_wall	theorem	-	-
+contract	v52.refmodel.symmetric_double_analytic_fm4	ERIEC.RefModelV52	analytic_fm4_swapped	theorem	-	-
+contract	v52.refmodel.symmetric_double_euclidean_hilbert_fm4	ERIEC.RefModelV52	euclidean_hilbert_fm4_swapped	theorem	-	-
+contract	v52.refmodel.symmetric_double_complex_hilbert_fm4	ERIEC.RefModelV52	complex_hilbert_fm4_swapped	theorem	-	-
+contract	v52.refmodel.symmetric_double_complex_full_marker	ERIEC.RefModelV52	symmetric_double_complete	theorem	-	-
+contract	v52.refmodel.symmetric_double_three_stage_dynamics	ERIEC.RefModelV52	markerStep_terminal	theorem	-	-
+contract	v52.refmodel.symmetric_double_obs_lab_exchange	ERIEC.RefModelV52	markerStep_exchange_iff	theorem	-	-
+contract	v52.refmodel.symmetric_double_converse_relations	ERIEC.RefModelV52	alpha_sigma_converse	theorem	-	-
+contract	v52.refmodel.symmetric_double_orthogonal_projection	ERIEC.RefModelV52	euclideanSpectralProjection_eq_id	theorem	-	-
+contract	v52.refmodel.symmetric_double_dynamic_conjugacy	ERIEC.RefModelV52	symmetric_double_dynamic_conjugacy	theorem	-	-
+contract	v52.refmodel.symmetric_double_dynamic_orbit_invariance	ERIEC.RefModelV52	collapse_initial_trajectory_swap_invariant	theorem	-	-
+contract	v52.markers.analytic_fm4_unitary	ERIEC.AnalyticFM4	hilbert_fm4_invariant	theorem	-	-
+contract	v52.refmodel.analytic_symmetric_double	ERIEC.RefModelV52	analytic_fm4_swapped	theorem	-	-
+contract	v52.refmodel.full_marker_analytic_fm4	ERIEC.RefModelV52	euclideanMarker_fm4_iff	theorem	-	-
+contract	v52.refmodel.symmetric_double_dynamics	ERIEC.RefModelV52	symmetric_double_dynamic_conjugacy	theorem	-	-
+contract	v52.refmodel.symmetric_double_dynamic_iso	ERIEC.RefModelV52	collapseDynamicIso	def	-	-
+contract	v52.refmodel.symmetric_double_update_bisim	ERIEC.RefModelV52	collapse_update_iterate_swap_commutes	theorem	-	-
+contract	v52.refmodel.symmetric_double_full_witness	ERIEC.RefModelV52	symmetricDoubleCompleteWitness	def	-	-
+contract	v52.refmodel.full_marker_conscious_wall	ERIEC.RefModelV52	euclideanMarkerConscious_horizontal_wall	theorem	-	-
+contract	v52.refmodel.full_marker_blind_wall	ERIEC.RefModelV52	euclideanMarkerBlind_horizontal_wall	theorem	-	-
+contract	v52.refmodel.symmetric_double_blind	ERIEC.RefModelV52	euclideanMarker_blind_false	theorem	-	-
+contract	v52.refmodel.symmetric_double_not_conscious	ERIEC.RefModelV52	euclideanMarker_not_conscious_false	theorem	-	-
+contract	v52.refmodel.symmetric_double_fm1	ERIEC.RefModelV52	fm1_false	theorem	-	-
+contract	v52.refmodel.noniso_multiplicity	ERIEC.RefModelV52	symmetricDouble_realizationMultiplicity_nonisomorphic	theorem	-	-
+contract	v52.refmodel.nondegenerate_recur_full	ERIEC.RefModelV52	fullWitness_has_recur	theorem	-	-
+contract	v52.refmodel.nondegenerate_recur_integrated	ERIEC.RefModelV52	integratedWitness_has_recur	theorem	-	-
+contract	v52.refmodel.horizontal_wall_witness	ERIEC.RefModelV52	horizontalWallWitness_indistinguishable	theorem	-	-
+Test Summary:       | Pass  Total   Time
+Lean Julia contract | 1202   1202  11.7s

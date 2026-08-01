@@ -659,6 +659,9 @@ implementation_status = "tested"
 realization_kind = "numerical"
 julia_api = "dominant_world_eigenvalue"
 julia_file = "src/slowing.jl"
+contract_id = "world.lambda_max"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-WLD-LAMBDAMAX-001/G4-20260730.log"
 depends_on = []
 
 [[claim]]
@@ -908,6 +911,9 @@ implementation_status = "tested"
 realization_kind = "witness"
 julia_api = "check_backward_worlddc_counterexample"
 julia_file = "src/worlddc.jl"
+contract_id = "worlddc.no_backward_unconditional"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-WDC-BACKWARD-CE-001/G4-20260730.log"
 depends_on = []
 
 # ---------------------------------------------------------------------------
@@ -2029,6 +2035,13 @@ result = "pass"
 log = "logs/gates/v2-wave03/G3-full-20260705.log"
 
 [[evidence_batch]]
+id = "EVID-V2-WDC-BACKWARD-CE-G4-20260730"
+claim_ids = ["VP2-WDC-BACKWARD-CE-001"]
+gate = "G4"
+result = "pass"
+log = "logs/gates/VP2-WDC-BACKWARD-CE-001/G4-20260730.log"
+
+[[evidence_batch]]
 id = "EVID-V2-VALUE-REMAINING-G0-20260705"
 claim_ids = [
   "VP2-VAL-COUNTERMODEL-001",
@@ -2300,6 +2313,13 @@ gate = "G3"
 result = "pass"
 log = "logs/gates/VP-WLD-002/G3-full-chi-20260705.log"
 
+[[evidence_batch]]
+id = "EVID-V2-WLD-LAMBDAMAX-G4-20260730"
+claim_ids = ["VP2-WLD-LAMBDAMAX-001"]
+gate = "G4"
+result = "pass"
+log = "logs/gates/VP2-WLD-LAMBDAMAX-001/G4-20260730.log"
+
 # ---------------------------------------------------------------------------
 # GRP-RICH-A6: 蝶番分岐の余帰納核への遺伝（2026-07-08 起票、draft）。
 # E1 不採用決定（category/erie_c_axiom_categorical_memo.md §11-2）に伴い、
@@ -2350,3 +2370,117 @@ contract_id = "richness.hinge_branch_pump"
 certification_status = "certified"
 certification_log = "logs/gates/VP-RICH-002/G4-20260708-223538.log"
 depends_on = ["VP2-RICH-BRANCH-001"]
+
+# ---------------------------------------------------------------------------
+# GRP-ADP-PCI: ERIE-C ↔ PCI アダプタ（2026-07-31 起票、draft・pinned）。
+#
+# 外部フレームワーク proof-carrying-intersubjectivity（PCI）へ ERIE-C の
+# 非退化参照模型を写し、両者の主張が一致することを Lean で確かめる層。
+# 対象層（M1〜M4）には何も足さない。adapters/ 以下は ERIEC.RefModel.Nondegenerate を
+# 読むだけで、formal/ERIEC/ へは一切書き戻さない。verdict は .inadequate であり、
+# 開示は「観測から標的が同定できない」という否定的主張のみを述べる。
+# よって §13-5 灯り不変条項に抵触しない（phenomenal_claim は不変）。
+#
+# 認証（G4）へ進めない理由 — 未解決の外部依存:
+#   lakefile.lean が proof-carrying-intersubjectivity をローカルパス
+#   ../proof-carrying-intersubjectivity として require しており、固定 git revision で
+#   はない。加えて当該リポジトリは 2026-07-31 時点で作業ツリーに未コミット変更を持つ
+#   （HEAD = 7bae4fc1097503262091a0afd2c154f155b92aa3、2026-07-28）。
+#   したがって現在ビルドが通る依存の内容は、いかなる commit でも再現できない。
+#   certificate は依存の同一性に依存するため、revision 固定が済むまで
+#   contract_id を割り当てず、pinned = true で driver の自動昇格を止める。
+#   固定方針はユーザー判断事項。
+
+[[claim_group]]
+id = "GRP-ADP-PCI"
+source = "adapters/ERIECPCI/Nondegenerate/"
+title_ja = "ERIE-C 非退化参照模型の PCI 監査層への対応"
+legacy_vp_ids = []
+children = [
+  "VP2-ADP-PCI-INS-001",
+  "VP2-ADP-PCI-NOBUNDLE-001",
+  "VP2-ADP-PCI-DISCLOSURE-001",
+]
+coverage = "partial"
+coverage_note = "adapters/ に現存する3定理のみを起票。PCI 側の摂動証明（perturbationAttestationRef）と系譜（lineageRegistryVersion）は serial 参照を置くだけで内容を主張しておらず、別命題として未起票。"
+
+[[claim]]
+id = "VP2-ADP-PCI-INS-001"
+group_id = "GRP-ADP-PCI"
+source_label = "adapters/ERIECPCI/Nondegenerate/Audit.lean#corresponds_to_nondegINS"
+claim_kind = "theorem"
+statement_ja = "ERIE-C の観測不可識別性 INS と PCI の混合繊維の存在が同値である"
+direction = "iff"
+assumptions = []
+conclusion = "INS nondegObserve nondegRegion ↔ Nonempty (MixedFiber (StateInScope practice model) model.observe candidate.target)"
+lean_decl = "ERIECPCI.Nondegenerate.corresponds_to_nondegINS"
+lean_file = "adapters/ERIECPCI/Nondegenerate/Audit.lean"
+statement_spec = "specs/statements/VP2-ADP-PCI-INS-001.lean"
+statement_hash = "sha256:7fd5275d5dd795611e9fe79394e74d7af06c85f560a1c975c2de1adfdf6b33f4"
+spec_status = "draft"
+proof_status = "proved"
+realization_kind = "formal_only"
+formalization_note = "双方向。ERIE-C 側の INS_iff_fiber（VP2-DYN-INS-FIBER-001）を経由して両向きを証明している。片側含意へ弱めてはならない。"
+depends_on = ["VP2-DYN-INS-FIBER-001"]
+pinned = true
+
+[[claim]]
+id = "VP2-ADP-PCI-NOBUNDLE-001"
+group_id = "GRP-ADP-PCI"
+source_label = "adapters/ERIECPCI/Nondegenerate/Audit.lean#no_adequacy_bundle"
+claim_kind = "theorem"
+statement_ja = "当該監査マニフェストに対し適合束は存在しない"
+assumptions = []
+conclusion = "¬ Nonempty (AdequacyBundle manifest)"
+lean_decl = "ERIECPCI.Nondegenerate.no_adequacy_bundle"
+lean_file = "adapters/ERIECPCI/Nondegenerate/Audit.lean"
+statement_spec = "specs/statements/VP2-ADP-PCI-NOBUNDLE-001.lean"
+statement_hash = "sha256:edd98beb317edb61b9cf4a78b41a939689ab6844b51ff166a61a15b904a5416d"
+spec_status = "draft"
+proof_status = "proved"
+realization_kind = "formal_only"
+formalization_note = "否定的主張。登録済み反例が適合束を排除するという PCI 側の定理を使う。ERIE-C 側の主張を強めない。"
+depends_on = ["VP2-ADP-PCI-INS-001"]
+pinned = true
+
+[[claim]]
+id = "VP2-ADP-PCI-DISCLOSURE-001"
+group_id = "GRP-ADP-PCI"
+source_label = "adapters/ERIECPCI/Nondegenerate/Disclosure.lean#disclosure_complete"
+claim_kind = "theorem"
+statement_ja = "発行された証明書に対し開示が必須項目を漏れなく含む"
+assumptions = []
+conclusion = "DisclosureComplete certificate disclosure"
+lean_decl = "ERIECPCI.Nondegenerate.disclosure_complete"
+lean_file = "adapters/ERIECPCI/Nondegenerate/Disclosure.lean"
+statement_spec = "specs/statements/VP2-ADP-PCI-DISCLOSURE-001.lean"
+statement_hash = "sha256:37e60b55d4c8294f5b6d946d98944489513c0e61310690878237490bc94d8eb8"
+spec_status = "draft"
+proof_status = "proved"
+realization_kind = "formal_only"
+formalization_note = "保証項目と非保証項目の双方についての完全性。非保証側に observationDoesNotSeparateScopeStates を含むことが、灯り不変条項と整合する開示になっている。"
+depends_on = ["VP2-ADP-PCI-NOBUNDLE-001"]
+pinned = true
+
+[[evidence_batch]]
+id = "EVID-V2-ADP-PCI-G0-20260731"
+claim_ids = [
+  "VP2-ADP-PCI-INS-001",
+  "VP2-ADP-PCI-NOBUNDLE-001",
+  "VP2-ADP-PCI-DISCLOSURE-001",
+]
+gate = "G0"
+result = "pass"
+log = "logs/gates/ADP-PCI-INS-001/G0-statements-20260731.log"
+
+[[evidence_batch]]
+id = "EVID-V2-ADP-PCI-G1-20260731"
+claim_ids = [
+  "VP2-ADP-PCI-INS-001",
+  "VP2-ADP-PCI-NOBUNDLE-001",
+  "VP2-ADP-PCI-DISCLOSURE-001",
+]
+gate = "G1"
+result = "pass"
+log = "logs/gates/ADP-PCI-INS-001/G1-20260731.log"
+axiom_log = "logs/gates/ADP-PCI-INS-001/G1-axioms-20260731.log"

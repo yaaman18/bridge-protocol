@@ -1,0 +1,34 @@
+⚠ [673/679] Replayed Test.AdequacyBundle
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✖ [677/679] Building Test.Disclosure (3.1s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/Test/Disclosure.lean -o /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.olean -i /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.ilean -c /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.c --setup /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.setup.json --json
+error: Test/Disclosure.lean:32:4: Type mismatch: After simplification, term
+  mandatory
+ has type
+  item ∈
+    match
+      (issueCertificate { serial := 1 } Judgment.auditManifest
+          (CertificateContent.representation Judgment.inconsistentVerdict)).content with
+    | CertificateContent.representation verdict =>
+      [DisclosureItem.representationVerdictRecorded
+          (match verdict with
+          | RepresentationVerdict.adequateGiven bundle => RepresentationVerdictKind.adequateGiven
+          | RepresentationVerdict.inadequate counterexample => RepresentationVerdictKind.inadequate
+          | RepresentationVerdict.underdetermined left right disagreement => RepresentationVerdictKind.underdetermined
+          | RepresentationVerdict.inconsistentEvidence conflict => RepresentationVerdictKind.inconsistentEvidence
+          | RepresentationVerdict.insufficientCoverage failure => RepresentationVerdictKind.insufficientCoverage
+          | RepresentationVerdict.openCandidateClass gap => RepresentationVerdictKind.openCandidateClass
+          | RepresentationVerdict.claimSpecificObligationMissing causalKind obligation =>
+            RepresentationVerdictKind.claimSpecificObligationMissing
+          | RepresentationVerdict.perturbationUndetermined obligation =>
+            RepresentationVerdictKind.perturbationUndetermined
+          | RepresentationVerdict.outOfScope failure => RepresentationVerdictKind.outOfScope)]
+    | CertificateContent.property candidate state verdict => []
+but is expected to have type
+  item = DisclosureItem.representationVerdictRecorded RepresentationVerdictKind.inconsistentEvidence
+error: Lean exited with code 1
+Some required targets logged failures:
+- Test.Disclosure
+error: build failed

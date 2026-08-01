@@ -1144,10 +1144,12 @@
         "sensitivity.dual_symmetry",
         "sensitivity.no_order_unit",
         "world.spectral_band",
+        "world.lambda_max",
         "value.endogenous",
         "world.actuated",
         "worlddc.bridge",
         "worlddc.no_unconditional_equivalence",
+        "worlddc.no_backward_unconditional",
         "worlddc.representation.forward",
         "graded.presheaf_transition_coproduct",
         "decomp.copair_unique",
@@ -1343,6 +1345,52 @@
         for dependency in graph.lean_dependencies
     )
     @test any(edge.relation == :lean_dependency for edge in graph.edges)
+
+    lambda_max_envelope = certified_artifact_envelope(
+        (
+            kind=:world_lambda_max,
+            lean_contracts=["world.lambda_max"],
+            julia_checkers=[:dominant_world_eigenvalue],
+            numeric_assumptions=NamedTuple(),
+        ),
+        artifact_check,
+    )
+    lambda_max_graph = certificate_dependency_graph(lambda_max_envelope)
+    @test any(
+        dependency.contract == "world.lambda_max" &&
+            dependency.lean_module == "ERIEC.World" &&
+            dependency.declaration == "lambdaMax_eq_normSq_T"
+        for dependency in lambda_max_graph.lean_dependencies
+    )
+    @test any(
+        edge.from == "world.lambda_max" &&
+            edge.to == "ERIEC.World.lambdaMax_eq_normSq_T" &&
+            edge.relation == :lean_dependency
+        for edge in lambda_max_graph.edges
+    )
+
+    backward_worlddc_envelope = certified_artifact_envelope(
+        (
+            kind=:backward_worlddc_counterexample,
+            lean_contracts=["worlddc.no_backward_unconditional"],
+            julia_checkers=[:check_backward_worlddc_counterexample],
+            numeric_assumptions=NamedTuple(),
+        ),
+        artifact_check,
+    )
+    backward_worlddc_graph = certificate_dependency_graph(backward_worlddc_envelope)
+    @test any(
+        dependency.contract == "worlddc.no_backward_unconditional" &&
+            dependency.lean_module == "ERIEC.WorldDC" &&
+            dependency.declaration == "no_backward_unconditional"
+        for dependency in backward_worlddc_graph.lean_dependencies
+    )
+    @test any(
+        edge.from == "worlddc.no_backward_unconditional" &&
+            edge.to == "ERIEC.WorldDC.no_backward_unconditional" &&
+            edge.relation == :lean_dependency
+        for edge in backward_worlddc_graph.edges
+    )
 
     rich_lineage_envelope = certified_artifact_envelope(
         (

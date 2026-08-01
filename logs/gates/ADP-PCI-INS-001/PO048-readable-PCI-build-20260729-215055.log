@@ -1,0 +1,71 @@
+✔ [655/679] Built ProofCarryingIntersubjectivity.Disclosure (11s)
+✔ [656/679] Built ProofCarryingIntersubjectivity.DisclosurePresentation (3.2s)
+✔ [657/679] Built ProofCarryingIntersubjectivity (2.8s)
+✔ [658/679] Built Test.Universe (4.2s)
+✔ [659/679] Built Test.Core (4.2s)
+✔ [660/679] Built Test.Translation (4.3s)
+✔ [661/679] Built Test.Stage2 (4.3s)
+✔ [662/679] Built Test.RegistryComplete (4.7s)
+✔ [663/679] Built Test.Causal (3.2s)
+✔ [664/679] Built Test.RegistryAnchor (3.2s)
+✔ [665/679] Built Test.Representation (3.7s)
+✔ [666/679] Built PciTools.LayerLintInput (8.8s)
+✔ [667/679] Built Test.Authorization (3.1s)
+✔ [668/679] Built PciTools.LayerLint (4.4s)
+✔ [669/679] Built Test.Judgment (3.1s)
+✔ [670/679] Built Test.PerturbationAttestation (3.2s)
+⚠ [671/679] Built Test.AdequacyBundle (3.3s)
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [672/679] Built Test.PropertyVerdict (2.9s)
+✔ [673/679] Built Test.Certificate (3.1s)
+✔ [674/679] Built Test.EvidenceGrowth (3.0s)
+✖ [675/679] Building Test.Disclosure (3.0s)
+trace: .> LEAN_PATH=/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Cli/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/batteries/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/Qq/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/aesop/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/importGraph/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/plausible/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/packages/mathlib/.lake/build/lib/lean:/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean /Users/yamaguchimitsuyuki/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/Test/Disclosure.lean -o /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.olean -i /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/lib/lean/Test/Disclosure.ilean -c /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.c --setup /Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity/.lake/build/ir/Test/Disclosure.setup.json --json
+error: Test/Disclosure.lean:33:26: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  item ∈
+    match representationCertificate.content with
+    | CertificateContent.representation verdict =>
+      [DisclosureItem.representationVerdictRecorded
+          (match verdict with
+          | RepresentationVerdict.adequateGiven bundle => RepresentationVerdictKind.adequateGiven
+          | RepresentationVerdict.inadequate counterexample => RepresentationVerdictKind.inadequate
+          | RepresentationVerdict.underdetermined left right disagreement => RepresentationVerdictKind.underdetermined
+          | RepresentationVerdict.inconsistentEvidence conflict => RepresentationVerdictKind.inconsistentEvidence
+          | RepresentationVerdict.insufficientCoverage failure => RepresentationVerdictKind.insufficientCoverage
+          | RepresentationVerdict.openCandidateClass gap => RepresentationVerdictKind.openCandidateClass
+          | RepresentationVerdict.claimSpecificObligationMissing causalKind obligation =>
+            RepresentationVerdictKind.claimSpecificObligationMissing
+          | RepresentationVerdict.perturbationUndetermined obligation =>
+            RepresentationVerdictKind.perturbationUndetermined
+          | RepresentationVerdict.outOfScope failure => RepresentationVerdictKind.outOfScope)]
+    | CertificateContent.property candidate state verdict => []
+
+case coversMandatoryGuaranteed
+item : DisclosureItem
+mandatory :
+  item ∈
+    match representationCertificate.content with
+    | CertificateContent.representation verdict =>
+      [DisclosureItem.representationVerdictRecorded
+          (match verdict with
+          | RepresentationVerdict.adequateGiven bundle => RepresentationVerdictKind.adequateGiven
+          | RepresentationVerdict.inadequate counterexample => RepresentationVerdictKind.inadequate
+          | RepresentationVerdict.underdetermined left right disagreement => RepresentationVerdictKind.underdetermined
+          | RepresentationVerdict.inconsistentEvidence conflict => RepresentationVerdictKind.inconsistentEvidence
+          | RepresentationVerdict.insufficientCoverage failure => RepresentationVerdictKind.insufficientCoverage
+          | RepresentationVerdict.openCandidateClass gap => RepresentationVerdictKind.openCandidateClass
+          | RepresentationVerdict.claimSpecificObligationMissing causalKind obligation =>
+            RepresentationVerdictKind.claimSpecificObligationMissing
+          | RepresentationVerdict.perturbationUndetermined obligation =>
+            RepresentationVerdictKind.perturbationUndetermined
+          | RepresentationVerdict.outOfScope failure => RepresentationVerdictKind.outOfScope)]
+    | CertificateContent.property candidate state verdict => []
+⊢ item ∈ completeDisclosure.guaranteed
+error: Lean exited with code 1
+✔ [676/679] Built Test.Noninterference (3.9s)
+✔ [677/679] Built Test.PartialCertificate (4.1s)
+Some required targets logged failures:
+- Test.Disclosure
+error: build failed

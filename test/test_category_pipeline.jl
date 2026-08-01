@@ -39,6 +39,15 @@ using .CategoryPipeline
     @test CategoryPipeline._lean_targets_for_impact(ledger, opd_impact) == ["ERIEC.OpenDynamics"]
 
     mktempdir() do directory
+        report_path = joinpath(directory, "category-impact-report.md")
+        write_report(report_path, opd_impact, ledger, GateResult[])
+        report_lines = readlines(report_path)
+        @test "| VP | Lean | Julia | status | coverage |" in report_lines
+        vp_row = only(filter(line -> startswith(line, "| VP-OPD-001 |"), report_lines))
+        @test endswith(vp_row, "| `certified` | unreviewed |")
+    end
+
+    mktempdir() do directory
         baseline = joinpath(directory, "baseline.toml")
         write_baseline(baseline, joinpath(root, String(manifest["document"])))
         impact = compute_impact(root, manifest, ledger, baseline)

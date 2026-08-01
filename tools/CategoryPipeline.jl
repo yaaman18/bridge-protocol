@@ -332,11 +332,12 @@ function write_report(path::AbstractString, impact::Impact, ledger, gates::Vecto
     if isempty(impact.impacted_vps)
         push!(lines, "更新対象なし。")
     else
-        push!(lines, "| VP | Lean | Julia | status |")
-        push!(lines, "|---|---|---|---|")
+        push!(lines, "| VP | Lean | Julia | status | coverage |")
+        push!(lines, "|---|---|---|---|---|")
         for id in impact.impacted_vps
             entry = ledger[id]
-            push!(lines, "| $id | `$(entry["lean_file"])` / `$(entry["lean_decl"])` | `$(entry["julia_file"])` / `$(entry["julia_api"])` | `$(entry["status"])` |")
+            coverage = get(entry, "coverage_audit", "unknown")
+            push!(lines, "| $id | `$(entry["lean_file"])` / `$(entry["lean_decl"])` | `$(entry["julia_file"])` / `$(entry["julia_api"])` | `$(entry["status"])` | $coverage |")
         end
     end
     push!(lines, "", "## ゲート", "")

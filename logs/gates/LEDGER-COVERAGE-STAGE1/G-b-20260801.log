@@ -1,0 +1,23 @@
+ERROR: LoadError: Some tests did not pass: 67 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_category_pipeline.jl:6
+category update pipeline: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_category_pipeline.jl:47
+  Expression: endswith(vp_row, "| certified | unreviewed |")
+   Evaluated: endswith("| VP-OPD-001 | `formal/ERIEC/OpenDynamics.lean` / `ERIEC.OpenDynamics.OpenGraph` | `src/open_dynamics.jl` / `FiniteOpenGraph` | `certified` | unreviewed |", "| certified | unreviewed |")
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] (::var"#2#9"{Impact, Dict{String, Dict{String, Any}}})(directory::String)
+   @ Main ~/bridge-protocol/test/test_category_pipeline.jl:47
+ [3] mktempdir(fn::var"#2#9"{Impact, Dict{String, Dict{String, Any}}}, parent::String; prefix::String)
+   @ Base.Filesystem ./file.jl:819
+ [4] mktempdir(fn::Function, parent::String)
+   @ Base.Filesystem ./file.jl:815
+ [5] macro expansion
+   @ ~/bridge-protocol/test/test_category_pipeline.jl:41 [inlined]
+ [6] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [7] top-level scope
+   @ ~/bridge-protocol/test/test_category_pipeline.jl:7
+Test Summary:            | Pass  Fail  Total  Time
+category update pipeline |   67     1     68  9.5s

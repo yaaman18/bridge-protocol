@@ -8,6 +8,9 @@
 #   G2 接続   formalized→bound      test/test_formal_julia_contract.jl 通過
 #   G3 実装   bound→implemented     Pkg.test()（対象 testset）通過
 #   G4 認証   implemented→certified certificate catalog 登録 + 依存グラフ edge
+# coverage_audit 値域: unreviewed | complete
+#   unreviewed = claim_ja が contract_id によってどこまで裏付けられているかは未監査
+#   complete   = 監査済み（段階3以降で使用。段階1では出現しない）
 #
 # ブートストラップ時のゲート証拠（2026-07-05 実行）:
 #   G1: lake build 成功（2377 jobs）        → logs/gates/bootstrap/G1-lake-build.log
@@ -32,6 +35,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-GRD-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 2: 随伴（最重要）と双対対称性 --------------------------------
 
@@ -48,6 +52,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-ADJ-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-SEN-001"
@@ -62,6 +67,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-001"]
 status      = "certified"                     # G4: logs/gates/VP-SEN-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 3: νΦ 終余代数性（最大不動点） --------------------------------
 
@@ -78,6 +84,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-001"]
 status      = "certified"                     # G4: logs/gates/VP-CLO-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 4: DC (i)-(iv)・蝶番・M4 終対象 set point 不在 -----------------
 
@@ -94,6 +101,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-001", "VP-CLO-001"]
 status      = "certified"                     # G4: logs/gates/VP-HNG-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-DC-001"
@@ -108,6 +116,7 @@ owner       = "codex"
 depends_on  = ["VP-HNG-001"]
 status      = "certified"                     # G4: logs/gates/VP-DC-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-BDY-001"
@@ -122,6 +131,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-BDY-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 5: Wld の内生計算と Umwelt 相対性 ------------------------------
 
@@ -138,6 +148,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-001"]
 status      = "certified"                     # G4: logs/gates/VP-WLD-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WDC-001"
@@ -152,6 +163,7 @@ owner       = "codex"
 depends_on  = ["VP-DC-001", "VP-WLD-001"]
 status      = "certified"                     # G4: logs/gates/VP-WDC-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 6–8: 蝶番崩壊・K 吸収性・臨界漸近（Lean 未着手） ----------------
 
@@ -168,6 +180,7 @@ owner       = "codex"
 depends_on  = ["VP-HNG-001", "VP-WLD-001"]
 status      = "certified"                    # G4: logs/gates/VP-CLP-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- category-v5-1 §17-20: 一般核（OpenDynamics/Audit/Lineage/TheoryTranslation）-------
 # codex が 2026-07-05 に G1/G2 通過済み。G3〜G4 は未実施。
@@ -185,6 +198,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-OPD-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-AUD-001"
@@ -199,6 +213,7 @@ owner       = "codex"
 depends_on  = ["VP-OPD-001"]
 status      = "certified"                     # G4: logs/gates/VP-AUD-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-LIN-001"
@@ -213,6 +228,7 @@ owner       = "codex"
 depends_on  = ["VP-OPD-001"]
 status      = "certified"                     # G4: logs/gates/VP-LIN-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-TTR-001"
@@ -227,6 +243,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-TTR-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 9: FM マーカー・盲視アナログ（Lean 未着手） --------------------
 
@@ -243,6 +260,7 @@ owner       = "codex"
 depends_on  = ["VP-DC-001"]
 status      = "certified"                     # G4: logs/gates/VP-MRK-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- v5.1 §16: 未実装Lean義務の機械追跡 ----------------------------------
 
@@ -259,6 +277,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-001"]
 status      = "certified"                     # G4: logs/gates/VP-ADJ-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GRA-001"
@@ -273,6 +292,7 @@ owner       = "codex"
 depends_on  = ["VP-ADJ-002"]
 status      = "certified"                     # G4: logs/gates/VP-GRA-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-KT-001"
@@ -287,6 +307,7 @@ owner       = "codex"
 depends_on  = ["VP-CLO-001"]
 status      = "certified"                     # G4: logs/gates/VP-KT-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GRA-002"
@@ -301,6 +322,7 @@ owner       = "codex"
 depends_on  = ["VP-GRA-001", "VP-KT-001"]
 status      = "certified"                     # G4: logs/gates/VP-GRA-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-CER-001"
@@ -315,6 +337,7 @@ owner       = "codex"
 depends_on  = ["VP-HNG-001", "VP-DC-001", "VP-GRA-002"]
 status      = "certified"                     # G4: logs/gates/VP-CER-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-DYN-001"
@@ -329,6 +352,7 @@ owner       = "codex"
 depends_on  = ["VP-CER-001", "VP-CLP-001"]
 status      = "certified"                     # G4: logs/gates/VP-DYN-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-SEN-002"
@@ -343,6 +367,7 @@ owner       = "codex"
 depends_on  = ["VP-SEN-001"]
 status      = "certified"                     # G4: logs/gates/VP-SEN-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WLD-002"
@@ -357,6 +382,7 @@ owner       = "codex"
 depends_on  = ["VP-WLD-001", "VP-SEN-002"]
 status      = "certified"                     # G4: logs/gates/VP-WLD-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-VAL-002"
@@ -371,6 +397,7 @@ owner       = "codex"
 depends_on  = ["VP-KT-001", "VP-DC-001", "VP-SEN-001"]
 status      = "certified"                     # G4: logs/gates/VP-VAL-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WDC-002"
@@ -385,6 +412,7 @@ owner       = "codex"
 depends_on  = ["VP-DC-001", "VP-WLD-001"]
 status      = "certified"                     # G4: logs/gates/VP-WDC-002/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GUA-001"
@@ -399,6 +427,7 @@ owner       = "codex"
 depends_on  = ["VP-BDY-001"]
 status      = "certified"                     # G4: logs/gates/VP-GUA-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-DEC-001"
@@ -413,6 +442,7 @@ owner       = "codex"
 depends_on  = ["VP-GRD-001"]
 status      = "certified"                     # G4: logs/gates/VP-DEC-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-INV-001"
@@ -427,6 +457,7 @@ owner       = "codex"
 depends_on  = ["VP-DYN-001", "VP-DEC-001"]
 status      = "certified"                     # G4: logs/gates/VP-INV-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-REF-001"
@@ -441,6 +472,7 @@ owner       = "codex"
 depends_on  = ["VP-INV-001", "VP-MRK-001", "VP-WDC-002"]
 status      = "certified"                     # G4: logs/gates/VP-REF-001/G4-20260705.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-001"
@@ -455,6 +487,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-002"
@@ -469,6 +502,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001"]
 status      = "certified"
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-003"
@@ -483,6 +517,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001"]
 status      = "certified"
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-004"
@@ -497,6 +532,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-003"]
 status      = "certified"
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-005"
@@ -511,6 +547,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001", "VP-WGR-003", "VP-WGR-004"]
 status      = "certified"                     # G4: logs/gates/VP-WGR-005/G4-20260707-230547.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-006"
@@ -525,6 +562,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001", "VP-WGR-005"]
 status      = "certified"                     # G4: logs/gates/VP-WGR-006/G4-20260708-060505.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-007"
@@ -539,6 +577,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001", "VP-WGR-005", "VP-WGR-006"]
 status      = "certified"                     # G4: logs/gates/VP-WGR-007/G4-20260708-060845.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-008"
@@ -553,6 +592,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-001", "VP-WGR-003", "VP-WGR-007"]
 status      = "certified"                     # G4: logs/gates/VP-WGR-008/G4-20260708-061436.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-WGR-009"
@@ -567,6 +607,7 @@ owner       = "codex"
 depends_on  = ["VP-WGR-007", "VP-WGR-008"]
 status      = "certified"                     # G4: logs/gates/VP-WGR-009/G4-20260708-061747.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-M1-001"
@@ -581,6 +622,7 @@ owner       = "codex"
 depends_on  = ["VP-REF-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-001/G4-20260707-180844.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-M1-FULL-001a"
@@ -595,6 +637,7 @@ owner       = "codex"
 depends_on  = ["VP-M1-001", "VP-REF-001", "VP-DYN-001", "VP-INV-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001a/G4-20260707-195447.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-M1-FULL-001b"
@@ -609,6 +652,7 @@ owner       = "codex"
 depends_on  = ["VP-M1-FULL-001a", "VP-WDC-001", "VP-VAL-002", "VP-REF-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001b/G4-20260707-224049.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 # ---- 検証点 RICH: 蝶番分岐の余帰納核への遺伝（台帳 A-6。E1 不採用決定に伴う対象層の豊かさ扱い）----
 
@@ -625,6 +669,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-RICH-001/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 Codex直接セッション「では実装開始」により凍結レビュー通過
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-RICH-002"
@@ -639,6 +684,7 @@ owner       = "codex"
 depends_on  = ["VP-RICH-001"]
 status      = "certified"                     # G4: logs/gates/VP-RICH-002/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 Codex直接セッション「では実装開始」により凍結レビュー通過
+coverage_audit = "unreviewed"
 
 # ---- 検証点 GEN: 増殖射（誕生半球・§11-3）。批准 2026-07-08。設計 specs/eriec-proliferation-spec.md ----
 # アーキテクチャ: GenEvent を DC→DC に持ち替えず、DC→OpenSystem 翻訳 witness を新設し
@@ -658,6 +704,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-GEN-001/G4-20260711-203639.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GEN-002"
@@ -672,6 +719,7 @@ owner       = "codex"
 depends_on  = ["VP-GEN-001"]
 status      = "certified"                     # G4: logs/gates/VP-GEN-002/G4-20260711-203524.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GEN-003"
@@ -686,6 +734,7 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002"]
 status      = "certified"                     # G4: logs/gates/VP-GEN-003/G4-20260711-203551.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GEN-004"
@@ -700,6 +749,7 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002", "VP-RICH-002"]
 status      = "certified"                     # G4: logs/gates/VP-GEN-004/G4-20260711-203602.log
 pinned      = false
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GEN-005"
@@ -714,6 +764,7 @@ owner       = "codex"
 depends_on  = ["VP-GEN-002", "VP-GEN-003"]
 status      = "certified"                    # G4: logs/gates/VP-GEN-005/G4-20260720-retry1.log
 pinned      = false                           # 2026-07-20 ユーザー凍結レビュー通過（G1 着手可）
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-GEN-006"
@@ -728,6 +779,7 @@ owner       = "codex"
 depends_on  = ["VP-GEN-005", "VP-RICH-001", "VP-RICH-002"]
 status      = "certified"                     # G4: logs/gates/VP-GEN-006/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 Codex直接セッション「当分自分でVPの起票」＋継続実装指示
+coverage_audit = "unreviewed"
 
 # ---- 機能終了ライン（specs/eriec-termination-spec.md、2026-07-20 起票・ユーザー実装指示）----
 # 目的関数: 外部公理を追加しない限り機能終了を構造的に外せないことの明示（反セルフハック）。
@@ -746,6 +798,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-TMP-001/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-TMP-002"
@@ -760,6 +813,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-TMP-002/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-TMP-003"
@@ -774,6 +828,7 @@ owner       = "codex"
 depends_on  = ["VP-TMP-002"]
 status      = "certified"                     # G4: logs/gates/VP-TMP-003/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-TMP-004"
@@ -788,6 +843,7 @@ owner       = "codex"
 depends_on  = ["VP-TMP-003"]
 status      = "certified"                     # G4: logs/gates/VP-TMP-004/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-TMP-005"
@@ -802,6 +858,7 @@ owner       = "codex"
 depends_on  = ["VP-TMP-003"]
 status      = "certified"                     # G4: logs/gates/VP-TMP-005/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 # ---- Σ1 実験ライン（specs/eriec-sigma1-experiment-spec.md、2026-07-20 起票・ユーザー実装指示）----
 # 改訂B: Σ1 実験仕様の6項目（kernel・初期分布・Φ_rich観測・非退化測度・Σ-purity検問・反例基準）を
@@ -820,6 +877,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-META-001/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-META-002"
@@ -834,6 +892,7 @@ owner       = "codex"
 depends_on  = []
 status      = "certified"                     # G4: logs/gates/VP-META-002/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-META-003"
@@ -848,6 +907,7 @@ owner       = "codex"
 depends_on  = ["VP-META-001", "VP-META-002"]
 status      = "certified"                     # G4: logs/gates/VP-META-003/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー実装指示により凍結スキップ
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-META-004"
@@ -862,6 +922,7 @@ owner       = "codex"
 depends_on  = ["VP-META-002"]
 status      = "certified"                     # G4: logs/gates/VP-META-004/G4-20260720-certification.log
 pinned      = false                           # 2026-07-20 ユーザー起票承認（codex challenge 由来の分離 VP）
+coverage_audit = "unreviewed"
 
 [[vp]]
 id          = "VP-META-005"
@@ -876,3 +937,4 @@ owner       = "codex"
 depends_on  = ["VP-META-004"]
 status      = "certified"                     # G4 regression: logs/gates/VP-META-005/G4-20260720-no-threshold-regression.log
 pinned      = false                           # 2026-07-20 Codex直接セッション「自分でVP起票」＋「一気に実装」指示
+coverage_audit = "unreviewed"

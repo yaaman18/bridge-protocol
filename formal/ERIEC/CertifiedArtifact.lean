@@ -369,6 +369,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "world_band"
       },
       {
+        id := "world.lambda_max"
+        leanModule := "ERIEC.World"
+        leanName := "lambdaMax_eq_normSq_T"
+        leanKind := "theorem"
+        juliaSymbol := "dominant_world_eigenvalue"
+        juliaChecker := "dominant_world_eigenvalue"
+      },
+      {
         id := "value.endogenous"
         leanModule := "ERIEC.Value"
         leanName := "V_endogenous"
@@ -399,6 +407,14 @@ def certifiedArtifact : CertifiedArtifact :=
         leanKind := "theorem"
         juliaSymbol := "check_no_unconditional_worlddc"
         juliaChecker := "check_no_unconditional_worlddc"
+      },
+      {
+        id := "worlddc.no_backward_unconditional"
+        leanModule := "ERIEC.WorldDC"
+        leanName := "no_backward_unconditional"
+        leanKind := "theorem"
+        juliaSymbol := "check_backward_worlddc_counterexample"
+        juliaChecker := "check_backward_worlddc_counterexample"
       },
       {
         -- formal-only: conditional forward (DC + intertwining representation

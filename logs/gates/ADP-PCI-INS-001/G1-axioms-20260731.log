@@ -1,0 +1,11 @@
+'ERIECPCI.Nondegenerate.corresponds_to_nondegINS' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIECPCI.Nondegenerate.no_adequacy_bundle' depends on axioms: [propext, Quot.sound]
+'ERIECPCI.Nondegenerate.disclosure_complete' depends on axioms: [propext, Quot.sound]
+ERIECPCI.Nondegenerate.corresponds_to_nondegINS : ERIEC.Dynamics.INS ERIEC.RefModel.nondegObserve
+    ERIEC.RefModel.nondegRegion ↔
+  Nonempty
+    (PCI.MixedFiber (PCI.StateInScope ERIECPCI.Nondegenerate.practice ERIECPCI.Nondegenerate.model)
+      ERIECPCI.Nondegenerate.model.observe ERIECPCI.Nondegenerate.candidate.target)
+ERIECPCI.Nondegenerate.no_adequacy_bundle : ¬Nonempty (PCI.AdequacyBundle ERIECPCI.Nondegenerate.manifest)
+ERIECPCI.Nondegenerate.disclosure_complete : PCI.DisclosureComplete ERIECPCI.Nondegenerate.certificate
+  ERIECPCI.Nondegenerate.disclosure

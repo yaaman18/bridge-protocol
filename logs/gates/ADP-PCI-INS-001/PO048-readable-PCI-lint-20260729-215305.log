@@ -1,0 +1,11 @@
+✔ [1298/1302] Built ProofCarryingIntersubjectivity.DisclosurePresentation:c.o (661ms)
+✔ [1299/1302] Built ProofCarryingIntersubjectivity.Disclosure:c.o (882ms)
+✔ [1300/1302] Built PciTools.LayerLintMain (3.7s)
+✔ [1302/1302] Built pci_layer_lint:exe (4.0s)
+PASS current tree
+PASS allowed graph fixture
+PASS direct import fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS transitive helper fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS unclassified helper fixture rejected (PciTools.ViolationKind.missingPolicy)
+PASS abbrev alias fixture rejected (PciTools.ViolationKind.forbiddenExpr)
+PASS facade leak fixture rejected (PciTools.ViolationKind.facadeLeak)

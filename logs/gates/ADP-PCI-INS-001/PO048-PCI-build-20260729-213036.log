@@ -1,0 +1,7 @@
+⚠ [673/679] Replayed Test.AdequacyBundle
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [677/679] Built Test.Disclosure (2.1s)
+✔ [678/679] Built Test.Main (2.9s)
+Build completed successfully (679 jobs).

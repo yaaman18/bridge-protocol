@@ -1,0 +1,27 @@
+✔ [656/679] Built ProofCarryingIntersubjectivity.DisclosurePresentation (10s)
+✔ [657/679] Built ProofCarryingIntersubjectivity (2.0s)
+✔ [658/679] Built Test.Universe (3.9s)
+✔ [659/679] Built Test.Core (4.3s)
+✔ [660/679] Built Test.Stage2 (4.3s)
+✔ [661/679] Built Test.Translation (4.3s)
+✔ [662/679] Built Test.RegistryComplete (4.4s)
+✔ [663/679] Built Test.Causal (3.1s)
+✔ [664/679] Built Test.RegistryAnchor (3.2s)
+✔ [665/679] Built Test.Representation (3.6s)
+✔ [666/679] Built PciTools.LayerLintInput (8.0s)
+✔ [667/679] Built Test.Authorization (3.1s)
+✔ [668/679] Built PciTools.LayerLint (4.6s)
+✔ [669/679] Built Test.Judgment (3.4s)
+✔ [670/679] Built Test.PerturbationAttestation (3.4s)
+⚠ [671/679] Built Test.AdequacyBundle (3.5s)
+warning: Test/AdequacyBundle.lean:216:4: Try `simp at createdAtSame` instead of `simpa using createdAtSame`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [672/679] Built Test.PropertyVerdict (3.2s)
+✔ [673/679] Built Test.Certificate (3.6s)
+✔ [674/679] Built Test.EvidenceGrowth (3.0s)
+✔ [675/679] Built Test.Disclosure (4.1s)
+✔ [676/679] Built Test.Noninterference (3.0s)
+✔ [677/679] Built Test.PartialCertificate (4.2s)
+✔ [678/679] Built Test.Main (8.4s)
+Build completed successfully (679 jobs).

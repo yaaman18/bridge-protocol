@@ -1,0 +1,14 @@
+✔ [1297/1302] Built ProofCarryingIntersubjectivity:c.o (2.3s)
+✔ [1298/1302] Built ProofCarryingIntersubjectivity.Disclosure:c.o (2.4s)
+✔ [1299/1302] Built ProofCarryingIntersubjectivity.DisclosurePresentation:c.o (2.4s)
+✔ [1300/1302] Built PciTools.LayerLintMain (2.8s)
+✔ [1302/1302] Built pci_layer_lint:exe (4.5s)
+FAIL current tree
+[PciTools.ViolationKind.missingPolicy] ProofCarryingIntersubjectivity: unclassified project import ProofCarryingIntersubjectivity.Disclosure; path=[ProofCarryingIntersubjectivity, ProofCarryingIntersubjectivity.Disclosure]
+[PciTools.ViolationKind.missingPolicy] ProofCarryingIntersubjectivity: unclassified project import ProofCarryingIntersubjectivity.DisclosurePresentation; path=[ProofCarryingIntersubjectivity, ProofCarryingIntersubjectivity.DisclosurePresentation]
+PASS allowed graph fixture
+PASS direct import fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS transitive helper fixture rejected (PciTools.ViolationKind.forbiddenImport)
+PASS unclassified helper fixture rejected (PciTools.ViolationKind.missingPolicy)
+PASS abbrev alias fixture rejected (PciTools.ViolationKind.forbiddenExpr)
+PASS facade leak fixture rejected (PciTools.ViolationKind.facadeLeak)
