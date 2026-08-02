@@ -180,7 +180,7 @@ owner       = "codex"
 depends_on  = ["VP-HNG-001", "VP-WLD-001"]
 status      = "certified"                    # G4: logs/gates/VP-CLP-001/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 # ---- category-v5-1 §17-20: 一般核（OpenDynamics/Audit/Lineage/TheoryTranslation）-------
 # codex が 2026-07-05 に G1/G2 通過済み。G3〜G4 は未実施。
@@ -352,7 +352,7 @@ owner       = "codex"
 depends_on  = ["VP-CER-001", "VP-CLP-001"]
 status      = "certified"                     # G4: logs/gates/VP-DYN-001/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-SEN-002"
@@ -382,7 +382,7 @@ owner       = "codex"
 depends_on  = ["VP-WLD-001", "VP-SEN-002"]
 status      = "certified"                     # G4: logs/gates/VP-WLD-002/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-VAL-002"
@@ -397,7 +397,7 @@ owner       = "codex"
 depends_on  = ["VP-KT-001", "VP-DC-001", "VP-SEN-001"]
 status      = "certified"                     # G4: logs/gates/VP-VAL-002/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-WDC-002"
@@ -412,7 +412,7 @@ owner       = "codex"
 depends_on  = ["VP-DC-001", "VP-WLD-001"]
 status      = "certified"                     # G4: logs/gates/VP-WDC-002/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-GUA-001"
@@ -457,7 +457,7 @@ owner       = "codex"
 depends_on  = ["VP-DYN-001", "VP-DEC-001"]
 status      = "certified"                     # G4: logs/gates/VP-INV-001/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-REF-001"
@@ -472,7 +472,7 @@ owner       = "codex"
 depends_on  = ["VP-INV-001", "VP-MRK-001", "VP-WDC-002"]
 status      = "certified"                     # G4: logs/gates/VP-REF-001/G4-20260705.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-WGR-001"
@@ -622,7 +622,7 @@ owner       = "codex"
 depends_on  = ["VP-REF-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-001/G4-20260707-180844.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-M1-FULL-001a"
@@ -637,7 +637,7 @@ owner       = "codex"
 depends_on  = ["VP-M1-001", "VP-REF-001", "VP-DYN-001", "VP-INV-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001a/G4-20260707-195447.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 [[vp]]
 id          = "VP-M1-FULL-001b"
@@ -652,7 +652,7 @@ owner       = "codex"
 depends_on  = ["VP-M1-FULL-001a", "VP-WDC-001", "VP-VAL-002", "VP-REF-001"]
 status      = "certified"                     # G4: logs/gates/VP-M1-FULL-001b/G4-20260707-224049.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 # ---- 検証点 RICH: 蝶番分岐の余帰納核への遺伝（台帳 A-6。E1 不採用決定に伴う対象層の豊かさ扱い）----
 
@@ -942,57 +942,81 @@ coverage_audit = "unreviewed"
 # ---- Legacy contract coverage audit ----------------------------------------
 
 [[legacy_coverage]]
-legacy_vp_id = "VP-WLD-002"
-contract_id = "world.spectral_band"
-audit_status = "unreviewed"
+legacy_vp_id = "VP-CLP-001"
+contract_id = "collapse.critical_slowing"
+audit_status = "complete"
 basis = "exact_ledger_decl"
-covers_claim_ids = ["VP2-WLD-BAND-001"]
-not_covered_claim_ids = []
+covers_claim_ids = []
+not_covered_claim_ids = ["VP2-DYN-BD-ONEWAY-001", "VP2-DYN-BDPAIR-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-CONF-001", "VP2-DYN-COREOF-001", "VP2-DYN-DESCENT-001", "VP2-DYN-DOWNV-001", "VP2-DYN-HINGE-COLLAPSE-001", "VP2-DYN-INS-001", "VP2-DYN-INS-FIBER-001", "VP2-DYN-K-001", "VP2-DYN-K-ABSORB-001", "VP2-DYN-PATH-ITERATE-001", "VP2-DYN-R2P-001", "VP2-DYN-REACHABLE-001", "VP2-DYN-TOTAL-DATA-001", "VP2-DYN-TOTAL-ORBIT-001", "VP2-DYN-TOTAL-PROP-001", "VP2-DYN-TRANSPORT-001", "VP2-DYN-UPD-001", "VP2-WLD-BAND-001", "VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]
 
 [[legacy_coverage]]
-legacy_vp_id = "VP-VAL-002"
-contract_id = "value.endogenous"
-audit_status = "unreviewed"
+legacy_vp_id = "VP-DYN-001"
+contract_id = "dynamics.finite_collapse"
+audit_status = "complete"
 basis = "exact_ledger_decl"
-covers_claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
-not_covered_claim_ids = []
-
-[[legacy_coverage]]
-legacy_vp_id = "VP-WDC-002"
-contract_id = "worlddc.no_unconditional_equivalence"
-audit_status = "unreviewed"
-basis = "exact_ledger_decl"
-covers_claim_ids = ["VP2-WDC-FORWARD-CE-001"]
-not_covered_claim_ids = []
+covers_claim_ids = []
+not_covered_claim_ids = ["VP2-DYN-BD-ONEWAY-001", "VP2-DYN-BDPAIR-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-CONF-001", "VP2-DYN-COREOF-001", "VP2-DYN-DESCENT-001", "VP2-DYN-DOWNV-001", "VP2-DYN-HINGE-COLLAPSE-001", "VP2-DYN-INS-001", "VP2-DYN-INS-FIBER-001", "VP2-DYN-K-001", "VP2-DYN-K-ABSORB-001", "VP2-DYN-PATH-ITERATE-001", "VP2-DYN-R2P-001", "VP2-DYN-REACHABLE-001", "VP2-DYN-TOTAL-DATA-001", "VP2-DYN-TOTAL-ORBIT-001", "VP2-DYN-TOTAL-PROP-001", "VP2-DYN-TRANSPORT-001", "VP2-DYN-UPD-001"]
 
 [[legacy_coverage]]
 legacy_vp_id = "VP-INV-001"
 contract_id = "invariance.update_bisimulation"
-audit_status = "unreviewed"
+audit_status = "complete"
 basis = "exact_ledger_decl"
 covers_claim_ids = ["VP2-INV-UPD-001"]
-not_covered_claim_ids = []
+not_covered_claim_ids = ["VP2-INV-DRIFT-001", "VP2-INV-E5-001", "VP2-INV-INS-001", "VP2-INV-INTERNAL-EPS-001", "VP2-INV-INTERNAL-KAPPA-001", "VP2-INV-STATIC-CLOSURE-001", "VP2-INV-STATIC-DC-001", "VP2-INV-STATIC-REL-001", "VP2-INV-UNITARY-001"]
 
 [[legacy_coverage]]
 legacy_vp_id = "VP-M1-001"
 contract_id = "reference_models.arbitrarily_large_dc"
-audit_status = "unreviewed"
+audit_status = "complete"
 basis = "exact_ledger_decl"
 covers_claim_ids = ["VP2-M1-LARGE-DC-001"]
-not_covered_claim_ids = []
+not_covered_claim_ids = ["VP2-M1-FULL-001a", "VP2-M1-FULL-001b"]
 
 [[legacy_coverage]]
 legacy_vp_id = "VP-M1-FULL-001a"
 contract_id = "reference_models.arbitrarily_large_ax_core_discrete"
-audit_status = "unreviewed"
+audit_status = "complete"
 basis = "exact_ledger_decl"
 covers_claim_ids = ["VP2-M1-FULL-001a"]
-not_covered_claim_ids = []
+not_covered_claim_ids = ["VP2-M1-FULL-001b", "VP2-M1-LARGE-DC-001"]
 
 [[legacy_coverage]]
 legacy_vp_id = "VP-M1-FULL-001b"
 contract_id = "reference_models.arbitrarily_large_three_layer"
-audit_status = "unreviewed"
+audit_status = "complete"
 basis = "exact_ledger_decl"
 covers_claim_ids = ["VP2-M1-FULL-001b"]
-not_covered_claim_ids = []
+not_covered_claim_ids = ["VP2-M1-FULL-001a", "VP2-M1-LARGE-DC-001"]
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-REF-001"
+contract_id = "reference_models.v5_1"
+audit_status = "complete"
+basis = "exact_ledger_decl"
+covers_claim_ids = []
+not_covered_claim_ids = ["VP2-REF-DYN-001", "VP2-REF-NONDEG-001", "VP2-REF-STABLE-001"]
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-VAL-002"
+contract_id = "value.endogenous"
+audit_status = "complete"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+not_covered_claim_ids = ["VP2-VAL-COUNTERMODEL-001", "VP2-VAL-NORMALIZED-001", "VP2-VAL-RANGE-001", "VP2-VAL-RAW-001", "VP2-VAL-WEIGHTED-001", "VP2-VAL-WEIGHTED-PURE-001", "VP2-VAL-WELLDEF-001"]
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-WDC-002"
+contract_id = "worlddc.no_unconditional_equivalence"
+audit_status = "complete"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-WDC-FORWARD-CE-001"]
+not_covered_claim_ids = ["VP2-WDC-BACKWARD-CE-001"]
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-WLD-002"
+contract_id = "world.spectral_band"
+audit_status = "complete"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-WLD-BAND-001"]
+not_covered_claim_ids = ["VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]

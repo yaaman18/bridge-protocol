@@ -67,14 +67,24 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G4** — the contract is registered in the certificate catalog and its dependency
   graph verifies.
 
-Two rules give the ledger its meaning. First, a claim is marked `certified` **only**
+Three rules give the ledger its meaning. First, a claim is marked `certified` **only**
 when actual gate logs exist under [logs/gates/](logs/gates/) — those logs are committed
 as evidence. Second, the *visible gap principle*: a claim that has category-theoretic
 motivation but no Lean proof stays visibly below `certified`; it is never silently
-dropped or silently believed.
+dropped or silently believed. Third, the *two-axis principle* (introduced 2026-08-01):
+`certified` in the v1 ledger means only that the single Lean declaration referenced by
+`contract_id` has been machine-checked; it does not guarantee every property enumerated
+in the `claim_ja` prose. The separate `coverage_audit` axis records how much of that prose
+is backed by the contract: `unreviewed` means not yet audited and `complete` means audited.
+The axes are orthogonal. A contract remains certified when `coverage_audit` is
+`unreviewed`, while certification alone does not guarantee prose coverage. The status of
+each atomic claim is recorded in
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-As of 2026-07-11, the ledger tracks 47 verification points, of which 45 are certified
-and 2 are open proposals.
+As of 2026-08-02, the v1 ledger tracks 59 verification points, all 59 certified. All 59
+`coverage_audit` values are `unreviewed`, and `legacy_coverage` contains 7 entries (all
+with `basis = "exact_ledger_decl"`). The v2 ledger contains 89 atomic claims: 38 certified
+and 51 uncertified.
 
 ## Repository layout
 

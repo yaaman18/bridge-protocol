@@ -60,14 +60,23 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G3** — Julia 実装がテストを通過する。
 - **G4** — contract が certificate catalog に登録され、依存グラフが検証される。
 
-台帳に意味を与える規則が二つある。第一に主張が `certified` と記されるのは
+台帳に意味を与える規則が三つある。第一に主張が `certified` と記されるのは
 [logs/gates/](logs/gates/) 配下に実際のゲートログが存在する場合**のみ**であり、
 そのログは証拠としてコミットされる。第二に、**可視ギャップ原則**: 圏論的動機は
 あるが Lean 証明がない主張は `certified` 未満として可視化され続け、黙って消される
-ことも黙って信じられることもない。
+ことも黙って信じられることもない。第三に、**二軸原則**（2026-08-01 導入）:
+v1 台帳の `certified` は `contract_id` が指す Lean 宣言ひとつが機械検査済みである
+ことだけを意味し、`claim_ja` の散文が列挙する性質すべてを保証しない。散文が
+どこまで契約に裏付けられているかは `coverage_audit` が別軸で記録する。
+`unreviewed` は未監査、`complete` は監査済みを意味する。この二軸は直交する。
+`coverage_audit` が `unreviewed` でも契約の認証そのものは有効であり、逆に契約が
+認証済みでも散文の被覆が保証されるわけではない。原子化された主張ごとの状態は
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) が保持する。
 
-2026年7月11日時点で台帳は 47 の検証点を追跡しており、うち 45 が certified、
-2 が提案中である。
+2026年8月2日時点で v1 台帳は 59 の検証点を追跡し、59 件すべてが certified で
+ある。`coverage_audit` は 59 件すべてが `unreviewed` で、`legacy_coverage` は
+7 件（すべて `basis = "exact_ledger_decl"`）である。v2 台帳は 89 の原子化された
+主張を保持し、38 件が certified、51 件が未認証である。
 
 ## リポジトリ構成
 

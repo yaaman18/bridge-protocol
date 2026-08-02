@@ -72,15 +72,25 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G4** — el contrato queda registrado en el catálogo de certificados y su grafo
   de dependencias se verifica.
 
-Dos reglas dan sentido al libro mayor. Primera: una afirmación se marca
+Tres reglas dan sentido al libro mayor. Primera: una afirmación se marca
 `certified` **solo** cuando existen registros reales de compuertas bajo
 [logs/gates/](logs/gates/) — esos registros se incluyen como evidencia. Segunda:
 el *principio de brecha visible*: una afirmación con motivación categórica pero
 sin demostración en Lean permanece visiblemente por debajo de `certified`; nunca
-se elimina ni se acepta en silencio.
+se elimina ni se acepta en silencio. Tercera: el *principio de dos ejes* (introducido
+el 2026-08-01). `certified` en el libro mayor v1 solo significa que la única declaración
+Lean indicada por `contract_id` ha sido verificada mecánicamente; no garantiza todas las
+propiedades enumeradas en la prosa de `claim_ja`. El eje independiente `coverage_audit`
+registra hasta qué punto el contrato respalda esa prosa: `unreviewed` significa no
+auditado y `complete`, auditado. Ambos ejes son ortogonales. Un contrato sigue certificado
+aunque `coverage_audit` sea `unreviewed`, y la certificación por sí sola no garantiza la
+cobertura de la prosa. El estado de cada afirmación atómica se conserva en
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-A fecha de 2026-07-11, el libro mayor registra 47 puntos de verificación, de los
-cuales 45 están certificados y 2 son propuestas abiertas.
+A fecha de 2026-08-02, el libro mayor v1 registra 59 puntos de verificación, todos
+certificados. Los 59 valores de `coverage_audit` son `unreviewed`, y `legacy_coverage`
+contiene 7 entradas (todas con `basis = "exact_ledger_decl"`). El libro mayor v2 contiene
+89 afirmaciones atómicas: 38 certificadas y 51 sin certificar.
 
 ## Estructura del repositorio
 
