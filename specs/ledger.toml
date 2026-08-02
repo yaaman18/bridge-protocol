@@ -938,3 +938,61 @@ depends_on  = ["VP-META-004"]
 status      = "certified"                     # G4 regression: logs/gates/VP-META-005/G4-20260720-no-threshold-regression.log
 pinned      = false                           # 2026-07-20 Codex直接セッション「自分でVP起票」＋「一気に実装」指示
 coverage_audit = "unreviewed"
+
+# ---- Legacy contract coverage audit ----------------------------------------
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-WLD-002"
+contract_id = "world.spectral_band"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-WLD-BAND-001"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-VAL-002"
+contract_id = "value.endogenous"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-WDC-002"
+contract_id = "worlddc.no_unconditional_equivalence"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-WDC-FORWARD-CE-001"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-INV-001"
+contract_id = "invariance.update_bisimulation"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-INV-UPD-001"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-M1-001"
+contract_id = "reference_models.arbitrarily_large_dc"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-M1-LARGE-DC-001"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-M1-FULL-001a"
+contract_id = "reference_models.arbitrarily_large_ax_core_discrete"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-M1-FULL-001a"]
+not_covered_claim_ids = []
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-M1-FULL-001b"
+contract_id = "reference_models.arbitrarily_large_three_layer"
+audit_status = "unreviewed"
+basis = "exact_ledger_decl"
+covers_claim_ids = ["VP2-M1-FULL-001b"]
+not_covered_claim_ids = []
