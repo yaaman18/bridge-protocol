@@ -49,8 +49,8 @@
     contracts = [
         (
             file="Adjunction.lean",
-            lean=["alpha_star", "sigma_star_induced", "sigma_star", "ERIESystem", "rigidity_of_gc", "ConvSystem", "conv_gc"],
-            julia=[:alpha_star, :sigma_star_induced, :sigma_star, :ERIEStructure, :check_erie_structure, :check_relational_rigidity],
+            lean=["alpha_star", "sigma_star_induced", "sigma_star", "ERIESystem", "rigidity_of_gc", "galoisConn_induced", "ConvSystem", "conv_gc"],
+            julia=[:alpha_star, :sigma_star_induced, :sigma_star, :ERIEStructure, :check_erie_structure, :check_relational_rigidity, :check_K3],
         ),
         (
             file="InterfaceLinearization.lean",
@@ -1108,11 +1108,12 @@
         read(`lake env lean --run formal/ERIEC/CertifiedArtifact.lean`, String)
     end
     artifact = parse_certified_artifact(artifact_text)
-    @test artifact.version == 1
+    @test artifact.version == 2
     @test artifact.artifact_id == "erie-c-certified-boundary"
     @test certified_artifact_contract_ids(artifact) == [
         "adjunction.system",
         "adjunction.rigidity",
+        "adjunction.galois_conn",
         "interface.relation_linearization",
         "interface.sensitivity_realization",
         "interface.relation_naturality",
@@ -1269,6 +1270,16 @@
         "v52.refmodel.horizontal_wall_witness",
     ]
 
+    @test_throws ArgumentError parse_certified_artifact(
+        "ERIEC_CERTIFIED_ARTIFACT\t2\tmalicious\n" *
+        "contract\tbad\tERIEC.World\tlambdaMax_eq_normSq_T\t" *
+        "ERIEC.World.lambdaMax_eq_normSq_T; #eval IO.println \"bad\"\t" *
+        "theorem\t-\t-\n",
+    )
+    @test_throws ArgumentError parse_certified_artifact(
+        "ERIEC_CERTIFIED_ARTIFACT\t99\tunsupported\n",
+    )
+
     artifact_check = verify_certified_artifact(artifact; project_root=project_root)
     @test certified_artifact_ok(artifact_check)
     @test isempty(artifact_check.missing_imports)
@@ -1287,7 +1298,9 @@
     @test summary.contracts == certified_artifact_contract_ids(artifact)
     @test any(
         detail.id == "graded.presheaf_transition_output_copair_unique" &&
-            detail.lean_name == "presheafTransitionOutputCopair_unique"
+            detail.lean_name == "presheafTransitionOutputCopair_unique" &&
+            detail.lean_full_name ==
+                "ERIEC.Graded.presheafTransitionOutputCopair_unique"
         for detail in summary.contract_details
     )
     @test any(
@@ -1369,6 +1382,30 @@
         for edge in lambda_max_graph.edges
     )
 
+    galois_conn_envelope = certified_artifact_envelope(
+        (
+            kind=:adjunction_galois_conn,
+            lean_contracts=["adjunction.galois_conn"],
+            julia_checkers=[:check_K3],
+            numeric_assumptions=NamedTuple(),
+        ),
+        artifact_check,
+    )
+    galois_conn_graph = certificate_dependency_graph(galois_conn_envelope)
+    @test any(
+        dependency.contract == "adjunction.galois_conn" &&
+            dependency.lean_module == "ERIEC.Adjunction" &&
+            dependency.declaration == "galoisConn_induced" &&
+            dependency.full_declaration == "ERIEC.Adj.galoisConn_induced"
+        for dependency in galois_conn_graph.lean_dependencies
+    )
+    @test any(
+        edge.from == "adjunction.galois_conn" &&
+            edge.to == "ERIEC.Adj.galoisConn_induced" &&
+            edge.relation == :lean_dependency
+        for edge in galois_conn_graph.edges
+    )
+
     backward_worlddc_envelope = certified_artifact_envelope(
         (
             kind=:backward_worlddc_counterexample,
@@ -1410,7 +1447,7 @@
     )
     @test any(
         edge.from == "generation.rich_lineage_cofinal" &&
-            edge.to == "ERIEC.RefModel.LineageWitness.rich_lineage_reference_model" &&
+            edge.to == "ERIEC.RefModel.rich_lineage_reference_model" &&
             edge.relation == :lean_dependency
         for edge in rich_lineage_graph.edges
     )
@@ -1433,7 +1470,7 @@
     )
     @test any(
         edge.from == "generation.branched_rich_lineage_cofinal" &&
-            edge.to == "ERIEC.RefModel.LineageWitness.branched_rich_lineage_reference_model" &&
+            edge.to == "ERIEC.RefModel.branched_rich_lineage_reference_model" &&
             edge.relation == :lean_dependency
         for edge in branched_rich_lineage_graph.edges
     )
@@ -1444,60 +1481,70 @@
             checker=:check_observed_termination,
             lean_module="ERIEC.TemporalDC",
             declaration="ObservedTerminationStep",
+            full_declaration="ERIEC.TemporalDC.Certification.ObservedTerminationStep",
         ),
         (
             id="temporaldc.permanent_termination",
             checker=:check_permanent_termination_prefix,
             lean_module="ERIEC.TemporalDC",
             declaration="PermanentTerminationStep",
+            full_declaration="ERIEC.TemporalDC.Certification.PermanentTerminationStep",
         ),
         (
             id="temporaldc.collapse_trace",
             checker=:check_collapse_trace_termination,
             lean_module="ERIEC.RefModel.CollapseTrace",
             declaration="collapse_trace_reference_model",
+            full_declaration="ERIEC.RefModel.collapse_trace_reference_model",
         ),
         (
             id="temporaldc.precarious",
             checker=:check_precarious_prefix,
             lean_module="ERIEC.RefModel.CollapseTrace",
             declaration="collapse_trace_precarious",
+            full_declaration="ERIEC.RefModel.collapse_trace_precarious",
         ),
         (
             id="temporaldc.no_escape",
             checker=:check_no_escape_prefix,
             lean_module="ERIEC.RefModel.CollapseTrace",
             declaration="all_mortal_reference_model",
+            full_declaration="ERIEC.RefModel.all_mortal_reference_model",
         ),
         (
             id="meta.sigma_purity",
             checker=:check_sigma_purity,
             lean_module="ERIEC.MetaSelection",
             declaration="m4_preserved_of_sigmaPure",
+            full_declaration="ERIEC.MetaSelection.m4_preserved_of_sigmaPure",
         ),
         (
             id="meta.qd_selection",
             checker=:check_selection_nondegenerate,
             lean_module="ERIEC.MetaSelection",
             declaration="SigmaPure",
+            full_declaration="ERIEC.MetaSelection.SigmaPure",
         ),
         (
             id="meta.sigma1_experiment",
             checker=:run_sigma1_experiment,
             lean_module="ERIEC.MetaSelection",
             declaration="trace_preserved_of_sigmaPure",
+            full_declaration="ERIEC.MetaSelection.trace_preserved_of_sigmaPure",
         ),
         (
             id="meta.individual_adapter",
             checker=:sigma1_observe_candidate,
             lean_module="ERIEC.MetaSelection",
             declaration="M4SafeMutation",
+            full_declaration="ERIEC.MetaSelection.M4SafeMutation",
         ),
         (
             id="meta.sigma1_diversity_audit",
             checker=:check_sigma1_diversity_resolution,
             lean_module="ERIEC.MetaSelection",
             declaration="DiversityAuditPure",
+            full_declaration="ERIEC.MetaSelection.DiversityAuditPure",
         ),
     ]
         temporal_envelope = certified_artifact_envelope(
@@ -1513,12 +1560,13 @@
         @test any(
             dependency.contract == temporal_contract.id &&
                 dependency.lean_module == temporal_contract.lean_module &&
-                dependency.declaration == temporal_contract.declaration
+                dependency.declaration == temporal_contract.declaration &&
+                dependency.full_declaration == temporal_contract.full_declaration
             for dependency in temporal_graph.lean_dependencies
         )
         @test any(
             edge.from == temporal_contract.id &&
-                edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" &&
+                edge.to == temporal_contract.full_declaration &&
                 edge.relation == :lean_dependency
             for edge in temporal_graph.edges
         )

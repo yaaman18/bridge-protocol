@@ -26,6 +26,7 @@ const ERIEC_TEST_PLAN = [
     ("test_invariance.jl", 0.5),
     ("test_lean_architecture.jl", 0.5),
     ("test_claim_ledger.jl", 0.5),
+    ("test_checker_semantic_manifest.jl", 12.0),
     ("test_ledger_consistency.jl", 0.5),
     ("test_reference_models.jl", 0.5),
     ("test_wager.jl", 0.5),
@@ -56,7 +57,11 @@ const ERIEC_TEST_PLAN = [
 
 """Suites that spawn subprocesses or use shared Lake artifacts and must not
 compete with CPU-heavy groups."""
-const ERIEC_EXCLUSIVE_TEST_FILES = Set(["test_cli.jl", "test_v52_formal_statements.jl"])
+const ERIEC_EXCLUSIVE_TEST_FILES = Set([
+    "test_checker_semantic_manifest.jl",
+    "test_cli.jl",
+    "test_v52_formal_statements.jl",
+])
 
 function eriec_test_groups(job_count::Integer)
     parallel_plan = filter(entry -> first(entry) ∉ ERIEC_EXCLUSIVE_TEST_FILES, ERIEC_TEST_PLAN)

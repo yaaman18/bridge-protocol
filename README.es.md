@@ -88,9 +88,12 @@ cobertura de la prosa. El estado de cada afirmación atómica se conserva en
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
 A fecha de 2026-08-02, el libro mayor v1 registra 59 puntos de verificación, todos
-certificados. Los 59 valores de `coverage_audit` son `unreviewed`, y `legacy_coverage`
-contiene 7 entradas (todas con `basis = "exact_ledger_decl"`). El libro mayor v2 contiene
-89 afirmaciones atómicas: 38 certificadas y 51 sin certificar.
+certificados. De los valores de `coverage_audit`, 10 son `complete` y 49 son `unreviewed`.
+`legacy_coverage` contiene 10 entradas (todas con `basis = "exact_ledger_decl"`); la
+auditoría determinó que los contratos cubren 7 afirmaciones atómicas y no cubren 85. Es
+decir, en las 10 entradas auditadas, solo 7 de las propiedades que enuncia su prosa están
+respaldadas por una verificación mecánica; las 85 restantes quedan fuera del contrato. El
+libro mayor v2 contiene 89 afirmaciones atómicas: 38 certificadas y 51 sin certificar.
 
 ## Estructura del repositorio
 

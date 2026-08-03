@@ -1,0 +1,88 @@
+ERROR: LoadError: Some tests did not pass: 1201 passed, 7 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1445
+  Expression: any((edge.from == "generation.rich_lineage_cofinal" && (edge.to == "ERIEC.RefModel.LineageWitness.rich_lineage_reference_model" && edge.relation == :lean_dependency) for edge = rich_lineage_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1445 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1468
+  Expression: any((edge.from == "generation.branched_rich_lineage_cofinal" && (edge.to == "ERIEC.RefModel.LineageWitness.branched_rich_lineage_reference_model" && edge.relation == :lean_dependency) for edge = branched_rich_lineage_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1468 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1553
+  Expression: any((edge.from == temporal_contract.id && (edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" && edge.relation == :lean_dependency) for edge = temporal_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1553 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1553
+  Expression: any((edge.from == temporal_contract.id && (edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" && edge.relation == :lean_dependency) for edge = temporal_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1553 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1553
+  Expression: any((edge.from == temporal_contract.id && (edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" && edge.relation == :lean_dependency) for edge = temporal_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1553 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1553
+  Expression: any((edge.from == temporal_contract.id && (edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" && edge.relation == :lean_dependency) for edge = temporal_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1553 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1553
+  Expression: any((edge.from == temporal_contract.id && (edge.to == "$(temporal_contract.lean_module).$(temporal_contract.declaration)" && edge.relation == :lean_dependency) for edge = temporal_graph.edges))
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1553 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Test Summary:       | Pass  Fail  Total   Time
+Lean Julia contract | 1201     7   1208  20.5s

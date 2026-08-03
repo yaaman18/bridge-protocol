@@ -4,6 +4,7 @@ struct CertifiedContract
     id::String
     lean_module::String
     lean_name::String
+    lean_full_name::String
     lean_kind::String
     julia_symbol::Union{Symbol,Nothing}
     julia_checker::Union{Symbol,Nothing}
@@ -30,6 +31,8 @@ certified_artifact_ok(check::CertifiedArtifactCheck) =
     isempty(check.missing_checkers)
 
 const _CERTIFIED_LEAN_KINDS = Set(["structure", "def", "theorem", "inductive", "abbrev"])
+const _CERTIFIED_LEAN_NAME = r"^ERIEC(?:\.[A-Za-z_][A-Za-z0-9_']*)+$"
+const _CERTIFIED_LEAN_SHORT_NAME = r"^[A-Za-z_][A-Za-z0-9_']*$"
 const CERTIFIED_ENVELOPE_SCHEMA_VERSION = 1
 const JULIA_UNVERIFIED_EXECUTION_LAYER = :julia_unverified
 const UNVERIFIED_EXECUTION_BOUNDARY = :unverified_runtime
@@ -53,17 +56,30 @@ function parse_certified_artifact(text::AbstractString)
         throw(ArgumentError("invalid certified artifact header"))
     version = tryparse(Int, header[2])
     version === nothing && throw(ArgumentError("invalid certified artifact version"))
+    version in (1, 2) ||
+        throw(ArgumentError("unsupported certified artifact version: $version"))
 
     contracts = CertifiedContract[]
     seen_ids = Set{String}()
     for line in lines[2:end]
         fields = split(line, '\t'; keepempty=true)
-        length(fields) == 7 && fields[1] == "contract" ||
+        expected_fields = version == 1 ? 7 : 8
+        length(fields) == expected_fields && fields[1] == "contract" ||
             throw(ArgumentError("invalid certified artifact contract line: $line"))
         id = fields[2]
         id in seen_ids && throw(ArgumentError("duplicate certified contract id: $id"))
-        fields[5] in _CERTIFIED_LEAN_KINDS ||
-            throw(ArgumentError("unsupported Lean declaration kind: $(fields[5])"))
+        occursin(_CERTIFIED_LEAN_NAME, fields[3]) ||
+            throw(ArgumentError("invalid Lean source module: $(fields[3])"))
+        occursin(_CERTIFIED_LEAN_SHORT_NAME, fields[4]) ||
+            throw(ArgumentError("invalid Lean declaration name: $(fields[4])"))
+        lean_full_name = version == 1 ? "$(fields[3]).$(fields[4])" : fields[5]
+        occursin(_CERTIFIED_LEAN_NAME, lean_full_name) ||
+            throw(ArgumentError("invalid fully qualified Lean declaration: $lean_full_name"))
+        kind_index = version == 1 ? 5 : 6
+        symbol_index = version == 1 ? 6 : 7
+        checker_index = version == 1 ? 7 : 8
+        fields[kind_index] in _CERTIFIED_LEAN_KINDS ||
+            throw(ArgumentError("unsupported Lean declaration kind: $(fields[kind_index])"))
         push!(seen_ids, id)
         push!(
             contracts,
@@ -71,14 +87,51 @@ function parse_certified_artifact(text::AbstractString)
                 id,
                 fields[3],
                 fields[4],
-                fields[5],
-                _artifact_symbol(fields[6]),
-                _artifact_symbol(fields[7]),
+                lean_full_name,
+                fields[kind_index],
+                _artifact_symbol(fields[symbol_index]),
+                _artifact_symbol(fields[checker_index]),
             ),
         )
     end
 
     CertifiedArtifact(version, header[3], contracts)
+end
+
+function _missing_lean_full_names(
+    project_root::AbstractString,
+    contracts::AbstractVector{CertifiedContract},
+)
+    isempty(contracts) && return CertifiedContract[]
+    imports = ["import $(lean_module)" for lean_module in
+        sort!(unique(contract.lean_module for contract in contracts))]
+    checks = ["#check $(contract.lean_full_name)" for contract in contracts]
+    source = join(vcat(imports, checks, [""]), '\n')
+    mktempdir() do temp_dir
+        check_path = joinpath(temp_dir, "CertifiedFullNames.lean")
+        write(check_path, source)
+        command = Cmd(`lake env lean $check_path`; dir=project_root)
+        diagnostics = IOBuffer()
+        process = run(
+            pipeline(ignorestatus(command); stdout=diagnostics, stderr=diagnostics),
+        )
+        success(process) && return CertifiedContract[]
+
+        diagnostic_text = String(take!(diagnostics))
+        line_pattern = r":([0-9]+):[0-9]+:"
+        failed_indices = Set{Int}()
+        for match in eachmatch(line_pattern, diagnostic_text)
+            line_number = parse(Int, match.captures[1])
+            contract_index = line_number - length(imports)
+            if 1 <= contract_index <= length(contracts)
+                push!(failed_indices, contract_index)
+            end
+        end
+
+        # Fail closed if Lean failed without a declaration-line diagnostic.
+        isempty(failed_indices) && return collect(contracts)
+        [contracts[index] for index in sort!(collect(failed_indices))]
+    end
 end
 
 function certified_artifact_contract_ids(artifact::CertifiedArtifact)
@@ -154,6 +207,10 @@ function verify_certified_artifact(
         end
     end
 
+    if isempty(missing_lean)
+        append!(missing_lean, _missing_lean_full_names(project_root, artifact.contracts))
+    end
+
     CertifiedArtifactCheck(
         artifact,
         missing_imports,
@@ -197,6 +254,7 @@ function certification_summary(check::CertifiedArtifactCheck)
                 id=contract.id,
                 lean_module=contract.lean_module,
                 lean_name=contract.lean_name,
+                lean_full_name=contract.lean_full_name,
                 lean_kind=contract.lean_kind,
                 julia_symbol=contract.julia_symbol,
                 julia_checker=contract.julia_checker,
@@ -319,6 +377,7 @@ function certificate_dependency_graph(envelope)
             contract=contract,
             lean_module=detail_by_id[contract].lean_module,
             declaration=detail_by_id[contract].lean_name,
+            full_declaration=detail_by_id[contract].lean_full_name,
             kind=detail_by_id[contract].lean_kind,
         )
         for contract in contracts
@@ -335,7 +394,7 @@ function certificate_dependency_graph(envelope)
     lean_dependency_edges = [
         (
             from=dependency.contract,
-            to="$(dependency.lean_module).$(dependency.declaration)",
+            to=dependency.full_declaration,
             relation=:lean_dependency,
         )
         for dependency in lean_dependencies

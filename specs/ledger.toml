@@ -45,12 +45,12 @@ source      = "category/tensor_categorical_v5.md#検証点2"
 claim_ja    = "α_w★ ⊣ σ_w★（感覚運動随伴 = ガロア接続）。破れれば表象主義に退化"
 lean_decl   = "ERIEC.Adj.galoisConn_induced"
 lean_file   = "formal/ERIEC/Adjunction.lean"
-julia_api   = "check_galois_conn"
+julia_api   = "check_K3"
 julia_file  = "src/adjunction.jl"
-contract_id = "adjunction.system"
+contract_id = "adjunction.galois_conn"
 owner       = "codex"
 depends_on  = []
-status      = "certified"                     # G4: logs/gates/VP-ADJ-001/G4-20260705.log
+status      = "certified"                     # G4: logs/gates/VP-ADJ-001/G4-20260803-full-name-schema.log
 pinned      = false
 coverage_audit = "unreviewed"
 

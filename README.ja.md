@@ -74,8 +74,11 @@ v1 台帳の `certified` は `contract_id` が指す Lean 宣言ひとつが機�
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) が保持する。
 
 2026年8月2日時点で v1 台帳は 59 の検証点を追跡し、59 件すべてが certified で
-ある。`coverage_audit` は 59 件すべてが `unreviewed` で、`legacy_coverage` は
-7 件（すべて `basis = "exact_ledger_decl"`）である。v2 台帳は 89 の原子化された
+ある。`coverage_audit` は 10 件が `complete`、49 件が `unreviewed` である。
+`legacy_coverage` は 10 件（すべて `basis = "exact_ledger_decl"`）で、監査の結果、
+契約が被覆する原子化主張は 7 件、被覆しない原子化主張は 85 件であった。
+すなわち監査済みの 10 件については、散文が述べる範囲のうち機械検査に裏付けられて
+いるのは 7 件のみであり、残る 85 件は契約の外にある。v2 台帳は 89 の原子化された
 主張を保持し、38 件が certified、51 件が未認証である。
 
 ## リポジトリ構成

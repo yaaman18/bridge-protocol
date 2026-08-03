@@ -1,0 +1,60 @@
+Precompiling ERIEC...
+   3936.0 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 4 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 1156 passed, 3 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1281
+  Expression: certified_artifact_ok(artifact_check)
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1281 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1283
+  Expression: isempty(artifact_check.missing_lean)
+   Evaluated: isempty(CertifiedContract[CertifiedContract("dc.system", "ERIEC.DC", "DC", "ERIEC.DC.DC", "structure", :DCResult, :check_DC), CertifiedContract("sensitivity.dual_symmetry", "ERIEC.Sensitivity", "dualSymmetry", "ERIEC.Sensitivity.dualSymmetry", "theorem", :sensitivity_tensor, :check_dual_symmetry), CertifiedContract("sensitivity.no_order_unit", "ERIEC.Sensitivity", "not_id_le_adjoint_comp", "ERIEC.Sensitivity.not_id_le_adjoint_comp", "theorem", :sensitivity_tensor, :check_adjoint_unit_counterexample), CertifiedContract("worlddc.representation.forward", "ERIEC.WorldDCRep", "wldNontrivial_of_intertwining", "ERIEC.WorldDCRep.wldNontrivial_of_intertwining", "theorem", nothing, nothing), CertifiedContract("lineage.core", "ERIEC.Lineage", "Lineage", "ERIEC.Lineage.Lineage", "structure", :FiniteLineage, :check_lineage), CertifiedContract("generation.rich_lineage_cofinal", "ERIEC.RefModel.LineageWitness", "rich_lineage_reference_model", "ERIEC.RefModel.LineageWitness.rich_lineage_reference_model", "theorem", :check_rich_lineage_cofinal, :check_rich_lineage_cofinal), CertifiedContract("generation.branched_rich_lineage_cofinal", "ERIEC.RefModel.LineageWitness", "branched_rich_lineage_reference_model", "ERIEC.RefModel.LineageWitness.branched_rich_lineage_reference_model", "theorem", :check_branched_rich_lineage_cofinal, :check_branched_rich_lineage_cofinal), CertifiedContract("temporaldc.observed_termination", "ERIEC.TemporalDC", "ObservedTerminationStep", "ERIEC.TemporalDC.ObservedTerminationStep", "def", :check_observed_termination, :check_observed_termination), CertifiedContract("temporaldc.permanent_termination", "ERIEC.TemporalDC", "PermanentTerminationStep", "ERIEC.TemporalDC.PermanentTerminationStep", "def", :check_permanent_termination_prefix, :check_permanent_termination_prefix), CertifiedContract("temporaldc.collapse_trace", "ERIEC.RefModel.CollapseTrace", "collapse_trace_reference_model", "ERIEC.RefModel.CollapseTrace.collapse_trace_reference_model", "theorem", :check_collapse_trace_termination, :check_collapse_trace_termination)  …  CertifiedContract("v52.refmodel.symmetric_double_full_witness", "ERIEC.RefModelV52", "symmetricDoubleCompleteWitness", "ERIEC.RefModelV52.symmetricDoubleCompleteWitness", "def", nothing, nothing), CertifiedContract("v52.refmodel.full_marker_conscious_wall", "ERIEC.RefModelV52", "euclideanMarkerConscious_horizontal_wall", "ERIEC.RefModelV52.euclideanMarkerConscious_horizontal_wall", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.full_marker_blind_wall", "ERIEC.RefModelV52", "euclideanMarkerBlind_horizontal_wall", "ERIEC.RefModelV52.euclideanMarkerBlind_horizontal_wall", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.symmetric_double_blind", "ERIEC.RefModelV52", "euclideanMarker_blind_false", "ERIEC.RefModelV52.euclideanMarker_blind_false", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.symmetric_double_not_conscious", "ERIEC.RefModelV52", "euclideanMarker_not_conscious_false", "ERIEC.RefModelV52.euclideanMarker_not_conscious_false", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.symmetric_double_fm1", "ERIEC.RefModelV52", "fm1_false", "ERIEC.RefModelV52.fm1_false", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.noniso_multiplicity", "ERIEC.RefModelV52", "symmetricDouble_realizationMultiplicity_nonisomorphic", "ERIEC.RefModelV52.symmetricDouble_realizationMultiplicity_nonisomorphic", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.nondegenerate_recur_full", "ERIEC.RefModelV52", "fullWitness_has_recur", "ERIEC.RefModelV52.fullWitness_has_recur", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.nondegenerate_recur_integrated", "ERIEC.RefModelV52", "integratedWitness_has_recur", "ERIEC.RefModelV52.integratedWitness_has_recur", "theorem", nothing, nothing), CertifiedContract("v52.refmodel.horizontal_wall_witness", "ERIEC.RefModelV52", "horizontalWallWitness_indistinguishable", "ERIEC.RefModelV52.horizontalWallWitness_indistinguishable", "theorem", nothing, nothing)])
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1283 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1292
+  Expression: summary.ok
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1292 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+Lean Julia contract: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_formal_julia_contract.jl:1
+  Got exception outside of a @test
+  ArgumentError: cannot certify payload with a failing artifact check
+  Stacktrace:
+   [1] certified_artifact_envelope(payload::@NamedTuple{kind::Symbol}, check::CertifiedArtifactCheck)
+     @ ERIEC ~/bridge-protocol/src/certification.jl:346
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_formal_julia_contract.jl:1311 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_formal_julia_contract.jl:2
+   [5] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [6] top-level scope
+     @ none:1
+Test Summary:       | Pass  Fail  Error  Total   Time
+Lean Julia contract | 1156     3      1   1160  19.5s

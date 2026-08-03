@@ -81,10 +81,13 @@ The axes are orthogonal. A contract remains certified when `coverage_audit` is
 each atomic claim is recorded in
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-As of 2026-08-02, the v1 ledger tracks 59 verification points, all 59 certified. All 59
-`coverage_audit` values are `unreviewed`, and `legacy_coverage` contains 7 entries (all
-with `basis = "exact_ledger_decl"`). The v2 ledger contains 89 atomic claims: 38 certified
-and 51 uncertified.
+As of 2026-08-02, the v1 ledger tracks 59 verification points, all 59 certified. Of the
+`coverage_audit` values, 10 are `complete` and 49 are `unreviewed`. `legacy_coverage`
+contains 10 entries (all with `basis = "exact_ledger_decl"`); the audit found that the
+contracts cover 7 atomic claims and do not cover 85. In other words, across the 10 audited
+entries, only 7 of the properties their prose asserts are backed by a machine check; the
+remaining 85 lie outside the contract. The v2 ledger contains 89 atomic claims: 38
+certified and 51 uncertified.
 
 ## Repository layout
 

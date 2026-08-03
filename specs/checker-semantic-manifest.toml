@@ -1,0 +1,822 @@
+schema_version = 1
+allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "unclassified"]
+
+[[contract]]
+id = "adjunction.system"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "adjunction.rigidity"
+checker_relation = "exact_finite_decision"
+review_status = "reviewed"
+checker = "check_relational_rigidity"
+lean_decl = "ERIEC.Adj.rigidity_of_gc"
+scope = "finite all_M and all_E supplied by the caller"
+assumptions = ["powerset(all_E) is enumerated internally", "alpha_rel and sigma_rel are total Julia callables on the supplied carriers"]
+guarantee = "decides the finite premises and relational rigidity conclusion"
+reviewer = "codex"
+basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+
+[[contract]]
+id = "adjunction.galois_conn"
+checker_relation = "exact_finite_decision"
+review_status = "reviewed"
+checker = "check_K3"
+lean_decl = "ERIEC.Adj.galoisConn_induced"
+scope = "finite all_M and caller-supplied sample_E_subsets"
+assumptions = ["sample_E_subsets equals powerset(all_E) for finite completeness", "alpha_rel is a total Julia callable on all_M"]
+guarantee = "decides alpha_star N subset X iff N subset sigma_star_induced X for every enumerated N and X"
+reviewer = "codex"
+basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+
+[[contract]]
+id = "interface.relation_linearization"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "interface.sensitivity_realization"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "interface.relation_naturality"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "interface.relation_lax_naturality"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "interface.strict_naturality_counterexample"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.alpha_only_counterexample"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.raw_gram_counterexample"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_object_classifier"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_lax_map"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_thin_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_strict_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_hilbert_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "bridge.hinge_structural_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "viability.closure_object"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "viability.closure_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "viability.relational_frame"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "viability.relational_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "layers.viable_to_hilbert"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "layers.nonfaithful_counterexample"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "grading.const_presheaf_antitone"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "grading.critical_rank"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "closure.nu_phi"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "closure.knaster_tarski"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "hinge.act"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "collapse.critical_slowing"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "dynamics.finite_collapse"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "dc.system"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "certification.critical_bound"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "sensitivity.dual_symmetry"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "sensitivity.no_order_unit"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "world.spectral_band"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "world.lambda_max"
+checker_relation = "observation_only"
+review_status = "reviewed"
+checker = "dominant_world_eigenvalue"
+lean_decl = "ERIEC.World.lambdaMax_eq_normSq_T"
+scope = "finite numeric loop matrices accepted by Julia LinearAlgebra"
+assumptions = ["numeric eigensolver behavior and floating-point arithmetic are outside the Lean proof"]
+guarantee = "reports the dominant absolute eigenvalue; it does not decide the Lean equality"
+reviewer = "codex"
+basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+
+[[contract]]
+id = "value.endogenous"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "world.actuated"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "worlddc.bridge"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "worlddc.no_unconditional_equivalence"
+checker_relation = "regression_only"
+review_status = "reviewed"
+checker = "check_no_unconditional_worlddc"
+lean_decl = "ERIEC.WorldDC.no_forward_unconditional"
+scope = "Boolean summaries, with the zero-argument method fixing two opposite examples"
+assumptions = ["Boolean inputs are externally supplied summaries rather than certified DC and World witnesses"]
+guarantee = "fixes the current unequal-summary examples; it does not decide the universal Lean theorem"
+reviewer = "codex"
+basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+
+[[contract]]
+id = "worlddc.no_backward_unconditional"
+checker_relation = "counterexample_validator"
+review_status = "reviewed"
+checker = "check_backward_worlddc_counterexample"
+lean_decl = "ERIEC.WorldDC.no_backward_unconditional"
+scope = "a supplied DCResult and WldResult pair"
+assumptions = ["is_DC and world_nontrivial correctly summarize the supplied runtime results"]
+guarantee = "true validates a runtime counterexample with World nontrivial and DC false"
+reviewer = "codex"
+basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+
+[[contract]]
+id = "worlddc.representation.forward"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "graded.presheaf_transition_coproduct"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "decomp.copair_unique"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "graded.presheaf_transition_naturality"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "graded.presheaf_transition_output_copair_unique"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "body.no_terminal_setpoint"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "guard.terminal_iff"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "markers.fm_classification"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "opendynamics.open_graph"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "audit.simulation"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "audit.certified_simulation"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "lineage.core"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "theorytr.phenomenal_guard"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "invariance.update_bisimulation"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.v5_1"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.stable_v2"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.dynamic_v2"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.nondegenerate_v2"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_dc"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_ax_core_discrete"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_three_layer"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.frozen_independence"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.w5_independence_family"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.conservative_extension"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.global_protocol_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.named_models"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.w6_cycle_soundness"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.interpretive_model_checker"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.finite_model_checker"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "wager.full_model_checker"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "richness.branch"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "richness.hinge_branch_pump"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.dc_viable_translation"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.proliferation_morphism"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.lineage_stays_open"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.richness_inherits_generational"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.rich_lineage_cofinal"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "generation.branched_rich_lineage_cofinal"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "temporaldc.observed_termination"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "temporaldc.permanent_termination"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "temporaldc.collapse_trace"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "temporaldc.precarious"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "temporaldc.no_escape"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "meta.sigma_purity"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "meta.qd_selection"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "meta.sigma1_experiment"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "meta.individual_adapter"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "meta.sigma1_diversity_audit"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gate.propagation"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gate.soundness"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gate.unique"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gap.branch"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gap.degeneracy"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.gap.trichotomy"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.decay.psi"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.decay.abstract_collapse"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.decay.collapse_of_psi"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.decay.psi2"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.opensimc.identity_audit"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.opensimc.path_units"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.opensimc.erase_functor"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.kernelopen.action_gap"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.centering.horizontal_wall"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.centering.fixed_specialization"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.centering.strength_data"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.centering.quantified_closure"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.value.positive_static_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.fm1_static_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.fm2_static_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.static_hinge_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.fm3_dynlab_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.fm4_dynrep_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.conscious_dynlabrep_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.blind_dynlabrep_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.conscious_static_hinge_dynlabrep_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.blind_static_hinge_dynlabrep_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.dynlabrep_static_hinge_fixed_specialization"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.conscious_static_hinge_horizontal_wall"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.blind_static_hinge_horizontal_wall"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.analyticfm4.coordinate_swap_unitary"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.analyticfm4.eigenspace_transport"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.analyticfm4.hilbert_unitary_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.analyticfm4.complex_hilbert_unitary_invariant"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.analyticfm4.complex_full_marker_link"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.traceability.vocabulary"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.traceability.soundness"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.recurrent_gate_viability"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.standard_gate_profile"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_positive_value"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_full_marker"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_analytic_fm4"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_euclidean_hilbert_fm4"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_complex_hilbert_fm4"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_complex_full_marker"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_three_stage_dynamics"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_obs_lab_exchange"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_converse_relations"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_orthogonal_projection"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_conjugacy"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_orbit_invariance"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.markers.analytic_fm4_unitary"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.analytic_symmetric_double"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.full_marker_analytic_fm4"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamics"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_iso"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_update_bisim"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_full_witness"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.full_marker_conscious_wall"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.full_marker_blind_wall"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_blind"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_not_conscious"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_fm1"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.noniso_multiplicity"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.nondegenerate_recur_full"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.nondegenerate_recur_integrated"
+checker_relation = "unclassified"
+review_status = "unreviewed"
+
+[[contract]]
+id = "v52.refmodel.horizontal_wall_witness"
+checker_relation = "unclassified"
+review_status = "unreviewed"
