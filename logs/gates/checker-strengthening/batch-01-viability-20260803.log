@@ -1,0 +1,19 @@
+Precompiling ERIEC...
+   4980.1 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 58 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_viability_closure.jl:1
+viability closure object map: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_viability_closure.jl:123
+  Expression: !(invalid_relational_functor.contract_premises)
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_viability_closure.jl:123 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_viability_closure.jl:2
+Test Summary:                | Pass  Fail  Total  Time
+viability closure object map |   58     1     59  4.5s

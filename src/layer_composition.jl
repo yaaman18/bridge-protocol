@@ -1,5 +1,6 @@
 """Check the implemented viable -> relational -> hinge -> Hilbert composition."""
 function check_layer_composition(states, step, viable)
+    viability = check_viability_closure(states, step, viable)
     relational = check_viability_relational_frame(states, step, viable)
     hinge = intersect(relational.left_closure, relational.right_closure)
     hinge_nonempty = !isempty(hinge)
@@ -8,13 +9,17 @@ function check_layer_composition(states, step, viable)
     world_nontrivial = hilbert_loop[1, 1] == 1
     left_associated = hilbert_loop
     right_associated = hinge_nonempty ? ones(1, 1) : zeros(1, 1)
+    endpoint_equivalent = world_nontrivial == viable_nonempty
     (
         viable_nonempty=viable_nonempty,
         hinge_nonempty=hinge_nonempty,
         world_nontrivial=world_nontrivial,
-        endpoint_equivalent=world_nontrivial == viable_nonempty,
+        endpoint_equivalent=endpoint_equivalent,
         composition_commutes=left_associated == right_associated,
         hilbert_loop=hilbert_loop,
+        contract_premises=viability.step_closed,
+        contract_conclusion=endpoint_equivalent,
+        contract_holds=viability.step_closed && endpoint_equivalent,
     )
 end
 

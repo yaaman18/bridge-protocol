@@ -11,6 +11,7 @@ const CHECKER_RELATION_VALUES = Set([
     "counterexample_validator",
     "observation_only",
     "regression_only",
+    "lean_only",
     "unclassified",
 ])
 
@@ -20,6 +21,9 @@ function valid_checker_semantic_row(row)
     review_status = get(row, "review_status", "")
     if relation == "unclassified"
         return review_status == "unreviewed"
+    end
+    if relation == "lean_only"
+        return review_status == "machine_verified"
     end
     review_status == "reviewed" || return false
     required = [
@@ -34,6 +38,10 @@ function valid_checker_semantic_row(row)
     all(key -> haskey(row, key) && !isempty(row[key]), required)
 end
 
+checker_relation_matches_contract(row, contract) =
+    (row["checker_relation"] == "lean_only") ==
+    (contract.julia_checker === nothing)
+
 @testset "checker semantic manifest" begin
     project_root = normpath(joinpath(@__DIR__, ".."))
     manifest = TOML.parsefile(
@@ -41,9 +49,9 @@ end
     )
     rows = manifest["contract"]
     ids = [row["id"] for row in rows]
-    artifact_ids = certified_artifact_contract_ids(
-        lean_certified_artifact(; project_root=project_root),
-    )
+    artifact = lean_certified_artifact(; project_root=project_root)
+    artifact_ids = certified_artifact_contract_ids(artifact)
+    contracts_by_id = Dict(contract.id => contract for contract in artifact.contracts)
 
     @test manifest["schema_version"] == 1
     @test Set(manifest["allowed_relations"]) == CHECKER_RELATION_VALUES
@@ -51,16 +59,24 @@ end
     @test Set(ids) == Set(artifact_ids)
     @test length(rows) == length(artifact_ids) == 157
     @test all(valid_checker_semantic_row, rows)
+    @test all(
+        row -> checker_relation_matches_contract(row, contracts_by_id[row["id"]]),
+        rows,
+    )
 
     reviewed = filter(row -> row["review_status"] == "reviewed", rows)
-    @test length(reviewed) == 5
-    @test count(row -> row["checker_relation"] == "unclassified", rows) == 152
-    @test Dict(row["id"] => row["checker_relation"] for row in reviewed) == Dict(
+    @test count(row -> row["checker_relation"] == "lean_only", rows) == 71
+    reviewed_relations = Dict(row["id"] => row["checker_relation"] for row in reviewed)
+    pilot_relations = Dict(
         "adjunction.rigidity" => "exact_finite_decision",
         "adjunction.galois_conn" => "exact_finite_decision",
         "world.lambda_max" => "observation_only",
         "worlddc.no_unconditional_equivalence" => "regression_only",
         "worlddc.no_backward_unconditional" => "counterexample_validator",
+    )
+    @test all(
+        get(reviewed_relations, id, nothing) == relation
+        for (id, relation) in pilot_relations
     )
     @test all(row -> isfile(joinpath(project_root, row["basis_log"])), reviewed)
 
@@ -75,10 +91,18 @@ end
         "reviewer" => "test",
         "basis_log" => "synthetic.log",
     )
-    for relation in setdiff(CHECKER_RELATION_VALUES, Set(["unclassified"]))
+    for relation in setdiff(
+        CHECKER_RELATION_VALUES,
+        Set(["lean_only", "unclassified"]),
+    )
         row = merge(synthetic, Dict("checker_relation" => relation))
         @test valid_checker_semantic_row(row)
     end
+    @test valid_checker_semantic_row(Dict(
+        "id" => "synthetic-lean-only",
+        "checker_relation" => "lean_only",
+        "review_status" => "machine_verified",
+    ))
     @test valid_checker_semantic_row(Dict(
         "id" => "synthetic-unclassified",
         "checker_relation" => "unclassified",
@@ -92,4 +116,13 @@ end
         synthetic,
         Dict("checker_relation" => "unknown"),
     ))
+
+    checker_present = (julia_checker=:synthetic_checker,)
+    checker_absent = (julia_checker=nothing,)
+    lean_only_row = Dict("checker_relation" => "lean_only")
+    classified_row = Dict("checker_relation" => "regression_only")
+    @test checker_relation_matches_contract(lean_only_row, checker_absent)
+    @test checker_relation_matches_contract(classified_row, checker_present)
+    @test !checker_relation_matches_contract(lean_only_row, checker_present)
+    @test !checker_relation_matches_contract(classified_row, checker_absent)
 end

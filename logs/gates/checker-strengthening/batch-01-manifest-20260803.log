@@ -1,0 +1,50 @@
+
+[58033] signal 15: Terminated: 15
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:45
+kevent at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+uv__io_poll at /usr/local/Cellar/julia/1.11.6/lib/julia/libjulia-internal.1.11.6.dylib (unknown line)
+uv_run at /usr/local/Cellar/julia/1.11.6/lib/julia/libjulia-internal.1.11.6.dylib (unknown line)
+ijl_task_get_next at /usr/local/Cellar/julia/1.11.6/lib/julia/libjulia-internal.1.11.6.dylib (unknown line)
+julia_poptask_66739.1 at /usr/local/Cellar/julia/1.11.6/lib/julia/sys.dylib (unknown line)
+julia_wait_66245.1 at /usr/local/Cellar/julia/1.11.6/lib/julia/sys.dylib (unknown line)
+julia_task_done_hook_66652.1 at /usr/local/Cellar/julia/1.11.6/lib/julia/sys.dylib (unknown line)
+jfptr_task_done_hook_66653.1 at /usr/local/Cellar/julia/1.11.6/lib/julia/sys.dylib (unknown line)
+jl_finish_task at /usr/local/Cellar/julia/1.11.6/lib/julia/libjulia-internal.1.11.6.dylib (unknown line)
+start_task at /usr/local/Cellar/julia/1.11.6/lib/julia/libjulia-internal.1.11.6.dylib (unknown line)
+unknown function (ip: 0x0)
+Allocations: 2734362 (Pool: 2734250; Big: 112); GC: 4
+Precompiling ERIEC...
+    ERIEC Being precompiled by another process (pid: 58032, pidfile: /Users/yamaguchimitsuyuki/.julia/compiled/v1.11/ERIEC/HC09U_oGdfS.ji.pidfile)
+   5116.0 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 6 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 0 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:45
+checker semantic manifest: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:45
+  Got exception outside of a @test
+  failed process: Process(`lake env lean --run formal/ERIEC/CertifiedArtifact.lean`, ProcessSignaled(15)) [0]
+  
+  Stacktrace:
+    [1] pipeline_error
+      @ ./process.jl:598 [inlined]
+    [2] read(cmd::Cmd)
+      @ Base ./process.jl:482
+    [3] read
+      @ ./process.jl:491 [inlined]
+    [4] (::ERIEC.var"#787#788")()
+      @ ERIEC ~/bridge-protocol/src/certification.jl:229
+    [5] cd(f::ERIEC.var"#787#788", dir::String)
+      @ Base.Filesystem ./file.jl:112
+    [6] #lean_certified_artifact#786
+      @ ~/bridge-protocol/src/certification.jl:228 [inlined]
+    [7] macro expansion
+      @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:52 [inlined]
+    [8] macro expansion
+      @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+    [9] top-level scope
+      @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:46
+   [10] include(fname::String)
+      @ Main ./sysimg.jl:38
+   [11] top-level scope
+      @ none:1
+Test Summary:             | Error  Total  Time
+checker semantic manifest |     1      1  8.0s

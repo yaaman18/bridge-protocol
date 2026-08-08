@@ -16,14 +16,18 @@ function check_viability_closure(states, step, viable)
         for source in states for target in states
     )
     postfixed = issubset(viable_states, closed)
+    fixed = closed == viable_states
     (
         viable_states=viable_states,
         closure=closed,
         step_closed=step_closed,
         left_postfixed=postfixed,
         right_postfixed=postfixed,
-        fixed=closed == viable_states,
-        invariant_implies_fixed=!step_closed || closed == viable_states,
+        fixed=fixed,
+        invariant_implies_fixed=!step_closed || fixed,
+        contract_premises=step_closed,
+        contract_conclusion=fixed,
+        contract_holds=step_closed && fixed,
     )
 end
 
@@ -52,13 +56,18 @@ function check_viability_closure_naturality(
         source_viable(source) == target_viable(mapping[source])
         for source in source_states
     )
+    premises = bijective && step_preserved && viability_preserved
+    left_natural = mapped(source_closed) == target_closed
     (
         bijective=bijective,
         step_preserved=step_preserved,
         viability_preserved=viability_preserved,
         stage_natural=mapped(source_viable_set) == target_viable_set,
-        left_natural=mapped(source_closed) == target_closed,
+        left_natural=left_natural,
         right_natural=mapped(source_closed) == target_closed,
+        contract_premises=premises,
+        contract_conclusion=left_natural,
+        contract_holds=premises && left_natural,
     )
 end
 
@@ -72,6 +81,11 @@ function check_viability_relational_frame(states, step, viable)
     abstract_closure = successor_closure(states, step, viable_states)
     left_closure = Phi(identity_rel, reflexive_step_rel, viable_states)
     right_closure = T_prime(identity_rel, reflexive_step_rel, viable_states)
+    step_closed = all(
+        !viable(source) || !step(source, target) || viable(target)
+        for source in states for target in states
+    )
+    left_fixed = left_closure == viable_states
     (
         viable_states=viable_states,
         abstract_closure=abstract_closure,
@@ -81,6 +95,10 @@ function check_viability_relational_frame(states, step, viable)
         right_realizes=right_closure == abstract_closure,
         left_postfixed=issubset(viable_states, left_closure),
         right_postfixed=issubset(viable_states, right_closure),
+        left_fixed=left_fixed,
+        contract_premises=step_closed,
+        contract_conclusion=left_fixed,
+        contract_holds=step_closed && left_fixed,
     )
 end
 
@@ -110,6 +128,8 @@ function check_viability_relational_functor(
     )
     bijective = Set(keys(mapping)) == Set(source_states) &&
         Set(values(mapping)) == Set(target_states)
+    structural_premises = bijective && identity_preserved && reflexive_step_preserved
+    frame_iso = structural_premises && viability_preserved
     (
         bijective=bijective,
         pi_preserved=identity_preserved,
@@ -118,7 +138,9 @@ function check_viability_relational_functor(
         sigma_preserved=reflexive_step_preserved,
         kappa_preserved=viability_preserved,
         epsilon_preserved=viability_preserved,
-        frame_iso=bijective && identity_preserved &&
-            reflexive_step_preserved && viability_preserved,
+        frame_iso=frame_iso,
+        contract_premises=structural_premises,
+        contract_conclusion=viability_preserved,
+        contract_holds=structural_premises && viability_preserved,
     )
 end

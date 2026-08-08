@@ -10,6 +10,9 @@
     @test stable.right_postfixed
     @test stable.fixed
     @test stable.invariant_implies_fixed
+    @test stable.contract_premises
+    @test stable.contract_conclusion
+    @test stable.contract_holds
 
     escaping_step = (source, target) -> source == :a && target == :c
     escaping = check_viability_closure(states, escaping_step, state -> state == :a)
@@ -18,6 +21,9 @@
     @test escaping.right_postfixed
     @test !escaping.fixed
     @test escaping.invariant_implies_fixed
+    @test !escaping.contract_premises
+    @test !escaping.contract_conclusion
+    @test !escaping.contract_holds
 
     empty = check_viability_closure(states, stable_step, _ -> false)
     @test empty.step_closed
@@ -46,6 +52,21 @@
     @test natural.stage_natural
     @test natural.left_natural
     @test natural.right_natural
+    @test natural.contract_premises
+    @test natural.contract_conclusion
+    @test natural.contract_holds
+
+    unnatural = check_viability_closure_naturality(
+        source_states,
+        target_states,
+        mapping,
+        source_step,
+        target_step,
+        state -> state in (:a, :b),
+        state -> state == :y,
+    )
+    @test !unnatural.contract_premises
+    @test !unnatural.contract_holds
 
     relational = check_viability_relational_frame(
         source_states, source_step, state -> state in (:a, :b),
@@ -57,6 +78,17 @@
     @test relational.right_realizes
     @test relational.left_postfixed
     @test relational.right_postfixed
+    @test relational.left_fixed
+    @test relational.contract_premises
+    @test relational.contract_conclusion
+    @test relational.contract_holds
+
+    escaping_relational = check_viability_relational_frame(
+        states, escaping_step, state -> state == :a,
+    )
+    @test !escaping_relational.contract_premises
+    @test !escaping_relational.contract_conclusion
+    @test !escaping_relational.contract_holds
 
     relational_functor = check_viability_relational_functor(
         source_states,
@@ -75,4 +107,20 @@
     @test relational_functor.kappa_preserved
     @test relational_functor.epsilon_preserved
     @test relational_functor.frame_iso
+    @test relational_functor.contract_premises
+    @test relational_functor.contract_conclusion
+    @test relational_functor.contract_holds
+
+    invalid_relational_functor = check_viability_relational_functor(
+        source_states,
+        target_states,
+        mapping,
+        source_step,
+        target_step,
+        state -> state in (:a, :b),
+        state -> state == :y,
+    )
+    @test invalid_relational_functor.contract_premises
+    @test !invalid_relational_functor.contract_conclusion
+    @test !invalid_relational_functor.contract_holds
 end
