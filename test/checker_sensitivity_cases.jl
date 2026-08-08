@@ -1,0 +1,314 @@
+const CHECKER_SENSITIVITY_NEGATIVE_KINDS = Set([
+    "mutated_candidate",
+    "invalid_encoding",
+    "countermodel",
+])
+
+"""Executable positive/negative evidence for reviewed exact finite checkers."""
+function checker_sensitivity_cases()
+    cases = Dict{String,NamedTuple}(
+        "adjunction.rigidity" => (
+            positive=() -> begin
+                all_M = Set([:m1, :m2])
+                all_E = Set([:e1, :e2])
+                alpha = m -> m == :m1 ? Set([:e1]) : Set([:e2])
+                sigma = e -> e == :e1 ? Set([:m1]) : Set([:m2])
+                check_relational_rigidity(alpha, sigma, all_M, all_E)
+            end,
+            negative=() -> begin
+                all_M = Set([:m1, :m2])
+                all_E = Set([:e1, :e2])
+                alpha = m -> m == :m1 ? Set([:e1]) : Set([:e2])
+                invalid_sigma = _ -> all_M
+                check_relational_rigidity(alpha, invalid_sigma, all_M, all_E)
+            end,
+            negative_kind="invalid_encoding",
+        ),
+        "interface.relation_linearization" => (
+            positive=() -> begin
+                motors = [:m1, :m2]
+                environments = [:e1, :e2, :e3]
+                alpha = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                sigma = e -> e in (:e1, :e3) ? Set([:m1]) : Set([:m2])
+                check_converse_adjoint(alpha, sigma, motors, environments)
+            end,
+            negative=() -> begin
+                motors = [:m1, :m2]
+                environments = [:e1, :e2, :e3]
+                alpha = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                mutated_sigma = _ -> Set([:m1, :m2])
+                check_converse_adjoint(alpha, mutated_sigma, motors, environments)
+            end,
+            negative_kind="mutated_candidate",
+        ),
+        "interface.sensitivity_realization" => (
+            positive=() -> begin
+                motors = [:m1, :m2]
+                environments = [:e1, :e2, :e3]
+                alpha = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                incidence = relation_incidence_matrix(alpha, motors, environments)
+                check_relation_sensitivity_bridge(
+                    alpha, motors, environments, x -> incidence * x, zeros(2),
+                )
+            end,
+            negative=() -> begin
+                motors = [:m1, :m2]
+                environments = [:e1, :e2, :e3]
+                alpha = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                incidence = relation_incidence_matrix(alpha, motors, environments)
+                check_relation_sensitivity_bridge(
+                    alpha, motors, environments, x -> 2 .* (incidence * x), zeros(2),
+                )
+            end,
+            negative_kind="mutated_candidate",
+        ),
+        "interface.relation_naturality" => (
+            positive=() -> begin
+                rel = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                rel_prime = u -> u == :u1 ? Set([:v1, :v3]) : Set([:v2])
+                map_m = m -> m == :m1 ? :u1 : :u2
+                map_e = e -> e == :e1 ? :v1 : e == :e2 ? :v2 : :v3
+                check_relation_linearization_naturality(
+                    rel, rel_prime, [:m1, :m2], [:e1, :e2, :e3],
+                    [:u2, :u1], [:v3, :v1, :v2], map_m, map_e,
+                )
+            end,
+            negative=() -> begin
+                rel = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
+                mutated_rel_prime = _ -> Set([:v1])
+                map_m = m -> m == :m1 ? :u1 : :u2
+                map_e = e -> e == :e1 ? :v1 : e == :e2 ? :v2 : :v3
+                check_relation_linearization_naturality(
+                    rel, mutated_rel_prime, [:m1, :m2], [:e1, :e2, :e3],
+                    [:u2, :u1], [:v3, :v1, :v2], map_m, map_e,
+                )
+            end,
+            negative_kind="mutated_candidate",
+        ),
+        "interface.relation_lax_naturality" => (
+            positive=() -> check_relation_hom_lax_naturality(
+                _ -> Set([:edge]), _ -> Set([:target]), [:source], [:edge],
+                _ -> :mapped, _ -> :target,
+            ),
+            negative=() -> check_relation_hom_lax_naturality(
+                _ -> Set([:edge]), _ -> Set{Symbol}(), [:source], [:edge],
+                _ -> :mapped, _ -> :target,
+            ),
+            negative_kind="mutated_candidate",
+        ),
+        "bridge.hinge_thin_functor" => (
+            positive=() -> check_hinge_classifier_functor_laws(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, ones(1, 1),
+            ).contract_holds,
+            negative=() -> check_hinge_classifier_functor_laws(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, zeros(1, 1),
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
+        "bridge.hinge_strict_functor" => (
+            positive=() -> check_strict_hinge_classifier_intertwining(
+                ones(1, 1), ones(1, 1), true,
+            ).contract_holds,
+            negative=() -> check_strict_hinge_classifier_intertwining(
+                ones(1, 1), zeros(1, 1), true,
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
+        "bridge.hinge_hilbert_functor" => (
+            positive=() -> check_hinge_hilbert_functor(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, ones(1, 1),
+            ).contract_holds,
+            negative=() -> check_hinge_hilbert_functor(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, zeros(1, 1),
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
+        "viability.closure_object" => (
+            positive=() -> begin
+                step = (source, target) ->
+                    (source == :a && target == :b) || (source == :b && target == :b)
+                check_viability_closure(
+                    [:a, :b, :c], step, state -> state in (:a, :b),
+                ).contract_holds
+            end,
+            negative=() -> begin
+                step = (source, target) -> source == :a && target == :c
+                check_viability_closure(
+                    [:a, :b, :c], step, state -> state == :a,
+                ).contract_holds
+            end,
+            negative_kind="invalid_encoding",
+        ),
+        "viability.closure_functor" => (
+            positive=() -> _checker_sensitivity_closure_functor(true),
+            negative=() -> _checker_sensitivity_closure_functor(false),
+            negative_kind="invalid_encoding",
+        ),
+        "viability.relational_frame" => (
+            positive=() -> begin
+                step = (source, target) ->
+                    (source == :a && target == :b) || (source == :b && target == :b)
+                check_viability_relational_frame(
+                    [:a, :b, :c], step, state -> state in (:a, :b),
+                ).contract_holds
+            end,
+            negative=() -> begin
+                step = (source, target) -> source == :a && target == :c
+                check_viability_relational_frame(
+                    [:a, :b, :c], step, state -> state == :a,
+                ).contract_holds
+            end,
+            negative_kind="invalid_encoding",
+        ),
+        "layers.viable_to_hilbert" => (
+            positive=() -> begin
+                step = (source, target) ->
+                    (source == :a && target == :b) || (source == :b && target == :b)
+                check_layer_composition(
+                    [:a, :b, :c], step, state -> state in (:a, :b),
+                ).contract_holds
+            end,
+            negative=() -> begin
+                step = (source, target) -> source == :a && target == :c
+                check_layer_composition(
+                    [:a, :b, :c], step, state -> state == :a,
+                ).contract_holds
+            end,
+            negative_kind="invalid_encoding",
+        ),
+        "grading.const_presheaf_antitone" => (
+            positive=() -> check_const_presheaf_antitone(
+                (rank, left, right) -> left == right && rank <= 1,
+                0:2, <=, 1:2, 1:2,
+            ),
+            negative=() -> check_const_presheaf_antitone(
+                (rank, left, right) -> left == right && rank >= 1,
+                0:2, <=, 1:2, 1:2,
+            ),
+            negative_kind="countermodel",
+        ),
+        "hinge.act" => (
+            positive=() -> check_hinge(
+                c -> c == :c1 ? Set([:m1]) : Set([:m2]),
+                e -> e == :e1 ? Set([:m1]) : Set([:m2]),
+                _ -> Set([:c1]), _ -> Set([:e1]), :s,
+            ),
+            negative=() -> check_hinge(
+                c -> c == :c1 ? Set([:m1]) : Set([:m2]),
+                e -> e == :e1 ? Set([:m1]) : Set([:m2]),
+                _ -> Set([:c1]), _ -> Set{Symbol}(), :s,
+            ),
+            negative_kind="countermodel",
+        ),
+        "certification.critical_bound" => (
+            positive=() -> check_critical_bound(
+                (rank, candidate) -> rank <= 1 ? copy(candidate) : Set{Symbol}(),
+                1, 2, <, Set([:c1]),
+            ),
+            negative=() -> check_critical_bound(
+                (_, candidate) -> copy(candidate), 1, 2, <, Set([:c1]),
+            ),
+            negative_kind="mutated_candidate",
+        ),
+        "decomp.copair_unique" => (
+            positive=() -> check_copair_unique(
+                x -> x + 1, x -> 2x,
+                tagged -> first(tagged) === :left ? last(tagged) + 1 : 2 * last(tagged),
+                1:3, 1:3,
+            ),
+            negative=() -> check_copair_unique(
+                x -> x + 1, x -> 2x, tagged -> last(tagged), 1:3, 1:3,
+            ),
+            negative_kind="mutated_candidate",
+        ),
+        "graded.presheaf_transition_naturality" => (
+            positive=() -> _checker_sensitivity_presheaf_naturality(false),
+            negative=() -> _checker_sensitivity_presheaf_naturality(true),
+            negative_kind="mutated_candidate",
+        ),
+        "body.no_terminal_setpoint" => (
+            positive=() -> check_m4_no_terminal_setpoint(SetPointDiagram([:seek, :probe], ==)),
+            negative=() -> check_m4_no_terminal_setpoint(SetPointDiagram(
+                [:seek, :target],
+                (source, candidate) -> source == candidate || candidate == :target,
+            )),
+            negative_kind="countermodel",
+        ),
+        "invariance.update_bisimulation" => (
+            positive=() -> check_update_bisimulation(x -> 2x, x -> x + 1, x -> x + 2, 0:10),
+            negative=() -> check_update_bisimulation(identity, x -> x + 1, x -> x + 2, 0:10),
+            negative_kind="mutated_candidate",
+        ),
+        "wager.interpretive_model_checker" => (
+            positive=() -> check_frozen_wager_interpretive_model(),
+            negative=() -> check_frozen_wager_interpretive_model(ph=Set{Symbol}()),
+            negative_kind="countermodel",
+        ),
+        "wager.finite_model_checker" => (
+            positive=() -> check_frozen_wager_model(),
+            negative=() -> check_frozen_wager_model(k0=2),
+            negative_kind="countermodel",
+        ),
+        "wager.full_model_checker" => (
+            positive=() -> check_frozen_wager_full_model(),
+            negative=() -> check_frozen_wager_full_model(k0=2),
+            negative_kind="countermodel",
+        ),
+        "richness.branch" => (
+            positive=() -> is_branch_point(),
+            negative=() -> is_branch_point(Dict(:m0 => Set([:e0])), :m0),
+            negative_kind="countermodel",
+        ),
+        "temporaldc.observed_termination" => (
+            positive=() -> check_observed_termination(
+                TemporalDCTrace([true, true, false, false]), [true, true, true, true],
+            ),
+            negative=() -> check_observed_termination(
+                TemporalDCTrace([true, true, false, false]), [true, true, false, true],
+            ),
+            negative_kind="mutated_candidate",
+        ),
+    )
+    Dict(
+        id => merge(case, (tolerance_assumption=nothing,))
+        for (id, case) in cases
+    )
+end
+
+function _checker_sensitivity_closure_functor(complete_subsets::Bool)
+    source_states = [:a, :b, :c]
+    target_states = [:x, :y, :z]
+    mapping = Dict(:a => :y, :b => :z, :c => :x)
+    source_step = (source, target) ->
+        (source == :a && target == :b) || (source == :b && target == :b)
+    target_step = (source, target) ->
+        (source == :y && target == :z) || (source == :z && target == :z)
+    subsets = complete_subsets ? powerset(Set(source_states)) : [Set{Symbol}()]
+    check_viability_closure_naturality(
+        source_states,
+        target_states,
+        mapping,
+        source_step,
+        target_step,
+        state -> state in (:a, :b),
+        state -> state in (:y, :z),
+        subsets,
+    ).contract_holds
+end
+
+function _checker_sensitivity_presheaf_naturality(mutated::Bool)
+    thin = FiniteThinCategory([1, 2, 3], <=)
+    source = GradedPresheaf(thin, w -> 1:w, (u, _v, x) -> min(x, u))
+    target = GradedPresheaf(thin, w -> 2 .* collect(1:w), (u, _v, x) -> min(x, 2u))
+    component = mutated ?
+        ((w, x) -> w == 1 ? 2x : 2x + 1) :
+        ((_w, x) -> 2x)
+    coproduct = presheaf_transition_coproduct(
+        source, target, PresheafTransition(:candidate, component),
+    )
+    check_presheaf_transition_naturality(coproduct)
+end

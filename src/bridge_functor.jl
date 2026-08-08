@@ -108,6 +108,47 @@ function check_hinge_classifier_functor_laws(
     )
 end
 
+function _check_hinge_nontrivial_candidate(
+    rho_rel,
+    sigma_rel,
+    kappa,
+    epsilon,
+    state,
+    candidate_loop::AbstractMatrix,
+)
+    hinge_nonempty = !isempty(Act(rho_rel, sigma_rel, kappa, epsilon, state))
+    expected_loop = hinge_classifying_loop(
+        rho_rel, sigma_rel, kappa, epsilon, state,
+    )
+    candidate_shape = size(candidate_loop) == (1, 1)
+    candidate_matches = candidate_shape && candidate_loop == expected_loop
+    fixed_nontrivial = candidate_shape && candidate_loop[1, 1] == 1
+    conclusion = fixed_nontrivial == hinge_nonempty
+    (
+        hinge_nonempty=hinge_nonempty,
+        fixed_nontrivial=fixed_nontrivial,
+        candidate_shape=candidate_shape,
+        candidate_matches=candidate_matches,
+        contract_premises=candidate_matches,
+        contract_conclusion=conclusion,
+        contract_holds=candidate_matches && conclusion,
+    )
+end
+
+"""Check the thin-functor object contract against an independent loop candidate."""
+function check_hinge_classifier_functor_laws(
+    rho_rel,
+    sigma_rel,
+    kappa,
+    epsilon,
+    state,
+    candidate_loop::AbstractMatrix,
+)
+    _check_hinge_nontrivial_candidate(
+        rho_rel, sigma_rel, kappa, epsilon, state, candidate_loop,
+    )
+end
+
 """Check strict loop equality and identity intertwining on reversible arrows."""
 function check_strict_hinge_classifier_intertwining(
     source_live::Bool,
@@ -124,6 +165,33 @@ function check_strict_hinge_classifier_intertwining(
         loops_equal=loops_equal,
         identity_intertwines=identity_intertwines,
         law_exact=arrow_valid == (loops_equal && identity_intertwines),
+    )
+end
+
+"""Check strict identity intertwining for independently supplied finite loops."""
+function check_strict_hinge_classifier_intertwining(
+    source_loop::AbstractMatrix,
+    target_loop::AbstractMatrix,
+    arrow_valid::Bool,
+)
+    source_shape = size(source_loop) == (1, 1)
+    target_shape = size(target_loop) == (1, 1)
+    loop_encoding_valid = source_shape && target_shape &&
+        all(value -> value == 0 || value == 1, source_loop) &&
+        all(value -> value == 0 || value == 1, target_loop)
+    identity_map = ones(1, 1)
+    loops_equal = loop_encoding_valid && source_loop == target_loop
+    identity_intertwines = loop_encoding_valid &&
+        target_loop * identity_map == identity_map * source_loop
+    conclusion = identity_intertwines
+    (
+        arrow_valid=arrow_valid,
+        loops_equal=loops_equal,
+        identity_intertwines=identity_intertwines,
+        loop_encoding_valid=loop_encoding_valid,
+        contract_premises=arrow_valid && loop_encoding_valid,
+        contract_conclusion=conclusion,
+        contract_holds=arrow_valid && loop_encoding_valid && conclusion,
     )
 end
 
@@ -154,6 +222,20 @@ function check_hinge_hilbert_functor(
         identity_law=identity_law,
         composition_law=composition_law,
         functor_laws=identity_law && composition_law,
+    )
+end
+
+"""Check the Hilbert-functor object contract against an independent loop candidate."""
+function check_hinge_hilbert_functor(
+    rho_rel,
+    sigma_rel,
+    kappa,
+    epsilon,
+    state,
+    candidate_loop::AbstractMatrix,
+)
+    _check_hinge_nontrivial_candidate(
+        rho_rel, sigma_rel, kappa, epsilon, state, candidate_loop,
     )
 end
 

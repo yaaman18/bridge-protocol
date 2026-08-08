@@ -56,6 +56,38 @@
     @test natural.contract_conclusion
     @test natural.contract_holds
 
+    all_source_subsets = powerset(Set(source_states))
+    all_k_natural = check_viability_closure_naturality(
+        source_states,
+        target_states,
+        mapping,
+        source_step,
+        target_step,
+        state -> state in (:a, :b),
+        state -> state in (:y, :z),
+        all_source_subsets,
+    )
+    @test all_k_natural.subset_family_complete
+    @test all_k_natural.subsets_in_carrier
+    @test all_k_natural.subset_natural
+    @test all_k_natural.contract_premises
+    @test all_k_natural.contract_conclusion
+    @test all_k_natural.contract_holds
+
+    incomplete_k_family = check_viability_closure_naturality(
+        source_states,
+        target_states,
+        mapping,
+        source_step,
+        target_step,
+        state -> state in (:a, :b),
+        state -> state in (:y, :z),
+        [Set{Symbol}()],
+    )
+    @test !incomplete_k_family.subset_family_complete
+    @test incomplete_k_family.contract_conclusion
+    @test !incomplete_k_family.contract_holds
+
     unnatural = check_viability_closure_naturality(
         source_states,
         target_states,

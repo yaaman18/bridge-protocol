@@ -1,5 +1,7 @@
-schema_version = 1
+schema_version = 2
 allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "lean_only", "unclassified"]
+sensitivity_registry = "test/checker_sensitivity_cases.jl"
+sensitivity_registry_sha256 = "540e792eb125a746f3b78425edc5b6056689230af89e7fc43ba675ee4e67eea9"
 
 [[contract]]
 id = "adjunction.system"
@@ -27,15 +29,15 @@ basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
 
 [[contract]]
 id = "adjunction.galois_conn"
-checker_relation = "exact_finite_decision"
+checker_relation = "regression_only"
 review_status = "reviewed"
 checker = "check_K3"
 lean_decl = "ERIEC.Adj.galoisConn_induced"
-scope = "finite all_M and caller-supplied sample_E_subsets"
+scope = "finite replay over all subsets of all_M and the caller-supplied sample_E_subsets"
 assumptions = ["sample_E_subsets equals powerset(all_E) for finite completeness", "alpha_rel is a total Julia callable on all_M"]
-guarantee = "decides alpha_star N subset X iff N subset sigma_star_induced X for every enumerated N and X"
+guarantee = "recomputes an identity that is tautological after expanding the Julia definitions; it carries no independent mathematical content and serves as a regression check of implementation consistency"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-2-sensitivity-20260808.log"
 
 [[contract]]
 id = "interface.relation_linearization"
@@ -147,39 +149,39 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
 
 [[contract]]
 id = "bridge.hinge_thin_functor"
-checker_relation = "observation_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_hinge_classifier_functor_laws"
 lean_decl = "ERIEC.BridgeFunctor.hingeClassifierFunctor_nontrivial_iff"
-scope = "three supplied Boolean liveness summaries"
-assumptions = ["Boolean summaries are not complete hinge data or Lean functor objects"]
-guarantee = "reports thin-category identity and composition laws, not the contracted object-level nontriviality equivalence"
+scope = "one complete finite hinge datum and an independently supplied one-dimensional candidate classifier loop"
+assumptions = ["the finite relation images completely encode the supplied hinge datum", "the candidate loop completely encodes the contracted functor output", "no numerical tolerance is used"]
+guarantee = "the additive method validates the independent candidate loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "bridge.hinge_strict_functor"
-checker_relation = "observation_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_strict_hinge_classifier_intertwining"
 lean_decl = "ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines"
-scope = "two supplied Boolean liveness summaries"
-assumptions = ["arrow validity is represented only by equality of the Boolean summaries"]
-guarantee = "reports arrow validity, loop equality, and intertwining fields instead of returning the contracted equality"
+scope = "two independently supplied finite one-dimensional classifier loops and a strict-arrow premise"
+assumptions = ["arrow_valid faithfully encodes the supplied strict hinge arrow", "both matrices completely encode the source and target 0-or-1 classifier loops", "no numerical tolerance is used"]
+guarantee = "the additive method decides identity intertwining after independently validating both finite loop encodings and the supplied arrow premise"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "bridge.hinge_hilbert_functor"
-checker_relation = "observation_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_hinge_hilbert_functor"
 lean_decl = "ERIEC.BridgeFunctor.strictHingeHilbertFunctor_nontrivial_iff"
-scope = "three supplied Boolean liveness summaries"
-assumptions = ["runtime Boolean arrows are not Lean StrictHingeData objects"]
-guarantee = "reports identity and composition laws rather than deciding the contracted object nontriviality equivalence"
+scope = "one complete finite strict hinge datum and an independently supplied one-dimensional candidate Hilbert loop"
+assumptions = ["the finite relation images completely encode the strict hinge datum", "the candidate loop completely encodes the contracted Hilbert functor output", "no numerical tolerance is used"]
+guarantee = "the additive method validates the independent candidate Hilbert loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "bridge.hinge_structural_functor"
@@ -211,11 +213,11 @@ checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_viability_closure_naturality"
 lean_decl = "ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural"
-scope = "two complete supplied finite carriers, their relations and predicates, and a mapping"
-assumptions = ["the mapping lookup is total on the source carrier", "the carrier enumerations are complete", "no numerical tolerance is used"]
-guarantee = "contract_holds is true exactly when the mapping satisfies the finite morphism premises and the mapped left closure equals the target left closure"
+scope = "two complete finite carriers and an explicitly supplied enumeration of every finite source subset K"
+assumptions = ["the supplied K family equals the powerset of the complete source carrier", "the mapping lookup is total on the source carrier", "both carrier enumerations are complete", "no numerical tolerance is used"]
+guarantee = "the additive method decides successor-closure naturality for every explicitly enumerated K after validating finite morphism and K-family completeness premises"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/batch-01-viability-r2-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "viability.relational_frame"
@@ -231,15 +233,15 @@ basis_log = "logs/gates/checker-strengthening/batch-01-viability-r2-20260803.log
 
 [[contract]]
 id = "viability.relational_functor"
-checker_relation = "exact_finite_decision"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_viability_relational_functor"
 lean_decl = "ERIEC.ViabilityClosure.viabilityRelationalFunctor_kappa_natural"
-scope = "two complete supplied finite relational frames and a mapping"
+scope = "a caller-supplied finite morphism witness over two complete relational frames"
 assumptions = ["the mapping is total on every enumerated source value", "the carrier enumerations are complete", "no numerical tolerance is used"]
-guarantee = "contract_holds is true exactly when the mapping satisfies the structural finite-frame premises and preserves membership in kappa"
+guarantee = "validates the supplied morphism witness, including kappa preservation; it does not independently decide the Lean theorem projected from that witness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/batch-01-viability-r2-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-1-downgrade-20260808.log"
 
 [[contract]]
 id = "layers.viable_to_hilbert"
@@ -1033,15 +1035,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-06-20260803.log"
 
 [[contract]]
 id = "meta.sigma1_diversity_audit"
-checker_relation = "exact_finite_decision"
+checker_relation = "observation_only"
 review_status = "reviewed"
 checker = "check_sigma1_diversity_resolution"
 lean_decl = "ERIEC.MetaSelection.DiversityAuditPure"
-scope = "the complete supplied finite vector of Sigma1Individual values"
+scope = "a nonempty supplied finite vector observed before and after the audit's own read-only computation"
 assumptions = ["sigma1_observe_trace is the protected observation used for the runtime analogue", "before and after observations bracket the entire audit computation"]
-guarantee = "decides equality of the protected observation list before and after the finite audit and reports the associated diagnostics"
+guarantee = "reports self-observed before/after equality and diagnostics; the current implementation has no false-result fixture and does not independently decide Lean purity"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-06-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-2-sensitivity-20260808.log"
 
 [[contract]]
 id = "v52.gate.propagation"

@@ -67,6 +67,21 @@
         @test laws.functor_laws
     end
 
+    thin_contract = check_hinge_classifier_functor_laws(
+        rho_full, sigma_rel, kappa, epsilon, :s, ones(1, 1),
+    )
+    @test thin_contract.candidate_matches
+    @test thin_contract.contract_premises
+    @test thin_contract.contract_conclusion
+    @test thin_contract.contract_holds
+
+    mutated_thin_contract = check_hinge_classifier_functor_laws(
+        rho_full, sigma_rel, kappa, epsilon, :s, zeros(1, 1),
+    )
+    @test !mutated_thin_contract.candidate_matches
+    @test !mutated_thin_contract.contract_conclusion
+    @test !mutated_thin_contract.contract_holds
+
     for source_live in (false, true), target_live in (false, true)
         strict = check_strict_hinge_classifier_intertwining(
             source_live, target_live,
@@ -76,6 +91,21 @@
         @test strict.identity_intertwines == strict.arrow_valid
         @test strict.law_exact
     end
+
+    strict_contract = check_strict_hinge_classifier_intertwining(
+        ones(1, 1), ones(1, 1), true,
+    )
+    @test strict_contract.loop_encoding_valid
+    @test strict_contract.contract_premises
+    @test strict_contract.contract_conclusion
+    @test strict_contract.contract_holds
+
+    mutated_strict_contract = check_strict_hinge_classifier_intertwining(
+        ones(1, 1), zeros(1, 1), true,
+    )
+    @test mutated_strict_contract.contract_premises
+    @test !mutated_strict_contract.contract_conclusion
+    @test !mutated_strict_contract.contract_holds
 
 
     for source_live in (false, true), middle_live in (false, true),
@@ -87,6 +117,22 @@
         @test hilbert_functor.composition_law
         @test hilbert_functor.functor_laws
     end
+
+
+    hilbert_contract = check_hinge_hilbert_functor(
+        rho_full, sigma_rel, kappa, epsilon, :s, ones(1, 1),
+    )
+    @test hilbert_contract.candidate_matches
+    @test hilbert_contract.contract_premises
+    @test hilbert_contract.contract_conclusion
+    @test hilbert_contract.contract_holds
+
+    mutated_hilbert_contract = check_hinge_hilbert_functor(
+        rho_full, sigma_rel, kappa, epsilon, :s, zeros(1, 1),
+    )
+    @test !mutated_hilbert_contract.candidate_matches
+    @test !mutated_hilbert_contract.contract_conclusion
+    @test !mutated_hilbert_contract.contract_holds
 
 
     structural = structural_hinge_isomorphism_witness()

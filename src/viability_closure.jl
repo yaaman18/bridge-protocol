@@ -71,6 +71,53 @@ function check_viability_closure_naturality(
     )
 end
 
+"""Decide closure naturality for every explicitly enumerated finite subset `K`."""
+function check_viability_closure_naturality(
+    source_states,
+    target_states,
+    mapping,
+    source_step,
+    target_step,
+    source_viable,
+    target_viable,
+    source_subsets,
+)
+    mapped(values) = Set(mapping[value] for value in values)
+    subsets = [Set(subset) for subset in source_subsets]
+    expected_subsets = powerset(Set(source_states))
+    subset_family_complete = Set(subsets) == Set(expected_subsets)
+    subsets_in_carrier = all(subset -> subset ⊆ Set(source_states), subsets)
+    bijective = Set(keys(mapping)) == Set(source_states) &&
+        Set(values(mapping)) == Set(target_states)
+    step_preserved = all(
+        source_step(source, target) == target_step(mapping[source], mapping[target])
+        for source in source_states for target in source_states
+    )
+    viability_preserved = all(
+        source_viable(source) == target_viable(mapping[source])
+        for source in source_states
+    )
+    premises = subset_family_complete && subsets_in_carrier && bijective &&
+        step_preserved && viability_preserved
+    subset_natural = all(subsets) do subset
+        mapped(successor_closure(source_states, source_step, subset)) ==
+            successor_closure(target_states, target_step, mapped(subset))
+    end
+    (
+        bijective=bijective,
+        step_preserved=step_preserved,
+        viability_preserved=viability_preserved,
+        subset_family_complete=subset_family_complete,
+        subsets_in_carrier=subsets_in_carrier,
+        subset_natural=subset_natural,
+        left_natural=subset_natural,
+        right_natural=subset_natural,
+        contract_premises=premises,
+        contract_conclusion=subset_natural,
+        contract_holds=premises && subset_natural,
+    )
+end
+
 """Realize the two viability closures by explicit pi/rho/alpha/sigma relations."""
 function check_viability_relational_frame(states, step, viable)
     identity_rel = state -> Set([state])
