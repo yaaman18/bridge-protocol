@@ -1,7 +1,7 @@
 schema_version = 2
 allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "lean_only", "unclassified"]
 sensitivity_registry = "test/checker_sensitivity_cases.jl"
-sensitivity_registry_sha256 = "540e792eb125a746f3b78425edc5b6056689230af89e7fc43ba675ee4e67eea9"
+sensitivity_registry_sha256 = "86f43be91705743366353a9e303e83b63bb0273c72828a0367b279378e6d2cf3"
 
 [[contract]]
 id = "adjunction.system"
@@ -125,27 +125,27 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
 
 [[contract]]
 id = "bridge.hinge_object_classifier"
-checker_relation = "observation_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_hinge_classifying_loop"
 lean_decl = "ERIEC.BridgeFunctor.hingeClassifyingLoop_nontrivial_iff"
-scope = "one supplied finite hinge datum"
-assumptions = ["the one-dimensional loop is constructed by hinge_classifying_loop"]
-guarantee = "reports hinge, fixed-direction, equivalence, and loop fields rather than returning the equivalence Boolean"
+scope = "one complete finite hinge datum and an independently supplied one-dimensional candidate classifier loop"
+assumptions = ["the finite relation images completely encode the supplied hinge datum", "the candidate loop completely encodes the contracted classifier output", "no numerical tolerance is used"]
+guarantee = "the additive method validates the independent candidate loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "bridge.hinge_lax_map"
-checker_relation = "observation_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_hinge_classifying_loop_lax"
 lean_decl = "ERIEC.BridgeFunctor.hingeClassifyingLoop_lax"
-scope = "one supplied finite source and target hinge datum"
-assumptions = ["the caller interprets the reported forward_preserved premise separately from lax_norm"]
-guarantee = "reports premise and norm-law fields but does not return the conditional Lean conclusion as a scalar decision"
+scope = "complete finite source and target hinge data with independently supplied one-dimensional candidate loops"
+assumptions = ["the finite relation images completely encode both hinge data", "both candidate loops completely encode the contracted classifier outputs", "the finite forward-preservation Boolean encodes the Lean premise", "no numerical tolerance is used"]
+guarantee = "the additive method validates both independent loop candidates and decides the lax norm conclusion under the finite forward-preservation premise"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "bridge.hinge_thin_functor"
@@ -185,15 +185,15 @@ basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260
 
 [[contract]]
 id = "bridge.hinge_structural_functor"
-checker_relation = "regression_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "structural_hinge_isomorphism_witness"
 lean_decl = "ERIEC.StructuralHinge.structuralHingeHilbertFunctor_nontrivial_iff"
-scope = "the hard-coded two-action renamed-model fixture"
-assumptions = ["the returned fields are not a generic validator over StructuralHingeData"]
-guarantee = "fixes one renamed-model preservation witness but does not decide the universal object-level equivalence"
+scope = "one complete finite structural hinge datum and an independently supplied one-dimensional candidate Hilbert loop"
+assumptions = ["the finite relation images completely encode the structural hinge datum", "the candidate loop completely encodes the contracted structural functor output", "no numerical tolerance is used"]
+guarantee = "the additive method validates the independent candidate Hilbert loop and decides its fixed-nonzero-direction equivalence with structural hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
 
 [[contract]]
 id = "viability.closure_object"
@@ -526,15 +526,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
 
 [[contract]]
 id = "graded.presheaf_transition_output_copair_unique"
-checker_relation = "regression_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_presheaf_transition_coproduct"
 lean_decl = "ERIEC.Graded.presheafTransitionOutputCopair_unique"
-scope = "a supplied finite PresheafTransitionCoproduct"
-assumptions = ["the checker never receives handlers or a candidate copair"]
-guarantee = "rechecks the coproduct witness and does not test the contracted output-copair uniqueness theorem"
+scope = "every tagged value in one supplied finite target fiber, for supplied handlers and a candidate copair"
+assumptions = ["the finite category and target fiber are completely enumerated", "Julia equality decides equality of handler and candidate outputs on the supplied fiber"]
+guarantee = "decides component agreement and extensional equality of the candidate with the output copair on the complete supplied finite fiber"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-7-graded-target-20260808.log"
 
 [[contract]]
 id = "body.no_terminal_setpoint"
@@ -556,7 +556,7 @@ checker = "check_terminal_guard"
 lean_decl = "ERIEC.Guard.hasTStar_iff_terminal"
 scope = "all objects in a supplied finite reachability carrier"
 assumptions = ["the Julia function returns the negation of terminal existence"]
-guarantee = "fixes the finite no-terminal guard behavior but does not decide the Lean definitional equivalence itself"
+guarantee = "keeps the finite no-terminal regression only: HasTStar is defined as the equivalence RHS and the Lean theorem is Iff.rfl, so an added candidate could only validate an encoding"
 reviewer = "codex"
 basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
 
@@ -639,51 +639,51 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
 
 [[contract]]
 id = "reference_models.v5_1"
-checker_relation = "regression_only"
+checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_reference_models"
 lean_decl = "ERIEC.RefModel.reference_models"
-scope = "the hard-coded Julia three-state reference fixture"
-assumptions = ["the Julia fixture is not formally identified with the Lean RefState model"]
-guarantee = "fixes a broader hard-coded runtime fixture; it does not isolate or certify the three Lean next equations"
+scope = "an independently supplied complete three-state carrier and next map"
+assumptions = ["the symbols s0, s1, and s2 encode the complete Lean RefState carrier", "Julia equality decides state equality", "no numerical tolerance is used"]
+guarantee = "the additive method decides all three finite next equations on the complete supplied carrier"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260809.log"
 
 [[contract]]
 id = "reference_models.stable_v2"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_reference_models"
 lean_decl = "ERIEC.RefModel.stable_reference_model"
-scope = "the hard-coded Julia three-state reference fixture"
-assumptions = ["the checker is shared with several contracts and is not field-specific"]
-guarantee = "checks a mixed runtime fixture but not every StableReferenceWitness field"
+scope = "the complete finite stable candidate encoding: carrier, next map, configurations, world loop, normalized value, and top relation images"
+assumptions = ["the candidate configuration fields encode the fixed Lean DC and DynFrame data", "the one-dimensional world loop is represented exactly", "no numerical tolerance is used"]
+guarantee = "validates the supplied finite StableReferenceWitness encoding through the fixed configuration, total next map, initial DC analogue, orbit, nontrivial world witness, normalized value, and empty top relations; it does not independently decide the Lean Nonempty theorem"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260809.log"
 
 [[contract]]
 id = "reference_models.dynamic_v2"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_reference_models"
 lean_decl = "ERIEC.RefModel.dynamic_reference_model"
-scope = "the hard-coded Julia three-state reference fixture"
-assumptions = ["the checker does not validate the Lean R2Prime and E5 witness fields"]
-guarantee = "fixes general reference-model behavior without deciding existence of DynamicReferenceWitness"
+scope = "the complete stable candidate plus every Boolean world and Unit-subset drift case and all triples of the three-state external relation"
+assumptions = ["Bool and the empty/singleton Unit subsets exhaust the Lean drift inputs", "the supplied three states exhaust the external-relation carrier", "no numerical tolerance is used"]
+guarantee = "validates the supplied finite DynamicReferenceWitness encoding, including both R2Prime clauses and the Lean-direction E5 transport condition; the fixed empty external relation makes E5 vacuous, and the checker does not independently decide the Lean Nonempty theorem"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260809.log"
 
 [[contract]]
 id = "reference_models.nondegenerate_v2"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_reference_models"
 lean_decl = "ERIEC.RefModel.nondegenerate_reference_model"
-scope = "the hard-coded Julia reference fixture"
-assumptions = ["the checker does not expose a field-by-field NondegenerateReferenceWitness validator"]
-guarantee = "checks selected analogue properties but does not certify the Lean multivalued, collapse, INS, blind, and no-terminal fields"
+scope = "complete Bool carriers and independently supplied multivalued relation, collapse, observation, region, marker, and reachability candidates"
+assumptions = ["Bool exhausts every finite carrier used by the nondegenerate witness", "one update suffices for the fixed constant collapse map", "no numerical tolerance is used"]
+guarantee = "validates the supplied finite NondegenerateReferenceWitness encoding through the multivalued, finite-collapse, INS mixed-fiber, blind-marker, identity-reachability, and no-terminal fields; it does not independently decide the Lean Nonempty theorem"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260809.log"
 
 [[contract]]
 id = "reference_models.arbitrarily_large_dc"
@@ -753,7 +753,7 @@ checker = "check_wager_conservative_extension"
 lean_decl = "ERIEC.Wager.W1_identification_conservative"
 scope = "the checker's hard-coded conservative-extension truth table"
 assumptions = ["the Boolean fixture is not a caller-supplied implementation satisfying the Lean premises"]
-guarantee = "regresses the intended identification behavior but does not prove preservation for arbitrary implementations"
+guarantee = "remains regression-only because ph = copy(structural) makes extension == sentence definitionally true; promotion requires an independently supplied or exhaustively enumerated Ph on a complete finite carrier"
 reviewer = "codex"
 basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
 
@@ -891,15 +891,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
 
 [[contract]]
 id = "generation.richness_inherits_generational"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_richness_inherits_generational"
 lean_decl = "ERIEC.Generation.richness_inherits_generational"
-scope = "five caller-supplied Boolean audit flags"
-assumptions = ["the checker does not receive a ProliferationMorphism or compare phi_rich values"]
-guarantee = "checks presence of reported premises but does not decide the Lean generational inequality"
+scope = "caller-supplied parent and child phi_rich values together with the reported phi_rich_lax witness field"
+assumptions = ["Julia <= represents the order used by the supplied phi_rich values", "no numerical tolerance is used"]
+guarantee = "validates the supplied witness field against the parent-to-child phi_rich inequality; it does not independently decide the Lean theorem projected from ProliferationMorphism.phi_rich_lax"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-7-generation-target-20260808.log"
 
 [[contract]]
 id = "generation.rich_lineage_cofinal"

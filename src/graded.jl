@@ -363,6 +363,55 @@ function check_presheaf_transition_coproduct(coproduct::PresheafTransitionCoprod
     )
 end
 
+"""Check the finite output-copair uniqueness contract against a candidate map."""
+function check_presheaf_transition_coproduct(
+    coproduct::PresheafTransitionCoproduct,
+    grade,
+    handlers,
+    candidate,
+)
+    coproduct_valid = check_presheaf_transition_coproduct(coproduct)
+    grade_valid = grade in coproduct.target.category.objects
+    if !coproduct_valid || !grade_valid
+        return (
+            coproduct_valid=coproduct_valid,
+            grade_valid=grade_valid,
+            component_agreement=false,
+            candidate_unique=false,
+            contract_premises=false,
+            contract_conclusion=false,
+            contract_holds=false,
+        )
+    end
+
+    tagged_outputs = (
+        (label=transition.label, grade=grade, value=value)
+        for transition in coproduct.transitions
+        for value in coproduct.target.fiber(grade)
+    )
+    component_agreement = all(
+        candidate(tagged) == handlers(tagged.label, tagged.value)
+        for tagged in tagged_outputs
+    )
+    candidate_unique = all(
+        candidate((label=transition.label, grade=grade, value=value)) ==
+            handlers(transition.label, value)
+        for transition in coproduct.transitions
+        for value in coproduct.target.fiber(grade)
+    )
+    contract_premises = coproduct_valid && grade_valid && component_agreement
+    contract_conclusion = candidate_unique
+    (
+        coproduct_valid=coproduct_valid,
+        grade_valid=grade_valid,
+        component_agreement=component_agreement,
+        candidate_unique=candidate_unique,
+        contract_premises=contract_premises,
+        contract_conclusion=contract_conclusion,
+        contract_holds=contract_premises && contract_conclusion,
+    )
+end
+
 function check_presheaf_transition_naturality(coproduct::PresheafTransitionCoproduct)
     check_presheaf_transition_coproduct(coproduct) || return false
     source = coproduct.source

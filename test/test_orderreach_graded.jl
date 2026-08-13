@@ -107,6 +107,20 @@
     )
     @test presheaf_transition_labels(presheaf_coproduct) == [:double]
     @test check_presheaf_transition_coproduct(presheaf_coproduct)
+    output_handlers = (label, value) -> (label, value + 1)
+    output_copair = tagged -> output_handlers(tagged.label, tagged.value)
+    output_copair_check = check_presheaf_transition_coproduct(
+        presheaf_coproduct, 3, output_handlers, output_copair,
+    )
+    @test output_copair_check.contract_premises
+    @test output_copair_check.contract_conclusion
+    @test output_copair_check.contract_holds
+    mutated_output_copair = tagged -> (:mutated, tagged.value)
+    mutated_output_copair_check = check_presheaf_transition_coproduct(
+        presheaf_coproduct, 3, output_handlers, mutated_output_copair,
+    )
+    @test !mutated_output_copair_check.component_agreement
+    @test !mutated_output_copair_check.contract_holds
     @test check_presheaf_transition_naturality(presheaf_coproduct)
     tagged_presheaf = presheaf_coproduct_injection(presheaf_coproduct, :double, 3, 2)
     @test apply_presheaf_transition_coproduct(presheaf_coproduct, tagged_presheaf) ==

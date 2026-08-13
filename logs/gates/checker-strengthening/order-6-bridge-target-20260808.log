@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   5096.1 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary:               | Pass  Total  Time
+bridge functor obstructions |  138    138  4.2s

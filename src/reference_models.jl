@@ -102,3 +102,143 @@ function check_reference_models()
         ins_mixed_fiber && blind.fm1 && !blind.fm2 &&
         no_common_terminal
 end
+
+"""Validate independently supplied finite encodings of the four reference-model contracts."""
+function check_reference_models(candidate::NamedTuple)
+    required = (
+        :states, :next, :config, :world_loop, :normalized_value,
+        :top_phi, :top_theta, :drift, :external, :core,
+        :multi_alpha, :collapse_initial, :collapse_update,
+        :observe, :region, :markers, :reaches,
+    )
+    encoding_complete = all(name -> hasproperty(candidate, name), required)
+    if !encoding_complete
+        return (
+            encoding_complete=false,
+            v5_1_contract_holds=false,
+            stable_contract_holds=false,
+            dynamic_contract_holds=false,
+            nondegenerate_contract_holds=false,
+            contract_holds=false,
+        )
+    end
+
+    expected_states = Set((:s0, :s1, :s2))
+    states = collect(candidate.states)
+    carrier_complete = length(states) == 3 && Set(states) == expected_states
+    next_complete = carrier_complete && Set(keys(candidate.next)) == expected_states
+    next_equations = next_complete &&
+        candidate.next[:s0] == :s1 &&
+        candidate.next[:s1] == :s2 &&
+        candidate.next[:s2] == :s2
+    v5_1_contract_holds = carrier_complete && next_equations
+
+    config_complete = carrier_complete && Set(keys(candidate.config)) == expected_states
+    fixed_config = config_complete && candidate.config == _STABLE_REFERENCE_CONFIG
+    total_next = next_complete && all(haskey(candidate.next, state) for state in states)
+    initial_dc = fixed_config &&
+        !isempty(candidate.config[:s0].kappa) &&
+        !isempty(candidate.config[:s0].epsilon)
+    orbit = fixed_config && next_complete && all(
+        candidate.config[candidate.next[state]] ==
+            _stable_reference_update(candidate.config[state])
+        for state in states
+    )
+    world_nontrivial = size(candidate.world_loop) == (1, 1) &&
+        candidate.world_loop * [1.0] == [1.0]
+    value_one = candidate.normalized_value == 1
+    top_relations_empty = isempty(candidate.top_phi) && isempty(candidate.top_theta)
+    stable_contract_holds = v5_1_contract_holds && fixed_config && total_next &&
+        initial_dc && orbit && world_nontrivial && value_one && top_relations_empty
+
+    bool_subsets = (Set{Nothing}(), Set([nothing]))
+    expected_drift(w, kappa) = (!w && !isempty(kappa)) || w
+    drift_encoding = all(
+        candidate.drift(w, kappa) == expected_drift(w, kappa)
+        for w in (false, true) for kappa in bool_subsets
+    )
+    r2_monotone = all(
+        w <= candidate.drift(w, kappa)
+        for w in (false, true) for kappa in bool_subsets
+    )
+    r2_strict = all(
+        isempty(kappa) || w || w < candidate.drift(w, kappa)
+        for w in (false, true) for kappa in bool_subsets
+    )
+    external_encoding = all(
+        !candidate.external(source, target)
+        for source in states for target in states
+    )
+    core_encoding = fixed_config && all(
+        candidate.core(state) == candidate.config[state].kappa for state in states
+    )
+    e5 = all(
+        !(candidate.core(source) == candidate.core(source_prime) &&
+            candidate.external(source, target)) ||
+            any(
+                target_prime -> candidate.external(source_prime, target_prime) &&
+                    candidate.core(target) == candidate.core(target_prime),
+                states,
+            )
+        for source in states for source_prime in states for target in states
+    )
+    dynamic_contract_holds = stable_contract_holds && drift_encoding &&
+        r2_monotone && r2_strict && external_encoding && core_encoding && e5
+
+    bools = (false, true)
+    multi_values = candidate.multi_alpha(nothing)
+    multivalued = Set(multi_values) == Set(bools)
+    initial = candidate.collapse_initial
+    collapsed = candidate.collapse_update(initial)
+    collapse_encoding =
+        initial == (kappa=Set([nothing]), epsilon=Set(bools), rank=false) &&
+        collapsed == (kappa=Set{Nothing}(), epsilon=Set{Bool}(), rank=true)
+    collapse = collapse_encoding && candidate.collapse_update(collapsed) == collapsed
+    region_encoding = Set(candidate.region) == Set([false])
+    ins = region_encoding && any(
+        inside != outside &&
+            (inside in candidate.region) != (outside in candidate.region) &&
+            candidate.observe(inside) == candidate.observe(outside)
+        for inside in bools for outside in bools
+    )
+    blind = candidate.markers == (fm1=true, fm2=false, fm3=true, fm4=true)
+    reachability_encoding = all(
+        candidate.reaches(source, target) == (source == target)
+        for source in bools for target in bools
+    )
+    no_terminal = reachability_encoding && !any(
+        all(candidate.reaches(source, terminal) for source in bools)
+        for terminal in bools
+    )
+    nondegenerate_contract_holds = multivalued && collapse && ins && blind && no_terminal
+
+    (
+        encoding_complete=encoding_complete,
+        carrier_complete=carrier_complete,
+        next_equations=next_equations,
+        fixed_config=fixed_config,
+        total_next=total_next,
+        initial_dc=initial_dc,
+        orbit=orbit,
+        world_nontrivial=world_nontrivial,
+        value_one=value_one,
+        top_relations_empty=top_relations_empty,
+        drift_encoding=drift_encoding,
+        r2_monotone=r2_monotone,
+        r2_strict=r2_strict,
+        external_encoding=external_encoding,
+        core_encoding=core_encoding,
+        e5=e5,
+        multivalued=multivalued,
+        collapse=collapse,
+        ins=ins,
+        blind=blind,
+        no_terminal=no_terminal,
+        v5_1_contract_holds=v5_1_contract_holds,
+        stable_contract_holds=stable_contract_holds,
+        dynamic_contract_holds=dynamic_contract_holds,
+        nondegenerate_contract_holds=nondegenerate_contract_holds,
+        contract_holds=v5_1_contract_holds && stable_contract_holds &&
+            dynamic_contract_holds && nondegenerate_contract_holds,
+    )
+end

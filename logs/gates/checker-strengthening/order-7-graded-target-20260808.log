@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   4842.5 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 5 seconds. 26 already precompiled.
+Test Summary:                                     | Pass  Total   Time
+ordered reachability graded dynamics and boundary |   57     57  37.4s

@@ -65,6 +65,24 @@ function check_richness_inherits_generational(;
     proliferation_morphism && parent_branch && child_branch_transport && child_pump && phi_rich_lax
 end
 
+"""Validate the `phi_rich_lax` field of a supplied finite-value witness."""
+function check_richness_inherits_generational(
+    parent_phi,
+    child_phi;
+    proliferation_morphism::Bool=true,
+    phi_rich_lax::Bool=true,
+)
+    inequality_holds = parent_phi <= child_phi
+    field_valid = phi_rich_lax && inequality_holds
+    (
+        proliferation_morphism=proliferation_morphism,
+        inequality_holds=inequality_holds,
+        phi_rich_lax=phi_rich_lax,
+        field_valid=field_valid,
+        contract_holds=proliferation_morphism && field_valid,
+    )
+end
+
 """
     check_rich_lineage_cofinal(N, bound;
         step_certificates=fill(true, N), scores=collect(1:(N + 1)),

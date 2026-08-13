@@ -96,6 +96,34 @@ function checker_sensitivity_cases()
             ),
             negative_kind="mutated_candidate",
         ),
+        "bridge.hinge_object_classifier" => (
+            positive=() -> check_hinge_classifying_loop(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, ones(1, 1),
+            ).contract_holds,
+            negative=() -> check_hinge_classifying_loop(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, zeros(1, 1),
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
+        "bridge.hinge_lax_map" => (
+            positive=() -> check_hinge_classifying_loop_lax(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                ones(1, 1), ones(1, 1),
+            ).contract_holds,
+            negative=() -> check_hinge_classifying_loop_lax(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                ones(1, 1), zeros(1, 1),
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
         "bridge.hinge_thin_functor" => (
             positive=() -> check_hinge_classifier_functor_laws(
                 _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
@@ -122,6 +150,17 @@ function checker_sensitivity_cases()
                 _ -> Set([:e]), :s, ones(1, 1),
             ).contract_holds,
             negative=() -> check_hinge_hilbert_functor(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, zeros(1, 1),
+            ).contract_holds,
+            negative_kind="mutated_candidate",
+        ),
+        "bridge.hinge_structural_functor" => (
+            positive=() -> structural_hinge_isomorphism_witness(
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s, ones(1, 1),
+            ).contract_holds,
+            negative=() -> structural_hinge_isomorphism_witness(
                 _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
                 _ -> Set([:e]), :s, zeros(1, 1),
             ).contract_holds,
@@ -230,6 +269,11 @@ function checker_sensitivity_cases()
             negative=() -> _checker_sensitivity_presheaf_naturality(true),
             negative_kind="mutated_candidate",
         ),
+        "graded.presheaf_transition_output_copair_unique" => (
+            positive=() -> _checker_sensitivity_presheaf_output_copair(false),
+            negative=() -> _checker_sensitivity_presheaf_output_copair(true),
+            negative_kind="mutated_candidate",
+        ),
         "body.no_terminal_setpoint" => (
             positive=() -> check_m4_no_terminal_setpoint(SetPointDiagram([:seek, :probe], ==)),
             negative=() -> check_m4_no_terminal_setpoint(SetPointDiagram(
@@ -241,6 +285,19 @@ function checker_sensitivity_cases()
         "invariance.update_bisimulation" => (
             positive=() -> check_update_bisimulation(x -> 2x, x -> x + 1, x -> x + 2, 0:10),
             negative=() -> check_update_bisimulation(identity, x -> x + 1, x -> x + 2, 0:10),
+            negative_kind="mutated_candidate",
+        ),
+        "reference_models.v5_1" => (
+            positive=() -> check_reference_models(
+                _checker_sensitivity_reference_candidate(),
+            ).v5_1_contract_holds,
+            negative=() -> begin
+                candidate = _checker_sensitivity_reference_candidate()
+                mutated = merge(candidate, (
+                    next=Dict(:s0 => :s0, :s1 => :s2, :s2 => :s2),
+                ))
+                check_reference_models(mutated).v5_1_contract_holds
+            end,
             negative_kind="mutated_candidate",
         ),
         "wager.interpretive_model_checker" => (
@@ -311,4 +368,50 @@ function _checker_sensitivity_presheaf_naturality(mutated::Bool)
         source, target, PresheafTransition(:candidate, component),
     )
     check_presheaf_transition_naturality(coproduct)
+end
+
+function _checker_sensitivity_presheaf_output_copair(mutated::Bool)
+    thin = FiniteThinCategory([1, 2], <=)
+    source = GradedPresheaf(thin, w -> 1:w, (u, _v, x) -> min(x, u))
+    target = GradedPresheaf(thin, w -> 2 .* collect(1:w), (u, _v, x) -> min(x, 2u))
+    coproduct = presheaf_transition_coproduct(
+        source, target, PresheafTransition(:double, (_w, x) -> 2x),
+    )
+    handlers = (label, value) -> (label, value + 1)
+    candidate = mutated ?
+        (tagged -> (:mutated, tagged.value)) :
+        (tagged -> handlers(tagged.label, tagged.value))
+    check_presheaf_transition_coproduct(
+        coproduct, 2, handlers, candidate,
+    ).contract_holds
+end
+
+function _checker_sensitivity_reference_candidate()
+    (
+        states=[:s0, :s1, :s2],
+        next=Dict(:s0 => :s1, :s1 => :s2, :s2 => :s2),
+        config=Dict(
+            :s0 => (kappa=Set([:c]), epsilon=Set([:e]), rank=:bottom),
+            :s1 => (kappa=Set([:c]), epsilon=Set([:e]), rank=:top),
+            :s2 => (kappa=Set{Symbol}(), epsilon=Set{Symbol}(), rank=:top),
+        ),
+        world_loop=ones(1, 1),
+        normalized_value=1 // 1,
+        top_phi=Set{Nothing}(),
+        top_theta=Set{Nothing}(),
+        drift=(w, kappa) -> (!w && !isempty(kappa)) || w,
+        external=(_source, _target) -> false,
+        core=state -> state == :s2 ? Set{Symbol}() : Set([:c]),
+        multi_alpha=_ -> Set([false, true]),
+        collapse_initial=(
+            kappa=Set([nothing]), epsilon=Set([false, true]), rank=false,
+        ),
+        collapse_update=_ -> (
+            kappa=Set{Nothing}(), epsilon=Set{Bool}(), rank=true,
+        ),
+        observe=_ -> nothing,
+        region=Set([false]),
+        markers=(fm1=true, fm2=false, fm3=true, fm4=true),
+        reaches=(source, target) -> source == target,
+    )
 end

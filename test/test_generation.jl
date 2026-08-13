@@ -18,6 +18,12 @@ using ERIEC
     @test check_richness_inherits_generational()
     @test !check_richness_inherits_generational(child_pump=false)
     @test !check_richness_inherits_generational(phi_rich_lax=false)
+    richness_witness = check_richness_inherits_generational(2, 3)
+    @test richness_witness.inequality_holds
+    @test richness_witness.field_valid
+    @test richness_witness.contract_holds
+    @test !check_richness_inherits_generational(3, 2).contract_holds
+    @test !check_richness_inherits_generational(2, 3; phi_rich_lax=false).contract_holds
 
     @test check_rich_lineage_cofinal(5, 4)
     @test !check_rich_lineage_cofinal(5, 6)

@@ -51,6 +51,20 @@ function check_hinge_classifying_loop(rho_rel, sigma_rel, kappa, epsilon, state)
     )
 end
 
+"""Check the object classifier against an independently supplied loop candidate."""
+function check_hinge_classifying_loop(
+    rho_rel,
+    sigma_rel,
+    kappa,
+    epsilon,
+    state,
+    candidate_loop::AbstractMatrix,
+)
+    _check_hinge_nontrivial_candidate(
+        rho_rel, sigma_rel, kappa, epsilon, state, candidate_loop,
+    )
+end
+
 """Check the lax norm law induced by a forward hinge-preserving arrow."""
 function check_hinge_classifying_loop_lax(
     rho_source,
@@ -85,6 +99,55 @@ function check_hinge_classifying_loop_lax(
         forward_preserved=forward_preserved,
         lax_norm=lax_norm,
         law_exact=forward_preserved == lax_norm,
+    )
+end
+
+"""Check the lax law against independently supplied source and target loops."""
+function check_hinge_classifying_loop_lax(
+    rho_source,
+    sigma_source,
+    kappa_source,
+    epsilon_source,
+    source_state,
+    rho_target,
+    sigma_target,
+    kappa_target,
+    epsilon_target,
+    target_state,
+    source_candidate::AbstractMatrix,
+    target_candidate::AbstractMatrix,
+)
+    source_hinge = !isempty(Act(
+        rho_source, sigma_source, kappa_source, epsilon_source, source_state,
+    ))
+    target_hinge = !isempty(Act(
+        rho_target, sigma_target, kappa_target, epsilon_target, target_state,
+    ))
+    source_expected = hinge_classifying_loop(
+        rho_source, sigma_source, kappa_source, epsilon_source, source_state,
+    )
+    target_expected = hinge_classifying_loop(
+        rho_target, sigma_target, kappa_target, epsilon_target, target_state,
+    )
+    source_shape = size(source_candidate) == (1, 1)
+    target_shape = size(target_candidate) == (1, 1)
+    source_candidate_matches = source_shape && source_candidate == source_expected
+    target_candidate_matches = target_shape && target_candidate == target_expected
+    forward_preserved = !source_hinge || target_hinge
+    probe = ones(1)
+    lax_norm = source_shape && target_shape &&
+        norm(source_candidate * probe) <= norm(target_candidate * probe)
+    premises = forward_preserved && source_candidate_matches && target_candidate_matches
+    (
+        source_hinge=source_hinge,
+        target_hinge=target_hinge,
+        source_candidate_matches=source_candidate_matches,
+        target_candidate_matches=target_candidate_matches,
+        forward_preserved=forward_preserved,
+        lax_norm=lax_norm,
+        contract_premises=premises,
+        contract_conclusion=lax_norm,
+        contract_holds=premises && lax_norm,
     )
 end
 
@@ -265,5 +328,20 @@ function structural_hinge_isomorphism_witness()
         hinge_preserved=mapped_act == target_act,
         nonempty_equivalent=isempty(source_act) == isempty(target_act),
         loops_equal=source_loop == target_loop,
+    )
+end
+
+
+"""Check the structural-functor object contract against an independent loop."""
+function structural_hinge_isomorphism_witness(
+    rho_rel,
+    sigma_rel,
+    kappa,
+    epsilon,
+    state,
+    candidate_loop::AbstractMatrix,
+)
+    _check_hinge_nontrivial_candidate(
+        rho_rel, sigma_rel, kappa, epsilon, state, candidate_loop,
     )
 end

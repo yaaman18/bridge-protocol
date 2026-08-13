@@ -33,6 +33,21 @@
     @test classified_empty.equivalent
     @test classified_empty.loop == zeros(1, 1)
 
+    object_contract = check_hinge_classifying_loop(
+        rho_full, sigma_rel, kappa, epsilon, :s, ones(1, 1),
+    )
+    @test object_contract.candidate_matches
+    @test object_contract.contract_premises
+    @test object_contract.contract_conclusion
+    @test object_contract.contract_holds
+
+    mutated_object_contract = check_hinge_classifying_loop(
+        rho_full, sigma_rel, kappa, epsilon, :s, zeros(1, 1),
+    )
+    @test !mutated_object_contract.candidate_matches
+    @test !mutated_object_contract.contract_conclusion
+    @test !mutated_object_contract.contract_holds
+
     empty_to_full = check_hinge_classifying_loop_lax(
         rho_empty, sigma_rel, kappa, epsilon, :s,
         rho_full, sigma_rel, kappa, epsilon, :s,
@@ -56,6 +71,27 @@
     @test !full_to_empty.forward_preserved
     @test !full_to_empty.lax_norm
     @test full_to_empty.law_exact
+
+    lax_contract = check_hinge_classifying_loop_lax(
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        ones(1, 1), ones(1, 1),
+    )
+    @test lax_contract.source_candidate_matches
+    @test lax_contract.target_candidate_matches
+    @test lax_contract.contract_premises
+    @test lax_contract.contract_conclusion
+    @test lax_contract.contract_holds
+
+    mutated_lax_contract = check_hinge_classifying_loop_lax(
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        ones(1, 1), zeros(1, 1),
+    )
+    @test mutated_lax_contract.source_candidate_matches
+    @test !mutated_lax_contract.target_candidate_matches
+    @test !mutated_lax_contract.contract_conclusion
+    @test !mutated_lax_contract.contract_holds
 
     for source_live in (false, true), middle_live in (false, true),
         target_live in (false, true)
@@ -141,4 +177,19 @@
     @test structural.hinge_preserved
     @test structural.nonempty_equivalent
     @test structural.loops_equal
+
+    structural_contract = structural_hinge_isomorphism_witness(
+        rho_full, sigma_rel, kappa, epsilon, :s, ones(1, 1),
+    )
+    @test structural_contract.candidate_matches
+    @test structural_contract.contract_premises
+    @test structural_contract.contract_conclusion
+    @test structural_contract.contract_holds
+
+    mutated_structural_contract = structural_hinge_isomorphism_witness(
+        rho_full, sigma_rel, kappa, epsilon, :s, zeros(1, 1),
+    )
+    @test !mutated_structural_contract.candidate_matches
+    @test !mutated_structural_contract.contract_conclusion
+    @test !mutated_structural_contract.contract_holds
 end
