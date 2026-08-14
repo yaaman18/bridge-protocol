@@ -723,15 +723,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
 
 [[contract]]
 id = "wager.frozen_independence"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_wager_independence"
 lean_decl = "ERIEC.Wager.W6_indep"
-scope = "the checker's hard-coded Boolean truth-table fixture"
-assumptions = ["the fixture is only a runtime analogue of the frozen wager definitions"]
-guarantee = "regresses the intended independence pattern but does not validate the Lean witness or quantify over implementations"
+scope = "caller-supplied finite positive and negative candidates for W1-W4 and W6; this is broader than the bound W6_indep declaration"
+assumptions = ["each supplied carrier is duplicate-free and complete for its candidate encoding", "all supplied predicates and relations faithfully encode the candidate finite models", "ERIEC.Wager.W6_iff_dc_transGen_self supplies the finite positive-length cycle characterization", "no checked decoder establishes that the candidates are consistentImpl and noViableImpl"]
+guarantee = "returns true when the supplied encodings validate positive and negative witnesses for W1-W4 and W6; it does not decide the fixed closed theorem W6_indep or establish identity with its named Lean implementations"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-9-audit-20260814.log"
 
 [[contract]]
 id = "wager.w5_independence_family"
@@ -759,27 +759,27 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
 
 [[contract]]
 id = "wager.global_protocol_invariant"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_frozen_protocol_invariant"
 lean_decl = "ERIEC.Wager.global_frozen_protocol_invariant"
-scope = "the checker's fixed witness-pair and protocol-pack fixture"
-assumptions = ["the fixture does not encode arbitrary Lean WitnessPair and frozen protocol packs"]
-guarantee = "regresses one positive protocol combination but does not validate the general invariant theorem"
+scope = "one caller-supplied positive/negative pair and the complete supplied finite list of protocol packs"
+assumptions = ["sentence and every pack are opaque caller-supplied predicates applicable to both witnesses", "the checker validates the finite premise encoding rather than implementing an independent Lean semantic definition"]
+guarantee = "returns true when sentence holds on the positive witness, fails on the negative witness, and every supplied pack holds on both; this validates the supplied premise encoding and does not re-prove the general projection theorem"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-9-audit-20260814.log"
 
 [[contract]]
 id = "wager.named_models"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_wager_named_models"
 lean_decl = "ERIEC.Wager.named_frozen_models_boundary"
-scope = "the checker's hard-coded named-model Boolean fixture"
-assumptions = ["model names and proof fields are not represented as Lean evidence objects"]
-guarantee = "regresses the expected boundary outcomes of the named examples without establishing their formal identities"
+scope = "five independently supplied finite candidates with separate carriers for KBad, KPlus, M0, MPlus, and MCyc"
+assumptions = ["each candidate carrier is duplicate-free and complete and its predicates and relations are faithfully encoded", "KBad and KPlus may use different environment carriers", "ERIEC.Wager.W6_iff_dc_transGen_self supplies the finite positive-length cycle characterization", "no checked decoder establishes correspondence with the five fixed Lean objects"]
+guarantee = "returns true when the supplied KBad/KPlus candidates respectively fail/satisfy ConvHolds and the supplied M0/MPlus/MCyc candidates respectively satisfy/fail/satisfy finite W6; it validates candidates without deciding their identities with the fixed Lean models"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-9-audit-20260814.log"
 
 [[contract]]
 id = "wager.w6_cycle_soundness"
@@ -800,10 +800,10 @@ review_status = "reviewed"
 checker = "check_frozen_wager_interpretive_model"
 lean_decl = "ERIEC.Wager.frozen_interpretive_checker_soundness"
 scope = "all combinations of the complete supplied finite state and environment carriers"
-assumptions = ["the supplied predicates and operations faithfully encode the finite interpretive model"]
-guarantee = "decides the W1-W3 checker conjunction for every point of the supplied finite model"
+assumptions = ["states and environments enumerate their complete finite Lean carriers exactly once", "dc, positive_value, conscious_hinge, Ph, and Mat are faithful extensional encodings with no elements outside those carriers", "the supplied Bool nontrivial is the truth value of FrozenImpl.nontrivial"]
+guarantee = "returns true exactly when the runtime-decoded finite predicates satisfy the pointwise definitions of W1, W2, and W3; frozen_interpretive_checker_soundness packages the accepted conjunction"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-13-audit-20260814.log"
 
 [[contract]]
 id = "wager.finite_model_checker"
@@ -812,10 +812,10 @@ review_status = "reviewed"
 checker = "check_frozen_wager_model"
 lean_decl = "ERIEC.Wager.frozen_model_checker_soundness"
 scope = "all combinations of the complete supplied finite carriers used by the W4-W6 checks"
-assumptions = ["the supplied predicates and relations faithfully encode the finite frozen wager model"]
-guarantee = "decides the W4-W6 checker conjunction over the supplied finite model"
+assumptions = ["actions, environments, cores, and states enumerate their complete finite Lean carriers exactly once", "alpha, sigma, pi, rho, dc, hinge, and edges faithfully and totally encode the finite FrozenImpl fields with no out-of-carrier values", "k0 is the runtime encoding of a Lean natural number", "ERIEC.Wager.W6_iff_dc_transGen_self identifies W6 on finite S with a dc state on a positive-length TransGen step cycle"]
+guarantee = "returns true exactly when the runtime-decoded finite model satisfies W4, W5, and W6; W4-W5 are enumerated directly and W6 is decided by the positive-length transitive-closure characterization"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-13-audit-20260814.log"
 
 [[contract]]
 id = "wager.full_model_checker"
@@ -824,10 +824,10 @@ review_status = "reviewed"
 checker = "check_frozen_wager_full_model"
 lean_decl = "ERIEC.Wager.frozen_full_model_checker_soundness"
 scope = "the complete supplied finite interpretive and frozen-model carriers"
-assumptions = ["both component models are faithfully and completely represented by the supplied runtime functions"]
-guarantee = "decides the combined W1-W6 checker conjunction for the supplied finite full model"
+assumptions = ["the interpretive and structural arguments faithfully encode one shared finite FrozenImpl over duplicate-free complete carrier enumerations", "all predicate, relation, hinge, and step encodings are total and contain no out-of-carrier values", "k0 is the runtime encoding of a Lean natural number", "ERIEC.Wager.W6_iff_dc_transGen_self supplies the finite W6 cycle equivalence used by the structural component"]
+guarantee = "returns true exactly when the runtime-decoded finite model satisfies W1 through W6 by conjoining the exact interpretive and structural finite decisions"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-13-audit-20260814.log"
 
 [[contract]]
 id = "richness.branch"

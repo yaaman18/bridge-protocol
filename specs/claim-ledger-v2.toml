@@ -167,9 +167,9 @@ id = "GRP-WAGER-14"
 source = "docs/§14凍結文書_v1.md"
 title_ja = "凍結賭け・独立性・保存性"
 legacy_vp_ids = []
-children = ["VP2-WAGER-FROZEN-001", "VP2-WAGER-W5-FAMILY-001", "VP2-WAGER-PRESERVATION-001", "VP2-WAGER-GLOBAL-INVARIANT-001", "VP2-WAGER-NAMED-MODELS-001", "VP2-WAGER-W6-CYCLE-SOUND-001", "VP2-WAGER-FINITE-CHECKER-001"]
+children = ["VP2-WAGER-FROZEN-001", "VP2-WAGER-W5-FAMILY-001", "VP2-WAGER-PRESERVATION-001", "VP2-WAGER-GLOBAL-INVARIANT-001", "VP2-WAGER-NAMED-MODELS-001", "VP2-WAGER-W6-CYCLE-SOUND-001", "VP2-WAGER-W6-FINITE-RECURRENCE-001", "VP2-WAGER-FINITE-CHECKER-001"]
 coverage = "complete"
-coverage_note = "W1–W6の閉式、W1–W4/W6の二証人境界、任意k0≥2のW5模型族、Ph定義的拡張の保存性、凍結文書で用いるnamed witness model境界、W6自己閉路soundness、およびW4/W5/W6有限モデル検査器を形式化。W6一般閉路の完全iffは別義務として残す。W3はFM3の具体的意味論ではなく凍結済みconsciousHinge述語に相対的。"
+coverage_note = "W1–W6の閉式、W1–W4/W6の二証人境界、任意k0≥2のW5模型族、Ph定義的拡張の保存性、凍結文書で用いるnamed witness model境界、W6自己閉路soundness、有限状態でのW6とDC付き正長閉路の同値、およびW4/W5/W6有限モデル検査器を形式化。W3はFM3の具体的意味論ではなく凍結済みconsciousHinge述語に相対的。"
 
 [[claim_group]]
 id = "GRP-M1-LARGE-DC"
@@ -1723,6 +1723,27 @@ certification_log = "logs/gates/VP-WGR-006/G4-20260708-060505.log"
 depends_on = [
   "VP2-WAGER-FROZEN-001",
   "VP2-WAGER-NAMED-MODELS-001",
+]
+
+[[claim]]
+id = "VP2-WAGER-W6-FINITE-RECURRENCE-001"
+group_id = "GRP-WAGER-14"
+source_label = "§14 W6有限状態再帰特徴付け"
+claim_kind = "theorem"
+statement_ja = "有限状態の凍結Wager実装では、W6は凍結Wager層のdc述語を満たす状態を通る正長step閉路の存在と同値である"
+direction = "iff"
+assumptions = ["Finite S"]
+conclusion = "W6 impl ↔ ∃ s, impl.dc s ∧ Relation.TransGen impl.step s s"
+lean_decl = "ERIEC.Wager.W6_iff_dc_transGen_self"
+lean_file = "formal/ERIEC/Wager/Recurrence.lean"
+statement_spec = "specs/statements/VP2-WAGER-W6-FINITE-RECURRENCE-001.lean"
+statement_hash = "sha256:1fde2995a20884dbfda190096cd473430132779327af41ac2a2bf6788304ebc4"
+spec_status = "frozen"
+proof_status = "proved"
+realization_kind = "formal_only"
+depends_on = [
+  "VP2-WAGER-FROZEN-001",
+  "VP2-WAGER-W6-CYCLE-SOUND-001",
 ]
 
 [[claim]]

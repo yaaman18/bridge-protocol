@@ -1,0 +1,10 @@
+ERIEC.Wager.W6_to_exists_dc_transGen_self.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} [Finite S] (impl : ERIEC.Wager.FrozenImpl A E C S) :
+  ERIEC.Wager.W6 impl → ∃ s, impl.dc s ∧ Relation.TransGen impl.step s s
+ERIEC.Wager.W6_of_exists_dc_transGen_self.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3}
+  {S : Type u_4} (impl : ERIEC.Wager.FrozenImpl A E C S) :
+  (∃ s, impl.dc s ∧ Relation.TransGen impl.step s s) → ERIEC.Wager.W6 impl
+ERIEC.Wager.W6_iff_dc_transGen_self.{u_1, u_2, u_3, u_4} {A : Type u_1} {E : Type u_2} {C : Type u_3} {S : Type u_4}
+  [Finite S] (impl : ERIEC.Wager.FrozenImpl A E C S) :
+  ERIEC.Wager.W6 impl ↔ ∃ s, impl.dc s ∧ Relation.TransGen impl.step s s
+'ERIEC.Wager.W6_iff_dc_transGen_self' depends on axioms: [propext, Classical.choice, Quot.sound]

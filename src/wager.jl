@@ -86,6 +86,177 @@ function _wager_relation_lookup(rel, key)
     rel(key)
 end
 
+_wager_unique_carrier(carrier) = length(Set(carrier)) == length(carrier)
+
+function _wager_predicate_encoding_valid(predicate, carrier)
+    carrier_set = Set(carrier)
+    if predicate isa AbstractSet
+        return predicate ⊆ carrier_set
+    elseif predicate isa AbstractDict
+        return Set(keys(predicate)) ⊆ carrier_set &&
+            all(value -> value isa Bool, values(predicate))
+    end
+    all(element -> applicable(predicate, element), carrier)
+end
+
+function _wager_predicate_value(predicate, element)
+    value = if predicate isa AbstractSet
+        element in predicate
+    elseif predicate isa AbstractDict
+        get(predicate, element, false)
+    else
+        predicate(element)
+    end
+    value === true
+end
+
+function _wager_relation_encoding_valid(relation, domain, codomain)
+    domain_set = Set(domain)
+    codomain_set = Set(codomain)
+    if relation isa AbstractDict
+        Set(keys(relation)) == domain_set || return false
+    else
+        all(element -> applicable(relation, element), domain) || return false
+    end
+    all(domain) do element
+        values = _wager_relation_lookup(relation, element)
+        values isa AbstractSet && values ⊆ codomain_set
+    end
+end
+
+function _wager_conv_result(model)
+    fields = (:actions, :environments, :cores, :alpha, :sigma, :pi, :rho)
+    all(field -> hasproperty(model, field), fields) || return nothing
+    actions = model.actions
+    environments = model.environments
+    cores = model.cores
+    all(_wager_unique_carrier, (actions, environments, cores)) || return nothing
+    _wager_relation_encoding_valid(model.alpha, actions, environments) || return nothing
+    _wager_relation_encoding_valid(model.sigma, environments, actions) || return nothing
+    _wager_relation_encoding_valid(model.pi, actions, cores) || return nothing
+    _wager_relation_encoding_valid(model.rho, cores, actions) || return nothing
+
+    alpha_sigma = all(actions) do action
+        all(environments) do environment
+            (environment in _wager_relation_lookup(model.alpha, action)) ==
+                (action in _wager_relation_lookup(model.sigma, environment))
+        end
+    end
+    pi_rho = all(actions) do action
+        all(cores) do core
+            (core in _wager_relation_lookup(model.pi, action)) ==
+                (action in _wager_relation_lookup(model.rho, core))
+        end
+    end
+    alpha_sigma && pi_rho
+end
+
+function _wager_w6_result(model)
+    fields = (:states, :dc, :edges)
+    all(field -> hasproperty(model, field), fields) || return nothing
+    states = model.states
+    _wager_unique_carrier(states) || return nothing
+    _wager_predicate_encoding_valid(model.dc, states) || return nothing
+    state_set = Set(states)
+    all(model.edges) do edge
+        edge isa Tuple && length(edge) == 2 && edge[1] in state_set && edge[2] in state_set
+    end || return nothing
+
+    index = Dict(state => i for (i, state) in enumerate(states))
+    n = length(states)
+    reach = falses(n, n)
+    for (source, target) in model.edges
+        reach[index[source], index[target]] = true
+    end
+    for k in 1:n, i in 1:n, j in 1:n
+        reach[i, j] = reach[i, j] || (reach[i, k] && reach[k, j])
+    end
+    any(state -> _wager_predicate_value(model.dc, state) && reach[index[state], index[state]],
+        states)
+end
+
+function _wager_interpretive_result(model)
+    fields = (:states, :environments, :dc, :nontrivial, :positive_value,
+        :conscious_hinge, :ph, :mat)
+    all(field -> hasproperty(model, field), fields) || return nothing
+    states = model.states
+    environments = model.environments
+    all(_wager_unique_carrier, (states, environments)) || return nothing
+    model.nontrivial isa Bool || return nothing
+    _wager_predicate_encoding_valid(model.dc, states) || return nothing
+    _wager_predicate_encoding_valid(model.conscious_hinge, states) || return nothing
+    _wager_predicate_encoding_valid(model.ph, states) || return nothing
+    pairs = ((state, environment) for state in states for environment in environments)
+    pair_carrier = collect(pairs)
+    _wager_predicate_encoding_valid(model.positive_value, pair_carrier) || return nothing
+    _wager_predicate_encoding_valid(model.mat, pair_carrier) || return nothing
+
+    w1 = all(states) do state
+        (_wager_predicate_value(model.dc, state) && model.nontrivial) ==
+            _wager_predicate_value(model.ph, state)
+    end
+    w2 = all(states) do state
+        !_wager_predicate_value(model.dc, state) || all(environments) do environment
+            pair = (state, environment)
+            _wager_predicate_value(model.positive_value, pair) ==
+                _wager_predicate_value(model.mat, pair)
+        end
+    end
+    w3 = all(states) do state
+        _wager_predicate_value(model.conscious_hinge, state) ==
+            _wager_predicate_value(model.ph, state)
+    end
+    w1_seed = any(state ->
+        _wager_predicate_value(model.dc, state) && model.nontrivial, states)
+    w2_seed = any(states) do state
+        _wager_predicate_value(model.dc, state) && any(environments) do environment
+            _wager_predicate_value(model.positive_value, (state, environment))
+        end
+    end
+    w3_seed = any(state -> _wager_predicate_value(model.conscious_hinge, state), states)
+    (; w1, w2, w3, w1_seed, w2_seed, w3_seed)
+end
+
+"""Validate caller-supplied finite witnesses for W1-W4 and W6 independence."""
+function check_wager_independence(witness::NamedTuple)
+    fields = (:positive, :w1_negative, :w2_negative, :w3_negative,
+        :core_positive, :core_negative, :w6_positive, :w6_negative)
+    all(field -> hasproperty(witness, field), fields) || return false
+    positive = _wager_interpretive_result(witness.positive)
+    w1_negative = _wager_interpretive_result(witness.w1_negative)
+    w2_negative = _wager_interpretive_result(witness.w2_negative)
+    w3_negative = _wager_interpretive_result(witness.w3_negative)
+    core_positive = _wager_conv_result(witness.core_positive)
+    core_negative = _wager_conv_result(witness.core_negative)
+    w6_positive = _wager_w6_result(witness.w6_positive)
+    w6_negative = _wager_w6_result(witness.w6_negative)
+    any(isnothing, (positive, w1_negative, w2_negative, w3_negative,
+        core_positive, core_negative, w6_positive, w6_negative)) && return false
+
+    positive.w1 && positive.w2 && positive.w3 &&
+        w1_negative.w1_seed && !w1_negative.w1 &&
+        w2_negative.w2_seed && !w2_negative.w2 &&
+        w3_negative.w3_seed && !w3_negative.w3 &&
+        core_positive && !core_negative && w6_positive && !w6_negative
+end
+
+"""Validate a supplied frozen witness pair and every supplied protocol pack."""
+function check_frozen_protocol_invariant(sentence, positive, negative, packs)
+    sentence(positive) === true && sentence(negative) === false &&
+        all(pack -> pack(positive) === true && pack(negative) === true, packs)
+end
+
+"""Validate supplied finite candidates for the five named frozen-model roles."""
+function check_wager_named_models(kbad, kplus, m0, mplus, mcyc)
+    kbad_conv = _wager_conv_result(kbad)
+    kplus_conv = _wager_conv_result(kplus)
+    m0_w6 = _wager_w6_result(m0)
+    mplus_w6 = _wager_w6_result(mplus)
+    mcyc_w6 = _wager_w6_result(mcyc)
+    any(isnothing, (kbad_conv, kplus_conv, m0_w6, mplus_w6, mcyc_w6)) && return false
+    !kbad_conv && kplus_conv && m0_w6 && !mplus_w6 && mcyc_w6
+end
+
 """Finite W1/W2/W3 truth-table checker for frozen Wager interpretations."""
 function check_frozen_wager_interpretive_model(;
     states=(:s0,),

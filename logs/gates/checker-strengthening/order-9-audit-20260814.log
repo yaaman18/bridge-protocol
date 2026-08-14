@@ -1,0 +1,21 @@
+order-9 Wager witness-validator audit (2026-08-14)
+
+Decision: reclassify wager.frozen_independence, wager.global_protocol_invariant, and
+wager.named_models from regression_only to witness_validator.
+
+- Existing zero-argument methods are retained unchanged as regression fixtures.
+- Additive overloads validate independently supplied finite candidates and reject malformed
+  negative encodings instead of treating encoding failure as a mathematical counterexample.
+- The frozen-independence overload validates positive and negative witnesses for W1-W4 and W6.
+  This is intentionally broader than its bound declaration ERIEC.Wager.W6_indep.
+- The global-invariant overload independently evaluates sentence(positive), !sentence(negative),
+  and every supplied pack on both witnesses.  The sentence and packs remain opaque parameters.
+- The named-model overload gives KBad, KPlus, M0, MPlus, and MCyc independent carriers and checks
+  ConvHolds or finite W6 as appropriate.
+- W6 validation uses a non-reflexive transitive closure, justified on finite carriers by
+  ERIEC.Wager.W6_iff_dc_transGen_self.
+
+The overloads do not establish that supplied candidates are the fixed Lean objects
+consistentImpl, noViableImpl, KBad, KPlus, M0, MPlus, or MCyc, and no checked canonical decoder is
+introduced.  Under the shared order-9/order-13 classification rule, these are witness validators,
+not exact decisions of the bound closed theorems.

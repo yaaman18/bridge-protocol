@@ -1,0 +1,32 @@
+order-13 Wager exact classification audit (2026-08-14)
+
+Decision: retain exact_finite_decision for all three contracts.
+
+- wager.interpretive_model_checker directly enumerates the complete supplied finite S and E
+  carriers and evaluates the definitions of W1, W2, and W3 pointwise.
+- wager.finite_model_checker directly enumerates W4 and W5.  Its non-reflexive transitive
+  closure test for a dc state on a positive-length step cycle is equivalent to W6 by
+  ERIEC.Wager.W6_iff_dc_transGen_self for finite S.
+- wager.full_model_checker is the conjunction of those two exact finite decisions over one
+  shared decoded FrozenImpl.
+- Existing sensitivity fixtures remain unchanged.  Target tests additionally cover a
+  positive two-state cycle, an acyclic graph, and a cycle that contains no dc state.
+
+The classification is conditional on duplicate-free complete finite carrier enumerations and
+faithful total encodings of all predicates, relations, hinge finsets, and the step relation.
+
+Classification rule shared with order-9
+
+exact_finite_decision requires the Julia checker to independently implement the semantic content
+of the corresponding Lean definitions and to decide every quantified case over a supplied complete
+finite decoding.  Merely applying opaque caller-supplied predicates, repackaging theorem premises,
+or validating a candidate encoding of a fixed closed Lean object is not an exact decision of that
+Lean claim.  A checker for a fixed closed object can be exact only when a checked canonical decoder
+or equivalent correspondence evidence ties the runtime encoding to that specific Lean object;
+without that bridge it remains a witness_validator.
+
+Thus the order-13 checkers qualify because they independently decide ConvHolds and W1-W6 over the
+decoded finite model.  The order-9 global invariant checker only evaluates opaque sentence and pack
+parameters, while the frozen-independence and named-model checkers validate supplied candidates
+without establishing that those candidates are the fixed Lean implementations named by the closed
+theorems.  Those three therefore remain witness validators.
