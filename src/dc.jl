@@ -47,6 +47,28 @@ function check_erie_structure(
     true
 end
 
+function _dc_finite_carrier(values)
+    items = collect(values)
+    length(unique(items)) == length(items) || return nothing
+    Set(items)
+end
+
+"""Validate every field of a finite encoding of `Adj.ERIESystem`."""
+function check_erie_structure(structure::ERIEStructure, all_M, all_E)
+    motors = _dc_finite_carrier(all_M)
+    environments = _dc_finite_carrier(all_E)
+    motors === nothing && return false
+    environments === nothing && return false
+    all(m -> Set(apply(structure.alpha_rel, m)) ⊆ environments, motors) || return false
+    all(e -> Set(apply(structure.sigma_rel, e)) ⊆ motors, environments) || return false
+    check_galois_conn(
+        structure.alpha_rel,
+        structure.sigma_rel,
+        motors,
+        powerset(environments),
+    )
+end
+
 struct ERIEState{M,E,C,S}
     structure::ERIEStructure{M,E,C}
     kappa::Function
@@ -105,6 +127,27 @@ function check_DC(sys::ERIEState)
     h_bound = !isempty(kappa_s ∩ sys.boundary)
 
     DCResult(h_self, h_smc, h_act, h_bound, act)
+end
+
+"""Validate all four proof fields of a finite encoding of `ERIEC.DC`."""
+function check_DC(sys::ERIEState, all_M, all_E, all_C)
+    motors = _dc_finite_carrier(all_M)
+    environments = _dc_finite_carrier(all_E)
+    cores = _dc_finite_carrier(all_C)
+    motors === nothing && return false
+    environments === nothing && return false
+    cores === nothing && return false
+
+    structure = sys.structure
+    all(m -> Set(apply(structure.alpha_rel, m)) ⊆ environments, motors) || return false
+    all(e -> Set(apply(structure.sigma_rel, e)) ⊆ motors, environments) || return false
+    all(m -> Set(apply(structure.pi_rel, m)) ⊆ cores, motors) || return false
+    all(c -> Set(apply(structure.rho_rel, c)) ⊆ motors, cores) || return false
+    Set(sys.kappa(sys.s)) ⊆ cores || return false
+    Set(sys.epsilon(sys.s)) ⊆ environments || return false
+    Set(sys.boundary) ⊆ cores || return false
+
+    is_DC(check_DC(sys))
 end
 
 function is_DC(result::DCResult)

@@ -23,6 +23,31 @@
     @test result.hBound
     @test is_DC(result)
     @test sys.structure.hGC === nothing
+    all_M = Set([:m1, :m2])
+    all_E = Set([:e1, :e2])
+    all_C = Set([:c1, :c2])
+    @test check_DC(sys, all_M, all_E, all_C)
+
+    no_self = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        alpha_rel, sigma_rel, _ -> Set{Symbol}(), rho_rel,
+        kappa, epsilon, Set([:c1]), :s,
+    )
+    @test !check_DC(no_self, all_M, all_E, all_C)
+    no_smc = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        _ -> Set{Symbol}(), sigma_rel, pi_rel, rho_rel,
+        kappa, epsilon, Set([:c1]), :s,
+    )
+    @test !check_DC(no_smc, all_M, all_E, all_C)
+    no_act = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        alpha_rel, sigma_rel, pi_rel, _ -> Set{Symbol}(),
+        kappa, epsilon, Set([:c1]), :s,
+    )
+    @test !check_DC(no_act, all_M, all_E, all_C)
+    no_bound = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        alpha_rel, sigma_rel, pi_rel, rho_rel,
+        kappa, epsilon, Set{Symbol}(), :s,
+    )
+    @test !check_DC(no_bound, all_M, all_E, all_C)
 
     verified_sys = ERIEState{Symbol,Symbol,Symbol,Symbol}(
         alpha_rel,
@@ -33,8 +58,8 @@
         epsilon,
         Set([:c1]),
         :s,
-        Set([:m1, :m2]),
-        Set([:e1, :e2]),
+        all_M,
+        all_E,
     )
     @test verified_sys.structure.hGC === true
 
@@ -48,8 +73,8 @@
         epsilon,
         Set([:c1]),
         :s,
-        Set([:m1, :m2]),
-        Set([:e1, :e2]),
+        all_M,
+        all_E,
     )
 end
 

@@ -53,9 +53,16 @@ This part is as important as the theory itself.
 
 ## Verification methodology
 
-Every mathematical claim in this repository is tracked as a **verification point**
-(VP) in a single ledger, [specs/ledger.toml](specs/ledger.toml), and moves through
-gated states:
+Verification evidence is represented by two ledgers with different roles. The schema-v1
+[specs/ledger.toml](specs/ledger.toml) is an index of certified Lean–Julia bindings,
+dependencies, and certificate-catalog entries. Its 59 VPs are all terminal
+`certified` entries; it is not the current claim-lifecycle source of truth, and
+implementation work does not advance its status. The atomic lifecycle ledger is
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml): it records 90 claims on four
+independent axes, `spec_status`, `proof_status`, `implementation_status`, and
+`certification_status`.
+
+The gate sequence remains the verification model:
 
 ```
 proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ implemented ──G4──▶ certified
@@ -67,11 +74,11 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G4** — the contract is registered in the certificate catalog and its dependency
   graph verifies.
 
-Three rules give the ledger its meaning. First, a claim is marked `certified` **only**
+Three rules give the ledgers their meaning. First, a claim is marked `certified` **only**
 when actual gate logs exist under [logs/gates/](logs/gates/) — those logs are committed
-as evidence. Second, the *visible gap principle*: a claim that has category-theoretic
-motivation but no Lean proof stays visibly below `certified`; it is never silently
-dropped or silently believed. Third, the *two-axis principle* (introduced 2026-08-01):
+as evidence. Second, the *visible gap principle*: v2 records claims that lack proof or
+certification on their corresponding axes; they are never silently dropped or silently
+believed. Third, the *two-axis principle* (introduced 2026-08-01):
 `certified` in the v1 ledger means only that the single Lean declaration referenced by
 `contract_id` has been machine-checked; it does not guarantee every property enumerated
 in the `claim_ja` prose. The separate `coverage_audit` axis records how much of that prose
@@ -81,13 +88,21 @@ The axes are orthogonal. A contract remains certified when `coverage_audit` is
 each atomic claim is recorded in
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-As of 2026-08-02, the v1 ledger tracks 59 verification points, all 59 certified. Of the
+As of 2026-08-14, the v1 ledger tracks 59 verification points, all 59 certified. Of the
 `coverage_audit` values, 10 are `complete` and 49 are `unreviewed`. `legacy_coverage`
 contains 10 entries (all with `basis = "exact_ledger_decl"`); the audit found that the
 contracts cover 7 atomic claims and do not cover 85. In other words, across the 10 audited
 entries, only 7 of the properties their prose asserts are backed by a machine check; the
-remaining 85 lie outside the contract. The v2 ledger contains 89 atomic claims: 38
-certified and 51 uncertified.
+remaining 85 lie outside the contract. The v2 ledger contains 90 atomic claims: 38
+certified and 52 uncertified.
+
+The runnable [category pipeline](bin/eriec-category-pipeline.jl) is an impact-recheck
+gate runner, not a status-progression driver. Its implementation reads schema v1 only,
+not v2, and writes no ledger status. The status-advancing driver described in
+[the orchestration specification](specs/loop-orchestration-spec.md) remains an
+unimplemented, deferred design; its need will be reconsidered when order-10b creates the
+first two non-terminal VPs. See the
+[read-only ledger audit](logs/ledger-design-audit-20260814.log) for the supporting evidence.
 
 ## Repository layout
 

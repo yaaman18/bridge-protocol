@@ -28,6 +28,15 @@
     )
     @test check_erie_structure(structure)
     @test check_erie_structure(structure; all_M=all_M, all_E=all_E)
+    @test check_erie_structure(structure, all_M, all_E)
+    @test !check_erie_structure(
+        ERIEStructure{Symbol,Symbol,Symbol}(
+            _ -> Set([:outside]), sigma_rel,
+            _ -> Set{Symbol}(), _ -> Set{Symbol}(),
+        ),
+        all_M,
+        all_E,
+    )
     @test !check_erie_structure(
         ERIEStructure{Symbol,Symbol,Symbol}(
             gc_alpha_rel,

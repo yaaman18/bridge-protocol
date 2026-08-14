@@ -1,0 +1,2 @@
+COMMAND: rg -n "README(\.md|\.ja\.md|\.es\.md)|loop-orchestration-spec\.md" test --glob "*.jl"
+PASS: no test references to the four changed documentation files

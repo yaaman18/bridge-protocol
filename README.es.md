@@ -58,9 +58,17 @@ Esta sección es tan importante como la teoría misma.
 
 ## Metodología de verificación
 
-Cada afirmación matemática de este repositorio se registra como un **punto de
-verificación** (VP) en un único libro mayor, [specs/ledger.toml](specs/ledger.toml),
-y avanza por estados con compuertas:
+La evidencia de verificación se representa en dos libros mayores con funciones
+distintas. [specs/ledger.toml](specs/ledger.toml), con esquema v1, es un índice de
+enlaces Lean–Julia certificados, dependencias y entradas del catálogo de certificados.
+Sus 59 VP están todos en el estado terminal `certified`; no es la fuente actual del ciclo
+de vida de las afirmaciones y el trabajo de implementación no hace avanzar su estado.
+El libro mayor del ciclo de vida atómico es
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml): registra 90 afirmaciones en
+cuatro ejes independientes, `spec_status`, `proof_status`, `implementation_status` y
+`certification_status`.
+
+La secuencia de compuertas sigue siendo el modelo de verificación:
 
 ```
 proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ implemented ──G4──▶ certified
@@ -72,12 +80,12 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G4** — el contrato queda registrado en el catálogo de certificados y su grafo
   de dependencias se verifica.
 
-Tres reglas dan sentido al libro mayor. Primera: una afirmación se marca
+Tres reglas dan sentido a ambos libros mayores. Primera: una afirmación se marca
 `certified` **solo** cuando existen registros reales de compuertas bajo
 [logs/gates/](logs/gates/) — esos registros se incluyen como evidencia. Segunda:
-el *principio de brecha visible*: una afirmación con motivación categórica pero
-sin demostración en Lean permanece visiblemente por debajo de `certified`; nunca
-se elimina ni se acepta en silencio. Tercera: el *principio de dos ejes* (introducido
+el *principio de brecha visible*: v2 registra en los ejes correspondientes las
+afirmaciones que carecen de demostración o certificación; nunca se eliminan ni se
+aceptan en silencio. Tercera: el *principio de dos ejes* (introducido
 el 2026-08-01). `certified` en el libro mayor v1 solo significa que la única declaración
 Lean indicada por `contract_id` ha sido verificada mecánicamente; no garantiza todas las
 propiedades enumeradas en la prosa de `claim_ja`. El eje independiente `coverage_audit`
@@ -87,13 +95,21 @@ aunque `coverage_audit` sea `unreviewed`, y la certificación por sí sola no ga
 cobertura de la prosa. El estado de cada afirmación atómica se conserva en
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-A fecha de 2026-08-02, el libro mayor v1 registra 59 puntos de verificación, todos
+A fecha de 2026-08-14, el libro mayor v1 registra 59 puntos de verificación, todos
 certificados. De los valores de `coverage_audit`, 10 son `complete` y 49 son `unreviewed`.
 `legacy_coverage` contiene 10 entradas (todas con `basis = "exact_ledger_decl"`); la
 auditoría determinó que los contratos cubren 7 afirmaciones atómicas y no cubren 85. Es
 decir, en las 10 entradas auditadas, solo 7 de las propiedades que enuncia su prosa están
 respaldadas por una verificación mecánica; las 85 restantes quedan fuera del contrato. El
-libro mayor v2 contiene 89 afirmaciones atómicas: 38 certificadas y 51 sin certificar.
+libro mayor v2 contiene 90 afirmaciones atómicas: 38 certificadas y 52 sin certificar.
+
+El [pipeline de categorías](bin/eriec-category-pipeline.jl) ejecutable vuelve a comprobar
+las compuertas afectadas; no es un driver de avance de estados. Su implementación solo
+lee el esquema v1, no v2, y no escribe estados en los libros mayores. El driver de avance
+descrito en [la especificación de orquestación](specs/loop-orchestration-spec.md) sigue
+siendo un diseño no implementado y aplazado; su necesidad se reconsiderará cuando
+order-10b cree los dos primeros VP no terminales. Véase la
+[auditoría de solo lectura](logs/ledger-design-audit-20260814.log) como evidencia.
 
 ## Estructura del repositorio
 

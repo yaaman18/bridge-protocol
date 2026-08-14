@@ -1,0 +1,100 @@
+ERIE-C checker strengthening read-only pre-audit: order-10 and order-11
+Date: 2026-08-14
+Role: codex audit
+Classification: challenge/revise
+
+Shared audit rule
+-----------------
+1. A witness_validator must consume an independently supplied finite encoding and validate every proof-bearing field of the bound Lean witness/structure. A typed Julia value alone is not a nontrivial validation.
+2. A checker that validates only necessary projections of a Lean witness is complete_only (Lean witness encoding -> checker acceptance), not sound_only.
+3. A checker that validates a sufficient concrete witness or premise is sound_only (checker acceptance -> scoped Lean claim under the stated faithful-encoding assumption); rejection need not refute the Lean claim.
+4. Existing zero-argument methods, fixtures, tolerances, seeds, and certified APIs must remain unchanged. New behavior must be additive and negative cases must mutate independently supplied input.
+
+Order-10: witness candidates
+----------------------------
+
+O10-1 adjunction.system — ACCEPT witness_validator.
+Lean evidence: formal/ERIEC/Adjunction.lean:38-42 defines ERIESystem with alphaRel, sigmaRel, and proof field hGC. Julia evidence: src/dc.jl:31-49 already exhaustively calls check_galois_conn when both finite carriers are supplied; src/adjunction.jl:51-57 enumerates every subset of M and E. This is not definitionally true: test/test_adjunction.jl has an independently supplied invalid sigma relation rejected by the finite-carrier path. Required scope: duplicate-free complete M/E carriers and relation images contained in them. pi_rel/rho_rel are Julia extras and are not ERIESystem proof obligations.
+
+O10-2 closure.nu_phi — ACCEPT witness_validator, but the current checker is incomplete.
+Lean evidence: formal/ERIEC/Closure.lean:41-46 has both isFixedPoint and isGreatest fields. Julia evidence: src/closure.jl:30-32 checks only fixedness; src/closure.jl:35-40 supplies the needed complete-powerset machinery. The strengthened overload must check fixedness and, for every subset Y of the complete finite C carrier, Phi(Y)=Y -> Y subseteq nuPhi. A negative candidate with a second fixed point outside result.value makes this non-tautological. Do not silently substitute only the stronger post-fixed condition without documenting the monotonicity argument.
+
+O10-3 dc.system — ACCEPT witness_validator via an additive Boolean validation path.
+Lean evidence: formal/ERIEC/DC.lean:6-19 has four proof fields hSelf/hSMC/hAct/hBound. Julia evidence: src/dc.jl:96-109 independently computes all four and src/dc.jl:111-113 conjoins them. check_DC currently returns DCResult, so the manifest must not claim that the report alone is Boolean validation; an additive same-name validation method or an explicitly bound Boolean wrapper is required. Each of the four independently mutated false cases is a meaningful negative. Lean DC itself has no GaloisConnection field, so a Julia ERIEStructure hGC is not an additional DC obligation.
+
+O10-4 markers.fm_classification — CHALLENGE; keep observation_only and remove from order-10 promotion.
+Lean evidence: formal/ERIEC/Markers.lean:11-16 defines FMMarkers as four Bool data fields with no proof obligation. Julia FMMarkers is the same four typed Bool fields. Every constructed Julia FMMarkers is therefore structurally valid; a validator of ERIEC.Markers.FMMarkers is definitionally true. classify_action_markers instead implements Markers.classify, but the manifest is bound to FMMarkers, not classify or the classification theorems. Promotion would require changing lean_decl/contract meaning, which is outside this batch and requires user decision.
+
+O10-5 opendynamics.open_graph — CHALLENGE; keep regression_only and remove from order-10 promotion.
+Lean evidence: formal/ERIEC/OpenDynamics.lean:18-21 defines OpenGraph only by a State type and arbitrary step Prop, with no closure or well-formedness proof. Julia FiniteOpenGraph is already a typed finite encoding; checking its construction is tautological relative to the Lean target. src/open_dynamics.jl:40-45 check_open_path validates a separate Path witness, not OpenGraph. Rebinding to Path or adding carrier-closure conditions would change the contract meaning or validate Julia-only invariants, so it is not a witness_validator for the current lean_decl.
+
+O10-6 generation.dc_viable_translation — ACCEPT witness_validator with a finite candidate, additive overload only.
+Lean evidence: formal/ERIEC/Generation.lean:27-33 is a non-Prop def constructing a ViableSystem whose system, viable predicate, and step_closed proof are fixed by dcToOpenSystem/dcViable. Current src/generation.jl:8-10 only checks two report flags and is not sufficient. A strengthened overload can accept complete finite S/config carriers plus an independently supplied candidate and compare the generated singleton step relation, viable equality predicate, and all step_closed cases. Mutating candidate step or viable makes the test non-tautological. It must not infer or claim an inverse ViableSystem -> DC.
+
+O10-7 generation.proliferation_morphism — ACCEPT witness_validator, high implementation scope.
+Lean evidence: formal/ERIEC/Generation.lean:62-90 has concrete data plus parent_viable, child_viable, heritage_lax, preorder/order, rank bound, phi_rich_lax, and universally quantified branch_transport fields. Current src/generation.jl:21-36 merely conjoins seven supplied Booleans, so it is a report-shape regression and cannot be promoted unchanged. A valid additive method must receive complete finite parent/child action/environment/core/state carriers, rank/record/heritage carriers, relations, maps, and candidate fields; independently recompute both DC premises, viable equalities, preorder laws/rank inequality, finite phi_rich, heritage relation, and every branch_transport case. Boolean proof flags may not stand in for these checks. Feasible, but this is the largest order-10 item and should be implemented separately after O10-1/2/3/6.
+
+Order-10 result: revise from 7 promotions to 5. Promote candidates O10-1, O10-2, O10-3, O10-6, O10-7 only after implementation and negative tests. Keep O10-4 observation_only and O10-5 regression_only. No exact_finite_decision promotion and no sensitivity-registry change.
+
+Order-11: partial-direction candidates
+--------------------------------------
+
+O11-1 worlddc.no_unconditional_equivalence — ACCEPT only as sound_only after a forward-specific additive path.
+Lean evidence: formal/ERIEC/WorldDC.lean:116-120 is the forward existential countermodel DC and not WldNontrivial. Current src/worlddc.jl:25-26 uses dc_holds != world_holds and also accepts the backward-only pair (false,true), so it is not sound for the bound forward declaration. src/worlddc.jl:28-29 already contains the correct sufficient forward predicate over DCResult/WldResult. The bound checker needs an additive forward-specific overload: acceptance -> supplied DC witness and trivial world loop -> the scoped forward countermodel. Rejection does not refute the existential theorem. Existing Boolean and zero-argument behavior remains unchanged.
+
+O11-2 reference_models.arbitrarily_large_dc — REVISE to complete_only if kept partial.
+Lean evidence: formal/ERIEC/RefModel/Large.lean:27-45 defines LargeNondegenerateWitness with DC, three cardinalities, multivaluedness, and hinge_nonempty. Current src/reference_models.jl:19-31 checks cardinalities, multivaluedness, and nonemptiness but omits the four DC fields and the actual hinge computation. Thus a faithful full Lean witness encoding necessarily passes these projections (Lean witness -> checker), while checker acceptance does not establish the Lean witness. That is complete_only. If instead all missing fields are independently validated, classify the new candidate overload witness_validator, not sound_only merely because the Lean theorem is existential.
+
+O11-3 reference_models.arbitrarily_large_ax_core_discrete — REVISE to complete_only if kept partial.
+Lean evidence: formal/ERIEC/RefModel/LargeCore.lean:149-188 constructs a LargeAXCoreReferenceWitness with stable and dynamic records, equality fields, R2Prime, and E5. Current src/reference_models.jl:34-71 checks a canonical carrier/orbit/drift subset but is not a field-by-field validator of all witness fields. Direction is full faithful witness -> selected runtime checks; acceptance can omit obligations. Therefore complete_only. A future full independently supplied candidate validator would be witness_validator.
+
+O11-4 reference_models.arbitrarily_large_three_layer — REVISE to complete_only if kept partial.
+Lean evidence: formal/ERIEC/RefModel/LargeCore.lean:190-205 requires tier1, DCWorldBridge, WldNontrivial, normalized value, and section13_2 witness. Current src/reference_models.jl:74-76 only combines the partial AX-core checker with check_reference_models() and does not independently validate all bridge/world/value/section13_2 fields. A full witness entails these selected regressions, but their success does not establish the full witness: complete_only. A full candidate overload would instead be witness_validator.
+
+O11-5 wager.w5_independence_family — ACCEPT sound_only with explicit domain and scope.
+Lean evidence: formal/ERIEC/Wager/Richness.lean:39-41 proves, for each k0 with 2 <= k0, W5(richImpl k0,k0) and not W5(poorImpl,k0). Current src/wager.jl:31-40 checks the sufficient cardinality facts for each supplied threshold and rejects inputs outside the theorem domain. Under the explicit assumption that the constructed finite hinges encode richImpl and poorImpl, acceptance supplies the two W5 sides for every supplied k0; it does not establish the universally quantified family outside the supplied finite list, and rejection does not refute the Lean theorem. This is sound_only on the supplied instances. A negative case must use an independently supplied rich/poor hinge candidate or an invalid in-domain candidate; merely including k0=1 only tests the precondition.
+
+Order-11 result: do not assign one relation uniformly. O11-1 and O11-5 can be sound_only after the stated strengthening. O11-2/O11-3/O11-4 are complete_only if they intentionally remain partial; if upgraded to validate every field of independently supplied witnesses, they should instead be witness_validator. No current item justifies exact_finite_decision.
+
+Recommended sequence
+--------------------
+1. Implement order-10 as O10-1/2/3/6 first; keep O10-4/5 unchanged.
+2. Implement O10-7 as a separate high-scope sub-batch.
+3. For order-11, first decide whether the three reference-model contracts intentionally remain partial (complete_only) or are redesigned as full witness validators. This is a classification/contract-scope decision and should be confirmed before implementation.
+4. Implement O11-1 and O11-5 only after their sound direction and candidate encoding are fixed.
+
+This audit made no source, test, manifest, ledger, fixture, tolerance, seed, commit, or push changes and ran no gate.
+
+Claude cross-check follow-up: order-10b Q1-Q3
+---------------------------------------------
+
+Q1 — CONDITIONAL ACCEPT.
+ERIEC.Markers.classify is a total definition on exactly 16 FMMarkers inputs. An exact contract is valid if the runtime relation being decided is the graph equation `classify markers = expectedClass`: add a Boolean checker accepting independently supplied markers and expected class, explicitly map all three Lean constructors to Julia symbols, and test all 16 marker inputs against an oracle derived directly from Markers.lean. The exact sensitivity negative must mutate the independently supplied expected class. Merely running classify_action_markers and comparing it with an expected value computed by that same Julia function would be self-confirmation and is not sufficient. Catalog kind must become `definition`; exact and sensitivity registry both increase 29 -> 30 and the registry hash must be updated after the tests are fixed.
+
+Q2 — CHALLENGE direct replacement of VP-MRK-001 / VP-OPD-001; recommend additive VPs.
+The two existing VPs are certified foundations, not isolated manifest rows. VP-OPD-001 is a dependency of VP-AUD-001 and VP-LIN-001; VP-MRK-001 is a dependency of VP-REF-001. Replacing OpenGraph by Path would make those dependency edges semantically false: Audit/Lineage depend on the graph layer, not merely one Path witness. The legacy state machine has no invalidated/superseded status and only specifies forward proposed->...->certified transitions. Therefore a direct mutation followed by silently leaving status=certified, or inventing an unsupported rollback, is not a valid G1-G4 procedure.
+
+Minimal safe procedure:
+1. Preserve VP-OPD-001 (`OpenGraph` / `FiniteOpenGraph`) and VP-MRK-001 (`FMMarkers` / current binding) as the already certified foundations.
+2. Add new proposed VPs (suggested VP-OPD-002 for `ERIEC.OpenDynamics.Path` / `OpenPath` / `check_open_path`, and VP-MRK-002 for `ERIEC.Markers.classify` / `classify_action_markers` / a Boolean graph checker) with new contract IDs. Do not reuse the existing contract IDs because the catalog requires unique semantic identities.
+3. Add corresponding catalog and semantic-manifest rows. For VP-MRK-002 add the sensitivity case/hash update.
+4. Run G1 -> G2 -> targeted G3 + full G3 -> G4 separately for each new VP, saving logs and advancing only the new VP status one gate at a time. Existing dependent VPs remain certified because their foundations are unchanged.
+If the user's decision strictly requires replacing the existing IDs rather than adding precise VPs, the spec must first define invalidation/supersession and dependency recertification for VP-AUD-001, VP-LIN-001, and VP-REF-001. Until then this part is deferred, not implementable under the current state machine.
+
+Q3 — REVISE B4.
+B4(a) is not an inconsistency: the catalog deliberately has separate `juliaSymbol` and `juliaChecker` fields. VP-OPD-001's `julia_api=FiniteOpenGraph` agrees with CertifiedArtifact `juliaSymbol=FiniteOpenGraph`, while `check_open_path` is separately the checker. The semantic mismatch is real at the contract-meaning level, but changing julia_api to the checker would be wrong; the additive Path VP resolves it cleanly.
+B4(b) is factually stale comment only: `opendynamics.open_graph` is already registered in CertifiedArtifact.lean:504-509 and the old G4 log exists. Remove/update the catalog-missing comment as ledger hygiene; do not present it as a missing G4 registration.
+B4(c) is also stale comments/header only: Markers.lean exists and contains FMMarkers/classify. Correct these comments in the small order-10b ledger-hygiene diff or separately; no status transition is justified solely by comment cleanup.
+
+Order-10a implementation result
+-------------------------------
+Implemented four additive finite witness paths without changing existing zero-argument or keyword methods.
+
+- adjunction.system: positional finite-carrier method validates relation closure and exhaustively checks the Galois connection. Target test 13/13 PASS.
+- closure.nu_phi: five-argument method validates carrier closure, fixedness, and every fixed-point subset's containment. A fixed-but-not-greatest candidate is rejected. Target test 20/20 PASS.
+- dc.system: four-argument method validates carrier closure and all hSelf/hSMC/hAct/hBound fields. Independent mutations for all four obligations are rejected. Target test 13/13 plus critical-bound 3/3 PASS.
+- generation.dc_viable_translation: finite DC + complete S carrier + independent candidate method validates the full S x (S x S) product, singleton step, Bool-valued viability equality, and step closure. Mutated step, viability, and non-Bool viability are rejected. Target test 34/34 PASS.
+
+Manifest relations after implementation: exact 29, witness_validator 21, regression_only 17, observation_only 10, lean_only 71, sound_only 3, counterexample_generator 4, counterexample_validator 2. Sensitivity registry and hash unchanged.
+
+Boundary evidence: manifest 87/87, Lean-Julia contract 1209/1209, claim ledger 414/414, v1 ledger 372/372, category pipeline 68/68. Final full G3 PASS at logs/gates/checker-strengthening/order-10a-full-g3-final-20260814.log. No Lean, ledger, catalog, fixture, tolerance, seed, commit, or push change.

@@ -5,15 +5,15 @@ sensitivity_registry_sha256 = "86f43be91705743366353a9e303e83b63bb0273c72828a036
 
 [[contract]]
 id = "adjunction.system"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_erie_structure"
 lean_decl = "ERIEC.Adj.ERIESystem"
-scope = "a Julia ERIEStructure, optionally with finite all_M and all_E carriers"
-assumptions = ["without both carriers the hGC Boolean is trusted", "pi_rel and rho_rel are not semantically validated"]
-guarantee = "fixes current runtime acceptance behavior; true does not establish the Lean GaloisConnection field"
+scope = "an independently supplied ERIEStructure and complete finite M and E carriers"
+assumptions = ["the carriers are duplicate-free and exhaust the encoded types", "relation images must stay inside the supplied carriers", "pi_rel and rho_rel are Julia extras and not fields of ERIEC.Adj.ERIESystem"]
+guarantee = "the additive positional method exhaustively validates the supplied alpha/sigma relations and GaloisConnection proof field; it does not establish identity with a fixed Lean object"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "adjunction.rigidity"
@@ -293,15 +293,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
 
 [[contract]]
 id = "closure.nu_phi"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_nu_phi_fixedpoint"
 lean_decl = "ERIEC.Closure.NuPhi"
-scope = "a supplied finite NuPhiResult and runtime relations"
-assumptions = ["set equality is exact for the supplied finite values"]
-guarantee = "checks only the fixed-point field; it does not check the NuPhi greatestness field"
+scope = "an independently supplied NuPhiResult, runtime relations, and complete finite M and C carriers"
+assumptions = ["the carriers are duplicate-free and relation images stay inside them", "powerset(all_C) exhausts every Lean subset candidate"]
+guarantee = "the additive method validates both fixedness and containment of every finite fixed point in the supplied nuPhi witness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "closure.knaster_tarski"
@@ -353,15 +353,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
 
 [[contract]]
 id = "dc.system"
-checker_relation = "observation_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_DC"
 lean_decl = "ERIEC.DC"
-scope = "one supplied Julia ERIEState"
-assumptions = ["runtime set operations represent the four queried DC conditions"]
-guarantee = "returns a DCResult reporting four conditions; callers must separately apply is_DC"
+scope = "an independently supplied ERIEState and complete finite M, E, and C carriers at its certified state"
+assumptions = ["the carriers are duplicate-free and every relation and state-set image stays inside them", "the Julia ERIEStructure hGC field is not a field of Lean ERIEC.DC"]
+guarantee = "the additive method independently computes and conjoins hSelf, hSMC, hAct, and hBound for the supplied finite DC witness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "certification.critical_bound"
@@ -855,15 +855,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
 
 [[contract]]
 id = "generation.dc_viable_translation"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_dc_viable_translation"
 lean_decl = "ERIEC.Generation.dcViableTranslation"
-scope = "two caller-supplied Boolean report flags"
-assumptions = ["the flags are not a Julia representation of a Lean DC or ViableSystem witness"]
-guarantee = "rejects an inverse-translation claim but does not construct or validate the Lean one-way translation"
+scope = "an independently supplied finite DC encoding, complete finite state carrier, and candidate step and viability functions"
+assumptions = ["the finite M, E, C, and S carriers exhaust the supplied encodings", "the candidate configuration carrier is the complete S x (S x S) product and viable is Bool-valued", "no inverse ViableSystem-to-DC translation is claimed"]
+guarantee = "the additive method validates the DC premise and every generated singleton step, viable equality, and step-closed case of the supplied dcViableTranslation candidate"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "generation.proliferation_morphism"

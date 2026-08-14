@@ -10,6 +10,14 @@
     result = nu_phi(pi_rel, rho_rel, all_C)
     @test result.converged
     @test check_nu_phi_fixedpoint(pi_rel, rho_rel, result)
+    @test check_nu_phi_fixedpoint(
+        pi_rel, rho_rel, result, Set([:m1, :m2]), all_C,
+    )
+    nongreatest = NuPhiResult(Set([:c1]), true, 1)
+    @test check_nu_phi_fixedpoint(pi_rel, rho_rel, nongreatest)
+    @test !check_nu_phi_fixedpoint(
+        pi_rel, rho_rel, nongreatest, Set([:m1, :m2]), all_C,
+    )
     @test check_final_coalgebra(pi_rel, rho_rel, result, all_C)
 
     delayed_pi_rel = m -> m == :m1 ? Set([:c1]) :

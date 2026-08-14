@@ -1,0 +1,99 @@
+ERIE-C legacy/v2 ledger read-only audit
+Date: 2026-08-14
+Scope: A1-A5 requested through agmsg; no design proposal or mutation
+
+Executive facts
+---------------
+- v1/legacy: 59 VP entries; all 59 status="certified".
+- v2: 90 atomic claims in the file and 15 claim groups. This supersedes the README's dated 89-claim count.
+- v2 realization_kind: executable 31, formal_only 30, witness 21, numerical 5, none 3.
+- Explicit claim_group bridge: 10 unique legacy VPs linked; 49 legacy VPs unlinked. Eight groups, not seven, have empty legacy_vp_ids.
+- CategoryPipeline reads only schema-v1 ledger.toml. It runs impact gates but never writes ledger statuses.
+
+A1. Claim kinds and lifecycle facts not representable by the current legacy row
+-------------------------------------------------------------------------------
+
+1. Lean-only/no-Julia claims: 33 observed v2 claims have no julia_api: formal_only 30 plus realization_kind=none 3. All 33 have lean_decl. A legacy VP row requires julia_api, julia_file, and contract_id under its documented G1-G4 shape, so these cannot be represented without inventing a Julia binding or changing that shape. Two formal_only claims happen to carry historical contract_id values, but none of the 30 has julia_api.
+
+2. Atomic frozen-statement identity: all 90 v2 claims have statement_spec and statement_hash. Legacy has neither field and identifies only one broad lean_decl plus prose claim_ja. This is an observed 90-claim information class, not a hypothetical feature.
+
+3. Independent lifecycle axes: v2 currently records five spec/proof/implementation/certification dimensions that legacy collapses into one status.
+   - spec_status: frozen 85, draft 3, missing 2.
+   - proof_status: proved 68, unproved 1, not_applicable 21.
+   - implementation_status: tested 57, missing 33.
+   - certification_status: certified 38, missing/uncertified-by-absence 52.
+   There are nine distinct status combinations in the current data. Legacy's 59/59 certified terminal rows cannot expose the 52 v2 claims lacking certification or the proved/unproved/not-applicable and tested/not-applicable distinctions.
+
+4. Realization mode: v2 has five observed kinds (31/30/21/5/3 above); legacy has one fixed Lean+Julia+contract row shape and no realization_kind. The specifically impossible observed subset is the 33 without Julia APIs. Numerical and witness rows can fit the legacy mandatory shape when they have bindings, so they are not counted as independently impossible.
+
+5. Target replacement/invalidation: legacy has no invalidated/superseded status and no revision identity. Current encoded invalidated entries: 0. Observed workflow pressures: 2 attempted certified-target replacements (VP-MRK-001 and VP-OPD-001), both avoided by preserving the existing VP and planning additive VPs. Thus replacement is an observed missing operation, but there are no current invalidated rows to count.
+
+6. Atomic decomposition/coverage: v2 has 90 claims and 15 groups, while legacy has 59 broad VPs plus only 10 legacy_coverage rows. This does not prove every unlinked item should map, but it shows legacy alone cannot carry the current atomic statement inventory or all per-claim states.
+
+A2. What test/test_ledger_consistency.jl actually enforces
+-----------------------------------------------------------
+
+- Lines 7-16 parse both files, index v1 VP IDs/v2 claim IDs/groups, and load the certificate catalog.
+- Lines 18-24 define the only explicit group bridge used by the test: a legacy VP sees children only when its ID occurs in claim_group.legacy_vp_ids.
+- Lines 27-44 define declaration coverage as exact lean_decl equality or a dotted descendant, and for basis=exact_ledger_decl require covers_claim_ids to equal the matching subset of the explicitly linked children.
+- Lines 47-54 require a complete coverage row's covers and not_covered sets to partition its linked children; lines 80-91 require disjointness and keep not_covered inside those children.
+- Lines 56-73 make audit_status=complete agree with the v1 VP coverage_audit axis and require every v1 coverage_audit=complete VP to have a complete legacy_coverage row.
+- Lines 75-78 require legacy_coverage legacy_vp_id uniqueness. Lines 94-100 require reviewer/log evidence only for basis=type_review.
+- Lines 103-108 require every certified v1 row to have coverage_audit in {unreviewed,complete}; they do not verify its G1-G4 log paths.
+- Lines 110-134 apply the preceding coverage checks to existing legacy_coverage rows.
+- Lines 192-214 require allowed coverage values, referenced v1 VP/catalog contract/v2 claim existence.
+- Lines 216-231, only for exact_ledger_decl covers, require contract_id equality with the v1 VP, claim membership in linked group children, dotted declaration coverage, catalog lean_name equality with the v1 declaration tail, and claim Lean file inclusion in the catalog module's source paths.
+
+What it does not enforce:
+- no requirement that every v1 VP occur in a v2 group;
+- no requirement that every v2 claim occur in a group's children;
+- no comparison of v1 status with v2 proof/implementation/certification statuses;
+- no statement_hash or statement_spec relation to v1;
+- no requirement that every v2 claim have any v1 counterpart;
+- no lifecycle/invalidation relation.
+
+A3. Bidirectional mapping gaps
+------------------------------
+
+Explicit group bridge:
+- 15 groups total; 7 have nonempty legacy_vp_ids and 8 are empty.
+- The seven linked groups refer to 10 unique valid legacy VPs and contain 56 unique child claim IDs.
+- The eight empty groups contain 32 child claim IDs.
+- Two additional claims, VP2-WAGER-INTERPRETIVE-CHECKER-001 and VP2-WAGER-FULL-CHECKER-001, declare group_id=GRP-WAGER-14 but are absent from that group's children array. Hence 88/90 claims are group children and 2/90 are structurally omitted.
+- Counting explicit connectivity, 10/59 legacy VPs are linked and 49/59 are unlinked; 56/90 v2 claims are children of linked groups and 34/90 are not explicitly connected (32 children of empty groups plus the two omitted claims).
+
+Declaration-only cross-check, independent of group metadata:
+- 18/59 legacy VPs have at least one v2 claim whose lean_decl is equal or a dotted descendant; 41/59 have none.
+- 18/90 v2 claims match at least one legacy declaration by that rule; 72/90 do not.
+These are syntactic counts only and must not be interpreted as semantic noncoverage. They do show that the empty group links are not merely derivable from declaration names.
+
+Intentional versus incomplete:
+- Empty groups sourced from the unresolved-proposition ledger and new modules can plausibly be intentionally v2-only, but no machine-readable field marks that intent. Therefore the eight empty legacy_vp_ids values are ambiguous, not proven omissions.
+- The two claims whose group_id names GRP-WAGER-14 but that are absent from its children are internally inconsistent metadata, not intentional noncorrespondence: the group_id itself states the intended group.
+- Claude's starting F4 count (seven empty groups) is stale; current primary data has eight.
+
+A4. Whether legacy currently tracks progression and what the driver does
+-----------------------------------------------------------------------
+
+- All 59 legacy VPs are certified, so the file contains no live proposed/formalized/bound/implemented/failed work item. It is useful as a certified binding/dependency/catalog index, but currently provides no observation of work progressing through G1-G4.
+- bin/eriec-category-pipeline.jl:22-27 reads specs/ledger.toml through tools/CategoryPipeline.load_ledger and validates mapping/DAG configuration.
+- tools/CategoryPipeline.jl:68-74 accepts only schema_version=1 and builds an in-memory VP dictionary. It never loads claim-ledger-v2.toml.
+- Lines 143-177 compute changed category sections, directly mapped legacy VPs, and their reverse dependency closure.
+- Lines 231-267 inspect the existing legacy status only to decide which Lean/Julia bindings must already exist.
+- Lines 283-316 run a binding check, Lean build, formal-Julia contract, impacted Julia tests, and certified-artifact verification for changed sections.
+- bin lines 47-71 write category-impact-report.md and, on accept, category-baseline.toml. Neither the bin entry point nor CategoryPipeline writes specs/ledger.toml or advances any VP status.
+
+Therefore the implemented driver is an impact/regression gate runner, not the status-transition driver described by loop-orchestration-spec.md:123-129. With all rows terminal, it can recheck existing certified bindings after category edits, but it cannot create or advance a new pending VP and cannot expose an atomic v2 proof/implementation gap.
+
+A5. Impact surface of the two previously avoided cases
+-------------------------------------------------------
+
+1. Order-12 Lean-only recurrence theorem:
+   - Current direct representation is v2 claim VP2-WAGER-W6-FINITE-RECURRENCE-001, realization_kind=formal_only, with statement spec/hash and proof state.
+   - A legacy entry would touch ledger.toml's mandatory Julia/contract row shape even though no Julia API exists; under the current shape it cannot be recorded honestly. The actual workaround therefore touched v2 and formal/spec files, not legacy.
+
+2. Certified target replacement (the avoided VP-MRK-001/VP-OPD-001 mutation):
+   - A direct replacement would affect legacy lean_decl/julia_api/status/dependencies and the catalog/manifest binding; v2 would need the corresponding atomic statement identity and certification state if atomic traceability is retained. Legacy has no invalidation/revision state to express the old certificate becoming stale.
+   - The accepted additive handling instead leaves existing legacy rows intact and requires new legacy proposed VPs for the new executable contracts; corresponding atomic v2 claims/group membership are a separate traceability surface. This is an impact statement, not a migration recommendation.
+
+No files other than this audit log were written by this audit. No schema, status, source, test, fixture, gate, commit, or push operation was performed.

@@ -1,0 +1,8 @@
+Precompiling ERIEC...
+    ERIEC Being precompiled by another process (pid: 3420, pidfile: /Users/yamaguchimitsuyuki/.julia/compiled/v1.11/ERIEC/HC09U_oGdfS.ji.pidfile)
+   5241.6 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 6 seconds. 26 already precompiled.
+Test Summary: | Pass  Total  Time
+dc            |   13     13  1.4s
+Test Summary:                | Pass  Total  Time
+critical certification bound |    3      3  0.0s

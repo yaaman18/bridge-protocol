@@ -9,6 +9,43 @@ function check_dc_viable_translation(; step_closed::Bool=true, inverse_translati
     step_closed && !inverse_translation
 end
 
+"""Validate a supplied finite encoding of `dcViableTranslation`."""
+function check_dc_viable_translation(
+    dc::ERIEState,
+    all_M,
+    all_E,
+    all_C,
+    all_S,
+    candidate::NamedTuple,
+)
+    check_DC(dc, all_M, all_E, all_C) || return false
+    states_list = collect(all_S)
+    length(unique(states_list)) == length(states_list) || return false
+    states = Set(states_list)
+    dc.s in states || return false
+    hasproperty(candidate, :step) || return false
+    hasproperty(candidate, :viable) || return false
+
+    configurations = [
+        (fast, (slow, environment))
+        for fast in states, slow in states, environment in states
+    ]
+    target = (dc.s, (dc.s, dc.s))
+    expected_step = Set([target])
+
+    all(configurations) do configuration
+        supplied_step = Set(candidate.step(configuration))
+        supplied_step == expected_step || return false
+        viable_value = candidate.viable(configuration)
+        viable_value isa Bool || return false
+        viable_value == (configuration[1] == dc.s) || return false
+        !viable_value || all(supplied_step) do successor
+            successor_viable = candidate.viable(successor)
+            successor_viable isa Bool && successor_viable
+        end
+    end
+end
+
 """
     check_proliferation_morphism(; parent_viable=true, child_viable=true,
         heritage_lax=true, child_rank_le_wstar=true, phi_rich_lax=true,

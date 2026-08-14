@@ -31,6 +31,23 @@ function check_nu_phi_fixedpoint(pi_rel, rho_rel, result::NuPhiResult)
     Phi(pi_rel, rho_rel, result.value) == result.value
 end
 
+"""Validate both finite `NuPhi` proof fields on complete carriers."""
+function check_nu_phi_fixedpoint(pi_rel, rho_rel, result::NuPhiResult, all_M, all_C)
+    motors_list = collect(all_M)
+    cores_list = collect(all_C)
+    length(unique(motors_list)) == length(motors_list) || return false
+    length(unique(cores_list)) == length(cores_list) || return false
+    motors = Set(motors_list)
+    cores = Set(cores_list)
+    Set(result.value) ⊆ cores || return false
+    all(m -> Set(apply(pi_rel, m)) ⊆ cores, motors) || return false
+    all(c -> Set(apply(rho_rel, c)) ⊆ motors, cores) || return false
+    check_nu_phi_fixedpoint(pi_rel, rho_rel, result) || return false
+    all(powerset(cores)) do candidate
+        Phi(pi_rel, rho_rel, candidate) != candidate || candidate ⊆ result.value
+    end
+end
+
 function check_final_coalgebra(pi_rel, rho_rel, result::NuPhiResult, all_C)
     check_nu_phi_fixedpoint(pi_rel, rho_rel, result) || return false
     all(powerset(Set(all_C))) do candidate

@@ -48,8 +48,16 @@ Bridge Protocolは自己維持する系の圏論的理論を構築し、それ�
 
 ## 検証方法論
 
-このリポジトリの数学的主張はすべて**検証点**（VP）として単一の台帳
-[specs/ledger.toml](specs/ledger.toml) に登録され、ゲートを通って状態遷移する:
+検証証拠は役割の異なる2つの台帳で表現される。schema v1 の
+[specs/ledger.toml](specs/ledger.toml) は、certified な Lean–Julia binding・依存・
+certificate catalog の索引である。59件のVPはすべて終端の `certified` であり、
+現在の claim lifecycle の唯一の真実源ではなく、実装作業によって status を進めない。
+原子化された主張のライフサイクル台帳は
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) であり、90件を
+`spec_status` / `proof_status` / `implementation_status` / `certification_status`
+の独立した4軸で記録する。
+
+ゲート列は引き続き検証モデルである:
 
 ```
 proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ implemented ──G4──▶ certified
@@ -60,11 +68,11 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 - **G3** — Julia 実装がテストを通過する。
 - **G4** — contract が certificate catalog に登録され、依存グラフが検証される。
 
-台帳に意味を与える規則が三つある。第一に主張が `certified` と記されるのは
+2つの台帳に意味を与える規則が三つある。第一に主張が `certified` と記されるのは
 [logs/gates/](logs/gates/) 配下に実際のゲートログが存在する場合**のみ**であり、
-そのログは証拠としてコミットされる。第二に、**可視ギャップ原則**: 圏論的動機は
-あるが Lean 証明がない主張は `certified` 未満として可視化され続け、黙って消される
-ことも黙って信じられることもない。第三に、**二軸原則**（2026-08-01 導入）:
+そのログは証拠としてコミットされる。第二に、**可視ギャップ原則**: 証明または認証を
+欠く主張は v2 の対応する軸に記録され、黙って消されることも黙って信じられることも
+ない。第三に、**二軸原則**（2026-08-01 導入）:
 v1 台帳の `certified` は `contract_id` が指す Lean 宣言ひとつが機械検査済みである
 ことだけを意味し、`claim_ja` の散文が列挙する性質すべてを保証しない。散文が
 どこまで契約に裏付けられているかは `coverage_audit` が別軸で記録する。
@@ -73,13 +81,21 @@ v1 台帳の `certified` は `contract_id` が指す Lean 宣言ひとつが機�
 認証済みでも散文の被覆が保証されるわけではない。原子化された主張ごとの状態は
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) が保持する。
 
-2026年8月2日時点で v1 台帳は 59 の検証点を追跡し、59 件すべてが certified で
+2026年8月14日時点で v1 台帳は 59 の検証点を追跡し、59 件すべてが certified で
 ある。`coverage_audit` は 10 件が `complete`、49 件が `unreviewed` である。
 `legacy_coverage` は 10 件（すべて `basis = "exact_ledger_decl"`）で、監査の結果、
 契約が被覆する原子化主張は 7 件、被覆しない原子化主張は 85 件であった。
 すなわち監査済みの 10 件については、散文が述べる範囲のうち機械検査に裏付けられて
-いるのは 7 件のみであり、残る 85 件は契約の外にある。v2 台帳は 89 の原子化された
-主張を保持し、38 件が certified、51 件が未認証である。
+いるのは 7 件のみであり、残る 85 件は契約の外にある。v2 台帳は 90 の原子化された
+主張を保持し、38 件が certified、52 件が未認証である。
+
+実行可能な [category pipeline](bin/eriec-category-pipeline.jl) は影響を受けるゲートの
+再検査 runner であり、status progression driver ではない。その実装が読むのは
+schema v1 のみで、v2 は読まず、台帳 status を書き換えない。
+[オーケストレーション仕様](specs/loop-orchestration-spec.md) の status-advancing driver
+は未実装のまま延期されており、order-10b が最初の非終端 VP 2件を作成した時点で
+必要性を再評価する。根拠は
+[read-only ledger audit](logs/ledger-design-audit-20260814.log) を参照。
 
 ## リポジトリ構成
 

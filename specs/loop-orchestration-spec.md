@@ -5,7 +5,16 @@
 **方針決定**: 完全自動（ゲート失敗時のみ停止・人間通知） ＋ 既存 agmsg + fswatch を拡張
 **前提資産**: `watch-specs.sh`, agmsg claude↔codex 分業, `test/test_formal_julia_contract.jl`, `formal/ERIEC/CertifiedArtifact.lean`→TSV→`src/certification.jl`, `certificate_dependency_graph`
 
-> 本書は「コードを書かずに仕様だけ決める」段階の成果物。データスキーマ（TOML）と状態機械・トリガ図のみを定義し、driver/watcher の実装は codex に委ねる。
+> 本書は「コードを書かずに仕様だけ決める」段階の成果物。データスキーマ（TOML）と状態機械・トリガ図を定義する。2026-08-14 現在、後述の status-advancing driver/watcher は未実装であり、実装はユーザー決定により延期されている。
+
+### 2026-08-14 時点の実装状況
+
+- `specs/ledger.toml`（schema v1）は、59 件すべてが `certified` の Lean–Julia binding・依存・certificate catalog の索引である。現在のライフサイクル台帳でも status の唯一の真実源でもなく、実装作業によって status を進めない。
+- `specs/claim-ledger-v2.toml` は 90 件の原子化された主張のライフサイクル台帳であり、`spec_status` / `proof_status` / `implementation_status` / `certification_status` の4軸を持つ。38 件が certified、52 件が未認証である。
+- 実行可能な `bin/eriec-category-pipeline.jl` は、影響を受ける既存ゲートを再検査する runner であり、status 遷移を行わない。内部の `tools/CategoryPipeline.jl` が読むのは schema v1 のみで、v2 は読まない。
+- 以下の driver/watcher と状態機械は設計として定義されているが未実装である。order-10b が最初の非終端 VP 2件を作成した時点で、driver の必要性を再評価する。
+
+この現状区分は [2026-08-14 read-only ledger audit](../logs/ledger-design-audit-20260814.log) に基づく。
 
 ---
 
@@ -13,7 +22,7 @@
 
 ループが programmable かどうかは「**各ステージ間に機械チェック可能な契約があるか**」だけで決まる。本ループで本質的に fuzzy なのは **②chat→圏論の1ステップだけ**で、③④⑤はすべて `lake build` / `Pkg.test()` / certificate catalog という硬いゲートに落ちる。
 
-決定的な enabling change は、**散文の `[検証点 N]` を機械可読な「検証点台帳」に昇格**させ、それを single source of truth として圏論spec・Lean定理・Julia checker・test に貫通させること。台帳の各エントリは状態機械上を進み、driver はゲートが通った分だけ状態を進め、落ちたら担当へ差し戻す。
+設計上の enabling change は、**散文の `[検証点 N]` を機械可読な「検証点台帳」に昇格**させ、圏論spec・Lean定理・Julia checker・test に貫通させることである。状態機械と status-advancing driver は本書の設計目標であり、現行実装では v1 索引と v2 ライフサイクル台帳が役割を分担している。
 
 不変条件（programmable の根拠）:
 - **冪等性**: source（議論ログ・spec・formal・src）に変化が無ければ driver 再実行で状態は変わらない。
@@ -22,9 +31,9 @@
 
 ---
 
-## §1. 検証点台帳（claim ledger）— `specs/ledger.toml`
+## §1. 検証点索引（schema v1）— `specs/ledger.toml`
 
-唯一の真実源。各検証点が1エントリ。`category/tensor_categorical_v5.md` の `[検証点 N]` から起票され、4ステージを貫く識別子を持つ。
+certified binding・依存・certificate catalog の索引。各検証点が1エントリで、4ステージを貫く識別子を持つ。現在の59件はすべて終端の `certified` であり、このファイルを現在の claim lifecycle の唯一の真実源として扱ったり、実装進捗に合わせて status を進めたりしない。
 
 ```toml
 schema_version = 1
@@ -50,9 +59,15 @@ pinned      = false                                         # true なら driver
 
 `failed` のエントリは `fail_gate`（"G1".."G4"）と `fail_log`（最新ゲート出力への相対パス）を追加で持つ。
 
+### §1.1 原子化 claim lifecycle — `specs/claim-ledger-v2.toml`
+
+原子化された90件の主張について、`spec_status` / `proof_status` / `implementation_status` / `certification_status` を独立に記録する。2026-08-14 時点では38件が certified、52件が未認証である。v1 の単一 `status` とこの4軸を同一視しない。
+
 ---
 
 ## §2. 状態機械とゲート
+
+以下は status progression の設計モデルである。現行の runner はこの遷移を書き込まない。
 
 ```
 proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ implemented ──G4──▶ certified
@@ -118,6 +133,8 @@ agmsg 役割（既存 team `erie`、`send.sh` 流用）:
 
 ## §5. driver（状態機械オーケストレータ）
 
+> **実装状況**: 仕様として定義済みだが未実装。`bin/eriec-loop-driver.jl`、`.specs-bin/driver.sh`、生成物 `specs/ledger-status.md` は存在せず、status writer もない。現行の `bin/eriec-category-pipeline.jl` は schema v1 を読む影響再検査 runner であり、台帳を書き換えない。実装はユーザー決定により延期し、order-10b が最初の非終端 VP 2件を作成した時点で必要性を再評価する。
+
 単一エントリポイント（例 `bin/eriec-loop-driver.jl` または `.specs-bin/driver.sh`）。fswatch から起動され、以下を実行:
 
 1. `specs/ledger.toml` を読む
@@ -145,7 +162,7 @@ driver とは別に、CI 兼用の整合テスト `test/test_ledger_consistency.
 - 全 `status=certified` の `contract_id` が certificate catalog に登録済み
 - `depends_on` が DAG（循環なし）
 
-これにより「圏論的主張はあるが Lean 証明が無い」状態は必ず `status<certified` として可視化され、ループの取りこぼしが構造的に防がれる。
+この整合テストと driver が実装された場合、「圏論的主張はあるが Lean 証明が無い」状態を `status<certified` として可視化する設計である。現状の未認証ギャップは v2 の4軸に記録されており、v1 の status progression がこの性質を保証しているわけではない。
 
 ---
 
@@ -158,4 +175,4 @@ driver とは別に、CI 兼用の整合テスト `test/test_ledger_consistency.
 5. spec-synthesizer（§3）と T0 配線 — ②自動化。ここが唯一の LLM 生成ステップ
 6. `specs/ledger-status.md` ダッシュボード生成
 
-> 1〜4 で③④⑤の自動ループが回り始める（②は当面手起こしでも動く）。5 で②まで含めた完全自動になる。
+> 1〜2 は現行の索引・整合検査として成立している。3・4・6 の status-advancing driver/watcher/dashboard は未実装で、ユーザー決定により延期されている。order-10b が最初の非終端 VP 2件を作成した時点で driver の必要性を再評価する。5 を含む完全自動化も未実装である。
