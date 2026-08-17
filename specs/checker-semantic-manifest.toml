@@ -461,15 +461,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
 
 [[contract]]
 id = "worlddc.no_unconditional_equivalence"
-checker_relation = "regression_only"
+checker_relation = "sound_only"
 review_status = "reviewed"
 checker = "check_no_unconditional_worlddc"
 lean_decl = "ERIEC.WorldDC.no_forward_unconditional"
-scope = "Boolean summaries, with the zero-argument method fixing two opposite examples"
-assumptions = ["Boolean inputs are externally supplied summaries rather than certified DC and World witnesses"]
-guarantee = "fixes the current unequal-summary examples; it does not decide the universal Lean theorem"
+scope = "one caller-supplied closed finite literal encoding of a forward DC/non-World countermodel"
+assumptions = ["schema version 1 constructor tags identify the frozen no-forward-unconditional declaration", "the finite carrier vectors and literal relation tables exhaust the supplied candidate", "the World conclusion is represented exactly by a 1x1 zero loop; no numerical tolerance is used"]
+guarantee = "acceptance soundly exhibits a decoded finite ERIEState satisfying all four recomputed DC fields while the exact zero loop has no fixed nonzero direction; rejection proves nothing about the universal Lean theorem"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-11-audit-20260815.log"
 
 [[contract]]
 id = "worlddc.no_backward_unconditional"
@@ -687,39 +687,39 @@ basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260
 
 [[contract]]
 id = "reference_models.arbitrarily_large_dc"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_arbitrarily_large_nondegenerate_models"
 lean_decl = "ERIEC.RefModel.arbitrarily_large_nondegenerate_dc"
-scope = "the caller-supplied finite list of integer sizes"
-assumptions = ["constructed Julia carriers are not formally identified with the Lean LargeNondegenerateWitness"]
-guarantee = "checks carrier cardinalities and multivaluedness but omits the Lean DC and hinge witness fields"
+scope = "one caller-supplied closed finite literal encoding at a stated k >= 2"
+assumptions = ["schema version 1 identifies the frozen LargeNondegenerateWitness declaration", "duplicate-free carrier vectors and complete literal tables exhaust the supplied finite candidate", "acceptance validates a concrete witness instance and does not decide universal existence for every k"]
+guarantee = "decodes an internal ERIEState and validates the three exact carrier cardinalities, all four recomputed DC fields, a genuinely multivalued alpha fiber, and the recomputed nonempty hinge"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-11-audit-20260815.log"
 
 [[contract]]
 id = "reference_models.arbitrarily_large_ax_core_discrete"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_arbitrarily_large_ax_core_discrete_models"
 lean_decl = "ERIEC.RefModel.arbitrarily_large_ax_core_discrete_model"
-scope = "the caller-supplied finite list of integer sizes"
-assumptions = ["the generated Julia fixture is only a shape-level analogue of the Lean witness"]
-guarantee = "checks selected carrier, orbit, and drift properties but not every LargeAXCoreReferenceWitness field"
+scope = "one caller-supplied closed versioned literal encoding of the canonical LargeAXCoreReferenceWitness at k >= 2"
+assumptions = ["the recognized constructor tags denote exactly the frozen finFullRelation, largeAXCoreDC, largeDynFrame, R2Prime, E5, and equality constructors", "duplicate-free carrier vectors and complete tables exhaust the candidate", "Bool exhausts the World carrier used by the canonical R2 case split"]
+guarantee = "validates the canonical stable and dynamic constructor identities, recomputed DC, frame orbit, totality, all three cardinalities, multivaluedness, hinge, internal totality, R2, E5, and both nested stable identities"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-11-audit-20260815.log"
 
 [[contract]]
 id = "reference_models.arbitrarily_large_three_layer"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_arbitrarily_large_three_layer_reference_models"
 lean_decl = "ERIEC.RefModel.arbitrarily_large_three_layer_reference_model"
-scope = "the caller-supplied finite list of sizes plus the hard-coded reference fixture"
-assumptions = ["the Julia checks are not a field-by-field validator for LargeThreeLayerReferenceWitness"]
-guarantee = "combines two runtime regressions and does not certify the Lean bridge, World, Value, and section-13.2 fields"
+scope = "one caller-supplied closed versioned literal encoding of the canonical three-layer witness at k >= 2"
+assumptions = ["the nested Tier-1 literal independently passes the LargeAXCoreReferenceWitness validator", "stable_world_identity_v1 denotes the frozen one-dimensional identity World constructor", "Bool exhausts the closed section-13.2 carriers and no numerical tolerance is used"]
+guarantee = "validates the nested Tier-1 witness, bridge stable identity, exact nonzero fixed direction, World nontriviality, normalized value one, and separately reports multivaluedness, collapse, INS, blind markers, and no common terminal before aggregation"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-11-audit-20260815.log"
 
 [[contract]]
 id = "wager.frozen_independence"
@@ -735,15 +735,15 @@ basis_log = "logs/gates/checker-strengthening/order-9-audit-20260814.log"
 
 [[contract]]
 id = "wager.w5_independence_family"
-checker_relation = "regression_only"
+checker_relation = "sound_only"
 review_status = "reviewed"
 checker = "check_w5_independence_family"
 lean_decl = "ERIEC.Wager.W5_indep_all"
-scope = "the finite caller-supplied list of integer thresholds"
-assumptions = ["the Julia carrier-size fixtures are not FrozenImpl or W5 proof objects"]
-guarantee = "checks representative rich and poor finite sizes at each requested threshold but not the universally quantified Lean theorem"
+scope = "one caller-supplied closed canonical rich/poor W5 encoding at a stated k0 >= 2"
+assumptions = ["schema version 1 constructor tags identify the frozen universal RawCore, positive-value, and step interpretations", "the duplicate-free carrier vectors and complete state tables exhaust both finite candidates", "acceptance validates one threshold instance and does not decide the universally quantified Lean theorem"]
+guarantee = "decodes separate canonical rich and poor finite candidates, evaluates W5 on their full state carriers, and accepts only when the rich candidate satisfies the k0 hinge bound while the poor candidate falsifies it"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-11-audit-20260815.log"
 
 [[contract]]
 id = "wager.conservative_extension"

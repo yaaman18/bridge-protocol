@@ -78,4 +78,23 @@
     @test !check_forward_worlddc_counterexample(dc_false, wld_empty)
     @test check_backward_worlddc_counterexample(dc_false, wld_nontrivial)
     @test !check_backward_worlddc_counterexample(dc_true, wld_nontrivial)
+
+    literal = (
+        schema_version=1,
+        contract_id="worlddc.no_unconditional_equivalence",
+        lean_decl="ERIEC.WorldDC.no_forward_unconditional",
+        motors=[:m], environments=[:e], cores=[:c], states=[:s],
+        alpha=Dict(:m => [:e]), sigma=Dict(:e => [:m]),
+        pi=Dict(:m => [:c]), rho=Dict(:c => [:m]),
+        kappa=Dict(:s => [:c]), epsilon=Dict(:s => [:e]),
+        boundary=[:c], state=:s, loop=zeros(Int, 1, 1),
+    )
+    @test check_no_unconditional_worlddc(literal)
+    @test !check_no_unconditional_worlddc(merge(literal, (loop=ones(Int, 1, 1),)))
+    @test !check_no_unconditional_worlddc(merge(literal, (boundary=Symbol[],)))
+    @test !check_no_unconditional_worlddc(merge(literal, (schema_version=2,)))
+    @test !check_no_unconditional_worlddc(merge(literal, (lean_decl="wrong",)))
+    @test !check_no_unconditional_worlddc(merge(literal, (motors=[:m, :m],)))
+    @test !check_no_unconditional_worlddc(Base.structdiff(literal, (loop=nothing,)))
+    @test !check_no_unconditional_worlddc(merge(literal, (unknown=true,)))
 end

@@ -1,0 +1,197 @@
+canonical decoder Stage 0 + Stage 1 read-only audit (2026-08-15)
+
+Decision: REVISE the singular "canonical decoder" into one canonical-encoding protocol
+with three typed semantic decoders. Do not build one generic semantic decoder.
+
+Scope
+- D-1 wager.w5_independence_family.
+- D-2 reference_models.arbitrarily_large_ax_core_discrete.
+- D-3 reference_models.arbitrarily_large_three_layer, which composes D-2.
+- Future order-9 promotions are explicitly out of scope.
+- No implementation, schema, manifest, fixture, tolerance, gate, commit, or push change
+  was made by this audit.
+
+Q1. Common mechanism and required granularity
+
+Common protocol
+All three inputs can share only a small structural protocol:
+1. a schema version;
+2. the existing contract ID and exact Lean declaration name;
+3. explicit theorem parameters, currently k/k0;
+4. duplicate-free complete finite carrier descriptions;
+5. closed constructor tags chosen from a contract-specific finite enum;
+6. literal payload tables where the Lean definition contains finite data;
+7. rejection of callbacks, opaque predicates, supplied proof Booleans, unknown fields,
+   missing fields, and noncanonical aliases.
+
+This common layer performs parsing, normalization, completeness checks, and dispatch. It
+does not define the semantic meaning of a tag and must not generate expected semantic
+values for its own tests.
+
+D-1 typed bridge: W5CanonicalEncoding
+- Lean evidence: formal/ERIEC/Wager/Richness.lean:9-26 defines richImpl k0 and its W5
+  proof; lines 28-35 define poorImpl and its not-W5 proof; lines 39-41 bind the pair.
+- Required identity granularity: complete Fin k0 and Unit state/action encodings, fixed
+  RawCore tag, dc values, hinge tables, and the step/other FrozenImpl field tags even
+  though W5 observes only dc and hinge. Checking only hinge cardinalities identifies an
+  arbitrary witness, not the fixed richImpl/poorImpl objects.
+- Semantic decoder: wager-specific; it maps rich_impl_v1 and poor_impl_v1 tags to the
+  line-mapped FrozenImpl definitions and independently evaluates W5 on complete states.
+
+D-2 typed bridge: AXCoreCanonicalEncoding
+- Lean evidence: formal/ERIEC/RefModel/LargeCore.lean:103-128 defines the nested stable,
+  dynamic, and AX-core witness fields; lines 149-184 construct the canonical witness.
+- Required identity granularity: k, complete Fin k/Bool/RefState carriers; all DC data;
+  DynFrame phi/theta/drift/kappa/epsilon/omega/stepInt constructor tags; TotalNext;
+  dc_eq/frame_eq; cardinalities; multivalued and hinge fields; R2Prime; E5;
+  dynamic.stable identity; same_stable.
+- Semantic decoder: reference-model-specific. It must map tags separately to
+  largeAXCoreDC, largeDynFrame, largeTotalNext, largeRefDrift, largeRefExternal,
+  largeRefCore, and largeRefCoreIso. An opaque function sampled on a few inputs is not a
+  canonical encoding.
+
+D-3 typed bridge: ThreeLayerCanonicalEncoding
+- Lean evidence: formal/ERIEC/RefModel/LargeCore.lean:138-143 defines tier1, bridge,
+  world_nontrivial, value_one, and section13_2; lines 190-202 construct the witness.
+- Required identity granularity: a complete D-2 encoding; dependent identity between
+  bridge.dc and tier1.stable.dc; stableWorld and its exact nonzero fixed direction;
+  normalized value data; and every NondegenerateReferenceWitness field from
+  formal/ERIEC/RefModel/Nondegenerate.lean:48-54.
+- Semantic decoder: a three-layer composition decoder. It may call the D-2 decoder and
+  the existing independent section-13.2 validator, but its bridge/world/value composition
+  rules are not shared with W5 or the D-2 leaf decoder.
+
+Conclusion for Q1
+The three needs share a canonical-encoding protocol, not one semantic decoder. Use three
+names and three typed schemas/decoders. Sharing carrier-normalization helpers is safe;
+sharing the tag-to-Lean semantic mapping is not. D-3 may compose D-2 explicitly.
+
+Q2. Meaning of "checked"
+
+Claude's reading is substantially correct: the main change is an input-schema change
+from opaque functions and caller-supplied truth summaries to closed structural data.
+That converts extensional function equality into recognition of a versioned constructor
+description. It is schema plus structural correspondence checking, not a new proof of the
+already-proved Lean theorem.
+
+"Checked" must mean all of the following, not merely "the decoder returned successfully":
+- The parser rejects every value outside the closed typed schema.
+- The schema contains no executable callback or proof-result Bool.
+- Every constructor tag is bound in the existing manifest row to one Lean declaration
+  and to a line-by-line mapping in the basis log.
+- Parameter and carrier checks are performed before decoding.
+- Literal finite payloads are compared structurally and exhaustively.
+- The decoded finite semantics are evaluated by the contract checker; acceptance is not
+  just tag recognition.
+- Independent tests use hand-written literal expected projections and mutations. They do
+  not call the decoder to manufacture expected values.
+- Every tag, parameter, carrier, nested identity, and semantic field has a rejection case.
+- A schema version changes whenever a mapped Lean definition or payload layout changes.
+
+This is a checked correspondence boundary, not a machine-checked Lean theorem that the
+Julia decoder is extensionally equal to Lean. The residual trusted base must be stated in
+the manifest assumptions; these contracts must not be promoted beyond the relation that
+this evidence supports.
+
+Q3. Avoiding a new self-confirmation surface
+
+Required safeguards
+1. Typed separation: implement three semantic decoders. Do not create a generic
+   tag->object semantic registry used by all three contracts.
+2. Independent oracle data: freeze literal positive descriptors and literal expected
+   field projections in tests or a reviewed fixture. The production decoder must not
+   generate either side of its own comparison.
+3. Mutation completeness: reject unknown tags, wrong versions/declarations/parameters,
+   incomplete or duplicate carriers, every wrong literal table, every broken nested
+   identity, and semantic counterexamples. Include at least one valid-k conclusion
+   mutation, not only a failed premise.
+4. Source binding: each manifest guarantee/basis log maps decoder tags to exact Lean
+   definitions and lines. A source change invalidates review until the mapping is audited.
+5. Decode/validate separation: parsing and tag dispatch produce a normalized typed value;
+   the contract checker separately evaluates the relevant finite semantic conditions.
+6. No opaque escape hatch: reject callbacks, custom comparator functions, precomputed
+   expected values, and supplied proof flags.
+7. Composition isolation: D-3 may consume the public result of D-2, but W5 shares no
+   semantic mapping with the reference-model decoders. A D-2 failure must be visible as a
+   named D-3 tier1 failure rather than silently normalized away.
+
+Manifest visibility
+For the order-11 minimum, expose each decoder's schema version, tags, trusted-base
+assumption, and line mapping in its existing D-1/D-2/D-3 manifest row and basis log. This
+makes the correspondence visible without pretending it is a separate Lean theorem.
+
+Do not add a new "decoder contract" in the minimum implementation. A certified decoder
+contract would require a new Lean declaration specifying the encoding semantics, catalog
+registration, contract-count changes, G1-G4, and a user-approved contract target. Adding
+only a Julia manifest row would violate the catalog/manifest ID equality. Such a formal
+decoder contract belongs to the out-of-scope reusable/full version.
+
+Residual limitation
+No ordinary Julia test suite can prove the decoder correct for all future code changes.
+The safeguards remove circular expected-value generation and make the trust boundary
+auditable; they do not eliminate it. If Stage 2 proposes one shared semantic decoder or
+decoder-generated expected fixtures, Q3 is unresolved and implementation must stop.
+
+Q4. Minimum order-11 version versus reusable full version
+
+Minimum version that can complete order-11
+- Add private/versioned typed descriptors or strictly validated NamedTuple schemas local
+  to src/wager.jl and src/reference_models.jl. Do not export a new generic decoder API.
+- Implement W5CanonicalEncoding, AXCoreCanonicalEncoding, and
+  ThreeLayerCanonicalEncoding independently; D-3 composes D-2.
+- Add literal positive and field-mutation negatives to test/test_wager.jl and
+  test/test_reference_models.jl.
+- Update only the existing three manifest rows and their basis log, in addition to the
+  other order-11 rows already identified.
+- Rough scale: several hundred Julia/test lines, dominated by AX-core field coverage. It
+  is not a small wrapper, but it avoids new Lean declarations, catalog IDs, and exports.
+
+Reusable/full version
+- A generic canonical-encoding AST, public decoder registry/API, formal Lean syntax and
+  semantics for descriptors, decoder correctness statements, new certified contracts,
+  catalog/ledger integration, and possible future order-9 migrations.
+- This is materially larger, changes public API and contract/catalog counts, and requires
+  a separate user-approved batch. It is not needed to finish the current order-11 scope.
+
+Q5. Coupled-invariant effects
+
+Minimum typed-decoder design
+- Contract count remains 157; no new contract ID or catalog entry.
+- Exact set remains 29 because D-1 becomes sound_only and D-2/D-3 become
+  witness_validator; sensitivity registry and sensitivity_registry_sha256 remain unchanged.
+- pilot_relations lines 73-79 are affected only by the separate order-11 change of
+  worlddc.no_unconditional_equivalence to sound_only. The decoder targets themselves are
+  not listed in pilot_relations.
+- CertifiedArtifact.lean, specs/ledger.toml, and specs/claim-ledger-v2.toml remain unchanged.
+- Existing D-1/D-2/D-3 manifest rows change relation/assumptions/guarantee/basis_log only.
+- If Stage 2 exports new descriptor types or changes existing method behavior instead of
+  adding overloads, that is a public-API change and must return to the user.
+
+Reusable/full design
+- New formal decoder contracts would change CertifiedArtifact, manifest count, likely
+  v1/v2 ledger bindings, G1-G4 evidence, and possibly public exports. Exact registry/hash
+  changes only if a new or migrated row actually claims exact_finite_decision.
+- These effects are why the full design is a separate decision, not hidden in order-11.
+
+Q6. Decoder creation does not guarantee D-2/D-3 promotion
+
+D-2 must not be promoted if any of these remains true:
+- the input contains an opaque function, predicate, comparator, or supplied proof Bool;
+- dc_eq/frame_eq is inferred from samples rather than a closed canonical descriptor;
+- R2Prime is tested on selected subsets rather than established by the recognized
+  largeRefDrift constructor semantics;
+- E5, TotalNext/internal_total, dynamic.stable identity, same_stable, computed hinge, or
+  any nested DC/Frame field is omitted;
+- a line-mapped tag or independent field mutation test is missing.
+
+D-3 must not be promoted if any of these remains true:
+- D-2 does not pass its full validator;
+- bridge.dc identity with tier1.stable.dc is not structural and explicit;
+- direction_nonzero/direction_fixed or world_nontrivial uses a relaxed/new tolerance;
+- value_one is not exact;
+- any section13_2 field is omitted or accepted from a supplied summary Bool;
+- D-3 swallows or reconstructs a failing D-2 result.
+
+Both remain at their conservative current relation (or the Stage-2-selected
+complete_only relation) if the canonical schema cannot satisfy these conditions. Building
+decoder code is not itself evidence for promotion.

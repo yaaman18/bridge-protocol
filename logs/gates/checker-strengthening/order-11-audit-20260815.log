@@ -1,0 +1,59 @@
+order-11 stage 2 semantic audit (2026-08-15)
+
+Scope
+  P1 worlddc.no_unconditional_equivalence
+  P2 wager.w5_independence_family
+  P3 reference_models.arbitrarily_large_dc
+  P4 reference_models.arbitrarily_large_ax_core_discrete
+  P5 reference_models.arbitrarily_large_three_layer
+
+R-A: closed decoder boundaries and recomputed obligations
+  P1 src/worlddc.jl:108
+     NamedTuple literals -> internal ERIEState -> all four DC fields recomputed;
+     the forward conclusion is falsified by an exact 1x1 zero loop.
+  P2 src/wager.jl:152
+     separate canonical rich/poor literal decoders -> W5 evaluated over each
+     complete state carrier at the supplied k0.
+  P3 src/reference_models.jl:146
+     literal relation tables -> internal ERIEState -> DC, three cardinalities,
+     a multivalued alpha fiber, and the hinge are recomputed.
+  P4 src/reference_models.jl:231
+     canonical constructor tags and literal tables -> DC, frame update orbit,
+     TotalNext, cardinalities, multivaluedness, hinge, internal totality, Bool
+     R2 case split, vacuous-false-external E5, and nested identity checks.
+  P5 src/reference_models.jl:314
+     the P4 decoder is consumed as a visible Tier-1 prerequisite; exact bridge
+     identity/direction/value checks and the five named section-13.2 results
+     (multivalued, collapse, INS, blind, no-terminal) precede aggregation.
+
+R-B: independent positive and negative tests
+  P1 test/test_worlddc.jl:82: 1 positive, 7 negative mutations.
+  P2 test/test_wager.jl:79: 1 positive, 7 negative mutations.
+  P3 test/test_reference_models.jl:165: 1 positive, 7 negative mutations.
+  P4 test/test_reference_models.jl:176: 1 positive, 5 negative mutations.
+  P5 test/test_reference_models.jl:198: 1 positive, 6 negative mutations.
+  Negatives cover bad version/decl/tag, duplicate or incomplete carriers/tables,
+  unknown nested fields, failed DC boundary, false W5 sizes, broken orbit,
+  broken nested stable identity, failed Tier-1, bridge identity/direction, and
+  individual section-13.2 obligations. Expected results are literal test data;
+  no decoder constructs its own expected test cases.
+
+R-C: forbidden trust-boundary audit
+  P1 overload accepts no Function, callable, DCResult, ERIEState, or proof Bool.
+  P2 overload accepts no Function, callable, DCResult, ERIEState, or proof Bool.
+  P3 overload accepts no Function, callable, DCResult, ERIEState, or proof Bool.
+  P4 overload accepts no Function, callable, DCResult, ERIEState, or proof Bool.
+  P5 overload accepts no Function, callable, DCResult, ERIEState, or proof Bool.
+  Functions and ERIEState values required by existing checkers are constructed
+  only after strict field/version/name/tag/carrier/table validation. Existing
+  overload behavior and exports are unchanged. No tolerance, threshold, seed,
+  fixture, phenomenal_claim, certified catalog, or sensitivity entry changed.
+
+Classification
+  P1 sound_only; P2 sound_only; P3 witness_validator;
+  P4 witness_validator; P5 witness_validator.
+
+Target evidence
+  PASS logs/gates/checker-strengthening/order-11-worlddc-20260815.log
+  PASS logs/gates/checker-strengthening/order-11-wager-20260815.log
+  PASS logs/gates/checker-strengthening/order-11-reference-models-20260815.log

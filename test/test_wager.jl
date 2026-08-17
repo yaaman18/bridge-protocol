@@ -58,6 +58,44 @@ end
     @test check_w5_independence_family()
     @test check_w5_independence_family((2, 3, 17, 257))
     @test !check_w5_independence_family((1, 2))
+    k0 = 3
+    rich = (
+        actions=collect(0:(k0 - 1)), environments=[:unit], cores=[:unit],
+        states=[:unit], raw_core_tag=:universal_raw_core_v1,
+        dc=Dict(:unit => true), nontrivial=true,
+        positive_value_tag=:universal_positive_value_v1,
+        conscious_hinge=Dict(:unit => true),
+        hinge=Dict(:unit => collect(0:(k0 - 1))),
+        step_tag=:universal_step_v1,
+    )
+    poor = (
+        actions=[:unit], environments=[:unit], cores=[:unit], states=[:unit],
+        raw_core_tag=:universal_raw_core_v1,
+        dc=Dict(:unit => true), nontrivial=true,
+        positive_value_tag=:universal_positive_value_v1,
+        conscious_hinge=Dict(:unit => true),
+        hinge=Dict(:unit => [:unit]), step_tag=:universal_step_v1,
+    )
+    w5_literal = (
+        schema_version=1, contract_id="wager.w5_independence_family",
+        lean_decl="ERIEC.Wager.W5_indep_all", k0=k0, rich=rich, poor=poor,
+    )
+    @test check_w5_independence_family(w5_literal)
+    @test !check_w5_independence_family(merge(w5_literal, (schema_version=2,)))
+    @test !check_w5_independence_family(merge(w5_literal, (lean_decl="wrong",)))
+    @test !check_w5_independence_family(merge(w5_literal, (
+        rich=merge(rich, (hinge=Dict(:unit => [0, 1]),)),
+    )))
+    @test !check_w5_independence_family(merge(w5_literal, (
+        poor=merge(poor, (hinge=Dict(:unit => [:unit, :other]),)),
+    )))
+    @test !check_w5_independence_family(merge(w5_literal, (
+        rich=merge(rich, (raw_core_tag=:unknown,)),
+    )))
+    @test !check_w5_independence_family(merge(w5_literal, (
+        rich=Base.structdiff(rich, (step_tag=nothing,)),
+    )))
+    @test !check_w5_independence_family(merge(w5_literal, (unknown=true,)))
     @test check_wager_conservative_extension()
     @test check_frozen_protocol_invariant()
     sentence = model -> model.wager

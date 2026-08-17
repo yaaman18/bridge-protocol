@@ -35,6 +35,85 @@ check_no_unconditional_worlddc() =
     check_no_unconditional_worlddc(true, false) &&
     check_no_unconditional_worlddc(false, true)
 
+const _WORLD_DC_LITERAL_FIELDS = Set((
+    :schema_version, :contract_id, :lean_decl,
+    :motors, :environments, :cores, :states,
+    :alpha, :sigma, :pi, :rho, :kappa, :epsilon,
+    :boundary, :state, :loop,
+))
+
+_worlddc_exact_fields(candidate::NamedTuple, fields) =
+    Set(propertynames(candidate)) == fields
+
+function _worlddc_literal_carrier(values)
+    values isa AbstractVector || return nothing
+    items = collect(values)
+    length(items) == length(unique(items)) || return nothing
+    items
+end
+
+function _worlddc_literal_table(table, domain, codomain)
+    table isa AbstractDict || return nothing
+    Set(keys(table)) == Set(domain) || return nothing
+    normalized = Dict{eltype(domain),Set{eltype(codomain)}}()
+    for key in domain
+        values = table[key]
+        values isa AbstractVector || values isa AbstractSet || return nothing
+        items = collect(values)
+        length(items) == length(unique(items)) || return nothing
+        Set(items) ⊆ Set(codomain) || return nothing
+        normalized[key] = Set(items)
+    end
+    normalized
+end
+
+"""Decode a closed finite description of the forward World/DC countermodel."""
+function _decode_forward_worlddc_literal(candidate::NamedTuple)
+    _worlddc_exact_fields(candidate, _WORLD_DC_LITERAL_FIELDS) || return nothing
+    candidate.schema_version == 1 || return nothing
+    candidate.contract_id == "worlddc.no_unconditional_equivalence" || return nothing
+    candidate.lean_decl == "ERIEC.WorldDC.no_forward_unconditional" || return nothing
+
+    motors = _worlddc_literal_carrier(candidate.motors)
+    environments = _worlddc_literal_carrier(candidate.environments)
+    cores = _worlddc_literal_carrier(candidate.cores)
+    states = _worlddc_literal_carrier(candidate.states)
+    any(isnothing, (motors, environments, cores, states)) && return nothing
+    all(length(carrier) == 1 for carrier in (motors, environments, cores, states)) ||
+        return nothing
+    candidate.state in states || return nothing
+
+    alpha = _worlddc_literal_table(candidate.alpha, motors, environments)
+    sigma = _worlddc_literal_table(candidate.sigma, environments, motors)
+    pi = _worlddc_literal_table(candidate.pi, motors, cores)
+    rho = _worlddc_literal_table(candidate.rho, cores, motors)
+    kappa = _worlddc_literal_table(candidate.kappa, states, cores)
+    epsilon = _worlddc_literal_table(candidate.epsilon, states, environments)
+    any(isnothing, (alpha, sigma, pi, rho, kappa, epsilon)) && return nothing
+
+    boundary_items = candidate.boundary
+    boundary_items isa AbstractVector || boundary_items isa AbstractSet || return nothing
+    boundary_values = collect(boundary_items)
+    length(boundary_values) == length(unique(boundary_values)) || return nothing
+    Set(boundary_values) ⊆ Set(cores) || return nothing
+    candidate.loop isa AbstractMatrix || return nothing
+
+    M, E, C, S = eltype(motors), eltype(environments), eltype(cores), eltype(states)
+    sys = ERIEState{M,E,C,S}(
+        m -> alpha[m], e -> sigma[e], m -> pi[m], c -> rho[c],
+        s -> kappa[s], s -> epsilon[s], Set(boundary_values), candidate.state,
+    )
+    (; sys, motors, environments, cores, loop=candidate.loop)
+end
+
+"""Soundly validate one literal finite forward countermodel; rejection proves nothing."""
+function check_no_unconditional_worlddc(candidate::NamedTuple)
+    decoded = _decode_forward_worlddc_literal(candidate)
+    decoded === nothing && return false
+    check_DC(decoded.sys, decoded.motors, decoded.environments, decoded.cores) &&
+        size(decoded.loop) == (1, 1) && all(iszero, decoded.loop)
+end
+
 function summarize_worlddc_bridge(bridge::DCWorldBridge)
     (
         claim=worlddc_bridge_claim(),

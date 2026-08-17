@@ -1,0 +1,86 @@
+checker-strengthening procedure fixed point (2026-08-15)
+
+Decision: accept with two clarifications.
+
+1. Roles
+- Claude explores design, category/ledger semantics, and independently reviews Codex claims.
+- Codex audits against primary repository evidence, implements Lean/Julia work packets, and
+  runs gates.
+- The user decides changes to judgment meaning, public APIs, theory invariants, research
+  choices, certified VP targets, ledger schema, and truth-source placement.
+
+2. Batch phases
+The procedure has stage 0 plus five execution stages (six numbered phases, not five):
+- Stage 0, target selection (Claude): enumerate contracts and current lean_decl values.
+- Stage 1, read-only pre-audit (Codex): classify each item accept/challenge/revise/defer;
+  record the relation it can claim, file:line evidence, implementation conditions, change
+  targets, and concrete positive and negative inputs. No implementation occurs here.
+- Stage 2, implementation packet (Claude): after Stage 1, fix VP/declaration, allowed files,
+  forbidden changes, mandatory design, gates, and stop conditions.
+- Stage 3, implementation (Codex).
+- Stage 4, gate execution (Codex), with actual output and log paths.
+- Stage 5, independent verification (Claude), returning accept or challenge.
+
+3. When Stage 1 must be repeated
+Repeat Stage 1 if the target lean_decl, user-selected design, or target classification
+changes. Feasibility discussion does not replace a current-target audit. In particular,
+the earlier order-10/11 audit of FMMarkers and OpenGraph does not audit the later targets
+Markers.classify and OpenDynamics.Path.
+
+4. Shared classification rule
+Use the rule in logs/gates/checker-strengthening/order-13-audit-20260814.log.
+exact_finite_decision requires an independent implementation of the Lean semantics over
+every quantified case in a supplied complete finite decoding. Applying opaque predicates,
+repackaging premises, or validating an unbridged candidate for a fixed closed Lean object
+is not exact. A fixed object requires a checked canonical decoder or equivalent
+correspondence evidence before exactness can even be considered.
+
+5. Common prohibitions
+- Add overloads only; preserve existing zero-argument methods and existing method behavior.
+- Do not change fixtures, tolerances, seeds, or phenomenal_claim.
+- Supply negative inputs independently; do not derive expected values inside the checker.
+- Add no object-layer M1-M4 object or axiom; axiom injection belongs only to the meta layer.
+- Do not commit or push.
+- Stop for a user decision on a model defect or mismatch with an existing contract test or
+  ledger consistency check. Do not insert a workaround.
+
+6. Coupled invariants
+- test/test_checker_semantic_manifest.jl:44-46: lean_only iff julia_checker is nothing.
+- line 63: manifest count = artifact IDs = 157.
+- lines 73-79: pilot_relations hard-codes selected reviewed classifications, including
+  worlddc.no_unconditional_equivalence; changing one of those rows requires changing the
+  corresponding expected relation.
+- line 84: every reviewed basis_log exists.
+- lines 86-88: sensitivity registry SHA-256 matches the manifest.
+- lines 89-91: sensitivity registry keys equal exact_finite_decision IDs.
+Promotion to exact therefore requires registry membership and hash recomputation.
+witness_validator, sound_only, and complete_only must not be registered there. Positive
+and negative evidence belongs in the target test file.
+
+7. Decisions reserved to the user
+Judgment meaning, public API, theory-invariant strength, research choices, contract meaning
+including lean_decl changes, certified VP targets, ledger schema, and truth-source moves.
+Possible downgrades of hinge.act (Act nonempty) or body.no_terminal_setpoint (M4b) stop for
+a user decision.
+
+8. Autonomy counter
+Stop at 10/10 and report to the user. Only explicit user approval resets the counter.
+Unnumbered messages count conservatively. The final message is PAUSE and needs no ack.
+
+9. Recorded failure modes
+- Re-audit after the target changes; do not call a post-change design a fixed spec early.
+- Do not use precedent as evidence for promotion when that precedent may contain the same
+  missing Lean/runtime bridge.
+- A checker-derived expected value is circular; expected evidence must be independent.
+- Do not classify a group uniformly without inspecting each contract.
+- Preserve visible, known unimplemented designs when aligning documentation to reality.
+- Keeping a weak relation can correctly avoid overclaiming when the Lean target has no
+  runtime proof obligation. Clarification: a conservative label does not prove that the
+  implementation is correct, nor make consumer misuse safe; it only limits the claim made.
+- Do not replace a certified existence target merely because it has no proof obligation;
+  inspect downstream dependencies first.
+
+10. Fixed endpoint
+The remaining batches are order-11, order-10b, order-10c, and the fixed read-only exact
+audit of 13 contracts recorded in hygiene-audit-20260815.log. Adding scope requires a user
+decision.

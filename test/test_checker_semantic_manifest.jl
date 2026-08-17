@@ -74,7 +74,7 @@ checker_relation_matches_contract(row, contract) =
         "adjunction.rigidity" => "exact_finite_decision",
         "adjunction.galois_conn" => "regression_only",
         "world.lambda_max" => "observation_only",
-        "worlddc.no_unconditional_equivalence" => "regression_only",
+        "worlddc.no_unconditional_equivalence" => "sound_only",
         "worlddc.no_backward_unconditional" => "counterexample_validator",
     )
     @test all(

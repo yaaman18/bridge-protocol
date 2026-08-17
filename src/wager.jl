@@ -38,6 +38,131 @@ function check_w5_independence_family(thresholds=2:128)
     end
 end
 
+struct W5CanonicalEncoding
+    k0::Int
+    rich_states::Vector{Symbol}
+    poor_states::Vector{Symbol}
+    rich_dc::Dict{Symbol,Bool}
+    poor_dc::Dict{Symbol,Bool}
+    rich_hinge::Dict{Symbol,Set{Int}}
+    poor_hinge::Dict{Symbol,Set{Symbol}}
+end
+
+const _W5_ENCODING_FIELDS = Set((
+    :schema_version, :contract_id, :lean_decl, :k0, :rich, :poor,
+))
+const _W5_SIDE_FIELDS = Set((
+    :actions, :environments, :cores, :states, :raw_core_tag,
+    :dc, :nontrivial, :positive_value_tag, :conscious_hinge,
+    :hinge, :step_tag,
+))
+
+_w5_exact_fields(candidate::NamedTuple, fields) = Set(propertynames(candidate)) == fields
+
+function _w5_unique_vector(values)
+    values isa AbstractVector || return nothing
+    items = collect(values)
+    length(items) == length(unique(items)) || return nothing
+    items
+end
+
+function _decode_w5_canonical(candidate::NamedTuple)
+    _w5_exact_fields(candidate, _W5_ENCODING_FIELDS) || return nothing
+    candidate.schema_version == 1 || return nothing
+    candidate.contract_id == "wager.w5_independence_family" || return nothing
+    candidate.lean_decl == "ERIEC.Wager.W5_indep_all" || return nothing
+    candidate.k0 isa Integer && 2 <= candidate.k0 || return nothing
+    candidate.rich isa NamedTuple && candidate.poor isa NamedTuple || return nothing
+    _w5_exact_fields(candidate.rich, _W5_SIDE_FIELDS) || return nothing
+    _w5_exact_fields(candidate.poor, _W5_SIDE_FIELDS) || return nothing
+
+    k0 = Int(candidate.k0)
+    rich_actions = _w5_unique_vector(candidate.rich.actions)
+    rich_environments = _w5_unique_vector(candidate.rich.environments)
+    rich_cores = _w5_unique_vector(candidate.rich.cores)
+    rich_states = _w5_unique_vector(candidate.rich.states)
+    poor_actions = _w5_unique_vector(candidate.poor.actions)
+    poor_environments = _w5_unique_vector(candidate.poor.environments)
+    poor_cores = _w5_unique_vector(candidate.poor.cores)
+    poor_states = _w5_unique_vector(candidate.poor.states)
+    any(isnothing, (
+        rich_actions, rich_environments, rich_cores, rich_states,
+        poor_actions, poor_environments, poor_cores, poor_states,
+    )) && return nothing
+
+    rich_actions == collect(0:(k0 - 1)) || return nothing
+    rich_environments == [:unit] && rich_cores == [:unit] &&
+        rich_states == [:unit] || return nothing
+    poor_actions == [:unit] && poor_environments == [:unit] &&
+        poor_cores == [:unit] && poor_states == [:unit] || return nothing
+    candidate.rich.raw_core_tag == :universal_raw_core_v1 || return nothing
+    candidate.poor.raw_core_tag == :universal_raw_core_v1 || return nothing
+    candidate.rich.positive_value_tag == :universal_positive_value_v1 || return nothing
+    candidate.poor.positive_value_tag == :universal_positive_value_v1 || return nothing
+    candidate.rich.step_tag == :universal_step_v1 || return nothing
+    candidate.poor.step_tag == :universal_step_v1 || return nothing
+    candidate.rich.nontrivial === true && candidate.poor.nontrivial === true || return nothing
+
+    candidate.rich.dc isa AbstractDict &&
+        Set(keys(candidate.rich.dc)) == Set(rich_states) || return nothing
+    candidate.poor.dc isa AbstractDict &&
+        Set(keys(candidate.poor.dc)) == Set(poor_states) || return nothing
+    candidate.rich.conscious_hinge isa AbstractDict &&
+        Set(keys(candidate.rich.conscious_hinge)) == Set(rich_states) || return nothing
+    candidate.poor.conscious_hinge isa AbstractDict &&
+        Set(keys(candidate.poor.conscious_hinge)) == Set(poor_states) || return nothing
+    candidate.rich.hinge isa AbstractDict &&
+        Set(keys(candidate.rich.hinge)) == Set(rich_states) || return nothing
+    candidate.poor.hinge isa AbstractDict &&
+        Set(keys(candidate.poor.hinge)) == Set(poor_states) || return nothing
+
+    all(candidate.rich.dc[s] === true for s in rich_states) || return nothing
+    all(candidate.poor.dc[s] === true for s in poor_states) || return nothing
+    all(candidate.rich.conscious_hinge[s] === (0 < k0) for s in rich_states) || return nothing
+    all(candidate.poor.conscious_hinge[s] === true for s in poor_states) || return nothing
+
+    rich_hinge = Dict{Symbol,Set{Int}}()
+    for state in rich_states
+        values = candidate.rich.hinge[state]
+        values isa AbstractVector || values isa AbstractSet || return nothing
+        items = collect(values)
+        length(items) == length(unique(items)) || return nothing
+        Set(items) == Set(rich_actions) || return nothing
+        rich_hinge[state] = Set(Int.(items))
+    end
+    poor_hinge = Dict{Symbol,Set{Symbol}}()
+    for state in poor_states
+        values = candidate.poor.hinge[state]
+        values isa AbstractVector || values isa AbstractSet || return nothing
+        items = collect(values)
+        length(items) == length(unique(items)) || return nothing
+        Set(items) == Set(poor_actions) || return nothing
+        poor_hinge[state] = Set(Symbol.(items))
+    end
+
+    W5CanonicalEncoding(
+        k0, Symbol.(rich_states), Symbol.(poor_states),
+        Dict(Symbol(s) => candidate.rich.dc[s] for s in rich_states),
+        Dict(Symbol(s) => candidate.poor.dc[s] for s in poor_states),
+        rich_hinge, poor_hinge,
+    )
+end
+
+"""Validate one canonically decoded `W5_indep_all` instance at `k0 ≥ 2`."""
+function check_w5_independence_family(candidate::NamedTuple)
+    decoded = _decode_w5_canonical(candidate)
+    decoded === nothing && return false
+    rich_w5 = all(
+        !decoded.rich_dc[state] || decoded.k0 <= length(decoded.rich_hinge[state])
+        for state in decoded.rich_states
+    )
+    poor_not_w5 = any(
+        decoded.poor_dc[state] && length(decoded.poor_hinge[state]) < decoded.k0
+        for state in decoded.poor_states
+    )
+    rich_w5 && poor_not_w5
+end
+
 """Executable truth-table boundary for definitional conservative extension."""
 function check_wager_conservative_extension()
     all((false, true)) do sentence

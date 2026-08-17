@@ -1,0 +1,53 @@
+checker-strengthening hygiene audit (2026-08-15)
+
+Proposal classification: accept.
+
+H1 pre-change evidence
+- specs/claim-ledger-v2.toml contained 90 claims but only 88 distinct group children.
+- The only missing children were VP2-WAGER-INTERPRETIVE-CHECKER-001 and
+  VP2-WAGER-FULL-CHECKER-001; both declare group_id = GRP-WAGER-14.
+- GRP-WAGER-14 had legacy_vp_ids = [] and 8 children before the repair.
+- test/test_ledger_consistency.jl derives legacy coverage children only from groups whose
+  legacy_vp_ids contain the audited v1 VP. Therefore GRP-WAGER-14 is outside those
+  partition and linked-child checks.
+- test/test_claim_ledger.jl checks that every listed child exists and, for complete
+  groups, is frozen. Both added claims exist and have spec_status = "frozen".
+
+H2 evidence
+- formal/ERIEC/Markers.lean exists and defines ERIEC.Markers.FMMarkers.
+- formal/ERIEC/CertifiedArtifact.lean registers opendynamics.open_graph.
+- Only the three stale inline comments were corrected. No v1 data field or status changed.
+
+Fixed termination condition for the checker-strengthening workstream
+After establishment of the shared order-9/order-13 classification rule recorded in
+logs/gates/checker-strengthening/order-13-audit-20260814.log, every contract labelled
+exact_finite_decision must have been verified against that rule.
+
+Current gap and fixed final audit scope
+- 86 contracts have Julia counterparts.
+- 33 have logs produced after the rule was established.
+- 53 still rely on 2026-08-03 batch-0X logs; 13 of those claim exact_finite_decision.
+- The final audit is read-only and is limited to exactly these 13 contracts:
+  1. interface.relation_linearization / check_converse_adjoint
+  2. interface.sensitivity_realization / check_relation_sensitivity_bridge
+  3. interface.relation_naturality / check_relation_linearization_naturality
+  4. interface.relation_lax_naturality / check_relation_hom_lax_naturality
+  5. grading.const_presheaf_antitone / check_const_presheaf_antitone
+  6. hinge.act / check_hinge
+  7. certification.critical_bound / check_critical_bound
+  8. decomp.copair_unique / check_copair_unique
+  9. graded.presheaf_transition_naturality / check_presheaf_transition_naturality
+  10. body.no_terminal_setpoint / check_m4_no_terminal_setpoint
+  11. invariance.update_bisimulation / check_update_bisimulation
+  12. richness.branch / is_branch_point
+  13. temporaldc.observed_termination / check_observed_termination
+
+The other 40 pre-rule contracts are excluded because they do not claim exactness. A weak
+classification errs on the safe side even if unnecessarily conservative, so expanding
+the audit to them is not cost-effective. If the final audit suggests downgrading
+hinge.act (Act nonempty) or body.no_terminal_setpoint (M4b), stop for a user decision
+because that changes the strength of a theory-level invariant.
+
+Roadmap fixed point
+The remaining batches are hygiene, order-11, order-10b, order-10c, and the exact audit
+above. No additional checker-strengthening scope is implied by this log.

@@ -1,0 +1,227 @@
+order-11 Stage 1 read-only pre-audit (2026-08-15)
+
+Procedure: logs/gates/checker-strengthening/procedure-20260815.log
+Shared rule: logs/gates/checker-strengthening/order-13-audit-20260814.log
+No implementation, manifest, fixture, tolerance, gate, commit, or push change was made by
+this audit.
+
+Summary classification
+- worlddc.no_unconditional_equivalence: ACCEPT sound_only only with a new data-level
+  overload that recomputes DC and validates a trivial loop. The existing Bool and
+  zero-argument methods remain regression_only behavior and remain unchanged.
+- wager.w5_independence_family: REVISE. sound_only is justified only for a new overload
+  whose checked canonical decoding identifies the supplied rich/poor encodings with
+  richImpl k0 and poorImpl and checks an actual k0 >= 2 conclusion instance. An arbitrary
+  unbridged rich/poor candidate pair would be witness_validator, not sound_only.
+- reference_models.arbitrarily_large_dc: ACCEPT witness_validator with a complete finite
+  candidate overload and recomputation of every nested DC and top-level witness field.
+- reference_models.arbitrarily_large_ax_core_discrete: ACCEPT witness_validator only with
+  a checked symbolic canonical decoder for the function-equality fields. Partial sampling
+  of opaque functions is insufficient.
+- reference_models.arbitrarily_large_three_layer: ACCEPT witness_validator under the same
+  canonical-decoder condition and full validation of tier1, bridge, world, value, and the
+  section-13.2 witness.
+
+A1. worlddc.no_unconditional_equivalence
+
+Lean target
+- formal/ERIEC/WorldDC.lean:116-120 is
+  ERIEC.WorldDC.no_forward_unconditional: an existential DC Unit witness paired with a
+  loop for which World.WldNontrivial is false.
+- formal/ERIEC/DC.lean:6-18 defines the DC data and hSelf/hSMC/hAct/hBound fields.
+- formal/ERIEC/World.lean:35-44 defines WldNontrivial as a nonzero fixed vector.
+
+Current runtime path
+- src/worlddc.jl:25-26 compares two externally supplied Bool summaries.
+- src/worlddc.jl:34-36 fixes two unequal Bool examples.
+- test/test_worlddc.jl:74-80 exercises summaries and separate counterexample helpers.
+These paths do not independently establish a DC or the Lean existential witness.
+
+Required additional path for sound_only
+- Add an overload near src/worlddc.jl:25-36 accepting an ERIEState, explicit complete
+  finite M/E/C carriers, and an explicit loop encoding.
+- Recompute all DC clauses with check_DC(sys, all_M, all_E, all_C), not a DCResult or Bool
+  supplied by the caller.
+- Require the supplied loop to be the exact zero loop. This proves absence of a nonzero
+  fixed vector without adding or relaxing a numerical tolerance.
+- The overload validates one concrete forward countermodel. It is sound for the
+  existential theorem but is not a decision procedure for every DC/world pair.
+
+Concrete tests in test/test_worlddc.jl
+- Positive: the canonical one-element full-relation ERIEState with nonempty boundary and
+  exact zeros(Int, 1, 1).
+- Negative DC mutation: the same state with an empty boundary, so hBound is false, paired
+  with the zero loop.
+- Negative conclusion mutation: the valid DC paired with Matrix{Int}(I, 1, 1); the loop
+  is nontrivial and is not the forward countermodel.
+- Merely passing (true, false) is not evidence for the new method.
+
+Change targets
+- src/worlddc.jl:25-36; test/test_worlddc.jl:74-80.
+- specs/checker-semantic-manifest.toml:463-472, including basis_log.
+- test/test_checker_semantic_manifest.jl:73-83 hard-codes this pilot relation as
+  regression_only and must change to sound_only. This coupling was absent from the
+  proposed invariant list but is required by the current test.
+
+A1. wager.w5_independence_family
+
+Lean target
+- formal/ERIEC/Wager/Basic.lean:44-45 defines W5 as all DC states having hinge.card >= k0.
+- formal/ERIEC/Wager/Richness.lean:9-26 defines richImpl k0 and proves its W5 instance.
+- lines 28-35 define poorImpl and prove not-W5 under 2 <= k0.
+- lines 39-41 define W5_indep_all for every k0 satisfying that premise.
+
+Current runtime path
+- src/wager.jl:31-39 constructs both hinge sets internally for a finite threshold list.
+- test/test_wager.jl:58-60 uses k0=1 only to reject the theorem premise. That is not a
+  negative case for the conclusion at a valid k0.
+
+Required additional path for sound_only
+- Add an overload near src/wager.jl:31-39 for a single valid k0 and an independently
+  supplied canonical encoding of richImpl k0 and poorImpl.
+- The decoder must check the complete Fin k0 / Unit carriers and every W5-relevant fixed
+  field: rich dc=true at every state, rich hinge=Finset.univ of cardinality k0, poor
+  dc=true at its Unit state, and poor hinge cardinality one.
+- Evaluate the W5 quantifier on the complete supplied state carriers and require rich W5
+  and poor not-W5. Because the decoder ties these encodings to the fixed Lean objects, a
+  successful valid-k0 call is a sound theorem instance; a finite set of calls is not an
+  exact decision of the universally quantified theorem.
+- If the overload accepts arbitrary rich/poor candidates without this canonical bridge,
+  classify it witness_validator instead.
+
+Concrete tests in test/test_wager.jl
+- Positive: k0=2, rich states Fin 2 with both dc=true and hinge={0,1}, plus the Unit poor
+  state with dc=true and hinge={0}.
+- Negative positive-witness mutation: retain k0=2 and both rich states but set one rich
+  hinge to a singleton, so W5 richImpl fails.
+- Negative negative-witness mutation: retain k0=2 but give the poor state a two-element
+  hinge, so not-W5 poorImpl fails.
+- k0=1 remains a premise rejection test but is not the required semantic negative.
+
+Change targets
+- src/wager.jl:31-39; test/test_wager.jl:58-60.
+- specs/checker-semantic-manifest.toml:737-746, including basis_log.
+
+A2. reference_models.arbitrarily_large_dc
+
+Lean fields
+- formal/ERIEC/RefModel/Large.lean:35-43: dc, action_card, environment_card, core_card,
+  multivalued, hinge_nonempty.
+- The nested dc is formal/ERIEC/DC.lean:6-18: alphaRel, sigmaRel, piRel, rhoRel, kappa,
+  epsilon, boundary, s, hSelf, hSMC, hAct, hBound.
+
+Current checks and missing fields
+- src/reference_models.jl:19-30 internally constructs carriers and a full alpha relation.
+  It checks the three generated cardinalities, generated multivaluedness, and only
+  actions nonempty.
+- It accepts no independent candidate and does not validate the nested DC relations or
+  recompute hSelf/hSMC/hAct/hBound. actions nonempty is not hinge_nonempty.
+
+Full witness-validator design
+- Add a NamedTuple overload near src/reference_models.jl:19-30 containing k, complete
+  action/environment/core carriers, and a candidate ERIEState for the Unit state.
+- Use check_DC with the complete carriers to recompute all four DC proof fields and range
+  containment; compute Hinge.Act from the supplied rho/sigma/kappa/epsilon.
+- Independently check the three carrier cardinalities, find two distinct alpha images for
+  multivalued, and require the computed hinge to be nonempty.
+
+Field-level negative mutations in test/test_reference_models.jl
+- dc/hBound: empty boundary; hSelf: empty pi/rho closure; hSMC: empty alpha/sigma closure;
+  hAct: empty rho or sigma.
+- action_card/environment_card/core_card: remove one independently supplied carrier item
+  while retaining k.
+- multivalued: make every alpha image a singleton.
+- hinge_nonempty: empty rho or sigma; this can also invalidate dc.hAct because the Lean
+  fields are intentionally redundant.
+
+A2. reference_models.arbitrarily_large_ax_core_discrete
+
+Lean fields
+- formal/ERIEC/RefModel/LargeCore.lean:103-117 LargeStableReferenceWitness: positive, dc,
+  frame, total, dc_eq, frame_eq, three cardinalities, multivalued, hinge_nonempty,
+  internal_total.
+- lines 119-123 LargeDynamicReferenceWitness: stable, r2, e5.
+- lines 125-128 LargeAXCoreReferenceWitness: stable, dynamic, same_stable.
+- DC fields are formal/ERIEC/DC.lean:6-18; DynFrame fields and h_int are
+  formal/ERIEC/Dynamics.lean:46-56; TotalNext is lines 28-30; R2Prime is lines 18-21.
+
+Current checks and missing fields
+- src/reference_models.jl:34-70 generates its own fixture. It checks generated carrier
+  sizes/multivaluedness, next keys, three update equations, and a small R2 sample.
+- It does not accept an independent witness; validate DC; compute hinge; validate the
+  complete DynFrame, dc_eq/frame_eq, TotalNext/internal_total, E5, dynamic.stable, or
+  same_stable. Its R2 sample covers only two subsets, not every Set(Fin k).
+
+Feasible full validator condition
+- The candidate must use a checked symbolic decoder for largeAXCoreDC, largeDynFrame,
+  largeTotalNext, largeRefDrift, largeRefExternal, largeRefCore, and largeRefCoreIso.
+  Decoder tags plus complete finite carrier tables can establish equality to these closed
+  definitions without treating arbitrary opaque functions as equal after samples.
+- Validate positive, full nested DC, canonical dc_eq; all frame fields and canonical
+  frame_eq; total.next/next_internal; three cards; multivalued; computed hinge;
+  internal_total; dynamic.stable identity; R2Prime; E5; and same_stable.
+- Without this decoder, exhaustive frame equality/R2 over all Set(Fin k) costs 2^k and is
+  not realistic at the existing k=128. Sampling would not validate all fields, so the
+  contract must remain complete_only/regression_only rather than claim witness_validator.
+
+Field-level negative mutations
+- positive: k=0; dc/dc_eq: noncanonical boundary or relation; frame/frame_eq: wrong phi or
+  drift decoder tag; total/internal_total: next(:s0)=:s0; each card: remove a carrier
+  item; multivalued: singleton alpha; hinge: empty rho/sigma; r2: drift(false, nonempty)
+  returns false; e5: add an external edge without a matching lifted target;
+  dynamic.stable/same_stable: reference a distinct stable-candidate digest.
+
+A2. reference_models.arbitrarily_large_three_layer
+
+Lean fields
+- formal/ERIEC/RefModel/LargeCore.lean:138-143: tier1, bridge, world_nontrivial,
+  value_one, section13_2.
+- bridge fields are WorldDC.lean:26-31: direction, direction_nonzero, direction_fixed.
+- section13_2 fields are RefModel/Nondegenerate.lean:48-54: multivalued, collapse, ins,
+  blind, no_terminal.
+
+Current checks and missing fields
+- src/reference_models.jl:74-76 only combines the partial AX-core generator with the
+  zero-argument reference regression. It accepts no three-layer candidate and does not
+  validate the five top-level fields.
+- src/reference_models.jl:107-244 already provides useful independent validation of the
+  section13_2 finite encoding, but the new overload must consume its result explicitly.
+
+Full witness-validator design
+- Add a candidate overload near src/reference_models.jl:74-76 that invokes the full tier1
+  validator above; checks bridge.dc identity with tier1.stable.dc; checks an exact nonzero
+  direction fixed by the exact canonical 1x1 identity stableWorld; checks
+  world_nontrivial; checks normalized_value == 1 exactly; and requires all five
+  section13_2 results from check_reference_models(candidate).nondegenerate_contract_holds.
+- Use exact integer/rational canonical data for world/value; do not add or relax tolerance.
+
+Field-level negative mutations
+- tier1: any tier1 negative above; bridge: zero or nonfixed direction, or mismatched dc
+  digest; world_nontrivial: zero loop; value_one: exact 0//1; section13_2: singleton
+  multi_alpha, non-collapsing update, non-INS observation, non-blind markers, or universal
+  reachability producing a terminal object.
+
+A3. Feasibility decision
+- LargeNondegenerateWitness is directly feasible with existing ERIEState/check_DC helpers.
+- LargeAXCoreReferenceWitness and LargeThreeLayerReferenceWitness are feasible only with
+  the checked symbolic canonical-decoder input described above. Opaque-function sampling
+  is not a full-field validator and is explicitly rejected.
+- If Stage 2 does not authorize that decoder/schema, the two contracts cannot be promoted
+  to witness_validator under the chosen full-field design; stop for a user decision
+  between complete_only and a different design.
+
+A4. Coupled invariants
+- Current manifest has 157 contracts and 29 exact_finite_decision rows.
+- All five targets already exist in CertifiedArtifact.lean and keep their lean_decl and
+  checker names. Additional Julia overloads create no contract, so the catalog and total
+  remain 157.
+- The target relations are sound_only or witness_validator, never exact. Therefore the
+  exact ID set remains 29, test/checker_sensitivity_cases.jl remains unchanged, and
+  sensitivity_registry_sha256 remains unchanged.
+- Required non-registry coupling: test/test_checker_semantic_manifest.jl:77 must change
+  with worlddc.no_unconditional_equivalence from regression_only to sound_only.
+- Expected Stage 2 change set: src/worlddc.jl, src/wager.jl, src/reference_models.jl,
+  test/test_worlddc.jl, test/test_wager.jl, test/test_reference_models.jl,
+  specs/checker-semantic-manifest.toml, test/test_checker_semantic_manifest.jl, and the
+  order-11 basis/gate logs. No Lean, CertifiedArtifact, fixture, tolerance, seed, or
+  sensitivity-registry change is justified by this audit.

@@ -1,0 +1,7 @@
+PASS log=logs/gates/checker-strengthening/hygiene-full-g3-20260815.log
+v5.2 Lean formal statement smoke test |   37     37  8.2s
+Test Summary:    | Pass  Total     Time
+Lenia report CLI |   75     75  2m30.6s
+Test Summary:             | Pass  Total   Time
+TRM neural experiment CLI |   40     40  27.4s
+     Testing ERIEC tests passed 
