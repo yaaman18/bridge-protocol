@@ -41,6 +41,7 @@ const ERIEC_TEST_PLAN = [
     ("test_policy_topology.jl", 40.0),
     ("test_benchmarks_reports.jl", 4.0),
     ("test_observation_artifact.jl", 7.0),
+    ("test_model_evaluation.jl", 65.0),
     ("test_orderreach_graded.jl", 41.0),
     ("test_decomp.jl", 0.5),
     ("test_grading.jl", 0.5),
@@ -60,6 +61,7 @@ compete with CPU-heavy groups."""
 const ERIEC_EXCLUSIVE_TEST_FILES = Set([
     "test_checker_semantic_manifest.jl",
     "test_cli.jl",
+    "test_model_evaluation.jl",
     "test_v52_formal_statements.jl",
 ])
 

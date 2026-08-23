@@ -58,7 +58,7 @@ Verification evidence is represented by two ledgers with different roles. The sc
 dependencies, and certificate-catalog entries. Its 59 VPs are all terminal
 `certified` entries; it is not the current claim-lifecycle source of truth, and
 implementation work does not advance its status. The atomic lifecycle ledger is
-[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml): it records 90 claims on four
+[specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml): it records 91 claims on four
 independent axes, `spec_status`, `proof_status`, `implementation_status`, and
 `certification_status`.
 
@@ -93,8 +93,8 @@ As of 2026-08-14, the v1 ledger tracks 59 verification points, all 59 certified.
 contains 10 entries (all with `basis = "exact_ledger_decl"`); the audit found that the
 contracts cover 7 atomic claims and do not cover 85. In other words, across the 10 audited
 entries, only 7 of the properties their prose asserts are backed by a machine check; the
-remaining 85 lie outside the contract. The v2 ledger contains 90 atomic claims: 38
-certified and 52 uncertified.
+remaining 85 lie outside the contract. The v2 ledger contains 91 atomic claims: 38
+certified and 53 uncertified.
 
 The runnable [category pipeline](bin/eriec-category-pipeline.jl) is an impact-recheck
 gate runner, not a status-progression driver. Its implementation reads schema v1 only,

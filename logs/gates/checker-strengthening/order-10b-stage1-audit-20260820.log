@@ -1,0 +1,172 @@
+order-10b Stage 1 pre-implementation audit (2026-08-20)
+
+Scope and decision
+  Read-only audit of the proposed VP-MRK-002 / VP-OPD-002 contracts. No Lean,
+  Julia, catalog, manifest, ledger, test, registry, gate, commit, or push change
+  was made. Overall classification: ACCEPT WITH MANDATORY CONDITIONS.
+  No target-layer axiom/object, phenomenal marker, DC/viable equivalence, numeric
+  tolerance, fixture, or Sigma-purity invariant is changed by the proposal.
+
+Controlling evidence
+  - formal/ERIEC/Markers.lean: FMMarkers, FunctionalClass, classify.
+  - src/markers.jl: FMMarkers and classify_action_markers.
+  - formal/ERIEC/OpenDynamics.lean: EdgeKind, OpenGraph, indexed Path.
+  - src/open_dynamics.jl: OpenEdgeKind, FiniteOpenGraph, OpenPath,
+    check_open_path.
+  - formal/ERIEC/CertifiedArtifact.lean: existing contracts
+    markers.fm_classification and opendynamics.open_graph.
+  - specs/checker-semantic-manifest.toml: the existing contracts remain
+    observation_only and regression_only respectively.
+  - test/test_checker_semantic_manifest.jl and
+    test/test_formal_julia_contract.jl: current coupled count/ID/registry checks.
+  - logs/gates/checker-strengthening/exact-13-type-audit-20260817.log:
+    fixed-13 type audit is already complete.
+
+Q1. FunctionalClass <-> Symbol bridge
+  ACCEPT only with this closed correspondence:
+    ERIEC.Markers.FunctionalClass.consciousMarker
+      <-> :conscious
+    ERIEC.Markers.FunctionalClass.blindsightAnalog
+      <-> :blindsight_analog
+    ERIEC.Markers.FunctionalClass.nonconsciousMarker
+      <-> :nonconscious
+  Unknown Symbols must be rejected. The catalog name binding alone does not
+  guarantee this semantic bridge. The implementation must provide one closed
+  decoder/comparison boundary, while literal tests independently pin all three
+  mappings. The manifest must state that this encoding is an assumption of the
+  cross-language boundary. The exact proposition is the graph equation
+  `classify markers = expectedClass`; unlike the former hinge Set/Bool mismatch,
+  an independently supplied expected output makes the whole function graph
+  decidable on the finite Bool domain.
+
+Q2. Lean indexed Path <-> Julia OpenPath
+  ACCEPT as witness_validator, not exact_finite_decision.
+  Structural correspondence:
+    Path.nil s <-> OpenPath([s], OpenEdgeKind[])
+    Path.cons edge rest <-> prepend/append one adjacent state and its edge kind,
+      with InternalEdge <-> EdgeKind.internal and
+      CouplingEdge(port) <-> EdgeKind.coupling port.
+  Lean's endpoint indices and embedded proof `G.step s kind m` are erased into a
+  runtime state/kind list. OpenPath enforces nonempty states and the n/n-1 shape;
+  check_open_path checks finite-carrier membership and recomputes graph.step for
+  every adjacent triple. Therefore acceptance validates one supplied encoded
+  Path witness for one supplied finite graph. It does not construct/decide every
+  Lean Path and does not certify the whole OpenGraph.
+  Mandatory assumptions: the supplied state/port/kind encodings are faithful;
+  state equality is the intended equality; graph.step is total and Bool-valued
+  on supplied triples; graph.states is the complete finite carrier in scope.
+  graph.step is graph data, not a proof oracle, because every edge obligation is
+  recomputed. The checker must not accept a separate `path_is_valid` Bool.
+
+Q3. Exact marker test/oracle design
+  ACCEPT the proposed design with the following non-circular layout.
+  - New checker signature conceptually checks
+    check_marker_classification(markers, candidate::Symbol)::Bool.
+  - It rejects unknown candidate Symbols, derives the Lean branch condition from
+    the four raw Bool fields without calling classify_action_markers, and compares
+    against the decoded candidate.
+  - A literal 16-row table in test/test_markers.jl supplies the expected Symbol
+    for every Bool^4 input. The table must call neither classifier nor checker to
+    derive expected values.
+  - For every row, assert the classifier result and checker acceptance, then
+    replace the candidate by a different valid class and assert rejection.
+    Also test an unknown Symbol rejection.
+  - The exact sensitivity registry gets one positive case and one mutated-candidate
+    negative case for the new contract. It must not use the checker to generate
+    its expected candidate.
+  This decides the complete finite input graph of Lean classify and avoids the
+  classifier-as-its-own-oracle failure.
+
+Q4. Coupled invariants and files
+  Required in the implementation batch:
+  - CertifiedArtifact catalog: append two unique IDs, with
+      markers.classify: leanKind=def, juliaSymbol=classify_action_markers,
+        juliaChecker=check_marker_classification;
+      opendynamics.path: leanKind=inductive, juliaSymbol=OpenPath,
+        juliaChecker=check_open_path.
+  - specs/checker-semantic-manifest.toml: append two reviewed rows and update the
+    sensitivity registry SHA-256 after adding only the marker exact case.
+  - test/test_checker_semantic_manifest.jl: 157 -> 159.
+  - test/test_formal_julia_contract.jl: append both contract IDs; add Lean
+    `classify` plus Julia check_marker_classification to the Markers mapping;
+    add Julia check_open_path to the OpenDynamics mapping (Path/OpenPath already
+    appear there).
+  - test/checker_sensitivity_cases.jl: exact registry gains markers.classify.
+  - src/ERIEC.jl: export check_marker_classification.
+  - test/test_markers.jl: independent all-16 positive and mutated-expected tests.
+  - test/test_open_categorical_layers.jl: retain a valid nil/nonempty path case,
+    valid internal/coupling path cases, and add false cases for an unknown state
+    and a non-edge adjacent triple.
+  - specs/ledger.toml: append both proposed VP rows.
+  - specs/category-impact.toml and test/test_category_pipeline.jl: map
+    VP-MRK-002 to marker sections (section 9 and, if the document treats the
+    classification there, section 14) and VP-OPD-002 to section 17; update fixed
+    assertions. Regenerate category-impact-report.md when the normal pipeline
+    requires the current all-VP report.
+  - formal/ERIEC.lean already imports ERIEC.Markers and ERIEC.OpenDynamics; no new
+    import is required.
+  - claim-ledger-v2 has no current marker/open-dynamics legacy group. With
+    coverage_audit=unreviewed, no new legacy_coverage row or claim-ledger edit is
+    mechanically required. Do not invent claim children merely for count parity.
+
+  Count correction:
+    Catalog/manifest total: 157 -> 159.
+    In isolation, before fixed-13 remediation, exact rows/registry: 29 -> 30.
+    However the completed fixed-13 audit requires three current exact rows to be
+    downgraded. If those recommendations are applied first or in the same batch,
+    exact rows/registry are 26 -> 27 after adding markers.classify. Therefore
+    `30` is only an order-10b-local intermediate count, not a durable global
+    target. The SHA-256 must always be computed from the final registry contents.
+
+Q5. Proposed legacy-ledger rows
+  The schema can be filled without changing theory semantics. Reserve these IDs
+  and contract IDs before implementation:
+
+  VP-MRK-002
+    source      = category/tensor_categorical_v5.md#検証点9
+    claim_ja    = classify の全 Bool^4 入力に対する有限グラフ判定
+    lean_decl   = ERIEC.Markers.classify
+    lean_file   = formal/ERIEC/Markers.lean
+    julia_api   = classify_action_markers
+    julia_file  = src/markers.jl
+    contract_id = markers.classify
+    owner       = codex
+    depends_on  = [VP-MRK-001]
+    status      = proposed
+    pinned      = false
+    coverage_audit = unreviewed
+
+  VP-OPD-002
+    source      = category/三層構造の圏論的定式化_v5_1.md#§17
+    claim_ja    = 有限 OpenGraph 上の Path 符号化証人の検証
+    lean_decl   = ERIEC.OpenDynamics.Path
+    lean_file   = formal/ERIEC/OpenDynamics.lean
+    julia_api   = OpenPath
+    julia_file  = src/open_dynamics.jl
+    contract_id = opendynamics.path
+    owner       = codex
+    depends_on  = [VP-OPD-001]
+    status      = proposed
+    pinned      = false
+    coverage_audit = unreviewed
+
+  The catalog separately records each Bool checker. Using the semantic Julia
+  counterpart in julia_api avoids pretending a Bool checker has the same codomain
+  as Lean classify or indexed Path.
+
+Q6. fixed-13 relationship
+  ACCEPT the claim that order-10b does not replace fixed-13, but CHALLENGE the
+  premise that fixed-13 remains unfinished. The independent binder/type/quantifier
+  audit was completed and recorded at
+  logs/gates/checker-strengthening/exact-13-type-audit-20260817.log.
+  Result: retain 8; reject current exact binding for 5. Immediate safe downgrades
+  are certification.critical_bound, invariance.update_bisimulation, and
+  temporaldc.observed_termination. Two exact-preserving rebinds require user
+  decisions. Stage 2 must not overwrite or silently postpone these findings.
+
+Stage 2 entry conditions
+  Proceed only after Claude accepts the closed marker encoding, independent
+  all-16 oracle, Path witness assumptions, reserved contract IDs, and count
+  correction above. Preserve existing markers.fm_classification and
+  opendynamics.open_graph rows and classifications; add guarantee notes only.
+  No implementation has been authorized by this audit itself.

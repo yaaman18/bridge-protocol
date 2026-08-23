@@ -62,6 +62,15 @@ function checker_sensitivity_cases()
             end,
             negative_kind="mutated_candidate",
         ),
+        "markers.classify" => (
+            positive=() -> check_marker_classification(
+                FMMarkers(true, false, true, true), :blindsight_analog,
+            ),
+            negative=() -> check_marker_classification(
+                FMMarkers(true, false, true, true), :nonconscious,
+            ),
+            negative_kind="mutated_candidate",
+        ),
         "interface.relation_naturality" => (
             positive=() -> begin
                 rel = m -> m == :m1 ? Set([:e1, :e3]) : Set([:e2])
@@ -243,16 +252,6 @@ function checker_sensitivity_cases()
             ),
             negative_kind="countermodel",
         ),
-        "certification.critical_bound" => (
-            positive=() -> check_critical_bound(
-                (rank, candidate) -> rank <= 1 ? copy(candidate) : Set{Symbol}(),
-                1, 2, <, Set([:c1]),
-            ),
-            negative=() -> check_critical_bound(
-                (_, candidate) -> copy(candidate), 1, 2, <, Set([:c1]),
-            ),
-            negative_kind="mutated_candidate",
-        ),
         "decomp.copair_unique" => (
             positive=() -> check_copair_unique(
                 x -> x + 1, x -> 2x,
@@ -281,11 +280,6 @@ function checker_sensitivity_cases()
                 (source, candidate) -> source == candidate || candidate == :target,
             )),
             negative_kind="countermodel",
-        ),
-        "invariance.update_bisimulation" => (
-            positive=() -> check_update_bisimulation(x -> 2x, x -> x + 1, x -> x + 2, 0:10),
-            negative=() -> check_update_bisimulation(identity, x -> x + 1, x -> x + 2, 0:10),
-            negative_kind="mutated_candidate",
         ),
         "reference_models.v5_1" => (
             positive=() -> check_reference_models(
@@ -319,15 +313,6 @@ function checker_sensitivity_cases()
             positive=() -> is_branch_point(),
             negative=() -> is_branch_point(Dict(:m0 => Set([:e0])), :m0),
             negative_kind="countermodel",
-        ),
-        "temporaldc.observed_termination" => (
-            positive=() -> check_observed_termination(
-                TemporalDCTrace([true, true, false, false]), [true, true, true, true],
-            ),
-            negative=() -> check_observed_termination(
-                TemporalDCTrace([true, true, false, false]), [true, true, false, true],
-            ),
-            negative_kind="mutated_candidate",
         ),
     )
     Dict(

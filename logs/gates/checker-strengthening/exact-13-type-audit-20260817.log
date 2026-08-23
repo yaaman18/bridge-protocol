@@ -1,0 +1,114 @@
+fixed 13 exact_finite_decision type audit (2026-08-17)
+
+Method
+  The manifest is an audit target, not controlling evidence. Every contract was read in the
+  fixed order: Lean binders -> full proposition/return type and direction -> Julia signature
+  and output -> quantified coverage -> trust boundary. Complete finite enumeration was used
+  only after proposition and codomain agreement had been established.
+
+Decision summary
+  Retain exact_finite_decision: 8.
+  Reject exact_finite_decision under the current binding: 5.
+  The two theory-invariant contracts, hinge.act and body.no_terminal_setpoint, retain exact;
+  no theory-invariant downgrade stop is triggered.
+
+RETAIN EXACT
+
+1. interface.relation_linearization -- ACCEPT exact.
+   Lean: formal/ERIEC/InterfaceLinearization.lean:47,
+   convSystem_linearization_eq_adjoint, concludes equality of the converse incidence
+   linearization and adjoint. Julia: src/interface_linearization.jl:14 computes both complete
+   finite incidence matrices and compares sigma with transpose(alpha). Over real 0/1 incidence
+   matrices this independently decides the conclusion; complete M/E carriers cover every
+   matrix entry. Relation functions are candidate data, not obligation oracles.
+
+2. interface.relation_naturality -- ACCEPT exact.
+   Lean: InterfaceLinearization.lean:82, RelationIso binder and reindexed matrix equality.
+   Julia: interface_linearization.jl:28 validates both carrier bijections, map_iff over every
+   source pair, and the complete reindexed incidence equality. All RelationIso obligations and
+   the conclusion are recomputed from candidate maps and relations.
+
+3. interface.relation_lax_naturality -- ACCEPT exact.
+   Lean: InterfaceLinearization.lean:103, the pointwise 0/1 matrix inequality induced by a
+   RelationHom. Julia: interface_linearization.jl:60 exhausts every supplied domain/codomain
+   pair and evaluates exactly the equivalent implication rel(m,e) -> rel'(f m,g e).
+
+4. hinge.act -- ACCEPT exact after the user-directed strict rebind.
+   Lean: formal/ERIEC/Hinge.lean:17, ActNonempty : Prop. Julia: src/hinge.jl:9 returns exactly
+   !isempty(Act(...)). The former Set/Bool codomain mismatch was removed without weakening M3.
+   Relation functions are the supplied object data and the intersection is recomputed.
+
+5. decomp.copair_unique -- ACCEPT exact.
+   Lean: formal/ERIEC/Decomp.lean:12, candidate = copair under both component equations.
+   Julia: src/decomp.jl:4 exhausts the complete supplied A and B carriers, hence every Sum A B
+   input, and checks both component equations and the conclusion. The candidate functions are
+   data and no proof Bool is accepted.
+
+6. graded.presheaf_transition_naturality -- ACCEPT exact.
+   Lean: formal/ERIEC/Graded.lean:135, naturality for every tag, comparable u/v, and x in the
+   source fiber. Julia: src/graded.jl:415 first validates both finite presheaves and transition
+   outputs, then exhausts all transitions, object pairs, and complete source fibers. Component,
+   restriction, and order functions are candidate data; the naturality equality is recomputed.
+
+7. body.no_terminal_setpoint -- ACCEPT exact.
+   Lean: formal/ERIEC/Body.lean:87, NoTerminalSetPoint is the negation of existence of an object
+   reached from every source. Julia: src/body.jl:157 exhausts every candidate and every source in
+   the duplicate-free complete object carrier. reaches is the diagram relation itself, not a
+   proof callback. The M4b invariant remains unchanged.
+
+8. richness.branch -- ACCEPT exact.
+   Lean: formal/ERIEC/Richness.lean:8, existence of two distinct values in alphaRel m.
+   Julia: src/richness.jl:11 forms the complete finite image and checks every pair for distinct
+   witnesses. The relation image is candidate data and the existential is independently decided.
+
+REJECT EXACT UNDER CURRENT BINDING
+
+9. interface.sensitivity_realization -- REVISE.
+   Lean: InterfaceLinearization.lean:63, converse_linearization_eq_sensitivity_adjoint assumes
+   both a ConvSystem and hRealizes, then concludes an equality involving sigma and the sensitivity
+   adjoint. Julia: interface_linearization.jl:21 receives no sigma/ConvSystem and checks only
+   Jacobian(response,base) = incidence(alpha), the hRealizes premise. It does not decide the bound
+   theorem conclusion. Minimal strict correction: bind the contract to the existing
+   ERIEC.InterfaceLinearization.RealizesSensitivityAt definition and then re-audit exactness;
+   otherwise exact must be removed. This binding change is a user decision.
+
+10. grading.const_presheaf_antitone -- REVISE.
+    Lean: formal/ERIEC/Grading.lean:28, constPresheaf_iff_antitone is an Iff between existence of
+    a RelPresheaf and AntitoneRelation. Julia: src/grading.jl:2 decides only AntitoneRelation on
+    complete carriers. It does not decide the Iff proposition (which the theorem proves) or encode
+    the existential structure. Minimal strict correction: bind to the existing
+    ERIEC.Grading.AntitoneRelation definition; otherwise exact must be removed. User decision.
+
+11. certification.critical_bound -- ACCEPT downgrade, REVISE its condition.
+    Lean: formal/ERIEC/DC.lean:52, crit_bound assumes global sig2, K.Nonempty, and post-fixedness,
+    then concludes not threshold<rank. Julia: src/dc.jl:157 checks the local implication for one
+    rank and one K, and never validates global sig2 or all configurations. It is not exact.
+    complete_only is valid only with a manifest assumption that the supplied local instance is
+    drawn from a faithful Lean witness satisfying sig2; a faithful full witness necessarily
+    passes this projection, while acceptance alone cannot establish sig2.
+
+12. invariance.update_bisimulation -- CHALLENGE complete_only; use regression_only.
+    Lean: formal/ERIEC/Invariance/Dynamic.lean:19, upd_bisim names mapConf/upd and assumes hPhi,
+    hTheta, and DriftEquivariant before concluding equality for c. Julia: src/invariance.jl:2
+    accepts arbitrary map/update/update_prime callbacks and a non-exhaustive sample list. There is
+    no bridge binding them to mapConf/upd or the three hypotheses. Therefore Lean theorem truth
+    does not imply acceptance of arbitrary Julia callbacks: even the complete_only direction is
+    unproved. Current safe classification is regression_only.
+
+13. temporaldc.observed_termination -- REJECT exact; regression_only until redesigned.
+    Lean: formal/ERIEC/TemporalDC.lean:179, ObservedTerminationStep O x y is a proposition for one
+    explicit pair x,y and includes T.next x y. Julia: src/temporal_dc.jl:32 receives a Boolean
+    linear trace and mask, assumes vector adjacency represents next, and returns whether there
+    exists any observed true-to-false adjacent pair. A pointwise pair predicate and an existential
+    search over a runtime prefix are different propositions. No existing Lean existential trace
+    predicate is bound to the checker. Use regression_only unless a user-approved Lean predicate
+    or an explicit endpoint checker restores proposition identity.
+
+Consequences if all recommendations are adopted
+  Immediate downgrades: critical_bound, update_bisimulation, observed_termination.
+  Exact-preserving rebind candidates requiring user decisions: sensitivity_realization to
+  RealizesSensitivityAt; const_presheaf_antitone to AntitoneRelation.
+  Exact count would fall from 29 to 26 after the three immediate downgrades, while the two strict
+  rebinds could remain exact after their own audits. The sensitivity registry must delete the
+  downgraded IDs and update its SHA-256 in the same implementation batch. No manifest, registry,
+  source, test, gate, commit, or push change was made by this audit.

@@ -1,0 +1,61 @@
+exact-13-remediation implementation audit (2026-08-20)
+
+Preconditions
+  S1 passed for both exact-preserving rebinds before edits. RealizesSensitivityAt
+  and AntitoneRelation are Prop-valued, and their Julia checkers return Bool for
+  the same finite equations/quantifiers without accepting proof booleans.
+
+Frozen claim repair
+  VP2-I1-DERIV-BRIDGE-001 retains its statement, hash, frozen status, and proof.
+  Only the independent realization/implementation/certification axes move to
+  formal_only/not_applicable/uncertified. This is the first executable-to-
+  formal_only correction found in the full git history. It is valid because
+  specs/statements/README.md freezes the complete Lean type and hash, while
+  specs/loop-orchestration-spec.md explicitly defines the four lifecycle axes as
+  independent. VP2-I1-REALIZES-SENSITIVITY-001 now owns the executable contract.
+
+README count clarification
+  The earlier audit inspected specs/statements/README.md, while Claude referred
+  to the repository-root README.md. The root README count assertions are updated.
+  Its 7 covered / 85 not-covered figures are sums across the ten legacy_coverage
+  rows, not a partition of all v2 claims. The new GRP-IFACE-I1 claim has no legacy
+  VP mapping, so neither sum changes.
+
+Prohibited changes
+  No checker behavior, zero-argument method, fixture, tolerance, threshold, seed,
+  phenomenal marker, retained-exact classification, or order-10b item changed.
+
+Gate results
+  G1 Lean build: PASS (2808 jobs)
+    logs/gates/exact-13-remediation/G1-20260820.log
+  G2 Lean-Julia contract: PASS 1209/1209
+    logs/gates/exact-13-remediation/G2-20260820.log
+  Manifest first run: FAIL 80/81. A context-weak patch had moved the three
+    classification labels onto retained exact rows. No checker/fixture/tolerance
+    changed. The failed log is preserved:
+    logs/gates/exact-13-remediation/G3-manifest-20260820.log
+  Manifest corrected rerun: PASS 81/81; exact and registry ID sets 26/26.
+    logs/gates/exact-13-remediation/G3-manifest-20260820-rerun.log
+  Claim ledger: PASS 417/417
+    logs/gates/exact-13-remediation/G3-claim-20260820.log
+  Legacy ledger: PASS 372/372
+    logs/gates/exact-13-remediation/G3-ledger-20260820.log
+  Category pipeline: PASS 68/68
+    logs/gates/exact-13-remediation/G3-category-20260820.log
+  Interface target: PASS 14/14
+    logs/gates/exact-13-remediation/G3-interface-20260820.log
+  Grading target: PASS 4/4
+    logs/gates/exact-13-remediation/G3-grading-20260820.log
+  Full G3: PASS
+    logs/gates/exact-13-remediation/G3-full-20260820.log
+  G4 new sensitivity claim: PASS 1209/1209
+    logs/gates/VP2-I1-REALIZES-SENSITIVITY-001/G4-20260820.log
+  G4 VP-GRA-001 rebind: PASS 1209/1209
+    logs/gates/VP-GRA-001/G4-20260820.log
+
+Final measured invariants
+  contracts=157
+  exact_finite_decision=26
+  sensitivity registry entries=26
+  sensitivity_registry_sha256=84dc3cab9366118667e1ea02a29c916d26856f2a59331776a3fe2c7507a782fb
+  claims=91, certified=38, uncertified=53

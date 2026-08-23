@@ -52,7 +52,7 @@ tests = ["test/test_worlddc.jl"]
 
 [[section]]
 id = "§9"
-vp_ids = ["VP-MRK-001"]
+vp_ids = ["VP-MRK-001", "VP-MRK-002"]
 tests = ["test/test_markers.jl"]
 
 [[section]]
@@ -77,7 +77,7 @@ tests = ["test/test_toy_systems.jl"]
 
 [[section]]
 id = "§14"
-vp_ids = ["VP-MRK-001"]
+vp_ids = ["VP-MRK-001", "VP-MRK-002"]
 tests = ["test/test_markers.jl"]
 
 [[section]]
@@ -93,7 +93,7 @@ all_vps = true
 
 [[section]]
 id = "§17"
-vp_ids = ["VP-OPD-001"]
+vp_ids = ["VP-OPD-001", "VP-OPD-002"]
 tests = ["test/test_open_categorical_layers.jl"]
 
 [[section]]

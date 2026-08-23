@@ -60,7 +60,7 @@ checker_relation_matches_contract(row, contract) =
     @test Set(manifest["allowed_relations"]) == CHECKER_RELATION_VALUES
     @test allunique(ids)
     @test Set(ids) == Set(artifact_ids)
-    @test length(rows) == length(artifact_ids) == 157
+    @test length(rows) == length(artifact_ids) == 159
     @test all(valid_checker_semantic_row, rows)
     @test all(
         row -> checker_relation_matches_contract(row, contracts_by_id[row["id"]]),
@@ -88,6 +88,9 @@ checker_relation_matches_contract(row, contract) =
     @test sensitivity_hash == manifest["sensitivity_registry_sha256"]
     sensitivity_cases = checker_sensitivity_cases()
     exact_rows = filter(row -> row["checker_relation"] == "exact_finite_decision", rows)
+    @test length(exact_rows) == 27
+    @test count(row -> row["checker_relation"] == "witness_validator", rows) == 26
+    @test count(row -> row["checker_relation"] == "regression_only", rows) == 13
     @test Set(keys(sensitivity_cases)) == Set(row["id"] for row in exact_rows)
     rows_by_id = Dict(row["id"] => row for row in rows)
     @test all(

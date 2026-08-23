@@ -24,4 +24,33 @@
     @test classify_action_markers(conscious) == :conscious
     @test classify_action_markers(blindsight) == :blindsight_analog
     @test classify_action_markers(absent) == :nonconscious
+
+    # Literal oracle for the complete Bool^4 input table. Expected values are
+    # not derived from either classifier implementation.
+    classification_oracle = [
+        (false, false, false, false, :nonconscious),
+        (false, false, false, true, :nonconscious),
+        (false, false, true, false, :nonconscious),
+        (false, false, true, true, :nonconscious),
+        (false, true, false, false, :nonconscious),
+        (false, true, false, true, :nonconscious),
+        (false, true, true, false, :nonconscious),
+        (false, true, true, true, :nonconscious),
+        (true, false, false, false, :nonconscious),
+        (true, false, false, true, :blindsight_analog),
+        (true, false, true, false, :nonconscious),
+        (true, false, true, true, :blindsight_analog),
+        (true, true, false, false, :nonconscious),
+        (true, true, false, true, :blindsight_analog),
+        (true, true, true, false, :nonconscious),
+        (true, true, true, true, :conscious),
+    ]
+    for (fm1, fm2, fm3, fm4, expected) in classification_oracle
+        markers = FMMarkers(fm1, fm2, fm3, fm4)
+        @test classify_action_markers(markers) === expected
+        @test check_marker_classification(markers, expected)
+        mutated = expected === :nonconscious ? :conscious : :nonconscious
+        @test !check_marker_classification(markers, mutated)
+    end
+    @test !check_marker_classification(conscious, :unknown_functional_class)
 end

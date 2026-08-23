@@ -1,0 +1,162 @@
+exact-13-remediation option A audit (2026-08-20)
+
+Decision
+  ACCEPT option A as a coherent claim/contract repair, with the exact field and
+  coupled-document updates below. This is a read-only audit apart from this log;
+  no claim ledger, statement spec, manifest, catalog, v1 ledger, registry, test,
+  gate, commit, or push change was made.
+
+1. What spec_status=frozen freezes
+  The controlling primary evidence supports the narrow, statement-level reading.
+  - specs/statements/README.md says that before setting spec_status=frozen the
+    complete Lean type must be placed under specs/statements, including binders,
+    typeclasses, quantifier order, assumptions, and conclusion. It then records a
+    normalized type hash and requires the implementation declaration to have the
+    definitionally same type.
+  - specs/loop-orchestration-spec.md section 1.1 explicitly treats spec_status,
+    proof_status, implementation_status, and certification_status as independent
+    axes and warns not to identify them with the v1 single status.
+  Therefore keeping the old claim's exact statement fields and hash unchanged
+  while correcting its realization/implementation/certification metadata does
+  not thaw or rewrite its frozen proposition.
+
+  Important qualification: this is permitted by the model but unprecedented in
+  committed history. Comparing every committed snapshot of
+  specs/claim-ledger-v2.toml found no existing claim whose realization_kind was
+  changed from executable to formal_only. Existing formal_only rows were added in
+  that state. Option A is the first correction of this kind and must be described
+  as a semantic metadata repair, not cited as an established migration precedent.
+
+2. Existing formal_only convention and A-2 exact values
+  There are 30 current formal_only claims. Restricting to the 25 that are frozen,
+  all 25 have:
+    implementation_status = not_applicable (explicit or inherited default)
+    certification_status = uncertified (explicit or inherited default)
+    no contract_id
+  Accordingly VP2-I1-DERIV-BRIDGE-001 must retain its frozen statement and proof:
+    lean_decl, lean_file, assumptions, conclusion, statement_spec,
+    statement_hash, spec_status=frozen, proof_status=proved, and depends_on stay.
+  Change realization metadata to:
+    implementation_status = not_applicable
+    realization_kind = formal_only
+    certification_status = uncertified
+  Remove:
+    julia_api, julia_file, contract_id, certification_log
+  Explicitly writing not_applicable/uncertified is preferable in this exceptional
+  transition even though they equal defaults; it makes the demotion auditable.
+
+3. New claim identity and fields
+  The proposed ID VP2-I1-REALIZES-SENSITIVITY-001 matches the established
+  VP2-I1-<topic>-001 convention and is accepted.
+
+  Required claim row:
+    id = VP2-I1-REALIZES-SENSITIVITY-001
+    group_id = GRP-IFACE-I1
+    source_label = I-1 感受性実現条件
+    claim_kind = definition
+    statement_ja = 物理応答の微分が有限関係の標準接続行列線形化を実現する条件
+    conclusion = (T_w response base).toLinearMap = linearizeRelation rel
+    lean_decl = ERIEC.InterfaceLinearization.RealizesSensitivityAt
+    lean_file = formal/ERIEC/InterfaceLinearization.lean
+    statement_spec = specs/statements/VP2-I1-REALIZES-SENSITIVITY-001.lean
+    statement_hash = sha256:269316677a5f8564ec5ed4241943aabed418d638464508c8f92533b7ec55f7c5
+    spec_status = frozen
+    proof_status = not_applicable
+    implementation_status = tested
+    realization_kind = executable
+    julia_api = check_relation_sensitivity_bridge
+    julia_file = src/interface_linearization.jl
+    contract_id = interface.sensitivity_realization
+    certification_status = certified
+    certification_log = the actual new G4 log path, set only after G4 passes
+    depends_on = [VP2-I1-REL-LIN-001]
+
+  Because GRP-IFACE-I1 has coverage=complete and the integrity test requires every
+  child of a complete group to be frozen, the new claim cannot be inserted as
+  draft. Its statement spec must be reviewed/typechecked before or in the same
+  gate batch, then the exact byte hash recorded.
+
+4. Exact new statement spec content
+  The hash above is for exactly this UTF-8 file, including the final newline:
+
+    import ERIEC.InterfaceLinearization
+
+    namespace ERIECV2.Statement.VP2_I1_REALIZES_SENSITIVITY_001
+
+    #check (ERIEC.InterfaceLinearization.RealizesSensitivityAt :
+      ∀ {m e : Nat}
+        (rel : Fin m → Set (Fin e))
+        (response : EuclideanSpace ℝ (Fin m) → EuclideanSpace ℝ (Fin e))
+        (base : EuclideanSpace ℝ (Fin m)),
+          Prop)
+
+    end ERIECV2.Statement.VP2_I1_REALIZES_SENSITIVITY_001
+
+5. Group hygiene
+  Add VP2-I1-REALIZES-SENSITIVITY-001 to GRP-IFACE-I1.children. Keep the two
+  existing children. Revise coverage_note so it distinguishes three atoms:
+  relation linearization, the executable RealizesSensitivityAt predicate, and the
+  formal-only adjoint consequence theorem. Do not imply that the checker executes
+  the consequence theorem.
+
+6. Count/document corrections
+  Claude's README line references are not present in the current repository.
+  specs/statements/README.md is only 17 lines and contains a historical initial
+  state of 53 draft claims; it has no 90/38/85 assertions. No scoped count update
+  is required there.
+
+  The actual hard-coded current counts are in specs/loop-orchestration-spec.md
+  lines 12-13 and 64. Update all three occurrences from:
+    90 claims, 38 certified, 52 uncertified (as of 2026-08-14)
+  to:
+    91 claims, 38 certified, 53 uncertified (as of 2026-08-20)
+  Certification stays at 38: A-2 removes one certified contract and A-3 adds one.
+  The repository contains no statement that 85 claims lie outside contracts; 85
+  is currently the number of frozen claims, not the non-contract count.
+
+  Expected post-change distributions:
+    claims 91
+    spec_status: frozen 86, draft 5
+    proof_status: proved 68, not_applicable 22, unproved 1
+    implementation_status: tested 57, not_applicable 34
+    certification_status: certified 38, uncertified 53
+    realization_kind: executable 31, formal_only 31, numerical 5,
+      witness 21, none 3
+    contract-bearing claims 38
+
+7. N3 test coupling
+  test/test_claim_ledger.jl fixes neither total count nor status/realization
+  distributions. It does require:
+  - all group children exist;
+  - every child of a complete group is frozen;
+  - every statement_spec file exists and matches its SHA-256;
+  - every contract-bearing claim is certified, its catalog ID exists, and its
+    certification_log exists.
+  test/test_ledger_consistency.jl fixes no claim count or realization distribution.
+  The new certified claim therefore needs a real G4 log before the row can pass.
+
+8. N4 grading rebind
+  Independent search confirms claim-ledger-v2 contains neither
+  ERIEC.Grading.constPresheaf_iff_antitone nor ERIEC.Grading.AntitoneRelation nor
+  contract_id=grading.const_presheaf_antitone. R2 is confined to manifest,
+  CertifiedArtifact catalog, and the certified v1 VP-GRA-001 lean_decl, followed
+  by the required gate rerun.
+
+9. Full implementation-batch coupling for option A
+  In addition to the already specified exact-13 remediation edits, Stage 2 must:
+  - update the old derivative theorem claim's realization metadata only;
+  - add the new frozen definition claim and exact statement spec;
+  - append the group child and revise its coverage note;
+  - update the three loop-orchestration count statements;
+  - rebind interface.sensitivity_realization in catalog/manifest to the new claim;
+  - run the statement/Lean build, claim integrity, contract, manifest, ledger,
+    category, targeted Julia, and full G3/G4 checks with new evidence logs.
+  No checker behavior, fixture, tolerance, seed, theorem statement/hash, or
+  retained exact classification may change.
+
+Option comparison
+  A is now preferable to B because it preserves the existing public contract ID
+  while making its actual executable proposition explicit, and preferable to C
+  because it does not rewrite a frozen theorem. Its cost is one new atomic claim
+  and the first-ever executable-to-formal_only metadata correction, both fully
+  visible in the audit trail.

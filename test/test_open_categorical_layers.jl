@@ -22,6 +22,19 @@ using Test
     @test check_open_path(recurrent_graph, internal_path_witness)
     @test internal_path(internal_path_witness)
     @test path_length(internal_path_witness) == 2
+    @test check_open_path(recurrent_graph, OpenPath([:a], OpenEdgeKind[]))
+    @test check_open_path(
+        recurrent_graph,
+        OpenPath([:b, :a], OpenEdgeKind[repair]),
+    )
+    @test !check_open_path(
+        recurrent_graph,
+        OpenPath([:a, :outside], OpenEdgeKind[internal]),
+    )
+    @test !check_open_path(
+        recurrent_graph,
+        OpenPath([:a, :a], OpenEdgeKind[internal]),
+    )
     @test check_finite_internal_horizon(recurrent_frame) ==
         (holds=true, horizon=2, violating_state=nothing)
     @test check_recoverable(recurrent_frame, kinds)

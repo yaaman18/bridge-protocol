@@ -143,8 +143,8 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "interface.sensitivity_realization"
         leanModule := "ERIEC.InterfaceLinearization"
-        leanName := "converse_linearization_eq_sensitivity_adjoint"
-        leanKind := "theorem"
+        leanName := "RealizesSensitivityAt"
+        leanKind := "def"
         juliaSymbol := "check_relation_sensitivity_bridge"
         juliaChecker := "check_relation_sensitivity_bridge"
       },
@@ -287,8 +287,8 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "grading.const_presheaf_antitone"
         leanModule := "ERIEC.Grading"
-        leanName := "constPresheaf_iff_antitone"
-        leanKind := "theorem"
+        leanName := "AntitoneRelation"
+        leanKind := "def"
         juliaSymbol := "check_const_presheaf_antitone"
         juliaChecker := "check_const_presheaf_antitone"
       },
@@ -319,9 +319,9 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "hinge.act"
         leanModule := "ERIEC.Hinge"
-        leanName := "Act"
+        leanName := "ActNonempty"
         leanKind := "def"
-        juliaSymbol := "Act"
+        juliaSymbol := "check_hinge"
         juliaChecker := "check_hinge"
       },
       {
@@ -501,11 +501,27 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "classify_action_markers"
       },
       {
+        id := "markers.classify"
+        leanModule := "ERIEC.Markers"
+        leanName := "classify"
+        leanKind := "def"
+        juliaSymbol := "classify_action_markers"
+        juliaChecker := "check_marker_classification"
+      },
+      {
         id := "opendynamics.open_graph"
         leanModule := "ERIEC.OpenDynamics"
         leanName := "OpenGraph"
         leanKind := "structure"
         juliaSymbol := "FiniteOpenGraph"
+        juliaChecker := "check_open_path"
+      },
+      {
+        id := "opendynamics.path"
+        leanModule := "ERIEC.OpenDynamics"
+        leanName := "Path"
+        leanKind := "inductive"
+        juliaSymbol := "OpenPath"
         juliaChecker := "check_open_path"
       },
       {

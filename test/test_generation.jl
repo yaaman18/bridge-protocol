@@ -35,6 +35,171 @@ using ERIEC
     @test !check_proliferation_morphism(phi_rich_lax=false)
     @test !check_proliferation_morphism(inverse_translation=true)
 
+    parent_alpha = m -> m == :pm0 ? Set([:pe0, :pe1]) : Set([:pe0])
+    parent_sigma = e -> e == :pe0 ? Set([:pm0, :pm1]) : Set([:pm0])
+    parent_pi = _ -> Set([:pc0])
+    parent_rho = _ -> Set([:pm0, :pm1])
+    parent = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        parent_alpha,
+        parent_sigma,
+        parent_pi,
+        parent_rho,
+        _ -> Set([:pc0]),
+        _ -> Set([:pe0, :pe1]),
+        Set([:pc0]),
+        :ps,
+    )
+    child_alpha = _ -> Set([:ce0, :ce1])
+    child_sigma = _ -> Set([:cm0])
+    child_pi = _ -> Set([:cc0])
+    child_rho = _ -> Set([:cm0])
+    child = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        child_alpha,
+        child_sigma,
+        child_pi,
+        child_rho,
+        _ -> Set([:cc0]),
+        _ -> Set([:ce0, :ce1]),
+        Set([:cc0]),
+        :cs,
+    )
+    parent_carriers = (
+        motors=[:pm0, :pm1],
+        environments=[:pe0, :pe1],
+        cores=[:pc0],
+        states=[:ps, :ps_aux],
+    )
+    child_carriers = (
+        motors=[:cm0],
+        environments=[:ce0, :ce1],
+        cores=[:cc0],
+        states=[:cs, :cs_aux],
+    )
+    heritage_carrier = [:root, :descendant]
+    rank_carrier = [:low, :high]
+    candidate = (
+        parent_config=(:ps, (:ps, :ps_aux)),
+        child_config=(:cs, (:cs_aux, :cs)),
+        record=(:literal_record, 1),
+        parent_heritage=_ -> :root,
+        child_heritage=_ -> :descendant,
+        heritage_related=(left, right) -> left == right ||
+            (left == :root && right == :descendant),
+        rank_le=(left, right) -> left == :low || right == :high,
+        parent_rank=:low,
+        child_rank=:low,
+        wstar=:high,
+    )
+    @test check_proliferation_morphism(
+        parent,
+        child,
+        parent_carriers,
+        child_carriers,
+        heritage_carrier,
+        rank_carrier,
+        candidate,
+    )
+
+    # Four independently falsified proof fields.
+    bad_parent_viable = merge(candidate, (
+        parent_config=(:ps_aux, (:ps, :ps_aux)),
+    ))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, bad_parent_viable,
+    )
+    bad_child_viable = merge(candidate, (
+        child_config=(:cs_aux, (:cs_aux, :cs)),
+    ))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, bad_child_viable,
+    )
+    bad_heritage = merge(candidate, (
+        heritage_related=(left, right) -> left == right,
+    ))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, bad_heritage,
+    )
+    bad_rank_bound = merge(candidate, (child_rank=:high, wstar=:low))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, bad_rank_bound,
+    )
+
+    # phi_rich is Int-valued 0/1, matching Lean Nat-valued 0/1. The two
+    # following proof fields are logically equivalent under the current Lean
+    # definition, but their separate executable paths are both asserted.
+    child_without_branch = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        _ -> Set([:ce0]),
+        e -> e == :ce0 ? Set([:cm0]) : Set{Symbol}(),
+        child_pi,
+        child_rho,
+        _ -> Set([:cc0]),
+        _ -> Set([:ce0]),
+        Set([:cc0]),
+        :cs,
+    )
+    shared_counterexample = ERIEC._proliferation_richness_obligations(
+        parent,
+        child_without_branch,
+        parent_carriers.motors,
+        child_carriers.motors,
+    )
+    @test shared_counterexample.parent_phi == 1
+    @test shared_counterexample.child_phi == 0
+    @test !shared_counterexample.phi_rich_lax
+    @test !shared_counterexample.branch_transport
+    @test !check_proliferation_morphism(
+        parent, child_without_branch, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, candidate,
+    )
+
+    # A distinct mutation fixes the same equivalence in the vacuous direction.
+    parent_without_branch = ERIEState{Symbol,Symbol,Symbol,Symbol}(
+        _ -> Set([:pe0]),
+        e -> e == :pe0 ? Set([:pm0, :pm1]) : Set{Symbol}(),
+        parent_pi,
+        parent_rho,
+        _ -> Set([:pc0]),
+        _ -> Set([:pe0]),
+        Set([:pc0]),
+        :ps,
+    )
+    equivalent_vacuous = ERIEC._proliferation_richness_obligations(
+        parent_without_branch,
+        child_without_branch,
+        parent_carriers.motors,
+        child_carriers.motors,
+    )
+    @test equivalent_vacuous.parent_phi == 0
+    @test equivalent_vacuous.child_phi == 0
+    @test equivalent_vacuous.phi_rich_lax
+    @test equivalent_vacuous.branch_transport
+
+    # Closed encoding guards.
+    unknown_candidate = merge(candidate, (unknown_field=:reject,))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, unknown_candidate,
+    )
+    missing_candidate = Base.structdiff(candidate, (record=nothing,))
+    @test !check_proliferation_morphism(
+        parent, child, parent_carriers, child_carriers,
+        heritage_carrier, rank_carrier, missing_candidate,
+    )
+    duplicate_parent_carrier = merge(parent_carriers, (states=[:ps, :ps],))
+    @test !check_proliferation_morphism(
+        parent, child, duplicate_parent_carrier, child_carriers,
+        heritage_carrier, rank_carrier, candidate,
+    )
+    incomplete_parent_carrier = merge(parent_carriers, (motors=[:pm0],))
+    @test !check_proliferation_morphism(
+        parent, child, incomplete_parent_carrier, child_carriers,
+        heritage_carrier, rank_carrier, candidate,
+    )
+
     @test check_lineage_stays_open()
     @test !check_lineage_stays_open(phi_rich_fixed=false)
     @test !check_lineage_stays_open(asserts_eventual_periodicity=true)

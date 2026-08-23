@@ -1,7 +1,7 @@
 schema_version = 2
 allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "lean_only", "unclassified"]
 sensitivity_registry = "test/checker_sensitivity_cases.jl"
-sensitivity_registry_sha256 = "86f43be91705743366353a9e303e83b63bb0273c72828a0367b279378e6d2cf3"
+sensitivity_registry_sha256 = "de701de4b5cb0b8539df6c72fc916cc00ed2cc4ed4e8c4803bec15f7dc80852b"
 
 [[contract]]
 id = "adjunction.system"
@@ -56,12 +56,12 @@ id = "interface.sensitivity_realization"
 checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_relation_sensitivity_bridge"
-lean_decl = "ERIEC.InterfaceLinearization.converse_linearization_eq_sensitivity_adjoint"
+lean_decl = "ERIEC.InterfaceLinearization.RealizesSensitivityAt"
 scope = "one supplied finite relation, differentiable response, and base point"
 assumptions = ["ForwardDiff computes the intended Jacobian and exact matrix equality is meaningful for the supplied values"]
 guarantee = "decides the finite realization condition equating the sensitivity tensor with the relation incidence matrix"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-remediation-20260820.log"
 
 [[contract]]
 id = "interface.relation_naturality"
@@ -272,12 +272,12 @@ id = "grading.const_presheaf_antitone"
 checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_const_presheaf_antitone"
-lean_decl = "ERIEC.Grading.constPresheaf_iff_antitone"
+lean_decl = "ERIEC.Grading.AntitoneRelation"
 scope = "all combinations of the supplied finite ranks and carriers"
 assumptions = ["leq and relation are total on the enumerated values"]
-guarantee = "decides antitonicity of the supplied finite relation, the constructive side of the Lean equivalence"
+guarantee = "decides the AntitoneRelation proposition for every tuple in the complete supplied finite carriers"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-remediation-20260820.log"
 
 [[contract]]
 id = "grading.critical_rank"
@@ -320,12 +320,12 @@ id = "hinge.act"
 checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_hinge"
-lean_decl = "ERIEC.Hinge.Act"
+lean_decl = "ERIEC.Hinge.ActNonempty"
 scope = "one supplied state with finite runtime relation images"
 assumptions = ["rho_rel, sigma_rel, kappa, and epsilon are total on the queried values"]
-guarantee = "decides nonemptiness of the runtime Act intersection at the supplied state"
+guarantee = "exactly decides the bound Lean ActNonempty predicate by computing the runtime Act intersection at the supplied state and testing its nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/hinge-act-rebind-audit-20260817.log"
 
 [[contract]]
 id = "collapse.critical_slowing"
@@ -365,15 +365,15 @@ basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "certification.critical_bound"
-checker_relation = "exact_finite_decision"
+checker_relation = "complete_only"
 review_status = "reviewed"
 checker = "check_critical_bound"
 lean_decl = "ERIEC.DC.crit_bound"
 scope = "one supplied finite configuration at one rank"
-assumptions = ["subset and order predicates implement the intended runtime relations"]
-guarantee = "decides the supplied instance of nonempty and post-fixed implying not above threshold"
+assumptions = ["subset and order predicates implement the intended runtime relations", "the input family is derived from a faithful Lean witness satisfying sig2"]
+guarantee = "checks only the one-rank, one-K projection rather than the theorem's global quantification; for a faithful sig2 witness, Lean theorem validity implies checker acceptance, but acceptance does not establish sig2"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-remediation-20260820.log"
 
 [[contract]]
 id = "sensitivity.dual_symmetry"
@@ -568,9 +568,21 @@ checker = "classify_action_markers"
 lean_decl = "ERIEC.Markers.FMMarkers"
 scope = "one supplied Julia FMMarkers value"
 assumptions = ["the returned Symbol classification is a runtime convention not a field of the Lean structure"]
-guarantee = "reports a functional class from four marker Booleans; it does not validate construction of the Lean structure"
+guarantee = "reports a functional class from four marker Booleans; it does not validate construction of the Lean structure, whose classification semantics are separately bound by markers.classify"
 reviewer = "codex"
 basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
+
+[[contract]]
+id = "markers.classify"
+checker_relation = "exact_finite_decision"
+review_status = "reviewed"
+checker = "check_marker_classification"
+lean_decl = "ERIEC.Markers.classify"
+scope = "one supplied FMMarkers value and one candidate from the closed three-Symbol encoding; all 16 Bool^4 marker inputs are covered by the literal oracle"
+assumptions = ["FunctionalClass.consciousMarker is encoded as :conscious, blindsightAnalog as :blindsight_analog, and nonconsciousMarker as :nonconscious"]
+guarantee = "independently decides the graph equation classify(markers)=expected without calling classify_action_markers; the complete literal Bool^4 oracle fixes the bridge, mutated candidates are rejected, and unknown Symbols are rejected"
+reviewer = "codex"
+basis_log = "logs/gates/checker-strengthening/order-10b-stage2-20260823.log"
 
 [[contract]]
 id = "opendynamics.open_graph"
@@ -580,9 +592,21 @@ checker = "check_open_path"
 lean_decl = "ERIEC.OpenDynamics.OpenGraph"
 scope = "one supplied finite graph and one runtime path"
 assumptions = ["path states and edge kinds are explicitly enumerated"]
-guarantee = "validates a path through a graph but does not validate or decide construction of the Lean OpenGraph structure"
+guarantee = "validates a path through a graph but does not validate or decide construction of the Lean OpenGraph structure; its Path witness semantics are separately bound by opendynamics.path"
 reviewer = "codex"
 basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+
+[[contract]]
+id = "opendynamics.path"
+checker_relation = "witness_validator"
+review_status = "reviewed"
+checker = "check_open_path"
+lean_decl = "ERIEC.OpenDynamics.Path"
+scope = "one supplied OpenPath witness over one supplied FiniteOpenGraph"
+assumptions = ["Julia state, port, and edge-kind values faithfully encode the Lean carriers and EdgeKind constructors", "graph.step is total and Bool-valued on every supplied adjacent triple", "graph.states is the complete finite state carrier in scope"]
+guarantee = "validates the erased list encoding of one endpoint-indexed Lean Path witness by checking shape, carrier membership, and every adjacent graph.step obligation; it does not decide existence of arbitrary paths"
+reviewer = "codex"
+basis_log = "logs/gates/checker-strengthening/order-10b-stage2-20260823.log"
 
 [[contract]]
 id = "audit.simulation"
@@ -627,15 +651,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
 
 [[contract]]
 id = "invariance.update_bisimulation"
-checker_relation = "exact_finite_decision"
+checker_relation = "regression_only"
 review_status = "reviewed"
 checker = "check_update_bisimulation"
 lean_decl = "ERIEC.Invariance.upd_bisim"
 scope = "the caller-supplied finite sample collection"
 assumptions = ["isequal implements the intended equality on sampled states"]
-guarantee = "decides the one-step commuting equation on every supplied sample, not on unsampled states"
+guarantee = "regresses a commuting equation on supplied samples only; no bridge binds the generic Julia map/update callbacks to Lean mapConf/upd or validates hPhi, hTheta, and DriftEquivariant, so neither theorem direction is certified"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-01-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-remediation-20260820.log"
 
 [[contract]]
 id = "reference_models.v5_1"
@@ -867,15 +891,15 @@ basis_log = "logs/gates/checker-strengthening/order-10-11-preaudit-20260814.log"
 
 [[contract]]
 id = "generation.proliferation_morphism"
-checker_relation = "regression_only"
+checker_relation = "witness_validator"
 review_status = "reviewed"
 checker = "check_proliferation_morphism"
 lean_decl = "ERIEC.Generation.ProliferationMorphism"
-scope = "seven caller-supplied Boolean audit flags"
-assumptions = ["the flags are not evidence objects for the Lean structure fields"]
-guarantee = "checks a runtime report shape and one-way guard but does not validate a ProliferationMorphism witness"
+scope = "one supplied finite ProliferationMorphism encoding over complete parent, child, Heritage, and Rank carriers"
+assumptions = ["the supplied M, M', E, E', C, C', S, S', Heritage, and Rank carriers exhaust their runtime encodings", "Julia equality faithfully encodes equality on every supplied carrier", "the supplied DC relations, heritage functions and relation, and rank order faithfully encode the corresponding Lean data and are total on the complete finite carriers", "the legacy Boolean-keyword method remains regression-only and is not witness evidence"]
+guarantee = "the additive method validates both finite DC encodings, configuration viability, total heritage data and heritage_lax, the complete finite preorder and rank bound, and independently recomputes phi_rich_lax and branch_transport from existing Act and Branch semantics; under the current Lean definitions the last two proof fields are logically equivalent"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/order-10c-stage1-audit-20260823.log"
 
 [[contract]]
 id = "generation.lineage_stays_open"
@@ -927,15 +951,15 @@ basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
 
 [[contract]]
 id = "temporaldc.observed_termination"
-checker_relation = "exact_finite_decision"
+checker_relation = "regression_only"
 review_status = "reviewed"
 checker = "check_observed_termination"
 lean_decl = "ERIEC.TemporalDC.Certification.ObservedTerminationStep"
 scope = "adjacent pairs in the complete supplied finite Boolean trace and observation mask"
 assumptions = ["trace adjacency represents the step function on the inspected finite run"]
-guarantee = "decides whether the supplied run contains an observed true-to-false DC transition"
+guarantee = "regresses whether a runtime trace contains an observed true-to-false transition; Lean binds one explicit x,y pair, while Julia existentially searches adjacent pairs, so these are different propositions until redesigned"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-remediation-20260820.log"
 
 [[contract]]
 id = "temporaldc.permanent_termination"

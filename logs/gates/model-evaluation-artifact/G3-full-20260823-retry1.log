@@ -1,0 +1,2 @@
+ORCHESTRATION ERROR: caller timeout stopped the full test before Julia produced output.
+This is not a G3 test result; see G3-full-20260823-retry2.log for the completed rerun.

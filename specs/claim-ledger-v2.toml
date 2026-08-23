@@ -122,9 +122,9 @@ id = "GRP-IFACE-I1"
 source = "docs/ERIEC_未解決命題台帳_v1.md#I-1"
 title_ja = "有限関係と連続感受性の界面"
 legacy_vp_ids = []
-children = ["VP2-I1-REL-LIN-001", "VP2-I1-DERIV-BRIDGE-001"]
+children = ["VP2-I1-REL-LIN-001", "VP2-I1-REALIZES-SENSITIVITY-001", "VP2-I1-DERIV-BRIDGE-001"]
 coverage = "complete"
-coverage_note = "有限関係の線形化と、実際のJacobianがそれを実現する場合の T_w† 一致を形式化。適合述語の充足は個別模型ごとの検証事項。"
+coverage_note = "有限関係の線形化、Jacobian適合述語 RealizesSensitivityAt の実行可能判定、同述語を仮定した T_w† 一致の形式定理を別々の原子claimとして記録する。checkerは帰結定理を実行しない。"
 
 [[claim_group]]
 id = "GRP-A5-NAT"
@@ -1183,6 +1183,28 @@ certification_log = "logs/gates/I1-REL-LIN-001/G4-20260706.log"
 depends_on = []
 
 [[claim]]
+id = "VP2-I1-REALIZES-SENSITIVITY-001"
+group_id = "GRP-IFACE-I1"
+source_label = "I-1 感受性実現条件"
+claim_kind = "definition"
+statement_ja = "物理応答の微分が有限関係の標準接続行列線形化を実現する条件"
+conclusion = "(T_w response base).toLinearMap = linearizeRelation rel"
+lean_decl = "ERIEC.InterfaceLinearization.RealizesSensitivityAt"
+lean_file = "formal/ERIEC/InterfaceLinearization.lean"
+statement_spec = "specs/statements/VP2-I1-REALIZES-SENSITIVITY-001.lean"
+statement_hash = "sha256:269316677a5f8564ec5ed4241943aabed418d638464508c8f92533b7ec55f7c5"
+spec_status = "frozen"
+proof_status = "not_applicable"
+implementation_status = "tested"
+realization_kind = "executable"
+julia_api = "check_relation_sensitivity_bridge"
+julia_file = "src/interface_linearization.jl"
+contract_id = "interface.sensitivity_realization"
+certification_status = "certified"
+certification_log = "logs/gates/VP2-I1-REALIZES-SENSITIVITY-001/G4-20260820.log"
+depends_on = ["VP2-I1-REL-LIN-001"]
+
+[[claim]]
 id = "VP2-I1-DERIV-BRIDGE-001"
 group_id = "GRP-IFACE-I1"
 source_label = "I-1 感受性適合界面"
@@ -1196,13 +1218,9 @@ statement_spec = "specs/statements/VP2-I1-DERIV-BRIDGE-001.lean"
 statement_hash = "sha256:e9fc8a5a786d293ac44d01f61a60733a618637348a600880e0a1b8f98dfa0085"
 spec_status = "frozen"
 proof_status = "proved"
-implementation_status = "tested"
-realization_kind = "executable"
-julia_api = "check_relation_sensitivity_bridge"
-julia_file = "src/interface_linearization.jl"
-contract_id = "interface.sensitivity_realization"
-certification_status = "certified"
-certification_log = "logs/gates/I1-DERIV-BRIDGE-001/G4-20260706.log"
+implementation_status = "not_applicable"
+realization_kind = "formal_only"
+certification_status = "uncertified"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]

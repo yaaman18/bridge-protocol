@@ -92,14 +92,14 @@ coverage_audit = "unreviewed"
 id          = "VP-HNG-001"
 source      = "category/tensor_categorical_v5.md#検証点4"
 claim_ja    = "蝶番 Act_w = ρ⋆(κs) ∩ σ⋆(εs) ≠ ∅（M3）"
-lean_decl   = "ERIEC.Hinge.Act"
+lean_decl   = "ERIEC.Hinge.ActNonempty"
 lean_file   = "formal/ERIEC/Hinge.lean"
 julia_api   = "check_hinge"
 julia_file  = "src/hinge.jl"
-contract_id = "hinge.act"                      # 予約名（catalog 未登録。G4 で登録要）
+contract_id = "hinge.act"                      # 予約名（catalog 登録済み）
 owner       = "codex"
 depends_on  = ["VP-ADJ-001", "VP-CLO-001"]
-status      = "certified"                     # G4: logs/gates/VP-HNG-001/G4-20260705.log
+status      = "certified"                     # G4: logs/gates/VP-HNG-001/G4-20260817.log
 pinned      = false
 coverage_audit = "unreviewed"
 
@@ -201,6 +201,21 @@ pinned      = false
 coverage_audit = "unreviewed"
 
 [[vp]]
+id          = "VP-OPD-002"
+source      = "category/三層構造の圏論的定式化_v5_1.md#§17"
+claim_ja    = "有限 OpenGraph 上の Path 符号化証人を全隣接辺の再検査によって検証する"
+lean_decl   = "ERIEC.OpenDynamics.Path"
+lean_file   = "formal/ERIEC/OpenDynamics.lean"
+julia_api   = "OpenPath"
+julia_file  = "src/open_dynamics.jl"
+contract_id = "opendynamics.path"
+owner       = "codex"
+depends_on  = ["VP-OPD-001"]
+status      = "implemented"                  # G3: logs/gates/VP-OPD-002/G3-20260823.log
+pinned      = false
+coverage_audit = "unreviewed"
+
+[[vp]]
 id          = "VP-AUD-001"
 source      = "category/三層構造の圏論的定式化_v5_1.md#§18"
 claim_ja    = "Audit: Simulation の圏の三法則（id_comp / comp_id / assoc）、UsesOnly 保存"
@@ -262,6 +277,21 @@ status      = "certified"                     # G4: logs/gates/VP-MRK-001/G4-202
 pinned      = false
 coverage_audit = "unreviewed"
 
+[[vp]]
+id          = "VP-MRK-002"
+source      = "category/tensor_categorical_v5.md#検証点9"
+claim_ja    = "classify の全 Bool^4 入力に対する閉じた3値符号化の有限グラフ判定"
+lean_decl   = "ERIEC.Markers.classify"
+lean_file   = "formal/ERIEC/Markers.lean"
+julia_api   = "classify_action_markers"
+julia_file  = "src/markers.jl"
+contract_id = "markers.classify"
+owner       = "codex"
+depends_on  = ["VP-MRK-001"]
+status      = "implemented"                  # G3: logs/gates/VP-MRK-002/G3-20260823.log
+pinned      = false
+coverage_audit = "unreviewed"
+
 # ---- v5.1 §16: 未実装Lean義務の機械追跡 ----------------------------------
 
 [[vp]]
@@ -283,14 +313,14 @@ coverage_audit = "unreviewed"
 id          = "VP-GRA-001"
 source      = "category/三層構造の圏論的定式化_v5_1.md#§2"
 claim_ja    = "階数圏・関係前層・定台前層性と反単調性の同値"
-lean_decl   = "ERIEC.Grading.constPresheaf_iff_antitone"
+lean_decl   = "ERIEC.Grading.AntitoneRelation"
 lean_file   = "formal/ERIEC/Grading.lean"
 julia_api   = "check_const_presheaf_antitone"
 julia_file  = "src/grading.jl"
 contract_id = "grading.const_presheaf_antitone"
 owner       = "codex"
 depends_on  = ["VP-ADJ-002"]
-status      = "certified"                     # G4: logs/gates/VP-GRA-001/G4-20260705.log
+status      = "certified"                     # G4 rebind: logs/gates/VP-GRA-001/G4-20260820.log
 pinned      = false
 coverage_audit = "unreviewed"
 

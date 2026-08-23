@@ -15,7 +15,9 @@ using .CategoryPipeline
     @test haskey(sections, "§20")
     mapped_sections = Dict(String(entry["id"]) => entry for entry in manifest["section"])
     @test mapped_sections["§0"]["all_vps"] === true
-    @test mapped_sections["§17"]["vp_ids"] == ["VP-OPD-001"]
+    @test mapped_sections["§9"]["vp_ids"] == ["VP-MRK-001", "VP-MRK-002"]
+    @test mapped_sections["§14"]["vp_ids"] == ["VP-MRK-001", "VP-MRK-002"]
+    @test mapped_sections["§17"]["vp_ids"] == ["VP-OPD-001", "VP-OPD-002"]
     @test mapped_sections["§18"]["vp_ids"] == ["VP-AUD-001"]
     @test mapped_sections["§19"]["vp_ids"] == ["VP-LIN-001"]
     @test mapped_sections["§20"]["vp_ids"] == ["VP-TTR-001"]
@@ -32,10 +34,17 @@ using .CategoryPipeline
         @test startswith(ledger[vp_id]["source"], "category/三層構造の圏論的定式化_v5_1.md#§")
     end
     @test ledger["VP-OPD-001"]["julia_api"] == "FiniteOpenGraph"
+    @test ledger["VP-OPD-002"]["julia_api"] == "OpenPath"
+    @test ledger["VP-MRK-002"]["julia_api"] == "classify_action_markers"
     @test ledger["VP-AUD-001"]["julia_api"] == "FiniteSimulation"
     @test ledger["VP-LIN-001"]["lean_decl"] == "ERIEC.OpenEvolution.Lineage"
     @test ledger["VP-TTR-001"]["julia_api"] == "GuaranteeProfile"
-    opd_impact = Impact(["§17"], String[], ["VP-OPD-001"], ["VP-OPD-001"], String[])
+    opd_impact = Impact(
+        ["§17"], String[],
+        ["VP-OPD-001", "VP-OPD-002"],
+        ["VP-OPD-001", "VP-OPD-002"],
+        String[],
+    )
     @test CategoryPipeline._lean_targets_for_impact(ledger, opd_impact) == ["ERIEC.OpenDynamics"]
 
     mktempdir() do directory
@@ -45,6 +54,35 @@ using .CategoryPipeline
         @test "| VP | Lean | Julia | status | coverage |" in report_lines
         vp_row = only(filter(line -> startswith(line, "| VP-OPD-001 |"), report_lines))
         @test endswith(vp_row, "| `certified` | unreviewed |")
+    end
+
+    mktempdir() do directory
+        first_report = report_history_path(directory)
+        write_report(first_report, opd_impact, ledger, GateResult[])
+        first_bytes = read(first_report)
+        second_report = report_history_path(directory)
+        write_report(second_report, Impact(String[], String[], String[], String[], String[]), ledger, GateResult[])
+        @test first_report != second_report
+        @test read(first_report) == first_bytes
+        @test isfile(second_report)
+    end
+
+    mktempdir() do directory
+        first_result = CategoryPipeline._run_gate(
+            directory,
+            "G-test-history",
+            ["sh", "-c", "printf first"],
+        )
+        second_result = CategoryPipeline._run_gate(
+            directory,
+            "G-test-history",
+            ["sh", "-c", "printf second; exit 1"],
+        )
+        @test first_result.passed
+        @test !second_result.passed
+        @test first_result.log != second_result.log
+        @test read(joinpath(directory, first_result.log), String) == "first"
+        @test read(joinpath(directory, second_result.log), String) == "second"
     end
 
     mktempdir() do directory

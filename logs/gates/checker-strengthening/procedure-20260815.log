@@ -81,6 +81,101 @@ Unnumbered messages count conservatively. The final message is PAUSE and needs n
   inspect downstream dependencies first.
 
 10. Fixed endpoint
-The remaining batches are order-11, order-10b, order-10c, and the fixed read-only exact
-audit of 13 contracts recorded in hygiene-audit-20260815.log. Adding scope requires a user
-decision.
+Order-11 is complete. The remaining batches are the fixed read-only exact audit of 13
+contracts recorded in hygiene-audit-20260815.log, order-10b, and order-10c. Run the fixed
+13-contract audit first, then order-10b, then order-10c. The fixed audit is the legacy exact
+backlog, not a substitute for the normal current-rule audit of any exact contract newly
+added by order-10b. Adding scope requires a user decision.
+
+11. Trust-boundary rule established by order-11
+- A checker input may contain executable values only when they encode the object or
+  relation being supplied as candidate data, and the checker independently recomputes the
+  claimed witness obligations relative to that data. The manifest classification alone
+  does not decide whether an executable input is safe.
+- A caller-supplied function, callable, result struct, or Bool is forbidden when it answers
+  a proof obligation, conclusion, correspondence, or fixed-object identity that the checker
+  claims to validate. Repackaging such an oracle is self-confirmation even for a
+  witness_validator.
+- For fixed or canonically identified Lean objects, use a checked closed literal decoder or
+  equivalent correspondence evidence. In order-11 all five new overloads therefore used
+  closed literal inputs; their decoders constructed ERIEState values and callbacks only
+  after validating the literal schema.
+- Before reusing an existing API, open its argument type definitions, including nested
+  fields. If it requires executable values or result/proof fields, decide field by field
+  whether each is candidate data or an obligation oracle. Construct obligation-bearing
+  runtime representations only inside the decoder after independent inputs have been
+  checked.
+- Before implementation, record one trust-boundary line per added overload: accepted input
+  types, nested executable fields, Bool fields, result/proof structs, and which obligations
+  are independently recomputed. A violation blocks implementation.
+
+The order-11 labels R-A/R-B/R-C were a batch-specific strict instance of this rule:
+- R-A: each order-11 overload accepted closed literal data only.
+- R-B: existing callback/result-based representations were constructed internally from the
+  checked literals.
+- R-C: each overload received a mechanical pre-implementation boundary audit, recorded in
+  order-11-audit-20260815.log.
+
+This does not imply that every witness_validator must literalize every function. For
+OpenDynamics.Path, `OpenGraph.step` is the relation belonging to the supplied graph; a
+constantly true step describes a complete graph, so accepting its paths is not by itself a
+false positive. The checker must still bind the contract to Path rather than claim to
+validate construction of a fixed OpenGraph, and must validate every edge of the supplied
+path relative to that graph. Conversely, Generation.ProliferationMorphism contains proof
+fields such as parent_viable, child_viable, heritage_lax, child_rank_le_wstar,
+phi_rich_lax, and branch_transport. Replacing those obligations by caller Booleans or
+callbacks is self-reporting even under witness_validator. Order-10c Stage 1 must determine
+which underlying finite functions are legitimate candidate data and how every proof field
+is recomputed; no blanket conclusion that literal decoding is unnecessary is accepted.
+
+12. Additional recorded failure mode
+- F8: An instruction to reuse an existing API was issued without opening the API's argument
+  types. In order-11 this first exposed DCResult proof Booleans, then seven required caller
+  callbacks in check_reference_models(candidate), then ERIEState's nested Function fields.
+  Changing one obligation-bearing representation to another did not move the trust
+  boundary. The prevention rule is twofold: inspect argument and nested field types before
+  proposing reuse, and re-run the written boundary rule against every revision, including
+  revisions authored by the person who wrote the rule.
+
+13. Bool distinction
+- A Bool that is the finite data being classified is permitted. The four fields of
+  Markers.FMMarkers are examples: they are the input to Markers.classify, not claims that
+  separate proof obligations have already succeeded.
+- A Bool that reports `parent_viable`, `heritage_lax`, `branch_transport`, DC proof fields,
+  or another obligation is not evidence for that obligation. It may be used only for a
+  deliberately weak runtime-report contract whose manifest guarantee explicitly disclaims
+  witness validation; it cannot support promotion by itself.
+
+14. Messaging operation
+- Team `erie` has two Claude Code identities. `claude` points at the frozen
+  `/Users/yamaguchimitsuyuki/erie-c`; `claude-bridge` points at this working repository.
+  Checker-strengthening messages use `claude-bridge` only.
+- Before concluding that delivery failed, run the agmsg team roster and verify both the
+  recipient identity and project path. Do not infer message loss from the wrong inbox.
+
+15. Revised execution order
+Run the fixed read-only audit of the 13 legacy exact_finite_decision contracts before the
+two implementation batches. It is disjoint from the planned order-10b additive contracts
+and order-10c proliferation target, can expose a required user decision for hinge.act or
+body.no_terminal_setpoint without mutating the repository, and determines the legacy exact
+backlog early. Then run order-10b and order-10c through their complete Stage 0-5 cycles.
+Any new exact contract introduced by order-10b still requires its own independent oracle,
+sensitivity entry/hash update, gates, and Stage 5 verification; the fixed 13-contract audit
+does not cover it.
+
+16. Exact-classification audit order
+- Treat manifest scope, assumptions, guarantee, and current classification as claims under
+  audit, not as evidence that can select which Lean declarations need inspection.
+- For every target, read in this order: Lean binders; full proposition or return type and
+  direction; Julia signature and output type; quantified runtime coverage; trust boundary.
+- Compare codomains and propositions before checking finite-carrier completeness. Complete
+  enumeration fills a quantifier only after both sides are known to state the same predicate;
+  it cannot turn a Set-valued definition into its nonemptiness proposition, an implication
+  into one premise, a pointwise predicate into an existential search, or generic callbacks
+  into a named Lean construction.
+- Do not use the manifest's own completeness wording as proof of completeness. Confirm the
+  carrier decoder or explicit faithful-encoding assumption against the Lean binders and the
+  checker loops.
+- For a small fixed audit such as the 13 legacy exact contracts, inspect every declaration.
+  Filtering by apparent suspicion reuses past classification errors as the review filter and
+  is a procedural form of self-confirmation.

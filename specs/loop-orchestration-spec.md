@@ -7,10 +7,10 @@
 
 > 本書は「コードを書かずに仕様だけ決める」段階の成果物。データスキーマ（TOML）と状態機械・トリガ図を定義する。2026-08-14 現在、後述の status-advancing driver/watcher は未実装であり、実装はユーザー決定により延期されている。
 
-### 2026-08-14 時点の実装状況
+### 2026-08-20 時点の実装状況
 
 - `specs/ledger.toml`（schema v1）は、59 件すべてが `certified` の Lean–Julia binding・依存・certificate catalog の索引である。現在のライフサイクル台帳でも status の唯一の真実源でもなく、実装作業によって status を進めない。
-- `specs/claim-ledger-v2.toml` は 90 件の原子化された主張のライフサイクル台帳であり、`spec_status` / `proof_status` / `implementation_status` / `certification_status` の4軸を持つ。38 件が certified、52 件が未認証である。
+- `specs/claim-ledger-v2.toml` は 91 件の原子化された主張のライフサイクル台帳であり、`spec_status` / `proof_status` / `implementation_status` / `certification_status` の4軸を持つ。38 件が certified、53 件が未認証である。
 - 実行可能な `bin/eriec-category-pipeline.jl` は、影響を受ける既存ゲートを再検査する runner であり、status 遷移を行わない。内部の `tools/CategoryPipeline.jl` が読むのは schema v1 のみで、v2 は読まない。
 - 以下の driver/watcher と状態機械は設計として定義されているが未実装である。order-10b が最初の非終端 VP 2件を作成した時点で、driver の必要性を再評価する。
 
@@ -61,7 +61,7 @@ pinned      = false                                         # true なら driver
 
 ### §1.1 原子化 claim lifecycle — `specs/claim-ledger-v2.toml`
 
-原子化された90件の主張について、`spec_status` / `proof_status` / `implementation_status` / `certification_status` を独立に記録する。2026-08-14 時点では38件が certified、52件が未認証である。v1 の単一 `status` とこの4軸を同一視しない。
+原子化された91件の主張について、`spec_status` / `proof_status` / `implementation_status` / `certification_status` を独立に記録する。2026-08-20 時点では38件が certified、53件が未認証である。v1 の単一 `status` とこの4軸を同一視しない。
 
 ---
 

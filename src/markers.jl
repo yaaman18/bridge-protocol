@@ -51,3 +51,17 @@ function classify_action_markers(markers::FMMarkers)
     end
     :nonconscious
 end
+
+"""Independently check the closed Lean `FunctionalClass` encoding."""
+function check_marker_classification(markers::FMMarkers, expected::Symbol)::Bool
+    expected in (:conscious, :blindsight_analog, :nonconscious) || return false
+
+    conscious = markers.fm1_global && markers.fm2_sensorimotor &&
+        markers.fm3_self_monitoring && markers.fm4_world
+    blindsight = markers.fm1_global && markers.fm4_world &&
+        (!markers.fm2_sensorimotor || !markers.fm3_self_monitoring)
+
+    (expected === :conscious && conscious) ||
+        (expected === :blindsight_analog && !conscious && blindsight) ||
+        (expected === :nonconscious && !conscious && !blindsight)
+end

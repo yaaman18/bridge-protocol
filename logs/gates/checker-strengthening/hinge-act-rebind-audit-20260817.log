@@ -1,0 +1,27 @@
+hinge.act strict semantic rebind audit (2026-08-17)
+
+User decision
+  Require strict agreement between the certified Lean declaration and the Julia checker;
+  do not retain an exact classification by interpreting a Set-valued declaration as an
+  unstated nonemptiness proposition.
+
+Mismatch
+  ERIEC.Hinge.Act returns Set M.
+  check_hinge returns Bool and decides whether that set is nonempty.
+  The former catalog binding therefore did not have the codomain or proposition stated by
+  the checker guarantee.
+
+Correction
+  Add the definitional predicate ERIEC.Hinge.ActNonempty := (Act ...).Nonempty.
+  Rebind VP-HNG-001 / hinge.act to ActNonempty and bind both juliaSymbol and juliaChecker to
+  check_hinge. Preserve ERIEC.Hinge.Act and every existing Julia method unchanged.
+
+Classification
+  exact_finite_decision remains justified: rho_rel, sigma_rel, kappa, and epsilon are the
+  supplied relation data; check_hinge independently computes their finite Act intersection
+  and returns exactly its nonemptiness. It consumes no proof Bool or obligation callback.
+
+Invariants
+  The M3 nonempty-hinge judgment is preserved. No axiom or object is added, no tolerance,
+  fixture, seed, phenomenal_claim, sensitivity case, or contract ID changes, and no commit
+  or push is performed.

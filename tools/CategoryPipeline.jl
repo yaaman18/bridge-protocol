@@ -12,6 +12,7 @@ export Impact,
     validate_configuration,
     write_baseline,
     write_report,
+    report_history_path,
     run_gates
 
 struct Impact
@@ -216,7 +217,29 @@ end
 function _command_log(root, name)
     log_dir = joinpath(root, "logs", "category-pipeline")
     mkpath(log_dir)
-    joinpath(log_dir, name * ".log")
+    # Gate evidence is historical data.  Include a process-local monotonic
+    # timestamp so a later check cannot overwrite an earlier pass or failure.
+    stem = "$(name)-$(time_ns())-$(getpid())"
+    candidate = joinpath(log_dir, stem * ".log")
+    suffix = 0
+    while ispath(candidate)
+        suffix += 1
+        candidate = joinpath(log_dir, "$(stem)-$(suffix).log")
+    end
+    candidate
+end
+
+function report_history_path(root::AbstractString)
+    report_dir = joinpath(root, "logs", "category-pipeline", "reports")
+    mkpath(report_dir)
+    stem = "category-impact-report-$(time_ns())-$(getpid())"
+    candidate = joinpath(report_dir, stem * ".md")
+    suffix = 0
+    while ispath(candidate)
+        suffix += 1
+        candidate = joinpath(report_dir, "$(stem)-$(suffix).md")
+    end
+    candidate
 end
 
 function _run_gate(root, name, command)

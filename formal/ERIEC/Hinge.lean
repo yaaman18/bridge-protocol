@@ -13,6 +13,11 @@ def Act {M E C S : Type*} (rhoRel : C -> Set M) (sigmaRel : E -> Set M)
     (kappa : S -> Set C) (epsilon : S -> Set E) (s : S) : Set M :=
   Closure.rho_star rhoRel (kappa s) ∩ Adj.sigma_star sigmaRel (epsilon s)
 
+/-- M3 predicate: the hinge action set at the supplied state is inhabited. -/
+def ActNonempty {M E C S : Type*} (rhoRel : C -> Set M) (sigmaRel : E -> Set M)
+    (kappa : S -> Set C) (epsilon : S -> Set E) (s : S) : Prop :=
+  (Act rhoRel sigmaRel kappa epsilon s).Nonempty
+
 theorem act_def {M E C S : Type*} (rhoRel : C -> Set M) (sigmaRel : E -> Set M)
     (kappa : S -> Set C) (epsilon : S -> Set E) (s : S) :
     Act rhoRel sigmaRel kappa epsilon s =

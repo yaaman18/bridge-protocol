@@ -50,6 +50,8 @@ include("temporal_dc.jl")
 include("sigma_selection.jl")
 include("certification.jl")
 include("observation_artifact.jl")
+include("model_evaluation.jl")
+include("m4_model_evaluation.jl")
 include("sigma1_run.jl")
 include("sigma1_diversity_audit.jl")
 include("trm_experiments.jl")
@@ -60,6 +62,7 @@ include("architecture.jl")
 include("lenia_experiments.jl")
 include("visualization.jl")
 include("cli.jl")
+include("model_evaluation_cli.jl")
 
 export Relation,
     DiscreteRelation,
@@ -264,6 +267,7 @@ export Relation,
     fm3_self_monitoring,
     fm4_world_participation,
     classify_action_markers,
+    check_marker_classification,
     UmweltComparison,
     compare_umwelt,
     SystemSeriesResult,
@@ -707,6 +711,30 @@ export Relation,
     certified_observation_series_artifact_json,
     write_certified_observation_artifact,
     write_certified_observation_series_artifact,
+    MODEL_EVALUATION_SCHEMA_VERSION,
+    MODEL_EVALUATION_FINGERPRINT_ALGORITHM,
+    MODEL_EVALUATION_RAW_FINGERPRINT_ALGORITHM,
+    ModelEvaluationRecord,
+    model_evaluation_payload,
+    model_evaluation_json,
+    model_evaluation_path,
+    parse_model_evaluation_json,
+    read_model_evaluation,
+    audit_model_evaluation,
+    list_model_evaluations,
+    audit_model_evaluations,
+    write_counterexample_draft_packet,
+    M4_SETPOINT_MODEL_SCHEMA_VERSION,
+    M4_SETPOINT_FINGERPRINT_ALGORITHM,
+    M4SetPointModel,
+    m4_setpoint_model_payload,
+    m4_setpoint_model_json,
+    parse_m4_setpoint_model_json,
+    m4_setpoint_diagram,
+    write_m4_setpoint_model,
+    run_m4_model_evaluation,
+    MODEL_EVALUATION_CLI_USAGE,
+    model_evaluation_cli,
     powerset
 
 end

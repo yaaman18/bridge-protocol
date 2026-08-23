@@ -1,0 +1,56 @@
+exact-13-remediation precheck (2026-08-20)
+
+Decision: CLARIFY before implementation.
+
+S1 type/proposition comparison
+  R1 passes the requested codomain/proposition check.
+  - Lean ERIEC.InterfaceLinearization.RealizesSensitivityAt is Prop:
+      (Sens.T_w response base).toLinearMap = linearizeRelation rel.
+  - Julia check_relation_sensitivity_bridge returns Bool after comparing the
+    complete relation-incidence matrix with sensitivity_tensor(response, base).
+  - ForwardDiff/Jacobian fidelity and exact Float64 equality remain explicit
+    boundary assumptions; no checker change is required.
+
+  R2 passes the requested codomain/proposition check.
+  - Lean ERIEC.Grading.AntitoneRelation is Prop quantifying low/high/a/b and the
+    implication rel high a b -> rel low a b under low <= high.
+  - Julia check_const_presheaf_antitone returns Bool and exhausts the supplied
+    finite ranks and both supplied carriers for the same implication.
+  - Totality and completeness of the enumerated carriers remain assumptions;
+    no checker change is required.
+
+C4
+  test/test_checker_semantic_manifest.jl pilot_relations contains only the five
+  unrelated pilot IDs. None of the remediation five appears; no pilot update is
+  required.
+
+C5
+  - grading.const_presheaf_antitone is VP-GRA-001 in specs/ledger.toml and its
+    lean_decl must change if R2 is accepted; rerun G1-G4.
+  - interface.sensitivity_realization has no v1 specs/ledger.toml VP.
+  - It does have frozen v2 claim VP2-I1-DERIV-BRIDGE-001 in
+    specs/claim-ledger-v2.toml. That claim states the theorem conclusion, binds
+    lean_decl=converse_linearization_eq_sensitivity_adjoint, and assigns
+    contract_id=interface.sensitivity_realization with executable/certified
+    status. Rebinding the catalog ID to RealizesSensitivityAt without changing
+    this row makes the frozen theorem claim and certified contract name different
+    propositions. The implementation packet does not specify how to resolve this.
+
+C6
+  specs/ledger.toml:962 is the legacy_coverage row for VP-INV-001, not a second VP
+  or depends_on edge. Reclassifying the manifest row does not alter the ledger
+  dependency DAG. Its exact_ledger_decl coverage records Lean declaration/source
+  coverage, not checker_relation, so no automatic dependency rewrite follows.
+
+Required clarification
+  Claude/spec owner must choose and obtain user authority for one coherent option:
+  A. Preserve frozen VP2-I1-DERIV-BRIDGE-001 as the theorem claim, detach its
+     executable contract/certification, and create or identify a separate claim
+     for RealizesSensitivityAt using interface.sensitivity_realization; or
+  B. Do not rebind the existing ID; add a new RealizesSensitivityAt contract and
+     downgrade/reclassify the theorem contract; or
+  C. Explicitly authorize a frozen claim-ledger semantic rewrite and specify all
+     affected fields/spec statement/hash/certification evidence.
+
+No catalog, manifest, ledger, claim ledger, sensitivity registry, source, test,
+gate, commit, or push change was made.

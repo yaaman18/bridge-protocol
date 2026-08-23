@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   7338.0 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 8 seconds. 26 already precompiled.
+Test Summary:              | Pass  Total  Time
+generation boundary audits |   52     52  6.8s

@@ -1,0 +1,1 @@
+{"kind":"set_point_diagram_model","schema_version":1,"contract_id":"body.no_terminal_setpoint","carrier_complete":true,"relation_encoding":"closed_world_edge_list","objects":["state"],"reaches":[["state","state"]],"claim_status":"not_a_claim","phenomenal_claim":"not_certified"}

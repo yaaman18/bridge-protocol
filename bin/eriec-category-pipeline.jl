@@ -46,10 +46,13 @@ function main(args)
 
     impact = compute_impact(root, manifest, ledger, baseline_path)
     gates = command in ("check", "accept") ? run_gates(root, manifest, ledger, impact) : GateResult[]
-    write_report(report_path, impact, ledger, gates)
+    historical_report_path = report_history_path(root)
+    write_report(historical_report_path, impact, ledger, gates)
+    cp(historical_report_path, report_path; force=true)
     println("changed sections: ", isempty(impact.changed_sections) ? "none" : join(impact.changed_sections, ", "))
     println("impacted VPs: ", isempty(impact.impacted_vps) ? "none" : join(impact.impacted_vps, ", "))
     println("report: ", relpath(report_path, root))
+    println("historical report: ", relpath(historical_report_path, root))
 
     if !isempty(impact.removed_sections)
         println(stderr, "removed sections require manifest review: ", join(impact.removed_sections, ", "))

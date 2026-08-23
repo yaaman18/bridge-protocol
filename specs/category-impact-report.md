@@ -30,7 +30,7 @@
 | VP-GRA-002 | `formal/ERIEC/Grading.lean` / `ERIEC.Grading.nuPhi_empty_above` | `src/grading.jl` / `check_sig2_collapse_bound` | `certified` | unreviewed |
 | VP-GRD-001 | `formal/ERIEC/Graded.lean` / `ERIEC.Graded.PresheafTransitionCoproduct` | `src/graded.jl` / `check_presheaf_transition_coproduct` | `certified` | unreviewed |
 | VP-GUA-001 | `formal/ERIEC/Guard.lean` / `ERIEC.Guard.hasTStar_iff_terminal` | `src/guard.jl` / `check_terminal_guard` | `certified` | unreviewed |
-| VP-HNG-001 | `formal/ERIEC/Hinge.lean` / `ERIEC.Hinge.Act` | `src/hinge.jl` / `check_hinge` | `certified` | unreviewed |
+| VP-HNG-001 | `formal/ERIEC/Hinge.lean` / `ERIEC.Hinge.ActNonempty` | `src/hinge.jl` / `check_hinge` | `certified` | unreviewed |
 | VP-INV-001 | `formal/ERIEC/Invariance.lean` / `ERIEC.Invariance.upd_bisim` | `src/invariance.jl` / `check_update_bisimulation` | `certified` | unreviewed |
 | VP-KT-001 | `formal/ERIEC/Closure.lean` / `ERIEC.Closure.finalCoalgebra` | `src/closure.jl` / `check_final_coalgebra` | `certified` | unreviewed |
 | VP-LIN-001 | `formal/ERIEC/Lineage.lean` / `ERIEC.OpenEvolution.Lineage` | `src/lineage.jl` / `FiniteLineage` | `certified` | unreviewed |

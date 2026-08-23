@@ -1,0 +1,255 @@
+order-10c stage 1 type-first audit (2026-08-23)
+
+Decision
+  ACCEPT an additive witness_validator design for
+  generation.proliferation_morphism. The existing zero-argument/keyword Bool
+  method remains regression-only compatibility behavior and cannot itself be
+  evidence for the Lean structure. No implementation was performed in stage 1.
+
+Baseline
+  Full G3 passed before the audit and after model-evaluation editing stopped:
+    logs/gates/order-10c/G3-baseline-20260823.log
+  The model-evaluation files were not modified by this audit.
+
+Q1. Lean field classification
+  External binders parent and child are proof-carrying DC values. A finite Julia
+  bridge must independently validate their DC obligations and complete carriers.
+
+  Record : Type u
+    Type parameter, not an obligation.
+  Heritage : Type u
+    Type parameter, not an obligation; a finite encoding needs a complete
+    Heritage carrier to validate total functions and predicates.
+  parent_config : Config (dcToOpenSystem parent)
+    Candidate data. It encodes S x (S x S) and must belong to that complete
+    product carrier.
+  child_config : Config (dcToOpenSystem child)
+    Candidate data, with the analogous S' x (S' x S') membership check.
+  record : Record
+    Candidate data. No later ProliferationMorphism field constrains it.
+  parent_viable : dcViable parent parent_config
+    Proof obligation/oracle if supplied as Bool. It must instead be recomputed
+    as parent_config.1 = parent.s.
+  child_viable : dcViable child child_config
+    Proof obligation/oracle if supplied as Bool. Recompute child_config.1 = child.s.
+  parentHeritage : Config (dcToOpenSystem parent) -> Heritage
+    Candidate function data. Validate it on the complete parent configuration
+    product and require every result to lie in the Heritage carrier.
+  childHeritage : Config (dcToOpenSystem child) -> Heritage
+    Candidate function data, validated on the complete child configuration product.
+  heritageRelated : Heritage -> Heritage -> Prop
+    Candidate predicate data. Its finite encoding must be total and Bool-valued
+    on the complete Heritage x Heritage carrier.
+  heritage_lax : heritageRelated ...
+    Proof obligation/oracle if supplied as Bool. Recompute the predicate at the
+    two independently computed heritage images.
+  Rank : Type u
+    Type parameter, not an obligation; finite validation needs a complete carrier.
+  rank_preorder : Preorder Rank
+    Proof-carrying candidate structure. The runtime le relation is candidate
+    data, but accepting reflexivity/transitivity flags would be an oracle. Check
+    Bool totality on Rank x Rank, reflexivity on every rank, and transitivity on
+    every rank triple.
+  parent_rank : Rank
+    Candidate data; require carrier membership.
+  child_rank : Rank
+    Candidate data; require carrier membership.
+  wstar : Rank
+    Candidate data; require carrier membership.
+  child_rank_le_wstar : rank_preorder.le child_rank wstar
+    Proof obligation/oracle if supplied as Bool. Recompute with the validated le.
+  phi_rich_lax : phi_rich parent <= phi_rich child
+    Proof obligation/oracle if supplied as Bool. Recompute both scores.
+  branch_transport : forall parent motor satisfying Act and Branch, exists a
+    child motor satisfying Act and Branch
+    Proof obligation/oracle if supplied as Bool. Recompute over complete finite
+    motor carriers.
+
+Q2. Independent recomputation plan
+  parent_viable / child_viable
+    Validate tuple shape and state-carrier membership, then compare the fast
+    component to the corresponding DC's distinguished state. This is exactly
+    Generation.dcViable; slow and environment components do not affect viability.
+
+  heritage_lax
+    Evaluate the validated total heritage functions at the two candidate configs,
+    then evaluate the validated Bool-valued heritageRelated relation on that pair.
+
+  child_rank_le_wstar
+    After exhaustive finite preorder validation, evaluate le(child_rank, wstar).
+
+  phi_rich_lax
+    There is no Julia function presently implementing Generation.phi_rich.
+    Existing primitives Act and is_branch_point match Hinge.Act and
+    Richness.Branch on supplied finite relations. Add a local finite score that
+    returns 1 iff any motor in the complete motor carrier is both in Act and a
+    branch point, otherwise 0. Compare parent_score <= child_score. This matches
+    the Lean if-then-else definition under complete-carrier and faithful-relation
+    assumptions; no caller phi_rich_lax Bool is accepted.
+
+  branch_transport
+    Compute parent Act and child Act from the two supplied finite DC encodings.
+    For every m in the complete parent motor carrier, if m is in parent Act and
+    is_branch_point(parent.alpha_rel,m), require that some m' in the complete
+    child motor carrier is in child Act and is_branch_point(child.alpha_rel,m').
+    This directly evaluates the forall/implication/exists nesting. It is vacuous
+    when no parent motor satisfies both premises, exactly as in Lean.
+
+  parent DC / child DC and totality
+    Reuse the finite check_DC path for the four DC proof fields. Additionally
+    reject duplicate/incomplete carrier encodings, out-of-carrier relation images,
+    non-Bool predicate/order results, malformed configs, and non-total callbacks
+    on every point demanded by the finite products.
+
+Q3. Feasibility and assumptions
+  No field is intrinsically noncomputable on complete finite carriers. The Lean
+  noncomputable phi_rich becomes decidable by exhaustive finite enumeration.
+  The design is infeasible without complete M, M', E, E', C, C', S, S',
+  Heritage, and Rank carriers and faithful equality/relation encodings; those
+  must be manifest assumptions, not silently inferred. Exceptions from partial
+  callbacks must reject the candidate rather than be accepted as evidence.
+
+Q4. Classification
+  Target classification: witness_validator, not exact_finite_decision. The
+  additive method validates one supplied finite encoding of a
+  ProliferationMorphism witness. It does not decide existence for arbitrary Lean
+  types and does not establish a global Julia-to-Lean representation bridge.
+  complete_only and sound_only do not describe the supplied-witness contract;
+  regression_only remains correct only for the legacy Bool-keyword method.
+
+Q5. Coupled invariants measured before implementation
+  contracts=159
+  exact_finite_decision=27
+  witness_validator=25 (expected 26 after reclassification)
+  sensitivity registry entries=27
+  sensitivity registry actual sha256=
+    de701de4b5cb0b8539df6c72fc916cc00ed2cc4ed4e8c4803bec15f7dc80852b
+  manifest sha256 field matches the actual hash.
+  generation.proliferation_morphism is absent from pilot_relations and the exact
+  sensitivity registry. Reclassification to witness_validator therefore leaves
+  contract count, exact count, registry count, and registry hash unchanged.
+
+Q6. Implementation estimate
+  Medium-large, but bounded: one additive typed method plus finite validation
+  helpers in src/generation.jl, exhaustive positive/mutated tests in
+  test/test_generation.jl, and one manifest row reclassification. Expected
+  implementation/test size is roughly 200-300 lines across 3 primary files,
+  plus the audit/basis log. Catalog, fixed public names, legacy method, exact
+  registry, numerical assumptions, formal Lean files, and contract count need
+  no change. G1/G2/target G3/connected manifest/full G3/G4 must then be rerun.
+
+Stage-2 guardrails
+  Do not accept any of the six Prop fields as supplied Bool evidence.
+  Do not weaken, replace, or delete the legacy regression method or its tests.
+  Do not claim an inverse ViableSystem-to-DC translation.
+  Do not identify ViableSystem.viable with DC.
+  Do not add target-layer axioms or write selector state back to individuals.
+  Any new finite-carrier/equality premise is a manifest assumption, not a
+  relaxed tolerance or an implicit universal claim.
+
+Stage 2 implementation result
+  ACCEPT and complete. The legacy Boolean-keyword method is unchanged. An
+  additive method accepts only candidate data: two finite ERIEState encodings,
+  complete parent/child carrier records, complete Heritage and Rank carriers,
+  and a closed ten-field candidate record. Unknown/missing fields, duplicate
+  carriers, and observable incomplete carriers are rejected.
+
+  The six Lean Prop fields are never supplied as Bool values. The checker
+  independently recomputes parent_viable, child_viable, heritage_lax,
+  child_rank_le_wstar, phi_rich_lax, and branch_transport. Heritage callbacks
+  are range-checked on every S x (S x S) configuration; heritageRelated is
+  required to be Bool-valued on the full Heritage square. rank_le is required
+  to be Bool-valued on the full Rank square, reflexive on every point, and
+  transitive on every Rank triple.
+
+phi_rich type correspondence
+  Lean Generation.phi_rich returns Nat and, by definition, has value 1 exactly
+  when RichnessWitness is inhabited and 0 otherwise. Julia
+  _generation_phi_rich returns Int and is restricted by construction to the
+  same literal values 0 and 1. It receives no candidate score. It calls the
+  existing Act and is_branch_point implementations and enumerates the complete
+  supplied motor carrier before returning the score.
+
+Equivalent proof fields
+  Let RW(dc) abbreviate exists m, m in Act(dc) and Branch(dc.alphaRel,m).
+  phi_rich_lax is false exactly when phi_rich(parent)=1 and
+  phi_rich(child)=0, hence exactly when RW(parent) and not RW(child).
+  branch_transport is forall m, parentWitness(m) -> exists m',
+  childWitness(m'). Its consequent does not mention m, so it is equivalent to
+  RW(parent) -> RW(child) and has the same false condition. Therefore the two
+  fields are logically equivalent under the current Lean definition; they
+  cannot be independently falsified without accepting proof oracles. The tests
+  execute and assert both calculation paths on one shared false fixture and a
+  distinct vacuously-true equivalence fixture. This also records that the field
+  named branch_transport establishes existence preservation, not a relation
+  between a particular parent m and child m'. Whether a stronger transport
+  relation is intended remains a theory-owner decision and was not changed.
+
+Negative evidence
+  Four isolated obligation mutations:
+    parent_viable=1, child_viable=1, heritage_lax=1,
+    child_rank_le_wstar=1.
+  Equivalent richness obligations:
+    one shared parent-rich/child-nonrich counterexample separately asserts
+    phi_rich_lax=false and branch_transport=false, and checker rejection;
+    one distinct parent-nonrich/child-nonrich mutation separately asserts both
+    paths true (vacuous equivalence regression).
+  Encoding mutations:
+    unknown field=1, missing field=1, duplicate carrier=1,
+    observable incomplete carrier=1.
+  The positive candidate and every expected outcome are literal test data; no
+  expected value is generated from the public checker.
+
+Final measured invariants
+  contracts=159
+  exact_finite_decision=27
+  witness_validator=26
+  regression_only=13
+  sensitivity registry entries=27
+  sensitivity registry actual sha256=
+    de701de4b5cb0b8539df6c72fc916cc00ed2cc4ed4e8c4803bec15f7dc80852b
+  The manifest field contains the same hash. The proliferation contract is not
+  in pilot_relations or the exact sensitivity registry.
+
+Checker-strengthening termination condition
+  SATISFIED. hygiene-audit-20260815 fixed the remaining pre-rule exact audit to
+  exactly 13 contracts. exact-13-type-audit-20260817 inspected all 13 from Lean
+  type through Julia coverage: 8 retained, 5 rejected under their then-current
+  bindings. exact-13-remediation-20260820 applied the two strict exact-preserving
+  rebinds and the three required downgrades, with gates. The other exact rows had
+  already received rule-compatible pilot/order strengthening evidence. The only
+  later exact addition, markers.classify, received its independent literal
+  Bool^4 oracle, mutated-candidate rejection, type audit, and gates in
+  order-10b-stage2-20260823.log. Thus every one of the current 27 exact rows is
+  covered by a post-baseline audit; no unverified exact contract remains.
+
+Gate results
+  Baseline full G3 before edits: PASS
+    logs/gates/order-10c/G3-baseline-20260823.log
+  G1 Lean build: PASS (2808 jobs)
+    logs/gates/order-10c/G1-20260823.log
+  G2 Lean-Julia contract: PASS (1214/1214)
+    logs/gates/order-10c/G2-contract-20260823.log
+  Target generation: PASS (52/52)
+    logs/gates/order-10c/G3-target-20260823.log
+  Manifest: PASS (86/86)
+    logs/gates/order-10c/G3-manifest-20260823.log
+  Claim ledger: PASS (417/417)
+    logs/gates/order-10c/G3-claim-20260823.log
+  v1 ledger: PASS (372/372)
+    logs/gates/order-10c/G3-ledger-20260823.log
+  Category pipeline: PASS (80/80)
+    logs/gates/order-10c/G3-category-20260823.log
+  Full G3: PASS
+    logs/gates/order-10c/G3-full-20260823.log
+  G4 certified artifact binding: PASS
+    logs/gates/order-10c/G4-20260823.log
+
+Orchestration notes
+  An initial parallel manifest run collided in Julia precompilation and was not
+  treated as a semantic result; the recorded manifest log was replaced by the
+  sequential 86/86 PASS. An initial G4 shell wrapper used zsh's read-only status
+  variable; G4 was rerun with a non-reserved variable and the final log is PASS.
+  No tolerance, threshold, seed, fixture expectation, formal declaration,
+  contract count, exact registry entry, model-evaluation file, commit, or push
+  was changed.

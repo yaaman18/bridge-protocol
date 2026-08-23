@@ -1,0 +1,17 @@
+ERROR: LoadError: Some tests did not pass: 80 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:48
+checker semantic manifest: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:91
+  Expression: Set(keys(sensitivity_cases)) == Set((row["id"] for row = exact_rows))
+   Evaluated: Set(["bridge.hinge_thin_functor", "interface.relation_naturality", "layers.viable_to_hilbert", "viability.relational_frame", "wager.full_model_checker", "grading.const_presheaf_antitone", "bridge.hinge_structural_functor", "viability.closure_functor", "wager.finite_model_checker", "interface.relation_lax_naturality"  …  "bridge.hinge_hilbert_functor", "graded.presheaf_transition_naturality", "bridge.hinge_strict_functor", "bridge.hinge_object_classifier", "decomp.copair_unique", "adjunction.rigidity", "richness.branch", "wager.interpretive_model_checker", "body.no_terminal_setpoint", "interface.sensitivity_realization"]) == Set(["bridge.hinge_thin_functor", "interface.relation_naturality", "layers.viable_to_hilbert", "invariance.update_bisimulation", "viability.relational_frame", "wager.full_model_checker", "grading.const_presheaf_antitone", "bridge.hinge_structural_functor", "viability.closure_functor", "wager.finite_model_checker"  …  "bridge.hinge_hilbert_functor", "graded.presheaf_transition_naturality", "bridge.hinge_strict_functor", "bridge.hinge_object_classifier", "adjunction.rigidity", "richness.branch", "wager.interpretive_model_checker", "certification.critical_bound", "body.no_terminal_setpoint", "interface.sensitivity_realization"])
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:91 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:49
+Test Summary:             | Pass  Fail  Total   Time
+checker semantic manifest |   80     1     81  52.7s
