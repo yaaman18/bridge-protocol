@@ -1,0 +1,4 @@
+Test Summary:    | Pass  Total  Time
+reference models |   35     35  5.2s
+Test Summary:                            | Pass  Total  Time
+order-11 closed large-reference decoders |   23     23  5.8s

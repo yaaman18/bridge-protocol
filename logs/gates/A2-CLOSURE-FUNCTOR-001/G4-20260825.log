@@ -1,0 +1,2 @@
+PASS contract=viability.closure_functor lean=ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural checker=check_viability_closure_naturality
+PASS graph_edges=9 artifact_ok=true

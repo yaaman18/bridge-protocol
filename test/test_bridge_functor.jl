@@ -129,18 +129,27 @@
     end
 
     strict_contract = check_strict_hinge_classifier_intertwining(
-        ones(1, 1), ones(1, 1), true,
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        ones(1, 1), ones(1, 1),
     )
+    @test strict_contract.source_holds
+    @test strict_contract.target_holds
     @test strict_contract.loop_encoding_valid
     @test strict_contract.contract_premises
     @test strict_contract.contract_conclusion
     @test strict_contract.contract_holds
 
     mutated_strict_contract = check_strict_hinge_classifier_intertwining(
-        ones(1, 1), zeros(1, 1), true,
+        rho_full, sigma_rel, kappa, epsilon, :s,
+        rho_empty, sigma_rel, kappa, epsilon, :s,
+        ones(1, 1), ones(1, 1),
     )
-    @test mutated_strict_contract.contract_premises
-    @test !mutated_strict_contract.contract_conclusion
+    @test mutated_strict_contract.source_holds
+    @test !mutated_strict_contract.target_holds
+    @test !mutated_strict_contract.arrow_valid
+    @test !mutated_strict_contract.target_candidate_matches
+    @test !mutated_strict_contract.contract_premises
     @test !mutated_strict_contract.contract_holds
 
 

@@ -1,0 +1,2 @@
+PASS contract=reference_models.v5_1 lean=ERIEC.RefModel.reference_models checker=check_reference_models
+PASS graph_edges=9 artifact_ok=true

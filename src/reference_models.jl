@@ -431,16 +431,21 @@ end
 
 """Validate independently supplied finite encodings of the four reference-model contracts."""
 function check_reference_models(candidate::NamedTuple)
+    v5_required = (:states, :next)
     required = (
         :states, :next, :config, :world_loop, :normalized_value,
         :top_phi, :top_theta, :drift, :external, :core,
         :multi_alpha, :collapse_initial, :collapse_update,
         :observe, :region, :markers, :reaches,
     )
-    encoding_complete = all(name -> hasproperty(candidate, name), required)
-    if !encoding_complete
+    supplied_fields = Set(propertynames(candidate))
+    minimal_v5_encoding = supplied_fields == Set(v5_required)
+    encoding_complete = supplied_fields == Set(required)
+    v5_1_encoding_complete = minimal_v5_encoding || encoding_complete
+    if !v5_1_encoding_complete
         return (
             encoding_complete=false,
+            v5_1_encoding_complete=false,
             v5_1_contract_holds=false,
             stable_contract_holds=false,
             dynamic_contract_holds=false,
@@ -451,13 +456,28 @@ function check_reference_models(candidate::NamedTuple)
 
     expected_states = Set((:s0, :s1, :s2))
     states = collect(candidate.states)
-    carrier_complete = length(states) == 3 && Set(states) == expected_states
+    carrier_complete = length(states) == 3 && allunique(states) &&
+        Set(states) == expected_states
     next_complete = carrier_complete && Set(keys(candidate.next)) == expected_states
     next_equations = next_complete &&
         candidate.next[:s0] == :s1 &&
         candidate.next[:s1] == :s2 &&
         candidate.next[:s2] == :s2
     v5_1_contract_holds = carrier_complete && next_equations
+
+    if minimal_v5_encoding
+        return (
+            encoding_complete=false,
+            v5_1_encoding_complete=true,
+            carrier_complete=carrier_complete,
+            next_equations=next_equations,
+            v5_1_contract_holds=v5_1_contract_holds,
+            stable_contract_holds=false,
+            dynamic_contract_holds=false,
+            nondegenerate_contract_holds=false,
+            contract_holds=v5_1_contract_holds,
+        )
+    end
 
     config_complete = carrier_complete && Set(keys(candidate.config)) == expected_states
     fixed_config = config_complete && candidate.config == _STABLE_REFERENCE_CONFIG
@@ -540,6 +560,7 @@ function check_reference_models(candidate::NamedTuple)
 
     (
         encoding_complete=encoding_complete,
+        v5_1_encoding_complete=v5_1_encoding_complete,
         carrier_complete=carrier_complete,
         next_equations=next_equations,
         fixed_config=fixed_config,

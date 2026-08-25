@@ -93,19 +93,42 @@ order-11 では実装パケットに対して **3回の challenge** が入り、
 「既存 API の再利用を指示する際に、その引数の型を確認していなかった」という同一原因。
 最終的に5項目すべてが「リテラルを境界で受け、デコーダ内部で必要な表現を構築する」形へ統一された。
 
+### 第5期 2026-08-17〜24 exact再監査と作業列終盤
+
+| バッチ | 日付 | 内容 | ログ |
+|---|---|---|---|
+| fixed exact 13監査 | 08-17 | 第1期batch由来13件を型から再監査 | `exact-13-type-audit-20260817.log` |
+| exact 13是正 | 08-20 | 2件をstrict rebind、3件を降格 | `exact-13-remediation-20260820.log` |
+| order-10b | 08-20〜24 | marker分類とOpenDynamics.Pathを新規契約化しG4完走 | `order-10b-stage1-audit-20260820.log` / `order-10b-stage2-20260823.log` |
+| order-10c | 08-23 | ProliferationMorphismを有限witness validator化 | `order-10c-stage1-audit-20260823.log` |
+| residual exact 13監査 | 08-24 | hygiene母集団から漏れた第1・2期由来13件を再監査 | `exact-residual-13-type-audit-20260824.log` |
+
+order-10cでは、`phi_rich_lax` と `branch_transport` が現行Lean定義の下で論理的に同値であることが
+型監査から判明した。後者は個体間の写像ではなく「親にbranch witnessがあれば子にも存在する」という
+存在保存であり、Juliaはその現行意味を忠実に全数判定する。写像形への強化は公開構造体と理論の意味変更なので、
+この作業列では行っていない。
+
+08-24の残余監査は、08-15のhygiene監査が母集団を2026-08-03 batchログ由来に限定したため、pilotおよび
+order-1〜8由来のexact 13件を終了条件から漏らしていたことを是正した。10件はexactを維持できたが、
+`viability.closure_functor`、`bridge.hinge_strict_functor`、`reference_models.v5_1` の3件は現実装のままでは
+exactを名乗れないとchallengeした。分類変更はユーザー決定待ちであり、終了条件はまだ未達である。
+08-25にユーザーは3件ともcheckerを修理してexactを維持すると決定した。有限Equiv検査、strict Iff前提の
+再計算、v5.1専用デコーダを実装し、独立負例とG1〜G4を通したため、このchallengeは解消済みである。
+
 ## 分類の推移
 
-| 分類 | 第1期末 | 現在（2026-08-15） |
+| 分類 | 第1期末 | 現在（2026-08-25） |
 |---|---|---|
-| `exact_finite_decision` | 20 | 29 |
-| `witness_validator` | — | 24 |
+| `exact_finite_decision` | 20 | 27 |
+| `witness_validator` | — | 26 |
 | `sound_only` | 3 | 5 |
-| `regression_only` | 29 | 12 |
+| `complete_only` | — | 1 |
+| `regression_only` | 29 | 13 |
 | `observation_only` | 20 | 10 |
 | `counterexample_generator` | 4 | 4 |
 | `counterexample_validator` | 2 | 2 |
 | `lean_only`（Julia 対応なし） | 71 | 71 |
-| **合計** | 157 | 157 |
+| **合計** | 157 | 159 |
 
 昇格だけでなく**降格も起きている**点が重要。order-9 で3件が降格し、order-10 は対象が7件から5件へ縮んだ。
 昇格しかできない分類体系は分類体系ではない。
@@ -126,25 +149,26 @@ order-11 では実装パケットに対して **3回の challenge** が入り、
 
 ## 現在の状態と残務
 
-作業ツリーはコミット済み（`b6c1088`）。契約総数157、厳密判定29、感度レジストリ29件で一致。
+契約総数159、厳密判定27、感度レジストリ27件で一致する。schema v1台帳は61件すべてが
+`certified` であり、order-10bの2件も2026-08-24にG4を完走した。
 
 | 順 | 残りバッチ | 内容 | 状態 |
 |---|---|---|---|
-| 1 | exact 一掃監査 | 基準確立前のまま厳密判定を名乗る13件の読み取り検証 | 対象確定・未着手 |
-| 2 | order-10b | 検証点2件の新設（分類関数と経路の型へ束縛） | 段1 未実施 |
-| 3 | order-10c | 増殖射1件 | 段1 未実施 |
+| 1 | residual exact 3件 | closure functor / strict hinge / reference v5.1を修理してexact維持 | 08-25 完了 |
+| 2 | 文書・証拠ポインタ | 監査済みexactのbasis_logと件数記述を同期 | 完了 |
 
 **一掃監査と order-10b の関係に注意**: 固定13件は第1期由来の厳密判定の積み残しであって、
 order-10b が新設する厳密判定契約の代替にはならない。order-10b の新規契約には、独立オラクル・
 感度レジストリ登録・sha256 再計算・ゲート・段5 の通常手続きが**別途必要**である。
 
-order-10c の規模は未確定。増殖射の証明義務（親子の生存性、継承、階数上界、豊かさ、分岐移送）は
-供給される関係ではなく義務なので、Bool や callback で答えさせると自己申告になる。段1 で
-候補データと証明オラクルをフィールドごとに分離してから見積もる。
+order-10c は08-23に完了した。増殖射の6個のPropを候補データから独立再計算し、
+`phi_rich_lax` と `branch_transport` の現行Lean定義上の同値も監査記録へ残した。
 
 **終了条件**（[hygiene-audit-20260815.log](hygiene-audit-20260815.log) に記録）:
 基準の確立後に `exact_finite_decision` を名乗る全契約が、その基準に照らして検証済みであること。
-現状は86件中33件が基準適用後で、53件が第1期のまま。うち13件が厳密判定を名乗っており、これが一掃監査の対象。
+固定13件と母集団漏れ13件の読み取り監査は完了した。後者でchallengeとなった3件は08-25に
+Julia checkerをLean命題へ合わせて修理し、独立負例・感度レジストリ・G1〜G4を通してexactを維持した。
+したがって現exact 27件はすべて基準適用後の監査証拠を持ち、この終了条件は充足した。
 
 ## この記録の既知の限界
 

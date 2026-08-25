@@ -1,0 +1,147 @@
+residual 13 exact_finite_decision type audit (2026-08-24)
+
+Method
+  This audit corrects the population omission in hygiene-audit-20260815.log.
+  Each contract was read in the fixed order: Lean binders and full proposition,
+  Julia signature and return, quantified finite coverage, candidate/proof trust
+  boundary, then independent sensitivity evidence. The manifest description was
+  treated as an audit target, not controlling evidence. No checker, fixture,
+  classification, registry, tolerance, formal declaration, commit, or push was
+  changed by this audit.
+
+Decision summary
+  Retain exact_finite_decision: 10.
+  Challenge exact_finite_decision under the current implementation: 3.
+  The checker-strengthening termination condition is not yet satisfied because
+  the three challenged rows still carry exact labels pending user-approved
+  remediation.
+
+RETAIN EXACT
+
+1. adjunction.rigidity -- ACCEPT exact, with a documentation correction.
+   Lean Adj.rigidity_of_gc takes alphaRel and sigmaRel plus a GaloisConnection
+   proof and concludes unique alpha images plus converse membership for every
+   m,e. Julia check_relational_rigidity recomputes the Galois connection for
+   every subset of the complete finite M/E carriers, then exhausts every m and
+   m,e conclusion. Relation callables are candidate relation data, not proof
+   oracles. Exactness is conditional on duplicate-free complete carriers and
+   relation images remaining inside them; the current manifest should state
+   those conditions explicitly.
+
+2. viability.closure_object -- ACCEPT exact.
+   Lean viabilityClosureImage_left_fixed unfolds to reflexive successor closure
+   of viableSet equalling viableSet for a ViableSystem. Julia enumerates every
+   source/target pair on the supplied complete carrier, independently recomputes
+   step_closed, successor closure, and equality. step and viable are object data;
+   the ViableSystem proof is not accepted as Bool.
+
+3. viability.relational_frame -- ACCEPT exact.
+   Lean viabilityRelationalFrame_left_fixed fixes pi to identityRel, rho to
+   reflexiveStepRel, and kappa to viableSet. Julia constructs those relations,
+   reuses finite Phi/successor closure, recomputes step_closed, and compares the
+   full finite image with viableSet. No proof field is supplied.
+
+4. layers.viable_to_hilbert -- ACCEPT exact.
+   Lean viableToHilbert_nontrivial_iff states WldNontrivial of the canonical
+   one-dimensional composite iff viableSet is inhabited. Julia first validates
+   the finite ViableSystem premise, constructs the relational frame and hinge,
+   constructs the zero-or-identity 1x1 loop, and compares nontriviality with
+   viable-set nonemptiness. The loop is computed rather than supplied.
+
+5. bridge.hinge_object_classifier -- ACCEPT exact.
+   Lean hingeClassifyingLoop_nontrivial_iff uses the complete hinge relations and
+   their selected kappa/epsilon images. Julia recomputes Act, constructs the
+   canonical zero-or-identity loop, validates an independent 1x1 candidate
+   against it, and decides nontriviality iff hinge nonemptiness. Finite relation
+   images are the full data relevant to the existential; no proof Bool is used.
+
+6. bridge.hinge_lax_map -- ACCEPT exact, with a stale-assumption correction.
+   Lean hingeClassifyingLoop_lax assumes HingeForward and concludes the norm
+   inequality for the zero-or-identity classifiers. The additive Julia method
+   does not receive a forward-preservation Bool: it recomputes both Act
+   nonemptiness values, forward implication, both candidate/canonical loop
+   equalities, and the 1D norm inequality. The manifest sentence claiming a
+   supplied forward Boolean is stale and must be removed.
+
+7. bridge.hinge_thin_functor -- ACCEPT exact.
+   Lean hingeClassifierFunctor_nontrivial_iff reduces the functor object to the
+   same canonical hinge classifier. The additive Julia method uses the shared
+   independent-candidate checker, which recomputes hinge nonemptiness and the
+   zero-or-identity loop before deciding the iff.
+
+8. bridge.hinge_hilbert_functor -- ACCEPT exact.
+   Lean strictHingeHilbertFunctor_nontrivial_iff is an object theorem and has no
+   arrow premise. The additive Julia method recomputes the complete hinge
+   classifier and validates the supplied 1x1 loop before deciding the same
+   nontriviality iff. It does not use the legacy three-Bool functor-law method.
+
+9. bridge.hinge_structural_functor -- ACCEPT exact.
+   Lean StructuralHingeData contains only a CompleteHingeData object; structural
+   isomorphisms are morphisms, not additional object fields. The object theorem
+   reduces to the strict classifier iff. Julia's additive method validates the
+   supplied structural object loop against the complete hinge datum and decides
+   the same equivalence.
+
+10. graded.presheaf_transition_output_copair_unique -- ACCEPT exact.
+    Lean quantifies every tag and every y in the target fiber, assumes component
+    agreement, and concludes extensional equality with the Sigma copair. Julia
+    validates the finite presheaf/coproduct data, enumerates every transition tag
+    and every value in the complete target fiber, recomputes component agreement,
+    and exhausts the same candidate equality. handlers and candidate are map
+    data, not proof flags.
+
+CHALLENGE CURRENT EXACT LABEL
+
+11. viability.closure_functor -- REJECT exact until Equiv validation is fixed.
+    Lean viabilityClosureFunctor_left_natural receives f whose mapConfig is an
+    Equiv. The additive Julia method calls a mapping "bijective" when its key set
+    equals the source carrier and its value set equals the target carrier, but it
+    never checks injectivity or equal cardinality. Concrete counterexample:
+      source=[:a,:b,:c], target=[:x,:y],
+      mapping=Dict(:a=>:x,:b=>:x,:c=>:y), no steps, no viable states,
+      source_subsets=powerset(source).
+    The checker returns bijective=true and contract_holds=true for this non-Equiv.
+    Minimal remediation: validate duplicate-free carriers, totality, injectivity,
+    surjectivity, and inverse round trips before the naturality equation. Re-audit
+    exact after that change. Without remediation, complete_only is the strongest
+    justified direction under an explicit faithful-Equiv assumption.
+
+12. bridge.hinge_strict_functor -- REJECT exact; proof premise is self-reported.
+    Lean strictHingeClassifier_identity_intertwines receives h : X <= Y, i.e. an
+    equivalence of source and target hinge truth. The additive Julia method takes
+    only two arbitrary 0/1 matrices plus arrow_valid::Bool. It neither receives
+    the two CompleteHingeData values nor independently recomputes h; it conjoins
+    the supplied Boolean with loop equality and intertwining. Repackaging a Lean
+    premise as a Boolean is explicitly excluded by the shared exact rule.
+    Minimal remediation: accept complete finite source/target hinge data,
+    recompute both canonical loops and the truth equivalence, then test identity
+    intertwining. Until then, complete_only is justified only under explicit
+    faithful-arrow and canonical-loop assumptions.
+
+13. reference_models.v5_1 -- REJECT exact under the declared scope.
+    Lean RefModel.reference_models is the closed conjunction of three next
+    equations on RefState.s0/s1/s2. The Julia v5_1 projection checks the complete
+    literal carrier and all three equations, which is the correct core. However,
+    check_reference_models(candidate) first requires fields for three unrelated
+    stable/dynamic/nondegenerate contracts. A candidate containing exactly the
+    complete three-state carrier and next map in the manifest scope is rejected
+    before v5_1_contract_holds is evaluated. Thus the checker has false negatives
+    caused by unrelated fields and is not an exact decision of this target.
+    Minimal remediation: add a dedicated closed v5.1 decoder/checker accepting
+    only states and next (or split validation before dispatch), reject unknown and
+    missing v5 fields, and retain the literal three-equation oracle. Until then,
+    regression_only is the safe fixed-object classification.
+
+Sensitivity evidence
+  All 13 rows have registry entries, but registry membership does not repair the
+  three semantic gaps. The strict negative mutates a target loop while keeping
+  arrow_valid=true and never tests the proof source. The closure-functor fixture
+  uses equal-size bijective carriers and misses the noninjective case. The v5.1
+  fixture supplies every unrelated model field and therefore misses the
+  overconstraint. These are coverage gaps, not reasons to weaken existing tests.
+
+Required next decision
+  The user must choose whether to remediate the three checkers and retain exact,
+  or downgrade their classifications and remove them from the exact sensitivity
+  registry. No classification or registry mutation is authorized by this
+  read-only stage.

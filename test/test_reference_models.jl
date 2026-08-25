@@ -45,6 +45,32 @@
     @test checked.nondegenerate_contract_holds
     @test checked.contract_holds
 
+    minimal_v5 = (
+        states=[:s0, :s1, :s2],
+        next=Dict(:s0 => :s1, :s1 => :s2, :s2 => :s2),
+    )
+    minimal_checked = check_reference_models(minimal_v5)
+    @test minimal_checked.v5_1_encoding_complete
+    @test minimal_checked.carrier_complete
+    @test minimal_checked.next_equations
+    @test minimal_checked.v5_1_contract_holds
+    @test minimal_checked.contract_holds
+
+    minimal_bad_next = merge(minimal_v5, (
+        next=Dict(:s0 => :s0, :s1 => :s2, :s2 => :s2),
+    ))
+    @test !check_reference_models(minimal_bad_next).v5_1_contract_holds
+
+    minimal_missing_state = merge(minimal_v5, (states=[:s0, :s1],))
+    @test !check_reference_models(minimal_missing_state).v5_1_contract_holds
+
+    minimal_unknown_state = merge(minimal_v5, (states=[:s0, :s1, :unknown],))
+    @test !check_reference_models(minimal_unknown_state).v5_1_contract_holds
+
+    minimal_extra_field = merge(minimal_v5, (unexpected=:field,))
+    @test !check_reference_models(minimal_extra_field).v5_1_encoding_complete
+    @test !check_reference_models(minimal_extra_field).v5_1_contract_holds
+
     bad_next = merge(candidate, (
         next=Dict(:s0 => :s0, :s1 => :s2, :s2 => :s2),
     ))

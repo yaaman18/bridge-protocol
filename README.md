@@ -55,7 +55,7 @@ This part is as important as the theory itself.
 
 Verification evidence is represented by two ledgers with different roles. The schema-v1
 [specs/ledger.toml](specs/ledger.toml) is an index of certified Lean–Julia bindings,
-dependencies, and certificate-catalog entries. Its 59 VPs are all terminal
+dependencies, and certificate-catalog entries. Its 61 VPs are all terminal
 `certified` entries; it is not the current claim-lifecycle source of truth, and
 implementation work does not advance its status. The atomic lifecycle ledger is
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml): it records 91 claims on four
@@ -88,8 +88,8 @@ The axes are orthogonal. A contract remains certified when `coverage_audit` is
 each atomic claim is recorded in
 [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml).
 
-As of 2026-08-14, the v1 ledger tracks 59 verification points, all 59 certified. Of the
-`coverage_audit` values, 10 are `complete` and 49 are `unreviewed`. `legacy_coverage`
+As of 2026-08-24, the v1 ledger tracks 61 verification points, all 61 certified. Of the
+`coverage_audit` values, 10 are `complete` and 51 are `unreviewed`. `legacy_coverage`
 contains 10 entries (all with `basis = "exact_ledger_decl"`); the audit found that the
 contracts cover 7 atomic claims and do not cover 85. In other words, across the 10 audited
 entries, only 7 of the properties their prose asserts are backed by a machine check; the

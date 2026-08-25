@@ -1418,7 +1418,7 @@ julia_api = "check_strict_hinge_classifier_intertwining"
 julia_file = "src/bridge_functor.jl"
 contract_id = "bridge.hinge_strict_functor"
 certification_status = "certified"
-certification_log = "logs/gates/A1-STRICT-FUNCTOR-001/G4-20260706.log"
+certification_log = "logs/gates/A1-STRICT-FUNCTOR-001/G4-20260825.log"
 depends_on = ["VP2-A1-THIN-FUNCTOR-001", "VP2-A5-REL-NAT-001"]
 
 [[claim]]
@@ -1506,7 +1506,7 @@ julia_api = "check_viability_closure_naturality"
 julia_file = "src/viability_closure.jl"
 contract_id = "viability.closure_functor"
 certification_status = "certified"
-certification_log = "logs/gates/A2-CLOSURE-FUNCTOR-001/G4-20260706.log"
+certification_log = "logs/gates/A2-CLOSURE-FUNCTOR-001/G4-20260825.log"
 depends_on = ["VP2-A2-VIABILITY-CLOSURE-001"]
 
 [[claim]]

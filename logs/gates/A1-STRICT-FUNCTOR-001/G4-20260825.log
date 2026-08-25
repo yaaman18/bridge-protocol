@@ -1,0 +1,2 @@
+PASS contract=bridge.hinge_strict_functor lean=ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines checker=check_strict_hinge_classifier_intertwining
+PASS graph_edges=9 artifact_ok=true

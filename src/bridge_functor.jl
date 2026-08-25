@@ -258,6 +258,60 @@ function check_strict_hinge_classifier_intertwining(
     )
 end
 
+"""Decide strict identity intertwining after recomputing both finite hinge predicates."""
+function check_strict_hinge_classifier_intertwining(
+    rho_source,
+    sigma_source,
+    kappa_source,
+    epsilon_source,
+    source_state,
+    rho_target,
+    sigma_target,
+    kappa_target,
+    epsilon_target,
+    target_state,
+    source_candidate::AbstractMatrix,
+    target_candidate::AbstractMatrix,
+)
+    source_holds = !isempty(Act(
+        rho_source, sigma_source, kappa_source, epsilon_source, source_state,
+    ))
+    target_holds = !isempty(Act(
+        rho_target, sigma_target, kappa_target, epsilon_target, target_state,
+    ))
+    source_expected = hinge_classifying_loop(
+        rho_source, sigma_source, kappa_source, epsilon_source, source_state,
+    )
+    target_expected = hinge_classifying_loop(
+        rho_target, sigma_target, kappa_target, epsilon_target, target_state,
+    )
+    source_shape = size(source_candidate) == (1, 1)
+    target_shape = size(target_candidate) == (1, 1)
+    source_candidate_matches = source_shape && source_candidate == source_expected
+    target_candidate_matches = target_shape && target_candidate == target_expected
+    arrow_valid = source_holds == target_holds
+    loop_encoding_valid = source_candidate_matches && target_candidate_matches
+    identity_map = ones(1, 1)
+    loops_equal = loop_encoding_valid && source_candidate == target_candidate
+    identity_intertwines = loop_encoding_valid &&
+        target_candidate * identity_map == identity_map * source_candidate
+    conclusion = identity_intertwines
+    premises = arrow_valid && loop_encoding_valid
+    (
+        source_holds=source_holds,
+        target_holds=target_holds,
+        source_candidate_matches=source_candidate_matches,
+        target_candidate_matches=target_candidate_matches,
+        arrow_valid=arrow_valid,
+        loops_equal=loops_equal,
+        identity_intertwines=identity_intertwines,
+        loop_encoding_valid=loop_encoding_valid,
+        contract_premises=premises,
+        contract_conclusion=conclusion,
+        contract_holds=premises && conclusion,
+    )
+end
+
 """Check identity and composition preservation for the Hilbert intertwiner functor."""
 function check_hinge_hilbert_functor(
     source_live::Bool,

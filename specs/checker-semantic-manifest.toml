@@ -1,7 +1,7 @@
 schema_version = 2
 allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "lean_only", "unclassified"]
 sensitivity_registry = "test/checker_sensitivity_cases.jl"
-sensitivity_registry_sha256 = "de701de4b5cb0b8539df6c72fc916cc00ed2cc4ed4e8c4803bec15f7dc80852b"
+sensitivity_registry_sha256 = "ed803d461f6c680518cc78cf8e5bf9fb93e165b91b5579f642ae028a22b57eac"
 
 [[contract]]
 id = "adjunction.system"
@@ -22,10 +22,10 @@ review_status = "reviewed"
 checker = "check_relational_rigidity"
 lean_decl = "ERIEC.Adj.rigidity_of_gc"
 scope = "finite all_M and all_E supplied by the caller"
-assumptions = ["powerset(all_E) is enumerated internally", "alpha_rel and sigma_rel are total Julia callables on the supplied carriers"]
+assumptions = ["all_M and all_E are duplicate-free complete finite carriers", "powerset(all_E) is enumerated internally", "alpha_rel and sigma_rel are total Julia callables whose images remain inside the supplied carriers"]
 guarantee = "decides the finite premises and relational rigidity conclusion"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/pilot-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "adjunction.galois_conn"
@@ -49,7 +49,7 @@ scope = "the complete supplied finite M and E carriers"
 assumptions = ["alpha_rel and sigma_rel are total and the carrier orderings define both incidence matrices"]
 guarantee = "decides whether the supplied converse incidence matrix equals the transpose linearization"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "interface.sensitivity_realization"
@@ -73,7 +73,7 @@ scope = "all elements of the supplied finite source and target carriers"
 assumptions = ["the supplied maps enumerate bijections and all relation membership is decidable"]
 guarantee = "decides relation-isomorphism preservation and the resulting incidence-matrix reindexing equality"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "interface.relation_lax_naturality"
@@ -85,7 +85,7 @@ scope = "all pairs in the supplied finite domain and codomain"
 assumptions = ["the supplied maps and relations are total on enumerated values"]
 guarantee = "decides the forward relation-hom condition equivalent to the entrywise finite lax inequality"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "interface.strict_naturality_counterexample"
@@ -133,7 +133,7 @@ scope = "one complete finite hinge datum and an independently supplied one-dimen
 assumptions = ["the finite relation images completely encode the supplied hinge datum", "the candidate loop completely encodes the contracted classifier output", "no numerical tolerance is used"]
 guarantee = "the additive method validates the independent candidate loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "bridge.hinge_lax_map"
@@ -142,10 +142,10 @@ review_status = "reviewed"
 checker = "check_hinge_classifying_loop_lax"
 lean_decl = "ERIEC.BridgeFunctor.hingeClassifyingLoop_lax"
 scope = "complete finite source and target hinge data with independently supplied one-dimensional candidate loops"
-assumptions = ["the finite relation images completely encode both hinge data", "both candidate loops completely encode the contracted classifier outputs", "the finite forward-preservation Boolean encodes the Lean premise", "no numerical tolerance is used"]
+assumptions = ["the finite relation images completely encode both hinge data", "both candidate loops completely encode the contracted classifier outputs", "HingeForward is recomputed from source and target hinge nonemptiness rather than supplied as a Boolean", "no numerical tolerance is used"]
 guarantee = "the additive method validates both independent loop candidates and decides the lax norm conclusion under the finite forward-preservation premise"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "bridge.hinge_thin_functor"
@@ -157,7 +157,7 @@ scope = "one complete finite hinge datum and an independently supplied one-dimen
 assumptions = ["the finite relation images completely encode the supplied hinge datum", "the candidate loop completely encodes the contracted functor output", "no numerical tolerance is used"]
 guarantee = "the additive method validates the independent candidate loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "bridge.hinge_strict_functor"
@@ -165,11 +165,11 @@ checker_relation = "exact_finite_decision"
 review_status = "reviewed"
 checker = "check_strict_hinge_classifier_intertwining"
 lean_decl = "ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines"
-scope = "two independently supplied finite one-dimensional classifier loops and a strict-arrow premise"
-assumptions = ["arrow_valid faithfully encodes the supplied strict hinge arrow", "both matrices completely encode the source and target 0-or-1 classifier loops", "no numerical tolerance is used"]
-guarantee = "the additive method decides identity intertwining after independently validating both finite loop encodings and the supplied arrow premise"
+scope = "two complete finite strict hinge data and independently supplied one-dimensional classifier-loop candidates"
+assumptions = ["the finite relation images completely encode both strict hinge data", "both candidate matrices completely encode the source and target 0-or-1 classifier loops", "no numerical tolerance is used"]
+guarantee = "the additive method recomputes both hinge predicates, decides their strict Iff arrow, validates both loop candidates, and decides identity intertwining"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-3-remediation-20260825.log"
 
 [[contract]]
 id = "bridge.hinge_hilbert_functor"
@@ -181,7 +181,7 @@ scope = "one complete finite strict hinge datum and an independently supplied on
 assumptions = ["the finite relation images completely encode the strict hinge datum", "the candidate loop completely encodes the contracted Hilbert functor output", "no numerical tolerance is used"]
 guarantee = "the additive method validates the independent candidate Hilbert loop and decides its fixed-nonzero-direction equivalence with finite hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "bridge.hinge_structural_functor"
@@ -193,7 +193,7 @@ scope = "one complete finite structural hinge datum and an independently supplie
 assumptions = ["the finite relation images completely encode the structural hinge datum", "the candidate loop completely encodes the contracted structural functor output", "no numerical tolerance is used"]
 guarantee = "the additive method validates the independent candidate Hilbert loop and decides its fixed-nonzero-direction equivalence with structural hinge nonemptiness"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-6-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "viability.closure_object"
@@ -205,7 +205,7 @@ scope = "the complete caller-supplied finite state carrier, step relation, and v
 assumptions = ["the supplied carrier enumerates every runtime configuration", "no numerical tolerance is used"]
 guarantee = "contract_holds is true exactly when the inputs encode the step-closed ViableSystem premise and its successor closure equals the viable set"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/batch-01-viability-r2-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "viability.closure_functor"
@@ -214,10 +214,10 @@ review_status = "reviewed"
 checker = "check_viability_closure_naturality"
 lean_decl = "ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural"
 scope = "two complete finite carriers and an explicitly supplied enumeration of every finite source subset K"
-assumptions = ["the supplied K family equals the powerset of the complete source carrier", "the mapping lookup is total on the source carrier", "both carrier enumerations are complete", "no numerical tolerance is used"]
-guarantee = "the additive method decides successor-closure naturality for every explicitly enumerated K after validating finite morphism and K-family completeness premises"
+assumptions = ["the supplied K family equals the powerset of the complete source carrier", "both carrier enumerations are duplicate-free and complete", "the supplied mapping is validated as a finite Equiv by totality, injectivity, surjectivity, equal cardinality, and both inverse round trips", "no numerical tolerance is used"]
+guarantee = "the additive method decides successor-closure naturality for every explicitly enumerated K after validating the finite Equiv and K-family completeness premises"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-5-manifest-sensitivity-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-3-remediation-20260825.log"
 
 [[contract]]
 id = "viability.relational_frame"
@@ -229,7 +229,7 @@ scope = "the complete caller-supplied finite state carrier, step relation, and v
 assumptions = ["runtime Phi uses the explicitly constructed finite identity and reflexive-step relations", "no numerical tolerance is used"]
 guarantee = "contract_holds is true exactly when the inputs encode the step-closed ViableSystem premise and the finite Phi image equals the viable kappa set"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/batch-01-viability-r2-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "viability.relational_functor"
@@ -253,7 +253,7 @@ scope = "one complete supplied finite viability system"
 assumptions = ["the one-dimensional zero-or-identity loop is the Julia classifier realization", "the supplied carrier is complete", "no numerical tolerance is used"]
 guarantee = "contract_holds is true exactly when the input is step-closed and world nontriviality is equivalent to nonemptiness of the viable set"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/batch-01-layer-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "layers.nonfaithful_counterexample"
@@ -510,7 +510,7 @@ scope = "the complete caller-supplied finite left and right sample values"
 assumptions = ["the sample collections exhaust the intended finite sum domain"]
 guarantee = "decides the copair equations and uniqueness equality on every supplied sum input"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-03-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "graded.presheaf_transition_naturality"
@@ -522,7 +522,7 @@ scope = "all tags, comparable object pairs, and source-fiber values in a supplie
 assumptions = ["the finite category and every fiber are completely enumerated"]
 guarantee = "decides every runtime naturality square for the supplied presheaf transition coproduct"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "graded.presheaf_transition_output_copair_unique"
@@ -534,7 +534,7 @@ scope = "every tagged value in one supplied finite target fiber, for supplied ha
 assumptions = ["the finite category and target fiber are completely enumerated", "Julia equality decides equality of handler and candidate outputs on the supplied fiber"]
 guarantee = "decides component agreement and extensional equality of the candidate with the output copair on the complete supplied finite fiber"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-7-graded-target-20260808.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-13-type-audit-20260824.log"
 
 [[contract]]
 id = "body.no_terminal_setpoint"
@@ -546,7 +546,7 @@ scope = "all objects in a supplied finite SetPointDiagram"
 assumptions = ["the diagram enumerates its complete object carrier"]
 guarantee = "decides absence of an object reachable from every supplied source"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-02-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "guard.terminal_iff"
@@ -669,9 +669,9 @@ checker = "check_reference_models"
 lean_decl = "ERIEC.RefModel.reference_models"
 scope = "an independently supplied complete three-state carrier and next map"
 assumptions = ["the symbols s0, s1, and s2 encode the complete Lean RefState carrier", "Julia equality decides state equality", "no numerical tolerance is used"]
-guarantee = "the additive method decides all three finite next equations on the complete supplied carrier"
+guarantee = "the dedicated v5.1 path accepts the exact states/next candidate or the existing complete four-contract candidate, rejects partial or unknown-field encodings, and decides the three literal next equations"
 reviewer = "codex"
-basis_log = "logs/gates/checker-strengthening/order-8-manifest-sensitivity-20260809.log"
+basis_log = "logs/gates/checker-strengthening/exact-residual-3-remediation-20260825.log"
 
 [[contract]]
 id = "reference_models.stable_v2"
@@ -863,7 +863,7 @@ scope = "the finite runtime image alpha_rel(m) for one supplied action"
 assumptions = ["the relation lookup returns the complete finite image"]
 guarantee = "decides existence of two distinct environment points in the supplied action image"
 reviewer = "codex"
-basis_log = "logs/gates/checker-semantic-manifest/batch-04-20260803.log"
+basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
 id = "richness.hinge_branch_pump"

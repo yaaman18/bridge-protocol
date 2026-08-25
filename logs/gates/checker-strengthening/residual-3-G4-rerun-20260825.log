@@ -1,0 +1,4 @@
+PASS contract=bridge.hinge_strict_functor lean=ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines checker=check_strict_hinge_classifier_intertwining
+PASS contract=reference_models.v5_1 lean=ERIEC.RefModel.reference_models checker=check_reference_models
+PASS contract=viability.closure_functor lean=ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural checker=check_viability_closure_naturality
+PASS graph_edges=9 artifact_ok=true

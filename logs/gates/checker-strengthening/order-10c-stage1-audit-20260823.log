@@ -253,3 +253,13 @@ Orchestration notes
   No tolerance, threshold, seed, fixture expectation, formal declaration,
   contract count, exact registry entry, model-evaluation file, commit, or push
   was changed.
+
+2026-08-24 termination correction
+  The preceding conclusion that every current exact row had post-baseline audit
+  coverage is superseded by exact-residual-13-type-audit-20260824.log. The
+  population reconstruction omitted 13 exact rows originating in the
+  pilot/order-1--8 batches. A fresh Lean-type-to-Julia audit retained 10 of
+  those rows and challenged 3: viability.closure_functor,
+  bridge.hinge_strict_functor, and reference_models.v5_1. Accordingly the
+  checker-strengthening termination condition is not satisfied until those
+  three rows are remediated or conservatively reclassified with user approval.

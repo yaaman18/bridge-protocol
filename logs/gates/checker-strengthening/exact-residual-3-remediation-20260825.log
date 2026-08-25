@@ -1,0 +1,99 @@
+exact residual 3 remediation audit — 2026-08-25
+
+Decision
+  User decision: repair all three Julia checkers and retain
+  exact_finite_decision. No Lean declaration, public contract id, tolerance,
+  threshold, seed, fixture expectation, or phenomenal marker is changed.
+
+R1 viability.closure_functor
+  Lean target:
+    ERIEC.ViabilityClosure.viabilityClosureFunctor_left_natural
+  Type boundary:
+    f is a ViableSystemIso, hence f.mapConfig is an Equiv. The theorem is
+    quantified over every K.
+  Prior defect:
+    Set(keys)==source and Set(values)==target accepted a collision when the
+    source had greater cardinality than the target.
+  Repair:
+    the additive all-K checker now validates duplicate-free carriers, mapping
+    totality, image membership, injectivity, surjectivity, cardinality equality,
+    and both inverse round trips before evaluating naturality.
+  Required counterexample:
+    [:a,:b,:c] -> [:x,:y] with a->x, b->x, c->y is rejected as non-bijective.
+
+R2 bridge.hinge_strict_functor
+  Lean target:
+    ERIEC.BridgeFunctor.strictHingeClassifier_identity_intertwines
+  Type boundary:
+    StrictHingeData preorder is X.data.holds iff Y.data.holds. This is distinct
+    from CompleteHingeData's one-way HingeForward implication.
+  Prior defect:
+    the additive checker trusted an externally supplied arrow_valid Bool.
+  Repair:
+    a finite-data additive method recomputes both holds predicates with Act,
+    derives arrow_valid as source_holds == target_holds, validates both
+    independently supplied loop candidates, and then decides intertwining.
+    The legacy Bool method remains only for compatibility and is not the exact
+    contract evidence path.
+  Required counterexample:
+    source holds, target does not, and a mutated target loop is rejected without
+    any caller-supplied arrow premise.
+
+R3 reference_models.v5_1
+  Lean target:
+    ERIEC.RefModel.reference_models
+  Type boundary:
+    the closed theorem is exactly the three literal RefState next equations.
+  Prior defect:
+    v5.1 acceptance was gated by fields belonging only to three later witness
+    contracts, producing a false negative for a states/next-only candidate.
+  Repair:
+    a dedicated exact two-field path validates the duplicate-free complete
+    carrier and literal next table. The existing exact full candidate shape is
+    still accepted for the combined four-contract API. Partial shapes and
+    unknown extra fields are rejected.
+  Evidence cases:
+    the minimal states/next candidate passes; mutated next, missing state,
+    unknown state, and unexpected-field candidates fail.
+
+Target gate evidence
+  R1: PASS 74/74
+    logs/gates/checker-strengthening/R1-target-20260825.log
+  R2: PASS 143/143
+    logs/gates/checker-strengthening/R2-target-20260825.log
+  R3: PASS 35/35 plus closed-decoder regression 23/23
+    logs/gates/checker-strengthening/R3-target-20260825.log
+
+Registry invariants
+  exact_finite_decision count remains 27.
+  The three exact rows retain their public ids and checker names.
+  Sensitivity registry SHA-256 after replacing the three negative cases:
+    ed803d461f6c680518cc78cf8e5bf9fb93e165b91b5579f642ae028a22b57eac
+
+Status
+  COMPLETE. All required gates passed.
+
+Connected and full gate evidence
+  G1 Lean: PASS 2808 jobs
+    logs/gates/checker-strengthening/residual-3-G1-20260825.log
+  G2 contract: PASS 1214/1214
+    logs/gates/checker-strengthening/residual-3-G2-contract-20260825.log
+  Manifest: PASS 86/86
+    logs/gates/checker-strengthening/residual-3-G3-manifest-20260825.log
+  Claim ledger: PASS 417/417
+    logs/gates/checker-strengthening/residual-3-G3-claim-final-20260825.log
+  v1 ledger: PASS 376/376
+    logs/gates/checker-strengthening/residual-3-G3-ledger-final-20260825.log
+  Category pipeline: PASS 80/80
+    logs/gates/checker-strengthening/residual-3-G3-category-final-20260825.log
+  Full G3: PASS
+    logs/gates/checker-strengthening/residual-3-G3-full-20260825.log
+  G4: PASS for all three contract-to-Lean-to-checker dependency paths
+    logs/gates/checker-strengthening/residual-3-G4-rerun-20260825.log
+
+G4 orchestration note
+  The first G4 wrapper compared the catalog's Symbol-valued julia_checker to a
+  String and failed before semantic certification. Its log is retained at
+  logs/gates/checker-strengthening/residual-3-G4-20260825.log. The wrapper was
+  corrected to compare Symbols and the rerun passed all three bindings and all
+  nine dependency edges.

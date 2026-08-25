@@ -83,28 +83,50 @@ function check_viability_closure_naturality(
     source_subsets,
 )
     mapped(values) = Set(mapping[value] for value in values)
+    source_carrier = collect(source_states)
+    target_carrier = collect(target_states)
+    source_unique = allunique(source_carrier)
+    target_unique = allunique(target_carrier)
+    mapping_total = Set(keys(mapping)) == Set(source_carrier)
+    images = mapping_total ? [mapping[source] for source in source_carrier] : Any[]
+    images_in_target = mapping_total && all(value -> value in target_carrier, images)
+    injective = mapping_total && length(Set(images)) == length(source_carrier)
+    surjective = mapping_total && Set(images) == Set(target_carrier)
+    cardinality_equal = length(source_carrier) == length(target_carrier)
+    inverse = injective ? Dict(value => source for (source, value) in mapping) : Dict()
+    inverse_roundtrip = injective && surjective &&
+        all(source -> inverse[mapping[source]] == source, source_carrier) &&
+        all(target -> mapping[inverse[target]] == target, target_carrier)
+    bijective = source_unique && target_unique && mapping_total &&
+        images_in_target && injective && surjective && cardinality_equal &&
+        inverse_roundtrip
     subsets = [Set(subset) for subset in source_subsets]
-    expected_subsets = powerset(Set(source_states))
+    expected_subsets = powerset(Set(source_carrier))
     subset_family_complete = Set(subsets) == Set(expected_subsets)
-    subsets_in_carrier = all(subset -> subset ⊆ Set(source_states), subsets)
-    bijective = Set(keys(mapping)) == Set(source_states) &&
-        Set(values(mapping)) == Set(target_states)
-    step_preserved = all(
+    subsets_in_carrier = all(subset -> subset ⊆ Set(source_carrier), subsets)
+    step_preserved = bijective && all(
         source_step(source, target) == target_step(mapping[source], mapping[target])
-        for source in source_states for target in source_states
+        for source in source_carrier for target in source_carrier
     )
-    viability_preserved = all(
+    viability_preserved = bijective && all(
         source_viable(source) == target_viable(mapping[source])
-        for source in source_states
+        for source in source_carrier
     )
     premises = subset_family_complete && subsets_in_carrier && bijective &&
         step_preserved && viability_preserved
-    subset_natural = all(subsets) do subset
+    subset_natural = bijective && all(subsets) do subset
         mapped(successor_closure(source_states, source_step, subset)) ==
             successor_closure(target_states, target_step, mapped(subset))
     end
     (
         bijective=bijective,
+        source_unique=source_unique,
+        target_unique=target_unique,
+        mapping_total=mapping_total,
+        injective=injective,
+        surjective=surjective,
+        cardinality_equal=cardinality_equal,
+        inverse_roundtrip=inverse_roundtrip,
         step_preserved=step_preserved,
         viability_preserved=viability_preserved,
         subset_family_complete=subset_family_complete,

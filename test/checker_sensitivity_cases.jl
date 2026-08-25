@@ -146,12 +146,20 @@ function checker_sensitivity_cases()
         ),
         "bridge.hinge_strict_functor" => (
             positive=() -> check_strict_hinge_classifier_intertwining(
-                ones(1, 1), ones(1, 1), true,
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                ones(1, 1), ones(1, 1),
             ).contract_holds,
             negative=() -> check_strict_hinge_classifier_intertwining(
-                ones(1, 1), zeros(1, 1), true,
+                _ -> Set([:m]), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                _ -> Set{Symbol}(), _ -> Set([:m]), _ -> Set([:c]),
+                _ -> Set([:e]), :s,
+                ones(1, 1), ones(1, 1),
             ).contract_holds,
-            negative_kind="mutated_candidate",
+            negative_kind="invalid_encoding",
         ),
         "bridge.hinge_hilbert_functor" => (
             positive=() -> check_hinge_hilbert_functor(
@@ -193,7 +201,20 @@ function checker_sensitivity_cases()
         ),
         "viability.closure_functor" => (
             positive=() -> _checker_sensitivity_closure_functor(true),
-            negative=() -> _checker_sensitivity_closure_functor(false),
+            negative=() -> begin
+                source = [:a, :b, :c]
+                target = [:x, :y]
+                check_viability_closure_naturality(
+                    source,
+                    target,
+                    Dict(:a => :x, :b => :x, :c => :y),
+                    (_source, _target) -> false,
+                    (_source, _target) -> false,
+                    _ -> false,
+                    _ -> false,
+                    powerset(Set(source)),
+                ).contract_holds
+            end,
             negative_kind="invalid_encoding",
         ),
         "viability.relational_frame" => (
@@ -283,13 +304,16 @@ function checker_sensitivity_cases()
         ),
         "reference_models.v5_1" => (
             positive=() -> check_reference_models(
-                _checker_sensitivity_reference_candidate(),
+                (
+                    states=[:s0, :s1, :s2],
+                    next=Dict(:s0 => :s1, :s1 => :s2, :s2 => :s2),
+                ),
             ).v5_1_contract_holds,
             negative=() -> begin
-                candidate = _checker_sensitivity_reference_candidate()
-                mutated = merge(candidate, (
+                mutated = (
+                    states=[:s0, :s1, :s2],
                     next=Dict(:s0 => :s0, :s1 => :s2, :s2 => :s2),
-                ))
+                )
                 check_reference_models(mutated).v5_1_contract_holds
             end,
             negative_kind="mutated_candidate",

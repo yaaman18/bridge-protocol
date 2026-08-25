@@ -63,3 +63,11 @@ Full-G3 blocker isolation
   claim ledger 417/417, and v1 ledger 372/372, pass. These model-evaluation
   files pre-existed as unrelated user work and were not modified for order-10b.
   G4 and certified status transitions are therefore intentionally not run.
+
+2026-08-24 certification follow-up
+  The external model-evaluation blocker was resolved outside this batch. A
+  fresh full G3 and both G4 checks passed, so VP-MRK-002 and VP-OPD-002 were
+  advanced to certified.
+  Full G3: logs/gates/order-10b/G3-full-certification-20260824.log
+  VP-MRK-002 G4: logs/gates/VP-MRK-002/G4-20260824.log
+  VP-OPD-002 G4: logs/gates/VP-OPD-002/G4-20260824.log

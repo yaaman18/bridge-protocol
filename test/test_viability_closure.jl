@@ -74,6 +74,25 @@
     @test all_k_natural.contract_conclusion
     @test all_k_natural.contract_holds
 
+    non_equiv_source = [:a, :b, :c]
+    non_equiv_target = [:x, :y]
+    non_equiv_mapping = Dict(:a => :x, :b => :x, :c => :y)
+    non_equiv = check_viability_closure_naturality(
+        non_equiv_source,
+        non_equiv_target,
+        non_equiv_mapping,
+        (_source, _target) -> false,
+        (_source, _target) -> false,
+        _ -> false,
+        _ -> false,
+        powerset(Set(non_equiv_source)),
+    )
+    @test !non_equiv.bijective
+    @test !non_equiv.injective
+    @test !non_equiv.cardinality_equal
+    @test !non_equiv.inverse_roundtrip
+    @test !non_equiv.contract_holds
+
     incomplete_k_family = check_viability_closure_naturality(
         source_states,
         target_states,

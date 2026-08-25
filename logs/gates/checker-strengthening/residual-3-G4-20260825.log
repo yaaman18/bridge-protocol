@@ -1,0 +1,4 @@
+ERROR: AssertionError: d.julia_checker == checker_name
+Stacktrace:
+ [1] top-level scope
+   @ none:1

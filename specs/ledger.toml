@@ -211,7 +211,7 @@ julia_file  = "src/open_dynamics.jl"
 contract_id = "opendynamics.path"
 owner       = "codex"
 depends_on  = ["VP-OPD-001"]
-status      = "implemented"                  # G3: logs/gates/VP-OPD-002/G3-20260823.log
+status      = "certified"                    # G4: logs/gates/VP-OPD-002/G4-20260824.log
 pinned      = false
 coverage_audit = "unreviewed"
 
@@ -288,7 +288,7 @@ julia_file  = "src/markers.jl"
 contract_id = "markers.classify"
 owner       = "codex"
 depends_on  = ["VP-MRK-001"]
-status      = "implemented"                  # G3: logs/gates/VP-MRK-002/G3-20260823.log
+status      = "certified"                    # G4: logs/gates/VP-MRK-002/G4-20260824.log
 pinned      = false
 coverage_audit = "unreviewed"
 
@@ -500,7 +500,7 @@ julia_file  = "src/reference_models.jl"
 contract_id = "reference_models.v5_1"
 owner       = "codex"
 depends_on  = ["VP-INV-001", "VP-MRK-001", "VP-WDC-002"]
-status      = "certified"                     # G4: logs/gates/VP-REF-001/G4-20260705.log
+status      = "certified"                     # G4: logs/gates/VP-REF-001/G4-20260825.log
 pinned      = false
 coverage_audit = "complete"
 
