@@ -28,32 +28,6 @@ function explicit_pending_max(ledger)
     return value isa Integer ? value : nothing
 end
 
-function legacy_bootstrap_max(base, current, base_sha)
-    base_claims = get(base, "claim", Any[])
-    current_claims = get(current, "claim", Any[])
-    isempty(base_claims) && return nothing
-
-    # Bootstrap is intentionally narrow: only the checked-out HEAD may represent
-    # the wholly pre-falsification schema, and the working tree must be a pure
-    # field migration of the same claim-id set.
-    head_sha = command_output(["git", "-C", REPO_ROOT, "rev-parse", "HEAD"])
-    base_sha == head_sha || return nothing
-    all(claim -> !haskey(claim, "falsification_ja"), base_claims) || return nothing
-    all(
-        claim -> haskey(claim, "falsification_ja") &&
-            !isempty(strip(claim["falsification_ja"])),
-        current_claims,
-    ) || return nothing
-
-    base_ids = Set(String(claim["id"]) for claim in base_claims)
-    current_ids = Set(String(claim["id"]) for claim in current_claims)
-    base_ids == current_ids || return nothing
-
-    # Every absent field is an observed missing falsification condition. The
-    # exact count is migration debt, not a caller-selected tolerance.
-    return length(base_claims)
-end
-
 function run_ratchet(args)
     base_ref = parse_base_ref(args)
     base_ref === nothing && return unverified("missing_or_invalid_base_ref")
@@ -100,17 +74,12 @@ function run_ratchet(args)
     current_max = explicit_pending_max(current_ledger)
     current_max === nothing && return unverified("current_pending_max_missing")
 
+    # The one-shot migration bootstrap that derived a base count from the
+    # pre-falsification schema was removed once the base carried [migration]
+    # explicitly. It is preserved in commit d795f0bcc86a6b10403773d0887b1ccfb267cfd8.
     base_max = explicit_pending_max(base_ledger)
+    base_max === nothing && return unverified("base_pending_max_missing")
     base_mode = "explicit"
-    if base_max === nothing
-        base_max = try
-            legacy_bootstrap_max(base_ledger, current_ledger, base_sha)
-        catch error
-            nothing
-        end
-        base_max === nothing && return unverified("base_pending_max_missing_or_mixed")
-        base_mode = "legacy_missing_fields_derived"
-    end
 
     current_claims = get(current_ledger, "claim", Any[])
     current_pending = count(

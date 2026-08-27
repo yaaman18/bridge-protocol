@@ -10,6 +10,10 @@ using .ClaimLedgerValidation
         ledger_path;
         project_root=project_root,
     )
+    # Guard against a vacuous pass: an empty or truncated check list would make
+    # every assertion below disappear rather than fail.
+    @test !isempty(checks)
+    @test length(checks) >= 859
     for check in checks
         check.ok || @info "claim ledger violation" code=check.code subject=check.subject detail=check.detail
         @test check.ok

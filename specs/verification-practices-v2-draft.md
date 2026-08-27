@@ -161,6 +161,20 @@ tools/verify/ratchet_check.jl --base-ref <commit>
 
 ---
 
+## 移行 bootstrap の削除記録
+
+導入時、基準コミットの台帳には `[migration]` が存在しなかったため、`ratchet_check.jl` は
+移行専用の導出規則（`legacy_bootstrap_max`）を持っていた。基準が旧スキーマそのものであり、
+claim の ID 集合が一致する場合にのみ、基準側の claim 件数を移行負債として導出するものである。
+
+この分岐は、台帳が `[migration]` 込みでコミットされた時点で到達不能になった。
+`--base-ref HEAD` に対する `base_mode` が `legacy_missing_fields_derived` から `explicit` へ
+変わったことを確認したうえで削除した。
+
+**削除した実装は commit `d795f0bcc86a6b10403773d0887b1ccfb267cfd8` に保存されている。**
+別ブランチは作っていない。当該コミットは main の祖先であり恒久的に到達可能であるため、
+退避の必要がない。
+
 ## 未解決項目（後の解決とする）
 
 **単調性は通常のテスト実行では一度も検査されない。** P-5 は G3V を明示的に走らせたときにだけ
