@@ -1,0 +1,28 @@
+schema_version = 1
+
+[[mutation]]
+id = "MUT-LEDGER-001"
+target = "specs/claim-ledger-v2.toml"
+expect_code = "CERTIFIED_TEXT_HASH_MISMATCH"
+author = "claude"
+rationale_ja = "認証済み claim の文面と claim_text_hash だけを同時更新しても、固定済み certified_text_hash が差分を検出することを確認する。"
+
+[mutation.edit]
+find = '''claim_text_hash = "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d"
+certified_text_hash = "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d"
+falsification_ja = "未記入"
+id = "VP2-WLD-LAMBDAMAX-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.8"
+claim_kind = "theorem"
+statement_ja = "非零有限次元でλmax(T†T)=‖T‖²"
+'''
+replace = '''claim_text_hash = "sha256:7166ea84e7320bd4536e54c83bbf60419180325e4e7ff93690f48e2ad145f40f"
+certified_text_hash = "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d"
+falsification_ja = "未記入"
+id = "VP2-WLD-LAMBDAMAX-001"
+group_id = "GRP-WLD-6"
+source_label = "定理 6.8"
+claim_kind = "theorem"
+statement_ja = "非零有限次元でλmax(T†T)=‖T‖²（mutation）"
+'''

@@ -17,6 +17,9 @@ proof_status = "unproved"
 implementation_status = "not_applicable"
 certification_status = "uncertified"
 
+[migration]
+falsification_pending_max = 91
+
 [[claim_group]]
 id = "GRP-DYN-5"
 source = "category/三層構造の圏論的定式化_v5_1.md#§5"
@@ -184,6 +187,8 @@ coverage_note = "有限DC参照モデルの任意サイズfragmentとAX_core離�
 # §5 Dynamics
 
 [[claim]]
+claim_text_hash = "sha256:a9cc7f30d7f009bca3b582526aaa2489f4c5ea30fbc8e2d8e698aac66daf44f4"
+falsification_ja = "未記入"
 id = "VP2-DYN-CONF-001"
 group_id = "GRP-DYN-5"
 source_label = "定義 5.1"
@@ -200,6 +205,8 @@ realization_kind = "formal_only"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:014cf94e6de6e56851ab24839ffcc3f82ccadcca6871ca2673586232bb7a6814"
+falsification_ja = "未記入"
 id = "VP2-DYN-UPD-001"
 group_id = "GRP-DYN-5"
 source_label = "定義 5.1"
@@ -219,6 +226,8 @@ julia_file = "src/dynamics.jl"
 depends_on = ["VP2-DYN-CONF-001"]
 
 [[claim]]
+claim_text_hash = "sha256:2af122284cd52a7ec9f94336fae0f6238f699fb8b01dac37f670e318fc0f2c0b"
+falsification_ja = "未記入"
 id = "VP2-DYN-DESCENT-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.2"
@@ -236,6 +245,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-DYN-UPD-001"]
 
 [[claim]]
+claim_text_hash = "sha256:7db486863a4fad770147ee7818302c00952a38116203cc71d1bd18112023aa27"
+falsification_ja = "未記入"
 id = "VP2-DYN-R2P-001"
 group_id = "GRP-DYN-5"
 source_label = "公理 5.3(R2′)‡"
@@ -255,6 +266,8 @@ ratification = "accepted"
 depends_on = ["VP2-DYN-CONF-001"]
 
 [[claim]]
+claim_text_hash = "sha256:abea0bc65a2ca60e6552e36af466774afd608163eb46dccced1427a32264d41f"
+falsification_ja = "未記入"
 id = "VP2-DYN-TOTAL-PROP-001"
 group_id = "GRP-DYN-5"
 source_label = "定義 5.3′"
@@ -271,6 +284,8 @@ realization_kind = "formal_only"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:4254e535900f6cd03e02dffbdab3a47a6eed7e6f5bf445e665fccb5fd2b3d09b"
+falsification_ja = "未記入"
 id = "VP2-DYN-TOTAL-DATA-001"
 group_id = "GRP-DYN-5"
 source_label = "定義 5.3″"
@@ -290,6 +305,8 @@ julia_file = "src/dynamics.jl"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:8bf5f426fcb458df00c2bf8cd37224268e3cf81dac641592800746c0df104802"
+falsification_ja = "未記入"
 id = "VP2-DYN-COLLAPSE-CONF-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.4(1)‡"
@@ -311,6 +328,8 @@ julia_file = "src/dynamics.jl"
 depends_on = ["VP2-DYN-DESCENT-001", "VP2-DYN-R2P-001"]
 
 [[claim]]
+claim_text_hash = "sha256:82d21e127b73cecfed3bb2264e25551af0d394986108a493c4a130b758b39a02"
+falsification_ja = "未記入"
 id = "VP2-DYN-PATH-ITERATE-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.4(2)"
@@ -328,6 +347,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-DYN-UPD-001"]
 
 [[claim]]
+claim_text_hash = "sha256:0200d8f25fa60ebe1b86db4be0ae2c5a6596dbcd8d981d2105a25980fcb9b7c7"
+falsification_ja = "未記入"
 id = "VP2-DYN-TOTAL-ORBIT-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.4(3)‡"
@@ -345,6 +366,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-DYN-TOTAL-DATA-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-PATH-ITERATE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:0924c2c0eb900bf2ecc2d0709f3f0c45e023122fb9ea207592da7f8b696ac591"
+falsification_ja = "未記入"
 id = "VP2-DYN-HINGE-COLLAPSE-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.4(3)・定理 4.2"
@@ -362,6 +385,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-DYN-COLLAPSE-CONF-001"]
 
 [[claim]]
+claim_text_hash = "sha256:e1955157e49c6300c8c32f7af313c564b8d7d6ce1971143cd086b3981ebe8e9a"
+falsification_ja = "未記入"
 id = "VP2-DYN-REACHABLE-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.3 到達構造"
@@ -379,6 +404,8 @@ realization_kind = "executable"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:9acee61bc0abe16dcf7fe37491e007b82c8cb1ca89c2e99545692f5830c3836b"
+falsification_ja = "未記入"
 id = "VP2-DYN-DOWNV-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.3 到達構造"
@@ -396,6 +423,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-REACHABLE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:73111c78d764ca73b774a0d363bfdd1a46bde3a0ce771ee65e8e4af2ec09e61b"
+falsification_ja = "未記入"
 id = "VP2-DYN-K-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.3 到達構造"
@@ -413,6 +442,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-DOWNV-001"]
 
 [[claim]]
+claim_text_hash = "sha256:bbf910aa1e2322fd6fb047441874d7890956255019ef896be8e3430dba16457b"
+falsification_ja = "未記入"
 id = "VP2-DYN-BDPAIR-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.3 到達構造"
@@ -430,6 +461,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-DOWNV-001", "VP2-DYN-K-001"]
 
 [[claim]]
+claim_text_hash = "sha256:3014f9575d23cba87232210106a8e992f774080a07577890280eef9cc3f4bb7a"
+falsification_ja = "未記入"
 id = "VP2-DYN-K-ABSORB-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.5"
@@ -448,6 +481,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-K-001"]
 
 [[claim]]
+claim_text_hash = "sha256:664e8e6d8e3e2fb94e23b0d8f96358f7816b57038b86212060f7cef47ec3c2ba"
+falsification_ja = "未記入"
 id = "VP2-DYN-BD-ONEWAY-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.6"
@@ -465,6 +500,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-DYN-K-ABSORB-001"]
 
 [[claim]]
+claim_text_hash = "sha256:3093e8c28624f160c24d70dae1ea46a22ffc30504a9df2a931b200fb91735d79"
+falsification_ja = "未記入"
 id = "VP2-DYN-INS-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.4"
@@ -482,6 +519,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-K-001"]
 
 [[claim]]
+claim_text_hash = "sha256:5a1087b21e086280ab2f360f0798e7fd5dcffb7f3ef4a9f926caab4b2a67e8d7"
+falsification_ja = "未記入"
 id = "VP2-DYN-INS-FIBER-001"
 group_id = "GRP-DYN-5"
 source_label = "定理 5.7"
@@ -501,6 +540,8 @@ realization_kind = "executable"
 depends_on = ["VP2-DYN-INS-001"]
 
 [[claim]]
+claim_text_hash = "sha256:9303cf3207e2ea88b334812b21337b05bf11a5a067a30760a3713675038d7eb2"
+falsification_ja = "未記入"
 id = "VP2-DYN-COREOF-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.5"
@@ -517,6 +558,8 @@ realization_kind = "formal_only"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:5b96c3c37b8b640c7541b1c0d59dc2ddc007bae96c7a7edcdc6c071baf536e97"
+falsification_ja = "未記入"
 id = "VP2-DYN-TRANSPORT-001"
 group_id = "GRP-DYN-5"
 source_label = "§5.5"
@@ -536,6 +579,8 @@ depends_on = ["VP2-DYN-COREOF-001"]
 # §6 World
 
 [[claim]]
+claim_text_hash = "sha256:1349665afe735ba175bd78e9bb31feba50b1e2b4631778e1b064a9921519fb1c"
+falsification_ja = "未記入"
 id = "VP2-WLD-EETA-001"
 group_id = "GRP-WLD-6"
 source_label = "§6.2"
@@ -555,6 +600,8 @@ julia_file = "src/world.jl"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:50e77ef6ff3cfca604fdc913a833880d33e873977013a046c736a20cd29fd758"
+falsification_ja = "未記入"
 id = "VP2-WLD-BAND-001"
 group_id = "GRP-WLD-6"
 source_label = "定義 6.5"
@@ -574,6 +621,8 @@ julia_file = "src/world.jl"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:9f404778afbccbed701c8bb53ed4aa5627ffeb81da9d1face15078fb0a21317e"
+falsification_ja = "未記入"
 id = "VP2-WLD-INVARIANT-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.6(1)"
@@ -590,6 +639,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-BAND-001"]
 
 [[claim]]
+claim_text_hash = "sha256:e334ca826b69f064e8f016d29ce2d5b3e8dd888c8d5db71f9bd8e4de74308abf"
+falsification_ja = "未記入"
 id = "VP2-WLD-ZERO-FIX-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.6(2)"
@@ -607,6 +658,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-BAND-001"]
 
 [[claim]]
+claim_text_hash = "sha256:0a3abcf1847fc29d697a521da19999151336e4f86aa26887bf5a928f1800b954"
+falsification_ja = "未記入"
 id = "VP2-WLD-MONO-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.6(3)"
@@ -624,6 +677,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-BAND-001"]
 
 [[claim]]
+claim_text_hash = "sha256:9a4819aef2c40685bdf9dd05372d429fc3e74d7f4a5baa5648479b30dd58c277"
+falsification_ja = "未記入"
 id = "VP2-WLD-SUBSET-EETA-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.6(4)"
@@ -642,6 +697,9 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-EETA-001", "VP2-WLD-BAND-001"]
 
 [[claim]]
+claim_text_hash = "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d"
+certified_text_hash = "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d"
+falsification_ja = "未記入"
 id = "VP2-WLD-LAMBDAMAX-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.8"
@@ -665,6 +723,8 @@ certification_log = "logs/gates/VP2-WLD-LAMBDAMAX-001/G4-20260730.log"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:e8cc3f96499043a527404726f8aec858db26959dcd6582936a1339feabdd1f1e"
+falsification_ja = "未記入"
 id = "VP2-WLD-CHI-001"
 group_id = "GRP-WLD-6"
 source_label = "§6.4"
@@ -684,6 +744,8 @@ julia_file = "src/slowing.jl"
 depends_on = ["VP2-WLD-LAMBDAMAX-001"]
 
 [[claim]]
+claim_text_hash = "sha256:aea8e386a4198ffdddfe1416e2100429b2450a9963290e76d7eda4cc806a3085"
+falsification_ja = "未記入"
 id = "VP2-WLD-CHI-NONTRIV-001"
 group_id = "GRP-WLD-6"
 source_label = "定理 6.8"
@@ -701,6 +763,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-BAND-001", "VP2-WLD-CHI-001"]
 
 [[claim]]
+claim_text_hash = "sha256:f26bbc6a3b61f8f66a360348b57170dc8862954793f45c730b8e6331db824f79"
+falsification_ja = "未記入"
 id = "VP2-WLD-SLOWING-001"
 group_id = "GRP-WLD-6"
 source_label = "予想 6.9"
@@ -724,6 +788,8 @@ depends_on = ["VP2-DYN-COLLAPSE-CONF-001", "VP2-WLD-CHI-001"]
 # §7 Value
 
 [[claim]]
+claim_text_hash = "sha256:a62fbfb7951c3a577f116d4dbe10b128ef18d280a3eba23d2059fab81df84a53"
+falsification_ja = "未記入"
 id = "VP2-VAL-RAW-001"
 group_id = "GRP-VAL-7"
 source_label = "§7.1"
@@ -743,6 +809,8 @@ julia_file = "src/value.jl"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:71c74edaf087c1811bd1ad78ca0de840356acfe97a75dc87170fe81f743e9f49"
+falsification_ja = "未記入"
 id = "VP2-VAL-NORMALIZED-001"
 group_id = "GRP-VAL-7"
 source_label = "§7.1"
@@ -763,6 +831,8 @@ julia_file = "src/value.jl"
 depends_on = ["VP2-VAL-RAW-001"]
 
 [[claim]]
+claim_text_hash = "sha256:01472d4b966d590e78eb372494420832aef184dfcb7ad51ed70aa665f262a2ce"
+falsification_ja = "未記入"
 id = "VP2-VAL-WELLDEF-001"
 group_id = "GRP-VAL-7"
 source_label = "定理 7.1"
@@ -780,6 +850,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-VAL-NORMALIZED-001"]
 
 [[claim]]
+claim_text_hash = "sha256:58841544264906af65612cf7448954a850c370787009342121021690e98718f0"
+falsification_ja = "未記入"
 id = "VP2-VAL-RANGE-001"
 group_id = "GRP-VAL-7"
 source_label = "定理 7.2(ii)"
@@ -797,6 +869,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-VAL-NORMALIZED-001"]
 
 [[claim]]
+claim_text_hash = "sha256:c76794bd5b0b00fe2b39af8df59ef2f657bc456aad86e894f2c2604c8c6b34fd"
+falsification_ja = "未記入"
 id = "VP2-VAL-ENDOGENOUS-001"
 group_id = "GRP-VAL-7"
 source_label = "定理 7.2"
@@ -818,6 +892,8 @@ julia_file = "src/value.jl"
 depends_on = ["VP2-VAL-WELLDEF-001", "VP2-VAL-RANGE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:d7e4515b8da1afd2d7efeaec930de3853f15782ce2a3c3f67ff3a2fc66ebd4e1"
+falsification_ja = "未記入"
 id = "VP2-VAL-COUNTERMODEL-001"
 group_id = "GRP-VAL-7"
 source_label = "定理 7.3"
@@ -837,6 +913,8 @@ julia_file = "src/value.jl"
 depends_on = ["VP2-VAL-RAW-001"]
 
 [[claim]]
+claim_text_hash = "sha256:cfde2ceff9cd2c09ff7eb40a01b61b8fd2232b8ecb94f62bc830ec11c2b74813"
+falsification_ja = "未記入"
 id = "VP2-VAL-WEIGHTED-001"
 group_id = "GRP-VAL-7"
 source_label = "§7.2"
@@ -856,6 +934,8 @@ julia_file = "src/weighted.jl"
 depends_on = ["VP2-VAL-NORMALIZED-001"]
 
 [[claim]]
+claim_text_hash = "sha256:bd98616ed8faa8e94003797acc7d5b74a100c64bc8d9ccc9899294a4dc7102b8"
+falsification_ja = "未記入"
 id = "VP2-VAL-WEIGHTED-PURE-001"
 group_id = "GRP-VAL-7"
 source_label = "定理 7.4"
@@ -876,6 +956,8 @@ depends_on = ["VP2-VAL-ENDOGENOUS-001", "VP2-VAL-WEIGHTED-001"]
 # §8 Counterexamples
 
 [[claim]]
+claim_text_hash = "sha256:728ffd01b9a7720518958757e1bf429b043a56811862db1b0dbff9f27558d1df"
+falsification_ja = "未記入"
 id = "VP2-WDC-FORWARD-CE-001"
 group_id = "GRP-WDC-8"
 source_label = "定理 8.1"
@@ -895,6 +977,9 @@ julia_file = "src/worlddc.jl"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:e46f9b41f6b1383eff1c53683b7b8cee2989aae91c58d966d8645ad5230af603"
+certified_text_hash = "sha256:e46f9b41f6b1383eff1c53683b7b8cee2989aae91c58d966d8645ad5230af603"
+falsification_ja = "未記入"
 id = "VP2-WDC-BACKWARD-CE-001"
 group_id = "GRP-WDC-8"
 source_label = "定理 8.2"
@@ -920,6 +1005,8 @@ depends_on = []
 # §12 Invariance
 
 [[claim]]
+claim_text_hash = "sha256:3093d88cc7c8efc8fffff331922513199ae043b8ecb201bfda266e8b2fe892dc"
+falsification_ja = "未記入"
 id = "VP2-INV-STATIC-REL-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.2"
@@ -936,6 +1023,8 @@ realization_kind = "formal_only"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:83e276fd6bbe79d168c3966b46f19c89a2362a081a4b6f3636614f8d09a82f0f"
+falsification_ja = "未記入"
 id = "VP2-INV-STATIC-CLOSURE-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.2"
@@ -952,6 +1041,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-INV-STATIC-REL-001"]
 
 [[claim]]
+claim_text_hash = "sha256:1ccfb496893c66588204982ca34a3ab8d6e82cb06291d04f3bc4b90e4cd9f8f1"
+falsification_ja = "未記入"
 id = "VP2-INV-STATIC-DC-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.2"
@@ -969,6 +1060,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-INV-STATIC-CLOSURE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:052f65edb102e74f8873cacf80d9cc23b66baaef19f27d622378222b84265756"
+falsification_ja = "未記入"
 id = "VP2-INV-INTERNAL-KAPPA-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.3"
@@ -985,6 +1078,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-INV-STATIC-CLOSURE-001", "VP2-DYN-UPD-001"]
 
 [[claim]]
+claim_text_hash = "sha256:2be95fd8b9652711d3caeaf3753f50829e51f7c6b496fe784ba5dd2599cf4471"
+falsification_ja = "未記入"
 id = "VP2-INV-INTERNAL-EPS-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.3"
@@ -1001,6 +1096,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-INV-STATIC-CLOSURE-001", "VP2-DYN-UPD-001"]
 
 [[claim]]
+claim_text_hash = "sha256:1e2a059a95a7b98fba7d8ea8bc6aaf69c4b28474de85fa7ec83ecc5a9f4e496e"
+falsification_ja = "未記入"
 id = "VP2-INV-DRIFT-001"
 group_id = "GRP-INV-12"
 source_label = "定義 12.3′"
@@ -1017,6 +1114,8 @@ realization_kind = "none"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:5bae4d17a7cadbea7303aa47a644dc73a313e8a29040c4a22ac4e5631b78f464"
+falsification_ja = "未記入"
 id = "VP2-INV-UPD-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.3″"
@@ -1037,6 +1136,8 @@ julia_file = "src/invariance.jl"
 depends_on = ["VP2-INV-INTERNAL-KAPPA-001", "VP2-INV-INTERNAL-EPS-001", "VP2-INV-DRIFT-001"]
 
 [[claim]]
+claim_text_hash = "sha256:24af919139176c5b327060797e59bc124888bb835ada579f76b0ae4533a941f6"
+falsification_ja = "未記入"
 id = "VP2-INV-UNITARY-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.4"
@@ -1053,6 +1154,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-WLD-BAND-001", "VP2-WLD-CHI-001"]
 
 [[claim]]
+claim_text_hash = "sha256:4887a33e02a0dfcfd4d52f760f1274cbf23debe3d2fa8512190c7cf66a196099"
+falsification_ja = "未記入"
 id = "VP2-INV-INS-001"
 group_id = "GRP-INV-12"
 source_label = "定理 12.5"
@@ -1071,6 +1174,8 @@ realization_kind = "formal_only"
 depends_on = ["VP2-INV-STATIC-DC-001", "VP2-DYN-INS-FIBER-001"]
 
 [[claim]]
+claim_text_hash = "sha256:5d5097ae291a07f3775fac5e8200cbfdecbe1375ce633dbf9a9c340c927025f2"
+falsification_ja = "未記入"
 id = "VP2-INV-E5-001"
 group_id = "GRP-INV-12"
 source_label = "公理 12.6(E5)‡"
@@ -1092,6 +1197,9 @@ depends_on = ["VP2-DYN-COREOF-001"]
 # §13 Reference models
 
 [[claim]]
+claim_text_hash = "sha256:12edbff01ca419bf2343a2ea7b3a6cf5b39db6a9a3e65b804200d738d932a1ee"
+certified_text_hash = "sha256:12edbff01ca419bf2343a2ea7b3a6cf5b39db6a9a3e65b804200d738d932a1ee"
+falsification_ja = "未記入"
 id = "VP2-REF-STABLE-001"
 group_id = "GRP-REF-13"
 source_label = "義務 13.1a"
@@ -1114,6 +1222,9 @@ certification_log = "logs/gates/VP2-REF-STABLE-001/G4-20260706.log"
 depends_on = ["VP2-DYN-TOTAL-DATA-001", "VP2-WLD-BAND-001", "VP2-VAL-NORMALIZED-001"]
 
 [[claim]]
+claim_text_hash = "sha256:c49c2cbdd0619cfd88e3f9a6c47f4c1be572314934ef4ac1e65fc9969940b5f5"
+certified_text_hash = "sha256:c49c2cbdd0619cfd88e3f9a6c47f4c1be572314934ef4ac1e65fc9969940b5f5"
+falsification_ja = "未記入"
 id = "VP2-REF-DYN-001"
 group_id = "GRP-REF-13"
 source_label = "義務 13.1b‡"
@@ -1136,6 +1247,9 @@ certification_log = "logs/gates/VP2-REF-DYN-001/G4-20260706.log"
 depends_on = ["VP2-REF-STABLE-001", "VP2-DYN-R2P-001", "VP2-INV-E5-001"]
 
 [[claim]]
+claim_text_hash = "sha256:b4810a73cf18e43ee6876778ca11c5977798f6fcd8e25e91912a83c19110e673"
+certified_text_hash = "sha256:b4810a73cf18e43ee6876778ca11c5977798f6fcd8e25e91912a83c19110e673"
+falsification_ja = "未記入"
 id = "VP2-REF-NONDEG-001"
 group_id = "GRP-REF-13"
 source_label = "義務 13.2"
@@ -1161,6 +1275,9 @@ depends_on = ["VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-INS-FIBER-001", "VP2-INV-E5-
 # Interface I-1
 
 [[claim]]
+claim_text_hash = "sha256:dd2745ce82f1d3b1624888d72e379e5b76ab1691de120ea48913cf2851f0d703"
+certified_text_hash = "sha256:dd2745ce82f1d3b1624888d72e379e5b76ab1691de120ea48913cf2851f0d703"
+falsification_ja = "未記入"
 id = "VP2-I1-REL-LIN-001"
 group_id = "GRP-IFACE-I1"
 source_label = "I-1 有限関係線形化"
@@ -1183,6 +1300,9 @@ certification_log = "logs/gates/I1-REL-LIN-001/G4-20260706.log"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:130a6a5bd77fbe46e06693446f51f6f5544c0883fb04f0833f1c33db656aa39b"
+certified_text_hash = "sha256:130a6a5bd77fbe46e06693446f51f6f5544c0883fb04f0833f1c33db656aa39b"
+falsification_ja = "未記入"
 id = "VP2-I1-REALIZES-SENSITIVITY-001"
 group_id = "GRP-IFACE-I1"
 source_label = "I-1 感受性実現条件"
@@ -1205,6 +1325,8 @@ certification_log = "logs/gates/VP2-I1-REALIZES-SENSITIVITY-001/G4-20260820.log"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:d23266f3f887014fa844b078c8dabaf0d18190cd25ff05ef9809b3876f7ba5aa"
+falsification_ja = "未記入"
 id = "VP2-I1-DERIV-BRIDGE-001"
 group_id = "GRP-IFACE-I1"
 source_label = "I-1 感受性適合界面"
@@ -1224,6 +1346,9 @@ certification_status = "uncertified"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:80641aff79cf6653b833ad5e9c1eef76080a54dc277e3466cbbfa620519bceee"
+certified_text_hash = "sha256:80641aff79cf6653b833ad5e9c1eef76080a54dc277e3466cbbfa620519bceee"
+falsification_ja = "未記入"
 id = "VP2-A5-REL-NAT-001"
 group_id = "GRP-A5-NAT"
 source_label = "A-5 有限同型自然性"
@@ -1246,6 +1371,9 @@ certification_log = "logs/gates/A5-REL-NAT-001/G4-20260706.log"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:277922fb789b9a2430adfade7765b116eaaead74c594b33add0a499c4014851f"
+certified_text_hash = "sha256:277922fb789b9a2430adfade7765b116eaaead74c594b33add0a499c4014851f"
+falsification_ja = "未記入"
 id = "VP2-A5-REL-LAX-001"
 group_id = "GRP-A5-NAT"
 source_label = "A-5 一般関係射のlax自然性"
@@ -1268,6 +1396,9 @@ certification_log = "logs/gates/A5-REL-HOM-001/G4-20260706.log"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:0944642f3d5c465251437395c757fec3109f3ac2ad8fdc3e0ae9ce4d99471e35"
+certified_text_hash = "sha256:0944642f3d5c465251437395c757fec3109f3ac2ad8fdc3e0ae9ce4d99471e35"
+falsification_ja = "未記入"
 id = "VP2-A5-STRICT-CE-001"
 group_id = "GRP-A5-NAT"
 source_label = "A-5 厳密自然性の反例"
@@ -1290,6 +1421,9 @@ certification_log = "logs/gates/A5-REL-HOM-001/G4-20260706.log"
 depends_on = ["VP2-A5-REL-LAX-001"]
 
 [[claim]]
+claim_text_hash = "sha256:577f0c1934a7765b86f6fd50ba838b4c54685caf3686afc787cef918f5c0a7e5"
+certified_text_hash = "sha256:577f0c1934a7765b86f6fd50ba838b4c54685caf3686afc787cef918f5c0a7e5"
+falsification_ja = "未記入"
 id = "VP2-A1-ALPHA-ONLY-CE-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 alpha-only標準候補の反例"
@@ -1312,6 +1446,9 @@ certification_log = "logs/gates/A1-ALPHA-ONLY-CE-001/G4-20260706.log"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:e4b0083e3a0758ba8a35c0c9dcba818652edfd02ff033d9f218cedb578335466"
+certified_text_hash = "sha256:e4b0083e3a0758ba8a35c0c9dcba818652edfd02ff033d9f218cedb578335466"
+falsification_ja = "未記入"
 id = "VP2-A1-RAW-GRAM-CE-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 非正規化Gram候補の反例"
@@ -1334,6 +1471,9 @@ certification_log = "logs/gates/A1-RAW-GRAM-CE-001/G4-20260706.log"
 depends_on = ["VP2-I1-REL-LIN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:6331461a1f12e3d629524a698f297a99a09a013f0299c44cafe38e70e1d95587"
+certified_text_hash = "sha256:6331461a1f12e3d629524a698f297a99a09a013f0299c44cafe38e70e1d95587"
+falsification_ja = "未記入"
 id = "VP2-A1-OBJECT-CLASSIFIER-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 完全Deltaデータによる対象分類器"
@@ -1356,6 +1496,9 @@ certification_log = "logs/gates/A1-OBJECT-CLASSIFIER-001/G4-20260706.log"
 depends_on = ["VP2-A1-ALPHA-ONLY-CE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:1aa4ccf53d229bdeb43c6f5c9ac18abcbf7a80a6f5abf9208f6c9e0647ab3d27"
+certified_text_hash = "sha256:1aa4ccf53d229bdeb43c6f5c9ac18abcbf7a80a6f5abf9208f6c9e0647ab3d27"
+falsification_ja = "未記入"
 id = "VP2-A1-LAX-MAP-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 前向蝶番射のlax写像"
@@ -1378,6 +1521,9 @@ certification_log = "logs/gates/A1-LAX-MAP-001/G4-20260706.log"
 depends_on = ["VP2-A1-OBJECT-CLASSIFIER-001", "VP2-A5-REL-LAX-001"]
 
 [[claim]]
+claim_text_hash = "sha256:39c8204d551bdb493b3d5204ae6843d1a5bdf4c34fceea00a9214ee7ddf52617"
+certified_text_hash = "sha256:39c8204d551bdb493b3d5204ae6843d1a5bdf4c34fceea00a9214ee7ddf52617"
+falsification_ja = "未記入"
 id = "VP2-A1-THIN-FUNCTOR-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 薄いclassifier圏の関手"
@@ -1400,6 +1546,9 @@ certification_log = "logs/gates/A1-THIN-FUNCTOR-001/G4-20260706.log"
 depends_on = ["VP2-A1-LAX-MAP-001"]
 
 [[claim]]
+claim_text_hash = "sha256:d9d5467a88a0a480b16e76fe49ec9df0a07b261860d0b4d42442874464a9c504"
+certified_text_hash = "sha256:d9d5467a88a0a480b16e76fe49ec9df0a07b261860d0b4d42442874464a9c504"
+falsification_ja = "未記入"
 id = "VP2-A1-STRICT-FUNCTOR-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 可逆断片のstrict classifier関手"
@@ -1422,6 +1571,9 @@ certification_log = "logs/gates/A1-STRICT-FUNCTOR-001/G4-20260825.log"
 depends_on = ["VP2-A1-THIN-FUNCTOR-001", "VP2-A5-REL-NAT-001"]
 
 [[claim]]
+claim_text_hash = "sha256:088ec0dcc1929cb0df04d7abe8fa60f30db166cbe167eb9ddca1cbc48ca89098"
+certified_text_hash = "sha256:088ec0dcc1929cb0df04d7abe8fa60f30db166cbe167eb9ddca1cbc48ca89098"
+falsification_ja = "未記入"
 id = "VP2-A1-HILBERT-FUNCTOR-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 Hilbert intertwiner圏へのstrict関手"
@@ -1444,6 +1596,9 @@ certification_log = "logs/gates/A1-HILBERT-FUNCTOR-001/G4-20260706.log"
 depends_on = ["VP2-A1-STRICT-FUNCTOR-001"]
 
 [[claim]]
+claim_text_hash = "sha256:568acb700fa196b42fc97342853197c37e90f67643773438bd1e8522024f0f14"
+certified_text_hash = "sha256:568acb700fa196b42fc97342853197c37e90f67643773438bd1e8522024f0f14"
+falsification_ja = "未記入"
 id = "VP2-A1-STRUCTURAL-FUNCTOR-001"
 group_id = "GRP-A1-BRIDGE"
 source_label = "A-1 構造同型圏からHilbert intertwiner圏への関手"
@@ -1466,6 +1621,9 @@ certification_log = "logs/gates/A1-STRUCTURAL-FUNCTOR-001/G4-20260706.log"
 depends_on = ["VP2-A1-HILBERT-FUNCTOR-001", "VP2-A5-REL-NAT-001"]
 
 [[claim]]
+claim_text_hash = "sha256:722cef253e6189cc6e90682e7238acd85f5dce63a17c17ef6d60e9a67840351e"
+certified_text_hash = "sha256:722cef253e6189cc6e90682e7238acd85f5dce63a17c17ef6d60e9a67840351e"
+falsification_ja = "未記入"
 id = "VP2-A2-VIABILITY-CLOSURE-001"
 group_id = "GRP-A2-CLOSURE-FUNCTOR"
 source_label = "A-2 viability閉包の対象写像"
@@ -1488,6 +1646,9 @@ certification_log = "logs/gates/A2-VIABILITY-CLOSURE-001/G4-20260706.log"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:8ab0d8908063486fa53d76e30330b2e0925ecef9229856ce59dc6f785235f669"
+certified_text_hash = "sha256:8ab0d8908063486fa53d76e30330b2e0925ecef9229856ce59dc6f785235f669"
+falsification_ja = "未記入"
 id = "VP2-A2-CLOSURE-FUNCTOR-001"
 group_id = "GRP-A2-CLOSURE-FUNCTOR"
 source_label = "A-2 viability閉包関手の自然性"
@@ -1510,6 +1671,9 @@ certification_log = "logs/gates/A2-CLOSURE-FUNCTOR-001/G4-20260825.log"
 depends_on = ["VP2-A2-VIABILITY-CLOSURE-001"]
 
 [[claim]]
+claim_text_hash = "sha256:000a58e07d3621172a4ed27223611f48f09508cc107a961e57d5708820e2ef64"
+certified_text_hash = "sha256:000a58e07d3621172a4ed27223611f48f09508cc107a961e57d5708820e2ef64"
+falsification_ja = "未記入"
 id = "VP2-A2-RELATIONAL-FRAME-001"
 group_id = "GRP-A2-CLOSURE-FUNCTOR"
 source_label = "A-2 関係フレーム実現"
@@ -1532,6 +1696,9 @@ certification_log = "logs/gates/A2-RELATIONAL-FRAME-001/G4-20260706.log"
 depends_on = ["VP2-A2-CLOSURE-FUNCTOR-001"]
 
 [[claim]]
+claim_text_hash = "sha256:e70119230bd57eb1032a4d066c512e8402254f5b6c25ba43bd3b6bdd05b54177"
+certified_text_hash = "sha256:e70119230bd57eb1032a4d066c512e8402254f5b6c25ba43bd3b6bdd05b54177"
+falsification_ja = "未記入"
 id = "VP2-A2-RELATIONAL-FUNCTOR-001"
 group_id = "GRP-A2-CLOSURE-FUNCTOR"
 source_label = "A-2 関係フレーム関手"
@@ -1554,6 +1721,9 @@ certification_log = "logs/gates/A2-RELATIONAL-FUNCTOR-001/G4-20260706.log"
 depends_on = ["VP2-A2-RELATIONAL-FRAME-001"]
 
 [[claim]]
+claim_text_hash = "sha256:fcf97c12eaab53c6057f6238eed2fa33fb815084f02903c666082bcbabbb3a32"
+certified_text_hash = "sha256:fcf97c12eaab53c6057f6238eed2fa33fb815084f02903c666082bcbabbb3a32"
+falsification_ja = "未記入"
 id = "VP2-A3-LAYER-COMPOSITION-001"
 group_id = "GRP-A3-LAYER-COMPOSITION"
 source_label = "A-3 実装済み三層経路の合成"
@@ -1576,6 +1746,9 @@ certification_log = "logs/gates/A3-LAYER-COMPOSITION-001/G4-20260706.log"
 depends_on = ["VP2-A1-STRUCTURAL-FUNCTOR-001", "VP2-A2-RELATIONAL-FUNCTOR-001"]
 
 [[claim]]
+claim_text_hash = "sha256:1c4dcea3c41882d1dcc5ca93c168a0d972a6f6dcbc232bf8cfe46d67d1385b27"
+certified_text_hash = "sha256:1c4dcea3c41882d1dcc5ca93c168a0d972a6f6dcbc232bf8cfe46d67d1385b27"
+falsification_ja = "未記入"
 id = "VP2-A3-NONFAITHFUL-001"
 group_id = "GRP-A3-LAYER-COMPOSITION"
 source_label = "A-3 情報保存閉ループへの反例"
@@ -1602,6 +1775,9 @@ depends_on = ["VP2-A3-LAYER-COMPOSITION-001"]
 # catalog records exact statement hashes.
 
 [[claim]]
+claim_text_hash = "sha256:39dbe960642802da9bd4ffe1e4e89ca5b8db15e3f4ecf7cdf31087ae269b6ec7"
+certified_text_hash = "sha256:39dbe960642802da9bd4ffe1e4e89ca5b8db15e3f4ecf7cdf31087ae269b6ec7"
+falsification_ja = "未記入"
 id = "VP2-WAGER-FROZEN-001"
 group_id = "GRP-WAGER-14"
 source_label = "§14 定義1.1–1.2・定理4.1–4.4,4.6"
@@ -1624,6 +1800,9 @@ certification_log = "logs/gates/VP-WGR-001/G4-20260707.log"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:3096a28c592876804dbcf98e24be29d173366a7d66067d83643a50c5ab5db88e"
+certified_text_hash = "sha256:3096a28c592876804dbcf98e24be29d173366a7d66067d83643a50c5ab5db88e"
+falsification_ja = "未記入"
 id = "VP2-WAGER-W5-FAMILY-001"
 group_id = "GRP-WAGER-14"
 source_label = "W-8・定理4.5一般化"
@@ -1647,6 +1826,9 @@ certification_log = "logs/gates/VP-WGR-002/G4-20260707.log"
 depends_on = ["VP2-WAGER-FROZEN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:e2776599bea3d3cd9438a0e575580316c281f11f3762538142133ffafbdc4762"
+certified_text_hash = "sha256:e2776599bea3d3cd9438a0e575580316c281f11f3762538142133ffafbdc4762"
+falsification_ja = "未記入"
 id = "VP2-WAGER-PRESERVATION-001"
 group_id = "GRP-WAGER-14"
 source_label = "W-7・定理5.2"
@@ -1669,6 +1851,9 @@ certification_log = "logs/gates/VP-WGR-003/G4-20260707.log"
 depends_on = ["VP2-WAGER-FROZEN-001"]
 
 [[claim]]
+claim_text_hash = "sha256:52ce9e31ddefd26783c5fb66e100835eff61276173e3c8ace5e52c8f2c8e3286"
+certified_text_hash = "sha256:52ce9e31ddefd26783c5fb66e100835eff61276173e3c8ace5e52c8f2c8e3286"
+falsification_ja = "未記入"
 id = "VP2-WAGER-GLOBAL-INVARIANT-001"
 group_id = "GRP-WAGER-14"
 source_label = "M-6"
@@ -1692,6 +1877,9 @@ certification_log = "logs/gates/VP-WGR-004/G4-20260707.log"
 depends_on = ["VP2-WAGER-PRESERVATION-001"]
 
 [[claim]]
+claim_text_hash = "sha256:afb4eb1fbe1d3ec5925bda2f8e0b4988beeb361cbcfd76b440cfbe709cf5532a"
+certified_text_hash = "sha256:afb4eb1fbe1d3ec5925bda2f8e0b4988beeb361cbcfd76b440cfbe709cf5532a"
+falsification_ja = "未記入"
 id = "VP2-WAGER-NAMED-MODELS-001"
 group_id = "GRP-WAGER-14"
 source_label = "§14 §7 Lean対応 named models"
@@ -1718,6 +1906,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:2833d79fd9055a100b2e19041c4c1ebb6e776936091657dca5052933091eec4b"
+certified_text_hash = "sha256:2833d79fd9055a100b2e19041c4c1ebb6e776936091657dca5052933091eec4b"
+falsification_ja = "未記入"
 id = "VP2-WAGER-W6-CYCLE-SOUND-001"
 group_id = "GRP-WAGER-14"
 source_label = "§14 定理2.1 片方向"
@@ -1744,6 +1935,8 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:255af08ce3466d341eebafe8537bb2849cdb21f8a8167f967954019a8b9c2973"
+falsification_ja = "未記入"
 id = "VP2-WAGER-W6-FINITE-RECURRENCE-001"
 group_id = "GRP-WAGER-14"
 source_label = "§14 W6有限状態再帰特徴付け"
@@ -1765,6 +1958,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:7998bcd16903a8b784b9861fe31dd4c4f7afd8cfa4bc2375a4add6cff1e4abc1"
+certified_text_hash = "sha256:7998bcd16903a8b784b9861fe31dd4c4f7afd8cfa4bc2375a4add6cff1e4abc1"
+falsification_ja = "未記入"
 id = "VP2-WAGER-FINITE-CHECKER-001"
 group_id = "GRP-WAGER-14"
 source_label = "L-4 Wager finite checker"
@@ -1791,6 +1987,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:6d8575e556459a53ddf48f58d6eaa6fee9109e0319b7a0717b3f336f3a030063"
+certified_text_hash = "sha256:6d8575e556459a53ddf48f58d6eaa6fee9109e0319b7a0717b3f336f3a030063"
+falsification_ja = "未記入"
 id = "VP2-WAGER-INTERPRETIVE-CHECKER-001"
 group_id = "GRP-WAGER-14"
 source_label = "L-4 Wager interpretive finite checker"
@@ -1817,6 +2016,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:f490823655b310235e3e4febc9b9ff539c956eb46d163e8590240e15625c52df"
+certified_text_hash = "sha256:f490823655b310235e3e4febc9b9ff539c956eb46d163e8590240e15625c52df"
+falsification_ja = "未記入"
 id = "VP2-WAGER-FULL-CHECKER-001"
 group_id = "GRP-WAGER-14"
 source_label = "L-4 Wager full finite checker"
@@ -1842,6 +2044,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:c6b6be451303e0b39ceb6e8364c0a8d480514ef82fb1cce2b80b188750ce287e"
+certified_text_hash = "sha256:c6b6be451303e0b39ceb6e8364c0a8d480514ef82fb1cce2b80b188750ce287e"
+falsification_ja = "未記入"
 id = "VP2-M1-LARGE-DC-001"
 group_id = "GRP-M1-LARGE-DC"
 source_label = "M-1 finite fragment"
@@ -1865,6 +2070,9 @@ certification_log = "logs/gates/VP-M1-001/G4-20260707-180844.log"
 depends_on = ["VP2-REF-NONDEG-001"]
 
 [[claim]]
+claim_text_hash = "sha256:cc653fcf8e00f8e20c14986055091c518c0a9de041128d0c7252ae016792d96f"
+certified_text_hash = "sha256:cc653fcf8e00f8e20c14986055091c518c0a9de041128d0c7252ae016792d96f"
+falsification_ja = "未記入"
 id = "VP2-M1-FULL-001a"
 group_id = "GRP-M1-LARGE-DC"
 source_label = "M-1 full Tier-1, v5.1 §0.3/§13"
@@ -1898,6 +2106,9 @@ depends_on = [
 ]
 
 [[claim]]
+claim_text_hash = "sha256:b2642376c155b34a9e2061fbf95e873fda6936becb9778710218bc645cb2c692"
+certified_text_hash = "sha256:b2642376c155b34a9e2061fbf95e873fda6936becb9778710218bc645cb2c692"
+falsification_ja = "未記入"
 id = "VP2-M1-FULL-001b"
 group_id = "GRP-M1-LARGE-DC"
 source_label = "M-1 full Tier-2 bridge shape, v5.1 §0.3/§13"
@@ -2374,6 +2585,9 @@ coverage = "partial"
 coverage_note = "単段版のみ起票。階付き一様版と世代間保存版(upd による Branch∩Act 維持)は別命題として未起票。"
 
 [[claim]]
+claim_text_hash = "sha256:baaa9e53a97de94572b1981dcc0e2e126c60a41249bc04168dbc9d80907bfa09"
+certified_text_hash = "sha256:baaa9e53a97de94572b1981dcc0e2e126c60a41249bc04168dbc9d80907bfa09"
+falsification_ja = "未記入"
 id = "VP2-RICH-BRANCH-001"
 group_id = "GRP-RICH-A6"
 source_label = "台帳 A-6・v5.1 定理1.3 証明中の場合分け |α(a)|≥2 の述語化"
@@ -2392,6 +2606,9 @@ certification_log = "logs/gates/VP-RICH-001/G4-20260708-223538.log"
 depends_on = []
 
 [[claim]]
+claim_text_hash = "sha256:067f88f98ae38b2dce25a7536ee7a524d5a04f2d68a3c4d410666146b7fae0d3"
+certified_text_hash = "sha256:067f88f98ae38b2dce25a7536ee7a524d5a04f2d68a3c4d410666146b7fae0d3"
+falsification_ja = "未記入"
 id = "VP2-RICH-HINGE-PUMP-001"
 group_id = "GRP-RICH-A6"
 source_label = "台帳 A-6"
@@ -2444,6 +2661,8 @@ coverage = "partial"
 coverage_note = "adapters/ に現存する3定理のみを起票。PCI 側の摂動証明（perturbationAttestationRef）と系譜（lineageRegistryVersion）は serial 参照を置くだけで内容を主張しておらず、別命題として未起票。"
 
 [[claim]]
+claim_text_hash = "sha256:c021b113a0d7ab3e3ade43248c932628ca91c6d413cfec88fa42743364fe6a6c"
+falsification_ja = "未記入"
 id = "VP2-ADP-PCI-INS-001"
 group_id = "GRP-ADP-PCI"
 source_label = "adapters/ERIECPCI/Nondegenerate/Audit.lean#corresponds_to_nondegINS"
@@ -2464,6 +2683,8 @@ depends_on = ["VP2-DYN-INS-FIBER-001"]
 pinned = true
 
 [[claim]]
+claim_text_hash = "sha256:16cd0cb0e4784d7a490c5fba25aff077ad6207628ab8268124c246b338b2ca53"
+falsification_ja = "未記入"
 id = "VP2-ADP-PCI-NOBUNDLE-001"
 group_id = "GRP-ADP-PCI"
 source_label = "adapters/ERIECPCI/Nondegenerate/Audit.lean#no_adequacy_bundle"
@@ -2483,6 +2704,8 @@ depends_on = ["VP2-ADP-PCI-INS-001"]
 pinned = true
 
 [[claim]]
+claim_text_hash = "sha256:2a99230ea6601ab7d740daaa85e94ee6a9d6402ef8393b6bef541f64b8877158"
+falsification_ja = "未記入"
 id = "VP2-ADP-PCI-DISCLOSURE-001"
 group_id = "GRP-ADP-PCI"
 source_label = "adapters/ERIECPCI/Nondegenerate/Disclosure.lean#disclosure_complete"

@@ -1,0 +1,6 @@
+G3V verification-practices
+base_ref=HEAD
+PASS mutation=MUT-LEDGER-001 expect_code=CERTIFIED_TEXT_HASH_MISMATCH live_sha=sha256:b542d09dbdcd9f9424d58c81a630794f0c9bf41c3c78474b3ce7ef7a158bd4aa
+base_ref=HEAD base_sha=56d39eee3bb6cf610317de18cb66ff14c3c0fff9 base_mode=legacy_missing_fields_derived base_pending_max=91 current_pending_max=91 current_pending=91
+PASS ratchet current_pending_max=91 base_pending_max=91
+mutation_status=0 ratchet_status=0

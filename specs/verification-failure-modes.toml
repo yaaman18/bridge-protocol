@@ -1,0 +1,39 @@
+schema_version = 1
+
+[[failure_mode]]
+id = "FM-CALLER-PROOF-BOOL"
+title_ja = "呼び出し側が渡す証明済み Bool の再包装"
+description_ja = "checker が対象命題を独立に判定せず、呼び出し側の Bool 要約を比較するだけなら循環的な PASS になる。"
+status = "observed"
+evidence_logs = [
+  "logs/gates/checker-strengthening/order-11-stage1-audit-20260815.log",
+]
+
+[[failure_mode]]
+id = "FM-OPAQUE-CALLBACK"
+title_ja = "不透明 callback の有限標本だけによる同一視"
+description_ja = "任意関数を標本点で呼ぶだけでは、Lean statement の量化範囲や意味内容を独立に決定できない。"
+status = "observed"
+evidence_logs = [
+  "logs/gates/checker-strengthening/order-11-stage1-audit-20260815.log",
+  "logs/gates/checker-strengthening/order-13-audit-20260814.log",
+]
+
+[[failure_mode]]
+id = "FM-CIRCULAR-ORACLE"
+title_ja = "期待値を作る oracle と checker の循環"
+description_ja = "checker と同じ導出経路で期待値を生成すると、同じ誤りを共有して陰性変異を見逃す。"
+status = "observed"
+evidence_logs = [
+  "logs/gates/checker-strengthening/order-11-audit-20260815.log",
+]
+
+[[failure_mode]]
+id = "FM-FALSIFICATION-NOT-GATED"
+title_ja = "反証条件が通常ゲートに接続されていない"
+description_ja = "反証条件や claim 文面の改変を意図的に注入しなければ、通常の成功テストだけでは検査の空洞化を検出できない。"
+status = "observed"
+evidence_logs = [
+  "logs/gates/ledger-separation/G3-20260825.log",
+  "logs/gates/ledger-separation/G3-acceptance-mutation-20260826.log",
+]

@@ -1,0 +1,17 @@
+ERROR: LoadError: Some tests did not pass: 858 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_claim_ledger.jl:5
+claim ledger integrity: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_claim_ledger.jl:38
+  Expression: claim["claim_text_hash"] == expected_claim_text_hash
+   Evaluated: "sha256:d3a1f12e050fd433eaa7b46519f633ea0ba9f914ac66464d179e9cb3e7e5e50d" == "sha256:35b54266be0405d08a1d5348ff4584e7c0852ce65ee960f7b07400bc3d691fb6"
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_claim_ledger.jl:38 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_claim_ledger.jl:6
+Test Summary:          | Pass  Fail  Total  Time
+claim ledger integrity |  858     1    859  4.7s
