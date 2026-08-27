@@ -4,6 +4,8 @@ Usage:
   eriec-model-evaluation.jl list [--root PATH] [--vp-id ID] [--contract-id ID] [--outcome pass|reject|error] [--counterexample-candidates]
   eriec-model-evaluation.jl audit [--root PATH] [--evaluation-id ID]
   eriec-model-evaluation.jl draft --evaluation-id ID [--root PATH]
+  eriec-model-evaluation.jl draft-list [--root PATH]
+  eriec-model-evaluation.jl draft-audit [--root PATH] [--evaluation-id ID]
 """
 
 function _model_evaluation_cli_options(args::Vector{String}, value_options, flag_options)
@@ -35,6 +37,20 @@ end
 _model_evaluation_cli_json(io::IO, payload) =
     println(io, String(JSON3.write(payload)))
 
+function _model_evaluation_cli_root(value::AbstractString; create::Bool=false)
+    root = abspath(value)
+    create && mkpath(root)
+    ispath(root) ? realpath(root) : root
+end
+
+function _model_evaluation_cli_artifact(path::AbstractString, root::AbstractString)
+    actual = realpath(path)
+    canonical_root = realpath(root)
+    startswith(actual, canonical_root * string(Base.Filesystem.path_separator)) ||
+        throw(ArgumentError("created artifact escaped the evidence root"))
+    relpath(actual, canonical_root)
+end
+
 function _model_evaluation_cli_run(
     args::Vector{String},
     project_root::AbstractString,
@@ -46,7 +62,10 @@ function _model_evaluation_cli_run(
         Set(["--counterexample-candidate"]),
     )
     haskey(options.values, "--model") || throw(ArgumentError("run requires --model"))
-    evidence_root = abspath(get(options.values, "--root", project_root))
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root);
+        create=true,
+    )
     result = run_m4_model_evaluation(
         project_root,
         options.values["--model"];
@@ -62,7 +81,7 @@ function _model_evaluation_cli_run(
         outcome=result.record.outcome,
         claim_relation=result.record.claim_relation,
         model_fingerprint=result.record.model_fingerprint,
-        artifact=relpath(result.path, evidence_root),
+        artifact=_model_evaluation_cli_artifact(result.path, evidence_root),
         claim_status=:not_a_claim,
         phenomenal_claim=:not_certified,
     ))
@@ -79,7 +98,9 @@ function _model_evaluation_cli_list(
         Set(["--root", "--vp-id", "--contract-id", "--outcome"]),
         Set(["--counterexample-candidates"]),
     )
-    evidence_root = abspath(get(options.values, "--root", project_root))
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root),
+    )
     outcome = if haskey(options.values, "--outcome")
         parsed = Symbol(options.values["--outcome"])
         parsed in _MODEL_EVALUATION_OUTCOMES ||
@@ -114,7 +135,9 @@ function _model_evaluation_cli_audit(
         Set(["--root", "--evaluation-id"]),
         Set{String}(),
     )
-    evidence_root = abspath(get(options.values, "--root", project_root))
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root),
+    )
     result = if haskey(options.values, "--evaluation-id")
         audit_model_evaluation(
             evidence_root,
@@ -140,7 +163,9 @@ function _model_evaluation_cli_draft(
     )
     haskey(options.values, "--evaluation-id") ||
         throw(ArgumentError("draft requires --evaluation-id"))
-    evidence_root = abspath(get(options.values, "--root", project_root))
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root),
+    )
     path = write_counterexample_draft_packet(
         evidence_root,
         options.values["--evaluation-id"];
@@ -149,11 +174,63 @@ function _model_evaluation_cli_draft(
     _model_evaluation_cli_json(out, (
         kind=:counterexample_claim_draft_created,
         evaluation_id=options.values["--evaluation-id"],
-        artifact=relpath(path, evidence_root),
+        artifact=_model_evaluation_cli_artifact(path, evidence_root),
         automatic_promotion=false,
         claim_status=:draft_not_a_claim,
     ))
     0
+end
+
+
+function _model_evaluation_cli_draft_list(
+    args::Vector{String},
+    project_root::AbstractString,
+    out::IO,
+)
+    options = _model_evaluation_cli_options(
+        args,
+        Set(["--root"]),
+        Set{String}(),
+    )
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root),
+    )
+    entries = list_counterexample_drafts(
+        evidence_root;
+        project_root=project_root,
+    )
+    _model_evaluation_cli_json(out, (
+        kind=:counterexample_draft_list,
+        count=length(entries),
+        entries,
+    ))
+    0
+end
+
+function _model_evaluation_cli_draft_audit(
+    args::Vector{String},
+    project_root::AbstractString,
+    out::IO,
+)
+    options = _model_evaluation_cli_options(
+        args,
+        Set(["--root", "--evaluation-id"]),
+        Set{String}(),
+    )
+    evidence_root = _model_evaluation_cli_root(
+        get(options.values, "--root", project_root),
+    )
+    result = if haskey(options.values, "--evaluation-id")
+        audit_counterexample_draft(
+            evidence_root,
+            options.values["--evaluation-id"];
+            project_root=project_root,
+        )
+    else
+        audit_counterexample_drafts(evidence_root; project_root=project_root)
+    end
+    _model_evaluation_cli_json(out, result)
+    result.ok ? 0 : 1
 end
 
 """Run the dedicated model-evaluation CLI; returns a process exit code."""
@@ -164,6 +241,7 @@ function model_evaluation_cli(
     err::IO=stderr,
 )
     normalized = String[String(arg) for arg in args]
+    canonical_project_root = _model_evaluation_cli_root(project_root)
     if isempty(normalized)
         _model_evaluation_cli_json(err, (
             kind=:model_evaluation_cli_error,
@@ -178,7 +256,7 @@ function model_evaluation_cli(
     end
     command, rest = first(normalized), normalized[2:end]
     if rest == ["--help"] || rest == ["-h"]
-        command in ("run", "list", "audit", "draft") || begin
+        command in ("run", "list", "audit", "draft", "draft-list", "draft-audit") || begin
             _model_evaluation_cli_json(err, (
                 kind=:model_evaluation_cli_error,
                 error="unknown command: $command",
@@ -189,22 +267,26 @@ function model_evaluation_cli(
         return 0
     end
     try
-        command == "run" && return _model_evaluation_cli_run(rest, project_root, out)
-        command == "list" && return _model_evaluation_cli_list(rest, project_root, out)
-        command == "audit" && return _model_evaluation_cli_audit(rest, project_root, out)
-        command == "draft" && return _model_evaluation_cli_draft(rest, project_root, out)
+        command == "run" && return _model_evaluation_cli_run(rest, canonical_project_root, out)
+        command == "list" && return _model_evaluation_cli_list(rest, canonical_project_root, out)
+        command == "audit" && return _model_evaluation_cli_audit(rest, canonical_project_root, out)
+        command == "draft" && return _model_evaluation_cli_draft(rest, canonical_project_root, out)
+        command == "draft-list" &&
+            return _model_evaluation_cli_draft_list(rest, canonical_project_root, out)
+        command == "draft-audit" &&
+            return _model_evaluation_cli_draft_audit(rest, canonical_project_root, out)
         throw(ArgumentError("unknown command: $command"))
     catch caught
         if caught isa ArgumentError
             _model_evaluation_cli_json(err, (
                 kind=:model_evaluation_cli_error,
-                error=sprint(showerror, caught),
+                error=_model_evaluation_showerror(caught),
             ))
             return 2
         end
         _model_evaluation_cli_json(err, (
             kind=:model_evaluation_cli_error,
-            error=sprint(showerror, caught),
+            error=_model_evaluation_showerror(caught),
         ))
         return 1
     end

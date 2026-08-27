@@ -206,40 +206,53 @@ function write_baseline(
         ],
     )
     mkpath(dirname(path))
-    temporary = path * ".tmp"
-    open(temporary, "w") do io
+    temporary, io = mktemp(dirname(path); cleanup=false)
+    published = false
+    try
         TOML.print(io, data; sorted=true)
+        close(io)
+        Base.Filesystem.rename(temporary, path)
+        published = true
+    finally
+        isopen(io) && close(io)
+        if !published
+            rm(temporary; force=true)
+        end
     end
-    mv(temporary, path; force=true)
     path
+end
+
+function _reserve_history_path(directory::AbstractString, stem::AbstractString, extension::AbstractString)
+    temporary, io = mktemp(directory; cleanup=false)
+    candidate = joinpath(directory, "$(stem)-$(basename(temporary))$(extension)")
+    reserved = false
+    try
+        close(io)
+        Base.Filesystem.rename(temporary, candidate)
+        reserved = true
+    finally
+        isopen(io) && close(io)
+        if !reserved
+            rm(temporary; force=true)
+        end
+    end
+    candidate
 end
 
 function _command_log(root, name)
     log_dir = joinpath(root, "logs", "category-pipeline")
     mkpath(log_dir)
-    # Gate evidence is historical data.  Include a process-local monotonic
-    # timestamp so a later check cannot overwrite an earlier pass or failure.
+    # mktemp reserves a unique inode before the caller opens the evidence file.
+    # Keep the descriptive stem and extension used by existing reports.
     stem = "$(name)-$(time_ns())-$(getpid())"
-    candidate = joinpath(log_dir, stem * ".log")
-    suffix = 0
-    while ispath(candidate)
-        suffix += 1
-        candidate = joinpath(log_dir, "$(stem)-$(suffix).log")
-    end
-    candidate
+    _reserve_history_path(log_dir, stem, ".log")
 end
 
 function report_history_path(root::AbstractString)
     report_dir = joinpath(root, "logs", "category-pipeline", "reports")
     mkpath(report_dir)
     stem = "category-impact-report-$(time_ns())-$(getpid())"
-    candidate = joinpath(report_dir, stem * ".md")
-    suffix = 0
-    while ispath(candidate)
-        suffix += 1
-        candidate = joinpath(report_dir, "$(stem)-$(suffix).md")
-    end
-    candidate
+    _reserve_history_path(report_dir, stem, ".md")
 end
 
 function _run_gate(root, name, command)

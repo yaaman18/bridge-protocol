@@ -2,22 +2,32 @@ import JSON3
 import SHA
 import TOML
 
-const MODEL_EVALUATION_SCHEMA_VERSION = 2
+const MODEL_EVALUATION_SCHEMA_VERSION = 3
+const COUNTEREXAMPLE_DRAFT_SCHEMA_VERSION = 1
 const MODEL_EVALUATION_FINGERPRINT_ALGORITHM =
     "sha256:eriec-canonical-model-bytes-v1"
 const MODEL_EVALUATION_RAW_FINGERPRINT_ALGORITHM =
     "sha256:eriec-raw-input-bytes-v1"
 const _MODEL_EVALUATION_OUTCOMES = Set((:pass, :reject, :error))
+const _MODEL_EVALUATION_ERROR_STAGES =
+    Set((:input_schema, :adapter, :checker, :postflight, :legacy_unknown))
 const _MODEL_EVALUATION_CLAIM_RELATIONS =
     Set((:observation_only, :counterexample_candidate))
-const _MODEL_EVALUATION_ID = r"^[A-Za-z0-9][A-Za-z0-9._-]*$"
-const _MODEL_EVALUATION_SHA256 = r"^[0-9a-f]{64}$"
+const _MODEL_EVALUATION_ID = r"^[A-Za-z0-9][A-Za-z0-9._-]*\z"
+const _MODEL_EVALUATION_SHA256 = r"^[0-9a-f]{64}\z"
 const _MODEL_EVALUATION_CATALOG_CACHE = Dict{Tuple{String,String},Any}()
-const _MODEL_EVALUATION_VERIFIED_CONTRACT_CACHE = Set{Tuple{String,String,String}}()
+const _MODEL_EVALUATION_GIT_BLOB_CACHE =
+    Dict{Tuple{String,String,String},Vector{UInt8}}()
+const _MODEL_EVALUATION_VERIFIED_CONTRACT_CACHE =
+    Set{Tuple{String,String,String,String}}()
 const _MODEL_EVALUATION_CATALOG_LOCK = ReentrantLock()
 const _MODEL_EVALUATION_CHECKER_LOCK = ReentrantLock()
 const _MODEL_EVALUATION_ID_LOCK = ReentrantLock()
 const _MODEL_EVALUATION_ID_COUNTER = Ref{UInt64}(0)
+const _MODEL_EVALUATION_M4_CHECKER_METHOD = which(
+    check_m4_no_terminal_setpoint,
+    Tuple{SetPointDiagram},
+)
 const _MODEL_EVALUATION_LOADED_SOURCE_SHA256 = Dict(
     relpath(path, dirname(@__DIR__)) => bytes2hex(SHA.sha256(read(path)))
     for path in readdir(@__DIR__; join=true)
@@ -32,24 +42,73 @@ const _MODEL_EVALUATION_PAYLOAD_KEYS = Set([
     "adapter_source_origin", "adapter_source", "adapter_source_sha256",
     "adapter_version", "registry_snapshot",
     "registry_snapshot_sha256", "outcome", "failed_predicates",
-    "claim_relation", "claim_status", "error_message", "seed",
+    "claim_relation", "claim_status", "error_stage", "error_message",
+    "error_diagnostics", "seed",
     "numeric_assumptions", "git_commit", "git_dirty", "julia_version",
     "manifest_sha256", "log_path", "log_sha256", "generated_unix",
     "phenomenal_claim", "execution_layer", "execution_certified",
     "execution_boundary", "execution_note",
 ])
+const _MODEL_EVALUATION_PAYLOAD_KEYS_V2 = setdiff(
+    _MODEL_EVALUATION_PAYLOAD_KEYS,
+    Set(["error_stage", "error_diagnostics"]),
+)
 const _MODEL_EVALUATION_REGISTRY_KEYS = Set([
     "kind", "vp_id", "contract_id", "lean_decl", "checker_id",
     "checker_relation", "checker_source", "scope", "assumptions", "guarantee",
+    "review_status", "reviewer", "basis_log",
     "catalog_artifact_id", "catalog_version", "ledger_sha256",
     "semantic_manifest_sha256", "certified_artifact_source_sha256",
+    "lean_declaration_source_sha256", "registry_git_commit",
+    "registry_generation_sha256",
+])
+const _MODEL_EVALUATION_REGISTRY_KEYS_V2 = setdiff(
+    _MODEL_EVALUATION_REGISTRY_KEYS,
+    Set([
+        "review_status", "reviewer", "basis_log",
+        "lean_declaration_source_sha256", "registry_git_commit",
+        "registry_generation_sha256",
+    ]),
+)
+const _COUNTEREXAMPLE_DRAFT_KEYS = Set([
+    "kind", "schema_version", "source_evaluation", "source_evaluation_sha256",
+    "evaluation_id", "vp_id", "contract_id", "checker_id", "checker_relation",
+    "adapter_id", "adapter_version", "lean_decl", "witness_artifact",
+    "witness_sha256", "model_fingerprint", "failed_predicates",
+    "registry_snapshot_sha256", "semantic_scope",
+    "semantic_assumptions", "semantic_guarantee", "review_status", "reviewer",
+    "basis_log", "target_claim_id", "promotion_status", "blocking_requirements",
+    "automatic_promotion", "claim_status", "phenomenal_claim",
 ])
 
 function _model_evaluation_valid_id(value::AbstractString)
     id = String(value)
+    isvalid(id) || throw(ArgumentError("evaluation_id must be valid UTF-8"))
     occursin(_MODEL_EVALUATION_ID, id) ||
         throw(ArgumentError("evaluation_id must match $(_MODEL_EVALUATION_ID.pattern)"))
     id
+end
+
+function _model_evaluation_utf8_safe(value::AbstractString)
+    text = String(value)
+    isvalid(text) && return text
+    io = IOBuffer()
+    for byte in codeunits(text)
+        if byte == 0x09 || byte == 0x0a || byte == 0x0d || 0x20 <= byte <= 0x7e
+            write(io, byte)
+        else
+            print(io, "\\x", lowercase(string(byte; base=16, pad=2)))
+        end
+    end
+    String(take!(io))
+end
+
+function _model_evaluation_diagnostic(stage::Symbol, message::AbstractString)
+    stage in _MODEL_EVALUATION_ERROR_STAGES ||
+        throw(ArgumentError("unsupported model evaluation error stage: $stage"))
+    safe = _model_evaluation_utf8_safe(message)
+    isempty(safe) && throw(ArgumentError("error diagnostic message must be nonempty"))
+    (stage=stage, message=safe)
 end
 
 """A self-contained empirical checker execution, explicitly not a claim."""
@@ -80,7 +139,9 @@ struct ModelEvaluationRecord
     outcome::Symbol
     failed_predicates::Vector{String}
     claim_relation::Symbol
+    error_stage::Union{Symbol,Nothing}
     error_message::Union{String,Nothing}
+    error_diagnostics::Vector{NamedTuple{(:stage,:message),Tuple{Symbol,String}}}
     seed::Union{Int,Nothing}
     numeric_assumptions::NamedTuple
     git_commit::String
@@ -102,6 +163,7 @@ _model_evaluation_sha256_file(path::AbstractString) =
 function _model_evaluation_relative_path(value::AbstractString, field::AbstractString)
     path = String(value)
     isempty(path) && throw(ArgumentError("$field must be nonempty"))
+    isvalid(path) || throw(ArgumentError("$field must be valid UTF-8"))
     isabspath(path) && throw(ArgumentError("$field must be repository-relative"))
     normalized = normpath(path)
     parts = splitpath(normalized)
@@ -175,6 +237,34 @@ function _model_evaluation_existing_directory(
     current
 end
 
+function _model_evaluation_publish_create_only(
+    temporary::AbstractString,
+    destination::AbstractString,
+    artifact_name::AbstractString,
+)
+    parent = dirname(destination)
+    lock_path = joinpath(parent, ".pending-lock-$(basename(destination))")
+    acquired = false
+    try
+        try
+            mkdir(lock_path)
+            acquired = true
+        catch err
+            (ispath(lock_path) || islink(lock_path)) && throw(ArgumentError(
+                "$artifact_name is already being published",
+            ))
+            rethrow(err)
+        end
+        (ispath(destination) || islink(destination)) && throw(ArgumentError(
+            "$artifact_name already exists; artifacts are create-only",
+        ))
+        Base.Filesystem.rename(temporary, destination)
+    finally
+        acquired && ispath(lock_path) && rm(lock_path; recursive=true)
+    end
+    destination
+end
+
 function _model_evaluation_hash(value::AbstractString, field::AbstractString)
     hash = String(value)
     occursin(_MODEL_EVALUATION_SHA256, hash) ||
@@ -183,8 +273,10 @@ function _model_evaluation_hash(value::AbstractString, field::AbstractString)
 end
 
 function _model_evaluation_json_safe(value, field::AbstractString="numeric_assumptions")
-    if value === nothing || value isa Bool || value isa AbstractString || value isa Symbol ||
-            value isa Integer
+    if value isa AbstractString
+        isvalid(value) || throw(ArgumentError("$field must contain valid UTF-8 strings"))
+        return true
+    elseif value === nothing || value isa Bool || value isa Symbol || value isa Integer
         return true
     elseif value isa AbstractFloat
         isfinite(value) || throw(ArgumentError("$field must contain only finite numbers"))
@@ -204,6 +296,7 @@ function _model_evaluation_json_safe(value, field::AbstractString="numeric_assum
 end
 
 function ModelEvaluationRecord(;
+    schema_version::Integer=MODEL_EVALUATION_SCHEMA_VERSION,
     evaluation_id::AbstractString,
     model_fingerprint::AbstractString,
     fingerprint_algorithm::AbstractString,
@@ -229,7 +322,9 @@ function ModelEvaluationRecord(;
     outcome::Symbol,
     failed_predicates=String[],
     claim_relation::Symbol=:observation_only,
+    error_stage::Union{Symbol,Nothing}=nothing,
     error_message::Union{AbstractString,Nothing}=nothing,
+    error_diagnostics=NamedTuple[],
     seed::Union{Integer,Nothing}=nothing,
     numeric_assumptions::NamedTuple=NamedTuple(),
     git_commit::AbstractString,
@@ -241,6 +336,9 @@ function ModelEvaluationRecord(;
     generated_unix::Real=time(),
     phenomenal_claim::Symbol=:not_certified,
 )
+    normalized_schema_version = Int(schema_version)
+    normalized_schema_version in (2, MODEL_EVALUATION_SCHEMA_VERSION) ||
+        throw(ArgumentError("unsupported model evaluation schema version"))
     id = _model_evaluation_valid_id(evaluation_id)
     outcome in _MODEL_EVALUATION_OUTCOMES ||
         throw(ArgumentError("outcome must be pass, reject, or error"))
@@ -259,11 +357,36 @@ function ModelEvaluationRecord(;
         throw(ArgumentError("error is not predicate rejection; failed_predicates must be empty"))
     claim_relation == :counterexample_candidate && outcome != :reject &&
         throw(ArgumentError("only reject evaluations can be counterexample candidates"))
-    message = error_message === nothing ? nothing : String(error_message)
+    message = error_message === nothing ? nothing :
+        _model_evaluation_utf8_safe(error_message)
+    diagnostics = NamedTuple{(:stage,:message),Tuple{Symbol,String}}[]
+    for diagnostic in error_diagnostics
+        hasproperty(diagnostic, :stage) && hasproperty(diagnostic, :message) ||
+            throw(ArgumentError("error_diagnostics entries require stage and message"))
+        push!(diagnostics, _model_evaluation_diagnostic(
+            Symbol(diagnostic.stage),
+            String(diagnostic.message),
+        ))
+    end
+    normalized_schema_version == MODEL_EVALUATION_SCHEMA_VERSION &&
+        any(diagnostic -> diagnostic.stage == :legacy_unknown, diagnostics) &&
+        throw(ArgumentError("legacy_unknown is only valid for schema version 2"))
     outcome == :error && (message === nothing || isempty(message)) &&
         throw(ArgumentError("error evaluations require error_message"))
+    outcome == :error && error_stage === nothing &&
+        throw(ArgumentError("error evaluations require error_stage"))
+    outcome == :error && isempty(diagnostics) &&
+        throw(ArgumentError("error evaluations require error_diagnostics"))
+    outcome == :error && first(diagnostics).stage != error_stage &&
+        throw(ArgumentError("error_stage must match the first diagnostic"))
+    outcome == :error && first(diagnostics).message != message &&
+        throw(ArgumentError("error_message must match the first diagnostic"))
     outcome != :error && message !== nothing &&
         throw(ArgumentError("only error evaluations may have error_message"))
+    outcome != :error && error_stage !== nothing &&
+        throw(ArgumentError("only error evaluations may have error_stage"))
+    outcome != :error && !isempty(diagnostics) &&
+        throw(ArgumentError("only error evaluations may have error_diagnostics"))
     phenomenal_claim == :not_certified ||
         throw(ArgumentError("phenomenal_claim must remain :not_certified"))
     isfinite(generated_unix) || throw(ArgumentError("generated_unix must be finite"))
@@ -285,13 +408,14 @@ function ModelEvaluationRecord(;
     )
     for (field, value) in pairs(strings)
         isempty(value) && throw(ArgumentError("$(field) must be nonempty"))
+        isvalid(value) || throw(ArgumentError("$(field) must be valid UTF-8"))
     end
     startswith(strings.model_fingerprint, "sha256:") ||
         throw(ArgumentError("model_fingerprint must use a sha256: prefix"))
     _model_evaluation_hash(strings.model_fingerprint[8:end], "model_fingerprint")
 
     ModelEvaluationRecord(
-        MODEL_EVALUATION_SCHEMA_VERSION,
+        normalized_schema_version,
         id,
         strings.model_fingerprint,
         strings.fingerprint_algorithm,
@@ -317,7 +441,9 @@ function ModelEvaluationRecord(;
         outcome,
         predicates,
         claim_relation,
+        error_stage,
         message,
+        diagnostics,
         seed === nothing ? nothing : Int(seed),
         numeric_assumptions,
         strings.git_commit,
@@ -332,7 +458,7 @@ function ModelEvaluationRecord(;
 end
 
 function model_evaluation_payload(record::ModelEvaluationRecord)
-    (
+    payload = (
         kind=:model_evaluation,
         schema_version=record.schema_version,
         evaluation_id=record.evaluation_id,
@@ -361,7 +487,9 @@ function model_evaluation_payload(record::ModelEvaluationRecord)
         failed_predicates=record.failed_predicates,
         claim_relation=record.claim_relation,
         claim_status=:not_a_claim,
+        error_stage=record.error_stage,
         error_message=record.error_message,
+        error_diagnostics=record.error_diagnostics,
         seed=record.seed,
         numeric_assumptions=record.numeric_assumptions,
         git_commit=record.git_commit,
@@ -376,6 +504,14 @@ function model_evaluation_payload(record::ModelEvaluationRecord)
             note="A model evaluation records a Julia checker execution; it is not a Lean proof or a certified counterexample claim.",
         )...,
     )
+    if record.schema_version == 2
+        names = Tuple(filter(
+            name -> !(name in (:error_stage, :error_diagnostics)),
+            propertynames(payload),
+        ))
+        return NamedTuple{names}(Tuple(getproperty(payload, name) for name in names))
+    end
+    payload
 end
 
 
@@ -413,17 +549,24 @@ function parse_model_evaluation_json(text::AbstractString)
     length(raw_keys) == length(unique(raw_keys)) ||
         throw(ArgumentError("duplicate model evaluation fields are forbidden"))
     actual_keys = Set(raw_keys)
-    actual_keys == _MODEL_EVALUATION_PAYLOAD_KEYS || begin
-        missing = sort!(collect(setdiff(_MODEL_EVALUATION_PAYLOAD_KEYS, actual_keys)))
-        unknown = sort!(collect(setdiff(actual_keys, _MODEL_EVALUATION_PAYLOAD_KEYS)))
+    "schema_version" in actual_keys ||
+        throw(ArgumentError("missing model evaluation fields: schema_version"))
+    payload.schema_version isa Integer && !(payload.schema_version isa Bool) ||
+        throw(ArgumentError("schema_version must be an integer"))
+    schema_version = Int(payload.schema_version)
+    schema_version in (2, MODEL_EVALUATION_SCHEMA_VERSION) ||
+        throw(ArgumentError("unsupported model evaluation schema version"))
+    expected_keys = schema_version == 2 ?
+        _MODEL_EVALUATION_PAYLOAD_KEYS_V2 : _MODEL_EVALUATION_PAYLOAD_KEYS
+    actual_keys == expected_keys || begin
+        missing = sort!(collect(setdiff(expected_keys, actual_keys)))
+        unknown = sort!(collect(setdiff(actual_keys, expected_keys)))
         isempty(missing) ||
             throw(ArgumentError("missing model evaluation fields: $(join(missing, ", "))"))
         throw(ArgumentError("unknown model evaluation fields: $(join(unknown, ", "))"))
     end
     String(payload.kind) == "model_evaluation" ||
         throw(ArgumentError("artifact kind must be model_evaluation"))
-    Int(payload.schema_version) == MODEL_EVALUATION_SCHEMA_VERSION ||
-        throw(ArgumentError("unsupported model evaluation schema version"))
     String(payload.claim_status) == "not_a_claim" ||
         throw(ArgumentError("claim_status must be not_a_claim"))
     String(payload.execution_layer) == "julia_unverified" ||
@@ -434,7 +577,34 @@ function parse_model_evaluation_json(text::AbstractString)
         throw(ArgumentError("execution_boundary must be unverified_runtime"))
     numeric = _model_evaluation_plain(payload.numeric_assumptions)
     numeric isa NamedTuple || throw(ArgumentError("numeric_assumptions must be an object"))
+    diagnostics = NamedTuple[]
+    error_stage = nothing
+    if schema_version == 2
+        if String(payload.outcome) == "error"
+            error_stage = :legacy_unknown
+            push!(diagnostics, (
+                stage=error_stage,
+                message=String(payload.error_message),
+            ))
+        end
+    else
+        payload.error_diagnostics isa JSON3.Array ||
+            throw(ArgumentError("error_diagnostics must be an array"))
+        for item in payload.error_diagnostics
+            item isa JSON3.Object ||
+                throw(ArgumentError("error_diagnostics entries must be objects"))
+            Set(String[String(key) for key in keys(item)]) == Set(["stage", "message"]) ||
+                throw(ArgumentError("error_diagnostics entries require only stage and message"))
+            push!(diagnostics, (
+                stage=Symbol(String(item.stage)),
+                message=String(item.message),
+            ))
+        end
+        error_stage = payload.error_stage === nothing ? nothing :
+            Symbol(String(payload.error_stage))
+    end
     ModelEvaluationRecord(
+        schema_version=schema_version,
         evaluation_id=String(payload.evaluation_id),
         model_fingerprint=String(payload.model_fingerprint),
         fingerprint_algorithm=String(payload.fingerprint_algorithm),
@@ -460,7 +630,9 @@ function parse_model_evaluation_json(text::AbstractString)
         outcome=Symbol(String(payload.outcome)),
         failed_predicates=String[String(item) for item in payload.failed_predicates],
         claim_relation=Symbol(String(payload.claim_relation)),
+        error_stage=error_stage,
         error_message=payload.error_message === nothing ? nothing : String(payload.error_message),
+        error_diagnostics=diagnostics,
         seed=payload.seed === nothing ? nothing : Int(payload.seed),
         numeric_assumptions=numeric,
         git_commit=String(payload.git_commit),
@@ -477,14 +649,62 @@ end
 read_model_evaluation(path::AbstractString) =
     parse_model_evaluation_json(read(path, String))
 
+function _model_evaluation_source_set_sha256(
+    project_root::AbstractString,
+    paths::AbstractVector{<:AbstractString},
+)
+    isempty(paths) && throw(ArgumentError("Lean declaration module has no source files"))
+    entries = [
+        (
+            path=relpath(realpath(path), realpath(project_root)),
+            sha256=_model_evaluation_sha256_file(path),
+        )
+        for path in sort!(String[String(path) for path in paths])
+    ]
+    _model_evaluation_sha256(String(JSON3.write(entries)))
+end
+
+function _model_evaluation_require_head_bytes(
+    project_root::AbstractString,
+    git_commit::AbstractString,
+    path::AbstractString,
+    bytes::AbstractVector{UInt8},
+    field::AbstractString,
+)
+    project = realpath(project_root)
+    relative = relpath(realpath(path), project)
+    startswith(relative, "..") &&
+        throw(ArgumentError("$field must stay inside the project root"))
+    key = (project, String(git_commit), relative)
+    committed = lock(_MODEL_EVALUATION_CATALOG_LOCK) do
+        get!(_MODEL_EVALUATION_GIT_BLOB_CACHE, key) do
+            specification = "$(git_commit):$relative"
+            read(Cmd(`git show $specification`; dir=project))
+        end
+    end
+    Vector{UInt8}(bytes) == committed || throw(ArgumentError(
+        "$field must match the recorded Git commit before evaluation",
+    ))
+    nothing
+end
+
 function _model_evaluation_registry_binding(
     project_root::AbstractString,
     vp_id::AbstractString,
     contract_id::AbstractString,
     checker_id::AbstractString,
 )
+    registry_git_commit = readchomp(Cmd(`git rev-parse HEAD`; dir=project_root))
     ledger_path = joinpath(project_root, "specs", "ledger.toml")
-    ledger = TOML.parsefile(ledger_path)
+    ledger_bytes = read(ledger_path)
+    _model_evaluation_require_head_bytes(
+        project_root,
+        registry_git_commit,
+        ledger_path,
+        ledger_bytes,
+        "ledger",
+    )
+    ledger = TOML.parse(String(copy(ledger_bytes)))
     vps = filter(vp -> String(vp["id"]) == vp_id, ledger["vp"])
     length(vps) == 1 || throw(ArgumentError("unknown or duplicate VP id: $vp_id"))
     vp = only(vps)
@@ -496,7 +716,15 @@ function _model_evaluation_registry_binding(
         throw(ArgumentError("checker_id does not match VP binding"))
 
     manifest_path = joinpath(project_root, "specs", "checker-semantic-manifest.toml")
-    manifest = TOML.parsefile(manifest_path)
+    manifest_bytes = read(manifest_path)
+    _model_evaluation_require_head_bytes(
+        project_root,
+        registry_git_commit,
+        manifest_path,
+        manifest_bytes,
+        "semantic manifest",
+    )
+    manifest = TOML.parse(String(copy(manifest_bytes)))
     contracts = filter(row -> String(row["id"]) == contract_id, manifest["contract"])
     length(contracts) == 1 ||
         throw(ArgumentError("unknown or duplicate semantic contract: $contract_id"))
@@ -507,17 +735,33 @@ function _model_evaluation_registry_binding(
         throw(ArgumentError("semantic manifest Lean declaration does not match VP binding"))
     String(semantic["review_status"]) == "reviewed" ||
         throw(ArgumentError("semantic contract must be reviewed"))
+    reviewer = String(get(semantic, "reviewer", ""))
+    basis_log = String(get(semantic, "basis_log", ""))
+    isempty(reviewer) && throw(ArgumentError("reviewed semantic contract requires reviewer"))
+    isempty(basis_log) && throw(ArgumentError("reviewed semantic contract requires basis_log"))
 
     catalog_source = joinpath(project_root, "formal", "ERIEC", "CertifiedArtifact.lean")
+    isfile(catalog_source) || throw(ArgumentError("certificate catalog source is missing"))
+    catalog_source_bytes = read(catalog_source)
+    _model_evaluation_require_head_bytes(
+        project_root,
+        registry_git_commit,
+        catalog_source,
+        catalog_source_bytes,
+        "certificate catalog source",
+    )
+    catalog_source_sha256 = _model_evaluation_sha256(catalog_source_bytes)
     catalog_key = (
         realpath(project_root),
-        isfile(catalog_source) ? _model_evaluation_sha256_file(catalog_source) : "missing",
+        catalog_source_sha256,
     )
     artifact = lock(_MODEL_EVALUATION_CATALOG_LOCK) do
         get!(_MODEL_EVALUATION_CATALOG_CACHE, catalog_key) do
             lean_certified_artifact(; project_root=project_root)
         end
     end
+    _model_evaluation_sha256_file(catalog_source) == catalog_source_sha256 ||
+        throw(ArgumentError("certificate catalog source changed while resolving binding"))
     catalog = filter(contract -> contract.id == contract_id, artifact.contracts)
     length(catalog) == 1 || throw(ArgumentError("contract is absent from certificate catalog"))
     certified = only(catalog)
@@ -525,11 +769,42 @@ function _model_evaluation_registry_binding(
         throw(ArgumentError("certificate catalog Lean declaration does not match VP binding"))
     certified.julia_checker == Symbol(checker_id) ||
         throw(ArgumentError("certificate catalog checker does not match VP binding"))
-    verification_key = (realpath(project_root), catalog_key[2], String(contract_id))
+    declaration_sources = _module_source_paths(project_root, certified.lean_module)
+    for source_path in declaration_sources
+        source_bytes = read(source_path)
+        _model_evaluation_require_head_bytes(
+            project_root,
+            registry_git_commit,
+            source_path,
+            source_bytes,
+            "Lean declaration source",
+        )
+    end
+    declaration_source_sha256 = _model_evaluation_source_set_sha256(
+        project_root,
+        declaration_sources,
+    )
+    registry_generation_sha256 = _model_evaluation_sha256(String(JSON3.write((
+        ledger_sha256=_model_evaluation_sha256(ledger_bytes),
+        semantic_manifest_sha256=_model_evaluation_sha256(manifest_bytes),
+        certified_artifact_source_sha256=catalog_source_sha256,
+        lean_declaration_source_sha256=declaration_source_sha256,
+        registry_git_commit,
+    ))))
+    verification_key = (
+        realpath(project_root),
+        catalog_key[2],
+        declaration_source_sha256,
+        String(contract_id),
+    )
     lock(_MODEL_EVALUATION_CATALOG_LOCK) do
         if !(verification_key in _MODEL_EVALUATION_VERIFIED_CONTRACT_CACHE)
             isempty(_missing_lean_full_names(project_root, [certified])) ||
                 throw(ArgumentError("catalog Lean declaration does not resolve"))
+            _model_evaluation_source_set_sha256(project_root, declaration_sources) ==
+                declaration_source_sha256 || throw(ArgumentError(
+                    "Lean declaration source changed while verifying binding",
+                ))
             push!(_MODEL_EVALUATION_VERIFIED_CONTRACT_CACHE, verification_key)
         end
     end
@@ -551,11 +826,17 @@ function _model_evaluation_registry_binding(
         scope=String(semantic["scope"]),
         assumptions=String[String(item) for item in semantic["assumptions"]],
         guarantee=String(semantic["guarantee"]),
+        review_status=String(semantic["review_status"]),
+        reviewer,
+        basis_log,
         catalog_artifact_id=artifact.artifact_id,
         catalog_version=artifact.version,
-        ledger_sha256=_model_evaluation_sha256_file(ledger_path),
-        semantic_manifest_sha256=_model_evaluation_sha256_file(manifest_path),
+        ledger_sha256=_model_evaluation_sha256(ledger_bytes),
+        semantic_manifest_sha256=_model_evaluation_sha256(manifest_bytes),
         certified_artifact_source_sha256=catalog_key[2],
+        lean_declaration_source_sha256=declaration_source_sha256,
+        registry_git_commit,
+        registry_generation_sha256,
     )
 end
 
@@ -571,11 +852,17 @@ function _model_evaluation_registry_payload(binding)
         scope=binding.scope,
         assumptions=binding.assumptions,
         guarantee=binding.guarantee,
+        review_status=binding.review_status,
+        reviewer=binding.reviewer,
+        basis_log=binding.basis_log,
         catalog_artifact_id=binding.catalog_artifact_id,
         catalog_version=binding.catalog_version,
         ledger_sha256=binding.ledger_sha256,
         semantic_manifest_sha256=binding.semantic_manifest_sha256,
         certified_artifact_source_sha256=binding.certified_artifact_source_sha256,
+        lean_declaration_source_sha256=binding.lean_declaration_source_sha256,
+        registry_git_commit=binding.registry_git_commit,
+        registry_generation_sha256=binding.registry_generation_sha256,
     )
 end
 
@@ -596,7 +883,100 @@ end
 function _model_evaluation_error_text(err, backtrace)
     io = IOBuffer()
     showerror(io, err, backtrace)
-    String(take!(io))
+    _model_evaluation_utf8_safe(String(take!(io)))
+end
+
+_model_evaluation_showerror(err) =
+    _model_evaluation_utf8_safe(sprint(showerror, err))
+
+function _model_evaluation_decode_registered_adapter(
+    adapter_id::String,
+    bytes::Vector{UInt8},
+)
+    adapter_id == "m4-setpoint-model-v1" ||
+        throw(ArgumentError("unsupported model evaluation adapter: $adapter_id"))
+    method = which(
+        _decode_model_evaluation_adapter,
+        Tuple{AbstractString,AbstractVector{UInt8}},
+    )
+    method === _M4_MODEL_EVALUATION_DECODE_METHOD ||
+        throw(ArgumentError("registered adapter decoder method changed after ERIEC loaded"))
+    invoke(
+        _decode_model_evaluation_adapter,
+        Tuple{AbstractString,AbstractVector{UInt8}},
+        adapter_id,
+        bytes,
+    )
+end
+
+function _model_evaluation_registered_adapter_value(
+    adapter_id::String,
+    decoded,
+)
+    adapter_id == "m4-setpoint-model-v1" ||
+        throw(ArgumentError("unsupported model evaluation adapter: $adapter_id"))
+    decoded isa M4SetPointModel ||
+        throw(ArgumentError("registered M4 adapter returned the wrong decoded type"))
+    method = which(
+        _model_evaluation_adapter_value,
+        Tuple{AbstractString,M4SetPointModel},
+    )
+    method === _M4_MODEL_EVALUATION_VALUE_METHOD ||
+        throw(ArgumentError("registered adapter value method changed after ERIEC loaded"))
+    invoke(
+        _model_evaluation_adapter_value,
+        Tuple{AbstractString,M4SetPointModel},
+        adapter_id,
+        decoded,
+    )
+end
+
+
+function _model_evaluation_exact_adapter_outcome(adapter_id::String, decoded)
+    adapter_id == "m4-setpoint-model-v1" ||
+        throw(ArgumentError("unsupported model evaluation adapter: $adapter_id"))
+    decoded isa M4SetPointModel ||
+        throw(ArgumentError("registered M4 adapter returned the wrong decoded type"))
+    edges = Set(decoded.reaches)
+    !any(
+        candidate -> all(
+            source -> (source, candidate) in edges,
+            decoded.objects,
+        ),
+        decoded.objects,
+    )
+end
+
+const _MODEL_EVALUATION_EXACT_OUTCOME_METHOD = which(
+    _model_evaluation_exact_adapter_outcome,
+    Tuple{String,Any},
+)
+
+function _model_evaluation_registered_exact_outcome(adapter_id::String, decoded)
+    which(_model_evaluation_exact_adapter_outcome, Tuple{String,Any}) ===
+        _MODEL_EVALUATION_EXACT_OUTCOME_METHOD || throw(ArgumentError(
+            "registered adapter exact-decision method changed after ERIEC loaded",
+        ))
+    invoke(
+        _model_evaluation_exact_adapter_outcome,
+        Tuple{String,Any},
+        adapter_id,
+        decoded,
+    )
+end
+
+function _model_evaluation_registered_checker(checker_id::String, value)
+    checker_id == "check_m4_no_terminal_setpoint" ||
+        throw(ArgumentError("unsupported registered model checker: $checker_id"))
+    value isa SetPointDiagram ||
+        throw(ArgumentError("registered M4 checker received the wrong value type"))
+    checker = getfield(@__MODULE__, Symbol(checker_id))
+    generic_method = which(checker, Tuple{SetPointDiagram})
+    selected_method = which(checker, Tuple{typeof(value)})
+    generic_method === _MODEL_EVALUATION_M4_CHECKER_METHOD &&
+        selected_method === _MODEL_EVALUATION_M4_CHECKER_METHOD ||
+        throw(ArgumentError("registered checker method changed after ERIEC loaded"))
+    invoke(checker, Tuple{SetPointDiagram}, value)
 end
 
 function _model_evaluation_id(vp_id::AbstractString, canonical_bytes::AbstractVector{UInt8})
@@ -613,13 +993,11 @@ function _run_model_evaluation(
     output_root::AbstractString=project_root,
     evaluation_id::Union{AbstractString,Nothing}=nothing,
     raw_model_bytes::AbstractVector{UInt8},
-    prepare_model::Function,
     vp_id::AbstractString,
     contract_id::AbstractString,
     checker_id::AbstractString,
     failed_predicates_on_reject,
     adapter_id::AbstractString,
-    adapter_source::AbstractString,
     claim_relation::Symbol=:observation_only,
     seed::Union{Integer,Nothing}=nothing,
     numeric_assumptions::NamedTuple=NamedTuple(),
@@ -627,6 +1005,8 @@ function _run_model_evaluation(
     project = realpath(project_root)
     output = realpath(mkpath(abspath(output_root)))
     binding = _model_evaluation_registry_binding(project, vp_id, contract_id, checker_id)
+    manifest_path = joinpath(project, "Manifest.toml")
+    manifest_bytes = isfile(manifest_path) ? read(manifest_path) : UInt8[]
     claim_relation in _MODEL_EVALUATION_CLAIM_RELATIONS || throw(ArgumentError(
         "claim_relation must be observation_only or counterexample_candidate",
     ))
@@ -637,6 +1017,9 @@ function _run_model_evaluation(
         "failed_predicates_on_reject must equal the registry-bound Lean declaration",
     ))
     normalized_adapter_id = _model_evaluation_valid_id(adapter_id)
+    adapter_source = normalized_adapter_id == "m4-setpoint-model-v1" ?
+        "src/m4_model_evaluation.jl" :
+        throw(ArgumentError("unsupported model evaluation adapter: $normalized_adapter_id"))
     adapter_file = _model_evaluation_project_file(
         project,
         adapter_source,
@@ -658,9 +1041,6 @@ function _run_model_evaluation(
         throw(ArgumentError("checker source changed after ERIEC was loaded; restart Julia"))
     loaded_adapter_sha == _model_evaluation_sha256(adapter_source_bytes) ||
         throw(ArgumentError("adapter source changed after ERIEC was loaded; restart Julia"))
-    registered_checker = getfield(@__MODULE__, Symbol(binding.checker_id))
-    registered_checker isa Function ||
-        throw(ArgumentError("registered checker is not callable"))
     claim_relation == :counterexample_candidate &&
         binding.checker_relation != "exact_finite_decision" &&
         throw(ArgumentError(
@@ -669,36 +1049,75 @@ function _run_model_evaluation(
     _model_evaluation_json_safe(numeric_assumptions)
     raw_bytes = Vector{UInt8}(raw_model_bytes)
 
-    prepared = nothing
+    decoded = nothing
+    prepared_value = nothing
     canonical_bytes = raw_bytes
     fingerprint_algorithm = MODEL_EVALUATION_RAW_FINGERPRINT_ALGORITHM
     outcome = :error
-    error_message = nothing
+    diagnostics = NamedTuple{(:stage,:message),Tuple{Symbol,String}}[]
+    function capture_error!(stage::Symbol, err, backtrace)
+        push!(diagnostics, _model_evaluation_diagnostic(
+            stage,
+            _model_evaluation_error_text(err, backtrace),
+        ))
+        nothing
+    end
     capture_path, capture_io = mktemp()
     try
-        prepared = prepare_model(raw_bytes)
-        hasproperty(prepared, :canonical_bytes) ||
-            throw(ArgumentError("prepare_model must return canonical_bytes"))
-        hasproperty(prepared, :value) ||
-            throw(ArgumentError("prepare_model must return value"))
-        canonical_bytes = Vector{UInt8}(prepared.canonical_bytes)
+        decoded = _model_evaluation_decode_registered_adapter(
+            normalized_adapter_id,
+            raw_bytes,
+        )
+        hasproperty(decoded, :canonical_bytes) ||
+            throw(ArgumentError("registered adapter decoder must return canonical_bytes"))
+        hasproperty(decoded, :decoded) ||
+            throw(ArgumentError("registered adapter decoder must return decoded"))
+        canonical_bytes = Vector{UInt8}(decoded.canonical_bytes)
         isempty(canonical_bytes) && throw(ArgumentError("canonical model must be nonempty"))
-        fingerprint_algorithm = hasproperty(prepared, :fingerprint_algorithm) ?
-            String(prepared.fingerprint_algorithm) : MODEL_EVALUATION_FINGERPRINT_ALGORITHM
-        result = lock(_MODEL_EVALUATION_CHECKER_LOCK) do
-            redirect_stdout(capture_io) do
-                redirect_stderr(capture_io) do
-                    registered_checker(prepared.value)
+        fingerprint_algorithm = hasproperty(decoded, :fingerprint_algorithm) ?
+            String(decoded.fingerprint_algorithm) : MODEL_EVALUATION_FINGERPRINT_ALGORITHM
+    catch err
+        capture_error!(:input_schema, err, catch_backtrace())
+    end
+    if isempty(diagnostics)
+        try
+            prepared_value = _model_evaluation_registered_adapter_value(
+                normalized_adapter_id,
+                decoded.decoded,
+            )
+        catch err
+            capture_error!(:adapter, err, catch_backtrace())
+        end
+    end
+    if isempty(diagnostics)
+        try
+            result = lock(_MODEL_EVALUATION_CHECKER_LOCK) do
+                redirect_stdout(capture_io) do
+                    redirect_stderr(capture_io) do
+                        _model_evaluation_registered_checker(
+                            binding.checker_id,
+                            prepared_value,
+                        )
+                    end
                 end
             end
+            result isa Bool || throw(ArgumentError("model checker must return Bool"))
+            expected_result = _model_evaluation_registered_exact_outcome(
+                normalized_adapter_id,
+                decoded.decoded,
+            )
+            result == expected_result || throw(ArgumentError(
+                "registered checker disagrees with the adapter exact decision",
+            ))
+            outcome = result ? :pass : :reject
+        catch err
+            capture_error!(:checker, err, catch_backtrace())
         end
-        result isa Bool || throw(ArgumentError("model checker must return Bool"))
-        outcome = result ? :pass : :reject
-    catch err
-        error_message = _model_evaluation_error_text(err, catch_backtrace())
-        outcome = :error
-    finally
+    end
+    try
         close(capture_io)
+    catch err
+        capture_error!(:postflight, err, catch_backtrace())
     end
     try
         _model_evaluation_sha256_file(joinpath(project, binding.checker_source)) ==
@@ -707,15 +1126,35 @@ function _run_model_evaluation(
         _model_evaluation_sha256_file(adapter_file.actual) ==
             _model_evaluation_sha256(adapter_source_bytes) ||
             throw(ArgumentError("adapter source changed during execution"))
+        rebound = _model_evaluation_registry_binding(
+            project,
+            vp_id,
+            contract_id,
+            checker_id,
+        )
+        _model_evaluation_registry_payload(rebound) ==
+            _model_evaluation_registry_payload(binding) ||
+            throw(ArgumentError("registry binding changed during execution"))
+        current_manifest_bytes = isfile(manifest_path) ? read(manifest_path) : UInt8[]
+        current_manifest_bytes == manifest_bytes ||
+            throw(ArgumentError("Julia manifest changed during execution"))
     catch err
-        error_message = _model_evaluation_error_text(err, catch_backtrace())
-        outcome = :error
+        capture_error!(:postflight, err, catch_backtrace())
     end
+    isempty(diagnostics) || (outcome = :error)
+    error_stage = isempty(diagnostics) ? nothing : first(diagnostics).stage
+    error_message = isempty(diagnostics) ? nothing : first(diagnostics).message
     captured = read(capture_path)
     rm(capture_path)
     log_buffer = IOBuffer()
     write(log_buffer, captured)
-    error_message === nothing || println(log_buffer, "\nchecker_error=", error_message)
+    for diagnostic in diagnostics
+        println(
+            log_buffer,
+            "\nerror_stage=", diagnostic.stage,
+            "\nerror_message=", diagnostic.message,
+        )
+    end
     println(log_buffer, "outcome=", outcome)
     log_bytes = take!(log_buffer)
 
@@ -723,7 +1162,7 @@ function _run_model_evaluation(
         _model_evaluation_id(vp_id, canonical_bytes) : String(evaluation_id))
     parent = _model_evaluation_secure_directory(output, "logs", "model-evaluations")
     destination = joinpath(parent, id)
-    ispath(destination) && throw(ArgumentError(
+    (ispath(destination) || islink(destination)) && throw(ArgumentError(
         "evaluation_id already exists; model evaluations are create-only",
     ))
 
@@ -731,9 +1170,7 @@ function _run_model_evaluation(
         String(JSON3.write(_model_evaluation_registry_payload(binding))) * "\n",
     ))
     git = _model_evaluation_git_state(project)
-    manifest_path = joinpath(project, "Manifest.toml")
-    manifest_sha = isfile(manifest_path) ?
-        _model_evaluation_sha256_file(manifest_path) : _model_evaluation_sha256(UInt8[])
+    manifest_sha = _model_evaluation_sha256(manifest_bytes)
     base_relative = joinpath("logs", "model-evaluations", id)
     source_relative = joinpath(base_relative, "source-model.json")
     model_relative = joinpath(base_relative, "model.json")
@@ -770,10 +1207,12 @@ function _run_model_evaluation(
         outcome=outcome,
         failed_predicates=failed,
         claim_relation=actual_claim_relation,
+        error_stage=error_stage,
         error_message=error_message,
+        error_diagnostics=diagnostics,
         seed=seed,
         numeric_assumptions=numeric_assumptions,
-        git_commit=git.commit,
+        git_commit=binding.registry_git_commit,
         git_dirty=git.dirty,
         manifest_sha256=manifest_sha,
         log_path=log_relative,
@@ -793,7 +1232,11 @@ function _run_model_evaluation(
         write(joinpath(temporary, "evaluation.json"), evaluation_bytes)
         seal = _model_evaluation_sha256(evaluation_bytes)
         write(joinpath(temporary, "seal.sha256"), "$seal  evaluation.json\n")
-        mv(temporary, destination)
+        _model_evaluation_publish_create_only(
+            temporary,
+            destination,
+            "model evaluation",
+        )
     catch
         ispath(temporary) && rm(temporary; recursive=true)
         rethrow()
@@ -811,6 +1254,7 @@ function _model_evaluation_safe_snapshot(
             evidence_root,
             _model_evaluation_relative_path(relative_path, "snapshot"),
         )
+        islink(candidate) && return nothing
         isfile(candidate) || return nothing
         actual = realpath(candidate)
         directory = realpath(evaluation_directory)
@@ -831,18 +1275,25 @@ function audit_model_evaluation(
 )
     errors = String[]
     warnings = String[]
+    replay_errors = String[]
     record = nothing
+    evaluation_sha256 = nothing
+    seal_bytes = nothing
+    semantic_replay = :not_attempted
     kind = :model_evaluation_audit_entry
     id = String(evaluation_id)
-    if !occursin(_MODEL_EVALUATION_ID, id)
+    if !isvalid(id) || !occursin(_MODEL_EVALUATION_ID, id)
         push!(errors, "invalid evaluation id")
-        return (; kind, ok=false, evaluation_id=id, errors, warnings, record)
+        return (; kind, ok=false, evaluation_id=_model_evaluation_utf8_safe(id),
+            errors, warnings, replay_errors, semantic_replay, record,
+            evaluation_sha256=nothing)
     end
     path = model_evaluation_path(evidence_root, id)
     directory = dirname(path)
     if !isfile(path)
         push!(errors, "evaluation.json is missing")
-        return (; kind, ok=false, evaluation_id=id, errors, warnings, record)
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, record, evaluation_sha256=nothing)
     end
     try
         evidence = realpath(evidence_root)
@@ -851,29 +1302,50 @@ function audit_model_evaluation(
             push!(errors, "evaluation directory escapes the evidence root")
         islink(directory) && push!(errors, "evaluation directory must not be a symlink")
     catch err
-        push!(errors, "evaluation directory validation failed: $(sprint(showerror, err))")
+        push!(errors, "evaluation directory validation failed: $(_model_evaluation_showerror(err))")
+    end
+    if islink(path)
+        push!(errors, "evaluation.json must not be a symlink")
+    else
+        try
+            realpath(path) == joinpath(realpath(directory), "evaluation.json") ||
+                push!(errors, "evaluation.json escapes its evaluation directory")
+        catch err
+            push!(errors, "evaluation.json validation failed: $(_model_evaluation_showerror(err))")
+        end
+    end
+    if !isempty(errors)
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, record, evaluation_sha256=nothing)
     end
     try
-        record = read_model_evaluation(path)
+        evaluation_bytes = read(path)
+        evaluation_sha256 = _model_evaluation_sha256(evaluation_bytes)
+        record = parse_model_evaluation_json(String(copy(evaluation_bytes)))
     catch err
-        push!(errors, "evaluation parse failed: $(sprint(showerror, err))")
-        return (; kind, ok=false, evaluation_id=id, errors, warnings, record)
+        push!(errors, "evaluation parse failed: $(_model_evaluation_showerror(err))")
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, record, evaluation_sha256=nothing)
     end
     record.evaluation_id == evaluation_id || push!(errors, "directory id does not match record")
 
     seal_path = joinpath(directory, "seal.sha256")
     if !isfile(seal_path)
         push!(errors, "seal.sha256 is missing")
+    elseif islink(seal_path)
+        push!(errors, "seal.sha256 must not be a symlink")
     else
         try
-            seal_fields = split(strip(read(seal_path, String)))
+            realpath(seal_path) == joinpath(realpath(directory), "seal.sha256") ||
+                throw(ArgumentError("seal.sha256 escapes its evaluation directory"))
+            seal_bytes = read(seal_path)
+            seal_fields = split(strip(String(copy(seal_bytes))))
             length(seal_fields) == 2 && seal_fields[2] == "evaluation.json" ||
                 throw(ArgumentError("invalid seal format"))
             expected = _model_evaluation_hash(seal_fields[1], "evaluation seal")
-            actual = _model_evaluation_sha256_file(path)
-            expected == actual || push!(errors, "evaluation seal mismatch")
+            expected == evaluation_sha256 || push!(errors, "evaluation seal mismatch")
         catch err
-            push!(errors, "evaluation seal validation failed: $(sprint(showerror, err))")
+            push!(errors, "evaluation seal validation failed: $(_model_evaluation_showerror(err))")
         end
     end
 
@@ -896,7 +1368,7 @@ function audit_model_evaluation(
                 _model_evaluation_sha256_file(snapshot) == expected ||
                     push!(errors, "$name snapshot hash mismatch")
             catch err
-                push!(errors, "$name snapshot read failed: $(sprint(showerror, err))")
+                push!(errors, "$name snapshot read failed: $(_model_evaluation_showerror(err))")
             end
         end
     end
@@ -906,7 +1378,8 @@ function audit_model_evaluation(
         push!(errors, "checker version is not bound to checker source bytes")
     record.adapter_version == "sha256:$(record.adapter_source_sha256)" ||
         push!(errors, "adapter version is not bound to adapter source bytes")
-    if haskey(resolved_snapshots, :model) && haskey(resolved_snapshots, :adapter)
+    if haskey(resolved_snapshots, :source_model) &&
+            haskey(resolved_snapshots, :model) && haskey(resolved_snapshots, :adapter)
         loaded_adapter_sha = get(
             _MODEL_EVALUATION_LOADED_SOURCE_SHA256,
             record.adapter_source_origin,
@@ -917,14 +1390,19 @@ function audit_model_evaluation(
         if loaded_adapter_sha == record.adapter_source_sha256 &&
                 loaded_checker_sha == record.checker_source_sha256
             try
-                append!(
-                    errors,
-                    _audit_model_evaluation_adapter(record, resolved_snapshots[:model]),
+                adapter_replay_errors = _audit_model_evaluation_adapter(
+                    record,
+                    resolved_snapshots[:source_model],
+                    resolved_snapshots[:model],
                 )
+                append!(replay_errors, adapter_replay_errors)
+                semantic_replay = isempty(adapter_replay_errors) ? :passed : :failed
             catch err
-                push!(errors, "adapter audit failed: $(sprint(showerror, err))")
+                semantic_replay = :failed
+                push!(replay_errors, "adapter audit failed: $(_model_evaluation_showerror(err))")
             end
         else
+            semantic_replay = :skipped
             push!(warnings, "semantic replay skipped because loaded checker/adapter drifted")
         end
     end
@@ -937,7 +1415,10 @@ function audit_model_evaluation(
             registry_keys = String[String(key) for key in keys(registry)]
             length(registry_keys) == length(unique(registry_keys)) ||
                 throw(ArgumentError("duplicate registry snapshot fields are forbidden"))
-            Set(registry_keys) == _MODEL_EVALUATION_REGISTRY_KEYS ||
+            expected_registry_keys = record.schema_version == 2 ?
+                _MODEL_EVALUATION_REGISTRY_KEYS_V2 :
+                _MODEL_EVALUATION_REGISTRY_KEYS
+            Set(registry_keys) == expected_registry_keys ||
                 throw(ArgumentError("registry snapshot fields do not match the schema"))
             String(registry.vp_id) == record.vp_id ||
                 push!(errors, "registry snapshot VP mismatch")
@@ -963,6 +1444,20 @@ function audit_model_evaluation(
                 throw(ArgumentError("registry assumptions must contain strings"))
             isempty(String(registry.guarantee)) &&
                 throw(ArgumentError("registry guarantee must be nonempty"))
+            if record.schema_version == 2
+                push!(warnings, "legacy schema v2 registry lacks explicit review provenance")
+            else
+                String(registry.review_status) == "reviewed" ||
+                    throw(ArgumentError("registry review_status must be reviewed"))
+                isempty(String(registry.reviewer)) &&
+                    throw(ArgumentError("registry reviewer must be nonempty"))
+                isempty(String(registry.basis_log)) &&
+                    throw(ArgumentError("registry basis_log must be nonempty"))
+                _model_evaluation_relative_path(
+                    String(registry.basis_log),
+                    "registry basis_log",
+                )
+            end
             isempty(String(registry.catalog_artifact_id)) &&
                 throw(ArgumentError("registry catalog id must be nonempty"))
             registry.catalog_version isa Integer &&
@@ -977,8 +1472,35 @@ function audit_model_evaluation(
                 String(registry.certified_artifact_source_sha256),
                 "registry certified_artifact_source_sha256",
             )
+            record.schema_version == 2 || _model_evaluation_hash(
+                String(registry.lean_declaration_source_sha256),
+                "registry lean_declaration_source_sha256",
+            )
+            record.schema_version == 2 || _model_evaluation_hash(
+                String(registry.registry_generation_sha256),
+                "registry registry_generation_sha256",
+            )
+            if record.schema_version != 2
+                isempty(String(registry.registry_git_commit)) &&
+                    throw(ArgumentError("registry_git_commit must be nonempty"))
+                String(registry.registry_git_commit) == record.git_commit ||
+                    push!(errors, "registry Git commit does not match evaluation")
+                expected_generation = _model_evaluation_sha256(String(JSON3.write((
+                    ledger_sha256=String(registry.ledger_sha256),
+                    semantic_manifest_sha256=String(registry.semantic_manifest_sha256),
+                    certified_artifact_source_sha256=String(
+                        registry.certified_artifact_source_sha256,
+                    ),
+                    lean_declaration_source_sha256=String(
+                        registry.lean_declaration_source_sha256,
+                    ),
+                    registry_git_commit=String(registry.registry_git_commit),
+                ))))
+                String(registry.registry_generation_sha256) == expected_generation ||
+                    push!(errors, "registry generation digest mismatch")
+            end
         catch err
-            push!(errors, "registry snapshot parse failed: $(sprint(showerror, err))")
+            push!(errors, "registry snapshot parse failed: $(_model_evaluation_showerror(err))")
         end
     end
     try
@@ -1008,10 +1530,26 @@ function audit_model_evaluation(
         )
         _model_evaluation_sha256_file(adapter_file.actual) == record.adapter_source_sha256 ||
             push!(warnings, "current adapter source drifted")
+        manifest_path = joinpath(realpath(project_root), "Manifest.toml")
+        current_manifest_sha = isfile(manifest_path) ?
+            _model_evaluation_sha256_file(manifest_path) :
+            _model_evaluation_sha256(UInt8[])
+        current_manifest_sha == record.manifest_sha256 ||
+            push!(warnings, "current Julia manifest drifted")
     catch err
-        push!(warnings, "current registry validation failed: $(sprint(showerror, err))")
+        push!(warnings, "current registry validation failed: $(_model_evaluation_showerror(err))")
     end
-    (; kind, ok=isempty(errors), evaluation_id=record.evaluation_id, errors, warnings, record)
+    try
+        _model_evaluation_sha256_file(path) == evaluation_sha256 ||
+            push!(errors, "evaluation.json changed during audit")
+        seal_bytes === nothing || read(seal_path) == seal_bytes ||
+            push!(errors, "seal.sha256 changed during audit")
+    catch err
+        push!(errors, "evaluation metadata postflight failed: $(_model_evaluation_showerror(err))")
+    end
+    (; kind, ok=isempty(errors), evaluation_id=record.evaluation_id, errors, warnings,
+        replay_errors, semantic_replay, record,
+        evaluation_sha256)
 end
 
 function list_model_evaluations(
@@ -1031,28 +1569,73 @@ function list_model_evaluations(
     )
     parent === nothing && return NamedTuple[]
     entries = NamedTuple[]
-    filtered = vp_id !== nothing || contract_id !== nothing || outcome !== nothing ||
-        counterexample_candidates
-    for id in sort(readdir(parent))
-        startswith(id, ".pending-") && continue
-        isdir(joinpath(parent, id)) || continue
+    for raw_id in sort(readdir(parent))
+        id = String(raw_id)
+        entry_path = joinpath(parent, id)
+        if !isvalid(id)
+            push!(entries, (
+                entry_kind=:foreign,
+                evaluation_id=_model_evaluation_utf8_safe(id),
+                filter_match=nothing,
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["foreign entry name is not valid UTF-8"],
+                warnings=String[],
+            ))
+            continue
+        end
+        if startswith(id, ".pending-")
+            push!(entries, (
+                entry_kind=:pending,
+                evaluation_id=id,
+                filter_match=nothing,
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["incomplete pending evaluation artifact is present"],
+                warnings=String[],
+            ))
+            continue
+        end
+        if !isdir(entry_path)
+            push!(entries, (
+                entry_kind=:foreign,
+                evaluation_id=id,
+                filter_match=nothing,
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["foreign non-directory entry is present in the evaluation store"],
+                warnings=String[],
+            ))
+            continue
+        end
         audit = audit_model_evaluation(evidence_root, id; project_root=project_root)
         record = audit.record
         if record === nothing
-            filtered || push!(entries, (
-                    evaluation_id=id,
-                    audit_ok=false,
-                    errors=audit.errors,
-                    warnings=audit.warnings,
-                ))
+            push!(entries, (
+                entry_kind=:invalid,
+                evaluation_id=id,
+                filter_match=nothing,
+                audit_ok=false,
+                semantic_replay=audit.semantic_replay,
+                replay_errors=audit.replay_errors,
+                errors=audit.errors,
+                warnings=audit.warnings,
+            ))
             continue
         end
-        vp_id === nothing || record.vp_id == vp_id || continue
-        contract_id === nothing || record.contract_id == contract_id || continue
-        outcome === nothing || record.outcome == outcome || continue
-        counterexample_candidates && record.claim_relation != :counterexample_candidate && continue
+        matches = (vp_id === nothing || record.vp_id == vp_id) &&
+            (contract_id === nothing || record.contract_id == contract_id) &&
+            (outcome === nothing || record.outcome == outcome) &&
+            (!counterexample_candidates ||
+                record.claim_relation == :counterexample_candidate)
+        audit.ok && !matches && continue
         push!(entries, (
+            entry_kind=:evaluation,
             evaluation_id=id,
+            filter_match=matches,
             vp_id=record.vp_id,
             contract_id=record.contract_id,
             checker_id=record.checker_id,
@@ -1062,6 +1645,8 @@ function list_model_evaluations(
             model_fingerprint=record.model_fingerprint,
             generated_unix=record.generated_unix,
             audit_ok=audit.ok,
+            semantic_replay=audit.semantic_replay,
+            replay_errors=audit.replay_errors,
             errors=audit.errors,
             warnings=audit.warnings,
         ))
@@ -1081,6 +1666,9 @@ function audit_model_evaluations(
             failed=0,
             errors=["evidence root does not exist or is not a directory"],
             duplicate_fingerprints=NamedTuple[],
+            semantic_replay_complete=false,
+            semantic_replay_ok=false,
+            semantic_replay_counts=(passed=0, failed=0, skipped=0, not_attempted=0),
             entries=NamedTuple[],
         )
     end
@@ -1092,8 +1680,11 @@ function audit_model_evaluations(
             ok=false,
             checked=0,
             failed=0,
-            errors=["evaluation directory validation failed: $(sprint(showerror, err))"],
+            errors=["evaluation directory validation failed: $(_model_evaluation_showerror(err))"],
             duplicate_fingerprints=NamedTuple[],
+            semantic_replay_complete=false,
+            semantic_replay_ok=false,
+            semantic_replay_counts=(passed=0, failed=0, skipped=0, not_attempted=0),
             entries=NamedTuple[],
         )
     end
@@ -1107,6 +1698,12 @@ function audit_model_evaluations(
         for (fingerprint, ids) in sort!(collect(fingerprints); by=first)
         if length(ids) > 1
     ]
+    replay_counts = (
+        passed=count(entry -> entry.semantic_replay == :passed, entries),
+        failed=count(entry -> entry.semantic_replay == :failed, entries),
+        skipped=count(entry -> entry.semantic_replay == :skipped, entries),
+        not_attempted=count(entry -> entry.semantic_replay == :not_attempted, entries),
+    )
     (
         kind=:model_evaluation_audit,
         ok=all(entry -> entry.audit_ok, entries),
@@ -1114,9 +1711,172 @@ function audit_model_evaluations(
         failed=count(entry -> !entry.audit_ok, entries),
         errors=String[],
         duplicate_fingerprints=duplicates,
+        semantic_replay_complete=replay_counts.skipped == 0 &&
+            replay_counts.not_attempted == 0,
+        semantic_replay_ok=replay_counts.failed == 0 && replay_counts.skipped == 0 &&
+            replay_counts.not_attempted == 0,
+        semantic_replay_counts=replay_counts,
         entries=entries,
     )
 end
+
+counterexample_draft_path(root::AbstractString, evaluation_id::AbstractString) = joinpath(
+    root,
+    "logs",
+    "counterexample-candidates",
+    _model_evaluation_valid_id(evaluation_id),
+    "packet.json",
+)
+
+function _model_evaluation_json_string(payload, name::Symbol)
+    value = getproperty(payload, name)
+    value isa AbstractString || throw(ArgumentError("$name must be a string"))
+    text = String(value)
+    isvalid(text) || throw(ArgumentError("$name must be valid UTF-8"))
+    text
+end
+
+function _model_evaluation_json_string_array(payload, name::Symbol; nonempty::Bool=false)
+    value = getproperty(payload, name)
+    value isa JSON3.Array || throw(ArgumentError("$name must be an array"))
+    all(item -> item isa AbstractString && isvalid(item), value) ||
+        throw(ArgumentError("$name must contain valid UTF-8 strings"))
+    result = String[String(item) for item in value]
+    nonempty && isempty(result) && throw(ArgumentError("$name must be nonempty"))
+    any(isempty, result) && throw(ArgumentError("$name must not contain empty strings"))
+    result
+end
+
+function parse_counterexample_draft_json(text::AbstractString)
+    payload = JSON3.read(text)
+    payload isa JSON3.Object ||
+        throw(ArgumentError("counterexample draft must be a JSON object"))
+    raw_keys = String[String(key) for key in keys(payload)]
+    length(raw_keys) == length(unique(raw_keys)) ||
+        throw(ArgumentError("duplicate counterexample draft fields are forbidden"))
+    Set(raw_keys) == _COUNTEREXAMPLE_DRAFT_KEYS || begin
+        missing = sort!(collect(setdiff(_COUNTEREXAMPLE_DRAFT_KEYS, Set(raw_keys))))
+        unknown = sort!(collect(setdiff(Set(raw_keys), _COUNTEREXAMPLE_DRAFT_KEYS)))
+        isempty(missing) || throw(ArgumentError(
+            "missing counterexample draft fields: $(join(missing, ", "))",
+        ))
+        throw(ArgumentError(
+            "unknown counterexample draft fields: $(join(unknown, ", "))",
+        ))
+    end
+    _model_evaluation_json_string(payload, :kind) == "counterexample_claim_draft" ||
+        throw(ArgumentError("draft kind must be counterexample_claim_draft"))
+    payload.schema_version isa Integer && !(payload.schema_version isa Bool) ||
+        throw(ArgumentError("draft schema_version must be an integer"))
+    Int(payload.schema_version) == COUNTEREXAMPLE_DRAFT_SCHEMA_VERSION ||
+        throw(ArgumentError("unsupported counterexample draft schema version"))
+    evaluation_id = _model_evaluation_valid_id(
+        _model_evaluation_json_string(payload, :evaluation_id),
+    )
+    source_evaluation = _model_evaluation_relative_path(
+        _model_evaluation_json_string(payload, :source_evaluation),
+        "source_evaluation",
+    )
+    witness_artifact = _model_evaluation_relative_path(
+        _model_evaluation_json_string(payload, :witness_artifact),
+        "witness_artifact",
+    )
+    basis_log = _model_evaluation_relative_path(
+        _model_evaluation_json_string(payload, :basis_log),
+        "basis_log",
+    )
+    strings = (
+        vp_id=_model_evaluation_json_string(payload, :vp_id),
+        contract_id=_model_evaluation_json_string(payload, :contract_id),
+        checker_id=_model_evaluation_json_string(payload, :checker_id),
+        checker_relation=_model_evaluation_json_string(payload, :checker_relation),
+        adapter_id=_model_evaluation_json_string(payload, :adapter_id),
+        adapter_version=_model_evaluation_json_string(payload, :adapter_version),
+        lean_decl=_model_evaluation_json_string(payload, :lean_decl),
+        model_fingerprint=_model_evaluation_json_string(payload, :model_fingerprint),
+        semantic_scope=_model_evaluation_json_string(payload, :semantic_scope),
+        semantic_guarantee=_model_evaluation_json_string(payload, :semantic_guarantee),
+        review_status=_model_evaluation_json_string(payload, :review_status),
+        reviewer=_model_evaluation_json_string(payload, :reviewer),
+    )
+    for (field, value) in pairs(strings)
+        isempty(value) && throw(ArgumentError("draft $field must be nonempty"))
+    end
+    strings.checker_relation == "exact_finite_decision" ||
+        throw(ArgumentError("draft checker_relation must be exact_finite_decision"))
+    strings.review_status == "reviewed" ||
+        throw(ArgumentError("draft review_status must be reviewed"))
+    startswith(strings.model_fingerprint, "sha256:") ||
+        throw(ArgumentError("draft model_fingerprint must use sha256"))
+    _model_evaluation_hash(strings.model_fingerprint[8:end], "draft model_fingerprint")
+    failed_predicates = _model_evaluation_json_string_array(
+        payload,
+        :failed_predicates;
+        nonempty=true,
+    )
+    semantic_assumptions = _model_evaluation_json_string_array(
+        payload,
+        :semantic_assumptions,
+    )
+    blocking_requirements = _model_evaluation_json_string_array(
+        payload,
+        :blocking_requirements;
+        nonempty=true,
+    )
+    payload.target_claim_id === nothing ||
+        throw(ArgumentError("draft target_claim_id must remain null"))
+    _model_evaluation_json_string(payload, :promotion_status) == "blocked" ||
+        throw(ArgumentError("draft promotion_status must be blocked"))
+    payload.automatic_promotion === false ||
+        throw(ArgumentError("draft automatic_promotion must be false"))
+    _model_evaluation_json_string(payload, :claim_status) == "draft_not_a_claim" ||
+        throw(ArgumentError("draft claim_status must be draft_not_a_claim"))
+    _model_evaluation_json_string(payload, :phenomenal_claim) == "not_certified" ||
+        throw(ArgumentError("draft phenomenal_claim must remain not_certified"))
+    (
+        kind=:counterexample_claim_draft,
+        schema_version=COUNTEREXAMPLE_DRAFT_SCHEMA_VERSION,
+        source_evaluation,
+        source_evaluation_sha256=_model_evaluation_hash(
+            _model_evaluation_json_string(payload, :source_evaluation_sha256),
+            "draft source_evaluation_sha256",
+        ),
+        evaluation_id,
+        vp_id=strings.vp_id,
+        contract_id=strings.contract_id,
+        checker_id=strings.checker_id,
+        checker_relation=strings.checker_relation,
+        adapter_id=strings.adapter_id,
+        adapter_version=strings.adapter_version,
+        lean_decl=strings.lean_decl,
+        witness_artifact,
+        witness_sha256=_model_evaluation_hash(
+            _model_evaluation_json_string(payload, :witness_sha256),
+            "draft witness_sha256",
+        ),
+        model_fingerprint=strings.model_fingerprint,
+        failed_predicates,
+        registry_snapshot_sha256=_model_evaluation_hash(
+            _model_evaluation_json_string(payload, :registry_snapshot_sha256),
+            "draft registry_snapshot_sha256",
+        ),
+        semantic_scope=strings.semantic_scope,
+        semantic_assumptions,
+        semantic_guarantee=strings.semantic_guarantee,
+        review_status=strings.review_status,
+        reviewer=strings.reviewer,
+        basis_log,
+        target_claim_id=nothing,
+        promotion_status=:blocked,
+        blocking_requirements,
+        automatic_promotion=false,
+        claim_status=:draft_not_a_claim,
+        phenomenal_claim=:not_certified,
+    )
+end
+
+read_counterexample_draft(path::AbstractString) =
+    parse_counterexample_draft_json(read(path, String))
 
 function write_counterexample_draft_packet(
     evidence_root::AbstractString,
@@ -1125,24 +1885,45 @@ function write_counterexample_draft_packet(
 )
     audit = audit_model_evaluation(evidence_root, evaluation_id; project_root=project_root)
     audit.ok || throw(ArgumentError("evaluation must pass audit before draft generation"))
+    audit.semantic_replay == :passed || throw(ArgumentError(
+        "evaluation semantic replay must pass before draft generation",
+    ))
     isempty(audit.warnings) || throw(ArgumentError(
         "current registry/checker drift must be resolved before draft generation",
     ))
     record = audit.record
+    record.schema_version == MODEL_EVALUATION_SCHEMA_VERSION ||
+        throw(ArgumentError("draft generation requires the current evaluation schema"))
     record.outcome == :reject ||
         throw(ArgumentError("only reject evaluations can produce a counterexample draft"))
     record.claim_relation == :counterexample_candidate ||
         throw(ArgumentError("evaluation is not marked counterexample_candidate"))
     record.checker_relation == "exact_finite_decision" ||
         throw(ArgumentError("draft generation requires exact_finite_decision"))
-    registry = JSON3.read(read(joinpath(evidence_root, record.registry_snapshot), String))
+    canonical_evidence = realpath(evidence_root)
+    evaluation_path = model_evaluation_path(canonical_evidence, evaluation_id)
+    evaluation_bytes = read(evaluation_path)
+    evaluation_sha256 = _model_evaluation_sha256(evaluation_bytes)
+    evaluation_sha256 == audit.evaluation_sha256 ||
+        throw(ArgumentError("evaluation changed after initial draft audit"))
+    captured_record = parse_model_evaluation_json(String(copy(evaluation_bytes)))
+    model_evaluation_payload(captured_record) == model_evaluation_payload(record) ||
+        throw(ArgumentError("evaluation record changed after initial draft audit"))
+    registry_path = _model_evaluation_safe_snapshot(
+        canonical_evidence,
+        dirname(evaluation_path),
+        record.registry_snapshot,
+    )
+    registry_path === nothing && throw(ArgumentError("registry snapshot is unavailable"))
+    registry_bytes = read(registry_path)
+    _model_evaluation_sha256(registry_bytes) == record.registry_snapshot_sha256 ||
+        throw(ArgumentError("registry snapshot changed after audit"))
+    registry = JSON3.read(String(copy(registry_bytes)))
     packet = (
         kind=:counterexample_claim_draft,
         schema_version=1,
-        source_evaluation=relpath(model_evaluation_path(evidence_root, evaluation_id), evidence_root),
-        source_evaluation_sha256=_model_evaluation_sha256_file(
-            model_evaluation_path(evidence_root, evaluation_id),
-        ),
+        source_evaluation=relpath(evaluation_path, canonical_evidence),
+        source_evaluation_sha256=evaluation_sha256,
         evaluation_id=record.evaluation_id,
         vp_id=record.vp_id,
         contract_id=record.contract_id,
@@ -1155,9 +1936,13 @@ function write_counterexample_draft_packet(
         witness_sha256=record.model_artifact_sha256,
         model_fingerprint=record.model_fingerprint,
         failed_predicates=record.failed_predicates,
+        registry_snapshot_sha256=record.registry_snapshot_sha256,
         semantic_scope=String(registry.scope),
         semantic_assumptions=String[String(item) for item in registry.assumptions],
         semantic_guarantee=String(registry.guarantee),
+        review_status=String(registry.review_status),
+        reviewer=String(registry.reviewer),
+        basis_log=String(registry.basis_log),
         target_claim_id=nothing,
         promotion_status=:blocked,
         blocking_requirements=[
@@ -1170,24 +1955,333 @@ function write_counterexample_draft_packet(
         phenomenal_claim=:not_certified,
     )
     parent = _model_evaluation_secure_directory(
-        realpath(evidence_root),
+        canonical_evidence,
         "logs",
         "counterexample-candidates",
     )
     destination = joinpath(parent, String(evaluation_id))
-    ispath(destination) && throw(ArgumentError("counterexample draft already exists"))
+    (ispath(destination) || islink(destination)) &&
+        throw(ArgumentError("counterexample draft already exists"))
     temporary = mktempdir(parent; prefix=".pending-")
     try
         bytes = Vector{UInt8}(codeunits(String(JSON3.write(packet)) * "\n"))
+        parse_counterexample_draft_json(String(copy(bytes)))
         write(joinpath(temporary, "packet.json"), bytes)
         write(
             joinpath(temporary, "seal.sha256"),
             "$(_model_evaluation_sha256(bytes))  packet.json\n",
         )
-        mv(temporary, destination)
+        final_audit = audit_model_evaluation(
+            canonical_evidence,
+            evaluation_id;
+            project_root=project_root,
+        )
+        final_audit.ok && final_audit.semantic_replay == :passed &&
+            isempty(final_audit.warnings) || throw(ArgumentError(
+                "evaluation changed or drifted during draft generation",
+            ))
+        final_audit.evaluation_sha256 == audit.evaluation_sha256 ||
+            throw(ArgumentError("evaluation digest changed during draft generation"))
+        model_evaluation_payload(final_audit.record) == model_evaluation_payload(record) ||
+            throw(ArgumentError("evaluation record changed during draft generation"))
+        read(evaluation_path) == evaluation_bytes ||
+            throw(ArgumentError("evaluation changed during draft generation"))
+        read(registry_path) == registry_bytes ||
+            throw(ArgumentError("registry snapshot changed during draft generation"))
+        _model_evaluation_publish_create_only(
+            temporary,
+            destination,
+            "counterexample draft",
+        )
     catch
         ispath(temporary) && rm(temporary; recursive=true)
         rethrow()
     end
     joinpath(destination, "packet.json")
+end
+
+function audit_counterexample_draft(
+    evidence_root::AbstractString,
+    evaluation_id::AbstractString;
+    project_root::AbstractString=evidence_root,
+)
+    kind = :counterexample_draft_audit_entry
+    errors = String[]
+    warnings = String[]
+    replay_errors = String[]
+    packet = nothing
+    packet_sha256 = nothing
+    seal_bytes = nothing
+    semantic_replay = :not_attempted
+    id = String(evaluation_id)
+    if !isvalid(id) || !occursin(_MODEL_EVALUATION_ID, id)
+        push!(errors, "invalid evaluation id")
+        return (; kind, ok=false, evaluation_id=_model_evaluation_utf8_safe(id),
+            errors, warnings, replay_errors, semantic_replay, packet,
+            packet_sha256=nothing)
+    end
+    path = counterexample_draft_path(evidence_root, id)
+    directory = dirname(path)
+    if !isfile(path)
+        push!(errors, "packet.json is missing")
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, packet, packet_sha256=nothing)
+    end
+    try
+        evidence = realpath(evidence_root)
+        actual_directory = realpath(directory)
+        startswith(actual_directory, evidence * string(Base.Filesystem.path_separator)) ||
+            push!(errors, "draft directory escapes the evidence root")
+        islink(directory) && push!(errors, "draft directory must not be a symlink")
+        islink(path) && push!(errors, "packet.json must not be a symlink")
+        realpath(path) == joinpath(actual_directory, "packet.json") ||
+            push!(errors, "packet.json escapes its draft directory")
+    catch err
+        push!(errors, "draft directory validation failed: $(_model_evaluation_showerror(err))")
+    end
+    isempty(errors) ||
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, packet, packet_sha256=nothing)
+    try
+        packet_bytes = read(path)
+        packet_sha256 = _model_evaluation_sha256(packet_bytes)
+        packet = parse_counterexample_draft_json(String(copy(packet_bytes)))
+    catch err
+        push!(errors, "draft parse failed: $(_model_evaluation_showerror(err))")
+        return (; kind, ok=false, evaluation_id=id, errors, warnings, replay_errors,
+            semantic_replay, packet, packet_sha256=nothing)
+    end
+    packet.evaluation_id == id || push!(errors, "draft directory id does not match packet")
+    seal_path = joinpath(directory, "seal.sha256")
+    if !isfile(seal_path)
+        push!(errors, "seal.sha256 is missing")
+    elseif islink(seal_path)
+        push!(errors, "seal.sha256 must not be a symlink")
+    else
+        try
+            realpath(seal_path) == joinpath(realpath(directory), "seal.sha256") ||
+                throw(ArgumentError("seal.sha256 escapes its draft directory"))
+            seal_bytes = read(seal_path)
+            seal_fields = split(strip(String(copy(seal_bytes))))
+            length(seal_fields) == 2 && seal_fields[2] == "packet.json" ||
+                throw(ArgumentError("invalid seal format"))
+            expected = _model_evaluation_hash(seal_fields[1], "draft seal")
+            expected == packet_sha256 ||
+                push!(errors, "draft seal mismatch")
+        catch err
+            push!(errors, "draft seal validation failed: $(_model_evaluation_showerror(err))")
+        end
+    end
+
+    expected_source = normpath(joinpath(
+        "logs",
+        "model-evaluations",
+        id,
+        "evaluation.json",
+    ))
+    packet.source_evaluation == expected_source ||
+        push!(errors, "draft source_evaluation is not the canonical evaluation path")
+    evaluation_audit = audit_model_evaluation(
+        evidence_root,
+        id;
+        project_root=project_root,
+    )
+    semantic_replay = evaluation_audit.semantic_replay
+    append!(
+        replay_errors,
+        ["source evaluation: $message" for message in evaluation_audit.replay_errors],
+    )
+    evaluation_audit.ok || append!(
+        errors,
+        ["source evaluation: $message" for message in evaluation_audit.errors],
+    )
+    append!(
+        warnings,
+        ["source evaluation: $message" for message in evaluation_audit.warnings],
+    )
+    record = evaluation_audit.record
+    if record !== nothing
+        evaluation_path = model_evaluation_path(evidence_root, id)
+        try
+            evaluation_audit.evaluation_sha256 == packet.source_evaluation_sha256 ||
+                push!(errors, "source evaluation hash mismatch")
+        catch err
+            push!(errors, "source evaluation read failed: $(_model_evaluation_showerror(err))")
+        end
+        record.outcome == :reject || push!(errors, "source evaluation is not reject")
+        record.claim_relation == :counterexample_candidate ||
+            push!(errors, "source evaluation is not a counterexample candidate")
+        record.checker_relation == "exact_finite_decision" ||
+            push!(errors, "source evaluation checker is not exact_finite_decision")
+        comparisons = (
+            vp_id=record.vp_id,
+            contract_id=record.contract_id,
+            checker_id=record.checker_id,
+            checker_relation=record.checker_relation,
+            adapter_id=record.adapter_id,
+            adapter_version=record.adapter_version,
+            lean_decl=record.lean_decl,
+            witness_artifact=record.model_artifact,
+            witness_sha256=record.model_artifact_sha256,
+            model_fingerprint=record.model_fingerprint,
+            failed_predicates=record.failed_predicates,
+            registry_snapshot_sha256=record.registry_snapshot_sha256,
+        )
+        for (field, expected) in pairs(comparisons)
+            getproperty(packet, field) == expected ||
+                push!(errors, "draft $field does not match source evaluation")
+        end
+        registry_path = _model_evaluation_safe_snapshot(
+            evidence_root,
+            dirname(evaluation_path),
+            record.registry_snapshot,
+        )
+        if registry_path === nothing
+            push!(errors, "source registry snapshot is unavailable")
+        else
+            try
+                registry = JSON3.read(read(registry_path, String))
+                registry_comparisons = (
+                    semantic_scope=String(registry.scope),
+                    semantic_assumptions=String[
+                        String(item) for item in registry.assumptions
+                    ],
+                    semantic_guarantee=String(registry.guarantee),
+                    review_status=String(registry.review_status),
+                    reviewer=String(registry.reviewer),
+                    basis_log=String(registry.basis_log),
+                )
+                for (field, expected) in pairs(registry_comparisons)
+                    getproperty(packet, field) == expected ||
+                        push!(errors, "draft $field does not match registry snapshot")
+                end
+            catch err
+                push!(errors, "draft registry comparison failed: $(_model_evaluation_showerror(err))")
+            end
+        end
+    end
+    try
+        _model_evaluation_sha256_file(path) == packet_sha256 ||
+            push!(errors, "packet.json changed during audit")
+        seal_bytes === nothing || read(seal_path) == seal_bytes ||
+            push!(errors, "draft seal changed during audit")
+    catch err
+        push!(errors, "draft metadata postflight failed: $(_model_evaluation_showerror(err))")
+    end
+    (; kind, ok=isempty(errors), evaluation_id=id, errors, warnings, replay_errors,
+        semantic_replay, packet, packet_sha256)
+end
+
+function list_counterexample_drafts(
+    evidence_root::AbstractString;
+    project_root::AbstractString=evidence_root,
+)
+    parent = _model_evaluation_existing_directory(
+        evidence_root,
+        "logs",
+        "counterexample-candidates",
+    )
+    parent === nothing && return NamedTuple[]
+    entries = NamedTuple[]
+    for raw_id in sort(readdir(parent))
+        id = String(raw_id)
+        entry_path = joinpath(parent, id)
+        if !isvalid(id)
+            push!(entries, (
+                entry_kind=:foreign,
+                evaluation_id=_model_evaluation_utf8_safe(id),
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["foreign entry name is not valid UTF-8"],
+                warnings=String[],
+            ))
+            continue
+        end
+        if startswith(id, ".pending-")
+            push!(entries, (
+                entry_kind=:pending,
+                evaluation_id=id,
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["incomplete pending counterexample draft is present"],
+                warnings=String[],
+            ))
+            continue
+        elseif !isdir(entry_path)
+            push!(entries, (
+                entry_kind=:foreign,
+                evaluation_id=id,
+                audit_ok=false,
+                semantic_replay=:not_attempted,
+                replay_errors=String[],
+                errors=["foreign non-directory entry is present in the draft store"],
+                warnings=String[],
+            ))
+            continue
+        end
+        audit = audit_counterexample_draft(
+            evidence_root,
+            id;
+            project_root=project_root,
+        )
+        push!(entries, (
+            entry_kind=audit.packet === nothing ? :invalid : :draft,
+            evaluation_id=id,
+            audit_ok=audit.ok,
+            semantic_replay=audit.semantic_replay,
+            replay_errors=audit.replay_errors,
+            errors=audit.errors,
+            warnings=audit.warnings,
+        ))
+    end
+    entries
+end
+
+function audit_counterexample_drafts(
+    evidence_root::AbstractString;
+    project_root::AbstractString=evidence_root,
+)
+    if !isdir(evidence_root)
+        return (
+            kind=:counterexample_draft_audit,
+            ok=false,
+            checked=0,
+            failed=0,
+            errors=["evidence root does not exist or is not a directory"],
+            semantic_replay_complete=false,
+            semantic_replay_ok=false,
+            entries=NamedTuple[],
+        )
+    end
+    entries = try
+        list_counterexample_drafts(evidence_root; project_root=project_root)
+    catch err
+        return (
+            kind=:counterexample_draft_audit,
+            ok=false,
+            checked=0,
+            failed=0,
+            errors=["draft directory validation failed: $(_model_evaluation_showerror(err))"],
+            semantic_replay_complete=false,
+            semantic_replay_ok=false,
+            entries=NamedTuple[],
+        )
+    end
+    semantic_replay_complete = all(
+        entry -> entry.semantic_replay in (:passed, :failed),
+        entries,
+    )
+    (
+        kind=:counterexample_draft_audit,
+        ok=all(entry -> entry.audit_ok, entries),
+        checked=length(entries),
+        failed=count(entry -> !entry.audit_ok, entries),
+        errors=String[],
+        semantic_replay_complete,
+        semantic_replay_ok=semantic_replay_complete &&
+            all(entry -> entry.semantic_replay == :passed, entries),
+        entries,
+    )
 end

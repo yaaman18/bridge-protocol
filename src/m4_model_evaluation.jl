@@ -12,7 +12,7 @@ const _M4_MODEL_KEYS = Set([
     "claim_status",
     "phenomenal_claim",
 ])
-const _M4_OBJECT_ID = r"^[A-Za-z0-9][A-Za-z0-9._-]*$"
+const _M4_OBJECT_ID = r"^[A-Za-z0-9][A-Za-z0-9._-]*\z"
 
 """Finite input for the no-terminal-setpoint component of M4 (the M4b boundary)."""
 struct M4SetPointModel
@@ -74,7 +74,9 @@ function parse_m4_setpoint_model_json(text::AbstractString)
     payload = try
         JSON3.read(text)
     catch err
-        throw(ArgumentError("invalid JSON: $(sprint(showerror, err))"))
+        throw(ArgumentError(
+            "invalid JSON: $(_model_evaluation_utf8_safe(sprint(showerror, err)))",
+        ))
     end
     payload isa JSON3.Object || throw(ArgumentError("M4 model must be a JSON object"))
     raw_keys = String[String(key) for key in keys(payload)]
@@ -121,6 +123,42 @@ function parse_m4_setpoint_model_json(text::AbstractString)
     M4SetPointModel(objects, reaches)
 end
 
+function _model_evaluation_adapter_source(adapter_id::AbstractString)
+    adapter_id == "m4-setpoint-model-v1" ||
+        throw(ArgumentError("unsupported model evaluation adapter: $adapter_id"))
+    "src/m4_model_evaluation.jl"
+end
+
+function _decode_model_evaluation_adapter(
+    adapter_id::AbstractString,
+    bytes::AbstractVector{UInt8},
+)
+    _model_evaluation_adapter_source(adapter_id)
+    model = parse_m4_setpoint_model_json(String(copy(bytes)))
+    (
+        decoded=model,
+        canonical_bytes=Vector{UInt8}(codeunits(m4_setpoint_model_json(model))),
+        fingerprint_algorithm=M4_SETPOINT_FINGERPRINT_ALGORITHM,
+    )
+end
+
+function _model_evaluation_adapter_value(
+    adapter_id::AbstractString,
+    model::M4SetPointModel,
+)
+    _model_evaluation_adapter_source(adapter_id)
+    m4_setpoint_diagram(model)
+end
+
+const _M4_MODEL_EVALUATION_DECODE_METHOD = which(
+    _decode_model_evaluation_adapter,
+    Tuple{AbstractString,AbstractVector{UInt8}},
+)
+const _M4_MODEL_EVALUATION_VALUE_METHOD = which(
+    _model_evaluation_adapter_value,
+    Tuple{AbstractString,M4SetPointModel},
+)
+
 m4_setpoint_diagram(model::M4SetPointModel) = begin
     edges = Set(model.reaches)
     SetPointDiagram(collect(model.objects), (source, target) -> (source, target) in edges)
@@ -132,18 +170,34 @@ function write_m4_setpoint_model(
     overwrite::Bool=false,
 )
     destination = abspath(path)
-    ispath(destination) && !overwrite &&
-        throw(ArgumentError("model artifact already exists"))
     mkpath(dirname(destination))
-    temporary, io = mktemp(dirname(destination))
+    lock_path = joinpath(dirname(destination), ".$(basename(destination)).write-lock")
+    acquired = false
+    temporary = nothing
+    io = nothing
     try
+        try
+            mkdir(lock_path)
+            acquired = true
+        catch err
+            (ispath(lock_path) || islink(lock_path)) &&
+                throw(ArgumentError("model artifact is already being written"))
+            rethrow(err)
+        end
+        islink(destination) &&
+            throw(ArgumentError("model artifact destination must not be a symlink"))
+        ispath(destination) && !overwrite &&
+            throw(ArgumentError("model artifact already exists"))
+        temporary, io = mktemp(dirname(destination))
         write(io, m4_setpoint_model_json(model), "\n")
         close(io)
         mv(temporary, destination; force=overwrite)
     catch
-        isopen(io) && close(io)
-        ispath(temporary) && rm(temporary)
+        io !== nothing && isopen(io) && close(io)
+        temporary !== nothing && ispath(temporary) && rm(temporary)
         rethrow()
+    finally
+        acquired && ispath(lock_path) && rm(lock_path; recursive=true)
     end
     destination
 end
@@ -169,26 +223,16 @@ function run_m4_model_evaluation(
 )
     source = _repository_model_path(model_root, model_path)
     raw_bytes = read(source)
-    prepare = function(bytes)
-        model = parse_m4_setpoint_model_json(String(copy(bytes)))
-        (
-            value=m4_setpoint_diagram(model),
-            canonical_bytes=Vector{UInt8}(codeunits(m4_setpoint_model_json(model))),
-            fingerprint_algorithm=M4_SETPOINT_FINGERPRINT_ALGORITHM,
-        )
-    end
     _run_model_evaluation(
         project_root;
         output_root=output_root,
         evaluation_id=evaluation_id,
         raw_model_bytes=raw_bytes,
-        prepare_model=prepare,
         vp_id="VP-BDY-001",
         contract_id="body.no_terminal_setpoint",
         checker_id="check_m4_no_terminal_setpoint",
         failed_predicates_on_reject=["ERIEC.Body.NoTerminalSetPoint"],
         adapter_id="m4-setpoint-model-v1",
-        adapter_source="src/m4_model_evaluation.jl",
         claim_relation=claim_relation,
         numeric_assumptions=(
             carrier_complete=true,
@@ -199,6 +243,7 @@ end
 
 function _audit_model_evaluation_adapter(
     record::ModelEvaluationRecord,
+    source_model_path::AbstractString,
     model_path::AbstractString,
 )
     errors = String[]
@@ -206,31 +251,53 @@ function _audit_model_evaluation_adapter(
         push!(errors, "unsupported model evaluation adapter: $(record.adapter_id)")
         return errors
     end
-    bytes = read(model_path)
-    try
-        model = parse_m4_setpoint_model_json(String(copy(bytes)))
-        canonical = Vector{UInt8}(codeunits(m4_setpoint_model_json(model)))
-        bytes == canonical || push!(errors, "M4 model snapshot is not canonical")
-        record.fingerprint_algorithm == M4_SETPOINT_FINGERPRINT_ALGORITHM ||
-            push!(errors, "M4 fingerprint algorithm mismatch")
-        expected_outcome = check_m4_no_terminal_setpoint(m4_setpoint_diagram(model)) ?
-            :pass : :reject
-        if record.outcome == :error
-            isempty(record.failed_predicates) ||
-                push!(errors, "M4 runtime error must not have failed predicates")
-        else
-            record.outcome == expected_outcome ||
-                push!(errors, "M4 outcome does not match the canonical model")
-            expected_failed = expected_outcome == :reject ?
-                ["ERIEC.Body.NoTerminalSetPoint"] : String[]
-            record.failed_predicates == expected_failed ||
-                push!(errors, "M4 failed predicates do not match the registry binding")
-        end
-    catch err
+    source_bytes = read(source_model_path)
+    model_bytes = read(model_path)
+    decoded = try
+        _model_evaluation_decode_registered_adapter(record.adapter_id, source_bytes)
+    catch
+        nothing
+    end
+    if decoded === nothing
         record.outcome == :error ||
-            push!(errors, "M4 model is invalid but outcome is not error")
+            push!(errors, "invalid M4 source input must have error outcome")
+        record.error_stage in (:input_schema, :legacy_unknown) ||
+            push!(errors, "invalid M4 source input has an incompatible error stage")
+        model_bytes == source_bytes ||
+            push!(errors, "invalid M4 input must preserve raw bytes as model snapshot")
         record.fingerprint_algorithm == MODEL_EVALUATION_RAW_FINGERPRINT_ALGORITHM ||
             push!(errors, "invalid M4 input must use the raw-byte fingerprint algorithm")
+        return errors
+    end
+    try
+        canonical = Vector{UInt8}(decoded.canonical_bytes)
+        model_bytes == canonical ||
+            push!(errors, "M4 source does not canonicalize to the model snapshot")
+        record.fingerprint_algorithm == M4_SETPOINT_FINGERPRINT_ALGORITHM ||
+            push!(errors, "M4 fingerprint algorithm mismatch")
+        checker_value = _model_evaluation_registered_adapter_value(
+            record.adapter_id,
+            decoded.decoded,
+        )
+        checker_result = _model_evaluation_registered_checker(
+            record.checker_id,
+            checker_value,
+        )
+        exact_result = _model_evaluation_registered_exact_outcome(
+            record.adapter_id,
+            decoded.decoded,
+        )
+        checker_result == exact_result ||
+            push!(errors, "registered M4 checker disagrees with the exact adapter decision")
+        expected_outcome = exact_result ? :pass : :reject
+        record.outcome == expected_outcome ||
+            push!(errors, "M4 outcome does not match the canonical source model")
+        expected_failed = expected_outcome == :reject ?
+            ["ERIEC.Body.NoTerminalSetPoint"] : String[]
+        record.failed_predicates == expected_failed ||
+            push!(errors, "M4 failed predicates do not match the registry binding")
+    catch err
+        push!(errors, "M4 semantic replay failed: $(_model_evaluation_showerror(err))")
     end
     errors
 end

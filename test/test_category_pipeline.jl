@@ -1,4 +1,5 @@
 using Test
+using TOML
 
 include(joinpath(@__DIR__, "..", "tools", "CategoryPipeline.jl"))
 using .CategoryPipeline
@@ -68,6 +69,21 @@ using .CategoryPipeline
     end
 
     mktempdir() do directory
+        empty_impact = Impact(String[], String[], String[], String[], String[])
+        tasks = [Threads.@spawn begin
+            path = report_history_path(directory)
+            write_report(path, empty_impact, ledger, GateResult[])
+            path
+        end for _ in 1:24]
+        paths = fetch.(tasks)
+        @test length(unique(paths)) == length(paths)
+        @test all(isfile, paths)
+        @test all(path -> endswith(path, ".md"), paths)
+        @test all(path -> startswith(basename(path), "category-impact-report-"), paths)
+        @test all(path -> filesize(path) > 0, paths)
+    end
+
+    mktempdir() do directory
         first_result = CategoryPipeline._run_gate(
             directory,
             "G-test-history",
@@ -86,12 +102,46 @@ using .CategoryPipeline
     end
 
     mktempdir() do directory
+        tasks = [Threads.@spawn CategoryPipeline._run_gate(
+            directory,
+            "G-test-parallel-history",
+            ["sh", "-c", "printf $(index)"],
+        ) for index in 1:16]
+        results = fetch.(tasks)
+        @test all(result -> result.passed, results)
+        @test length(unique(result.log for result in results)) == length(results)
+        @test all(result -> endswith(result.log, ".log"), results)
+        @test Set(
+            read(joinpath(directory, result.log), String)
+            for result in results
+        ) == Set(string.(1:16))
+    end
+
+    mktempdir() do directory
         baseline = joinpath(directory, "baseline.toml")
         write_baseline(baseline, joinpath(root, String(manifest["document"])))
         impact = compute_impact(root, manifest, ledger, baseline)
         @test isempty(impact.changed_sections)
         @test isempty(impact.impacted_vps)
         @test isempty(impact.unmapped_sections)
+    end
+
+    mktempdir() do directory
+        document = joinpath(directory, "category.md")
+        write(document, "## §1. relation\nstable\n")
+        baseline = joinpath(directory, "baseline.toml")
+        write_baseline(baseline, document; document_label="initial.md")
+        tasks = [Threads.@spawn write_baseline(
+            baseline,
+            document;
+            document_label="parallel-$(index).md",
+        ) for index in 1:24]
+        fetch.(tasks)
+        parsed = TOML.parsefile(baseline)
+        @test parsed["schema_version"] == 1
+        @test parsed["document"] in ["parallel-$(index).md" for index in 1:24]
+        @test only(parsed["section"])["id"] == "§1"
+        @test sort(readdir(directory)) == ["baseline.toml", "category.md"]
     end
 
     mktempdir() do directory

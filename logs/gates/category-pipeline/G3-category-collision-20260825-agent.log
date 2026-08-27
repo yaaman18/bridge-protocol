@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   5839.2 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 6 seconds. 26 already precompiled.
+Test Summary:            | Pass  Total  Time
+category update pipeline |   93     93  7.5s

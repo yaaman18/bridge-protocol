@@ -12,25 +12,32 @@
 この分離は、実行結果を数学的反例として誤昇格させないための境界である。いずれの成果物でも
 `phenomenal_claim` は `not_certified` から変更しない。
 
-## 三値 outcome
+## 三値 outcome と失敗段階
 
 - `pass`: checkerが正常終了して対象述語を通した。1状態モデルがM4を通った場合もここに記録する。
   これは「条件がそのモデルを排除しない」という観測であり、反例claimではない。
 - `reject`: checkerが正常終了して対象述語を落とした。一つ以上の`failed_predicates`を必須とする。
   `claim_relation="counterexample_candidate"` を付けても候補にすぎない。
-- `error`: 入力のschema検証、変換、checker実行のいずれかが判定を完了しなかった。
-  `failed_predicates`を持たせず、例外内容をJSON-safeな`error_message`と実行ログへ保存する。
+- `error`: 入力のschema検証、adapter変換、checker実行、保存前再検証のいずれかが判定を
+  完了しなかった。`failed_predicates`を持たせず、最初の失敗を`error_stage` / `error_message`へ、
+  発生した失敗列を`error_diagnostics`へ保存する。stageは`input_schema | adapter | checker |
+  postflight`のいずれかで、各diagnosticはstageとJSON-safeなmessageを持つ。不正UTF-8を含む
+  例外表示はbyte escapeして、成果物JSON自体を不正UTF-8にしない。
 
 `reject` と `error` は交換可能ではない。入力不良や実装例外を反例として数えない。
 
-## 保存単位（schema version 2）
+## 保存単位（schema version 3）
+
+reader/auditは既存のschema version 2成果物も読める。v2は明示的な失敗段階とreview provenanceを
+持たないため、in-memoryではerrorを`legacy_unknown`として正規化し、registry provenance不足を
+warningにする。新規書込みとdraft生成はversion 3だけを用いる。
 
 一回の評価は次を同一ディレクトリにsnapshotする。
 
 ```text
 logs/model-evaluations/<evaluation_id>/
 ├── source-model.json   # 実際に読んだ入力bytes
-├── model.json          # schema検証後のcanonical bytes（入力不良時はraw bytes）
+├── model.json          # adapter decode後のcanonical bytes（入力schema不良時はraw bytes）
 ├── checker-source.jl   # 台帳が指すcheckerソース
 ├── adapter-source.jl   # model decode・canonicalize・checker入力変換のソース
 ├── registry.json       # VP・semantic manifest・certificate catalogの束縛
@@ -40,14 +47,34 @@ logs/model-evaluations/<evaluation_id>/
 ```
 
 `evaluation.json` はsource/canonical model、checker/adapter source、registry、log、ManifestのSHA-256、
-checker relation、Lean宣言、git commit/dirty、Julia version、seed、数値仮定を保持する。
+checker relation、Lean宣言、git commit/dirty、Julia version、seed、数値仮定、および上記の失敗段階を
+保持する。`source-model.json`は実際に読んだraw bytesであり、登録adapterのdecodeが成功した場合だけ
+`model.json`をcanonical bytesへ置き換える。両方のhashを別々に束縛し、canonical fingerprintを
+raw fingerprintと混同しない。
 実装APIは既存`evaluation_id`を拒否し、固定名上書きをしない。これはアプリケーション上の
 append-only規約であり、WORM媒体や署名を意味しない。後からファイルを直接変更した場合はauditが検出する。
 
-auditではsnapshotのディレクトリ脱出、symlink脱出、hash/seal不一致、fingerprint不一致、
-registry内の識別子不一致を失敗にする。現在の台帳が過去snapshotから変化した場合は、過去の実行を
-失効させずdrift warningとして報告する。`list`は壊れた項目も隠さず返し、同じcanonical fingerprintを
-持つ複数実行をaggregate auditの重複一覧へ載せる。
+registry snapshotは台帳とsemantic manifestをそれぞれ一度だけ読んだbytesからparseとhashを行い、
+certificate catalogのsource hashに加えて、対象Lean declarationを含むsource集合のdigestを保持する。
+またsemantic manifestの`review_status="reviewed"`、非空の`reviewer`、`basis_log`を保存する。
+これら四つのsource digest（ledger、semantic manifest、catalog、Lean source集合）と
+`registry_git_commit`から`registry_generation_sha256`も作り、snapshot内の組合せを一つのgenerationとして
+束縛する。各registry sourceはそのcommitのGit blobと一致する場合だけ評価へ使い、段階的なworktree更新を
+別世代の組合せとして保存しない。
+実行後のpostflightではchecker/adapter sourceとregistry bindingを再計算し、実行中の変更を`error`として
+保存する。これにより、別世代のregistry値とdigestを一つのsnapshotへ混ぜない。
+
+auditの結果は、snapshotの構造・seal・hash・束縛を検査する`ok`と、現在ロードされている
+adapter/checkerで意味を再計算する`semantic_replay`を分ける。`semantic_replay`は`passed | failed |
+skipped | not_attempted`である。ロード済みsourceがsnapshotからdriftした場合はreplayを`skipped`にし、
+warningを返すが、hashで閉じた過去成果物そのものを失効させない。aggregate auditは各状態のcountと
+`semantic_replay_complete` / `semantic_replay_ok`を別に返す。再計算の不一致や例外は構造`errors`ではなく
+`replay_errors`へ保存するため、byte-integrityの`ok`と意味再生の成否を混同しない。
+
+inventoryの`list` / aggregate auditは、正常なevaluationだけでなく、parse不能なdirectory、
+`.pending-*`、store直下のforeignな非directoryも隠さず返す。filter指定時も壊れた項目を除外せず、
+`entry_kind`と`filter_match`で正常な評価との違いを示す。同じcanonical fingerprintを持つ複数実行は
+aggregate auditの重複一覧へ載せる。
 
 ## M4有限モデルadapter
 
@@ -74,10 +101,16 @@ M4を構成する他の条件まで一回の評価で証明したとは扱わな
 - 未知field、欠落field、carrier外端点は`reject`ではなく`error`になる。
 - objectsとedgesをsortしたcanonical JSON bytesからfingerprintを計算する。field順や列挙順の差で
   別モデルにしない。
+- 実行adapterは登録済み`adapter_id`からsource、decode、checker入力変換をdispatchする。呼出側から
+  任意の`prepare_model`やadapter sourceを注入できない。auditは`source-model.json`を同じ登録adapterで
+  再decodeし、得られたcanonical bytesが`model.json`と一致することを検査する。
+- adapter呼出しはロード時に固定したgeneric methodを`invoke`し、checkerは選択methodがロード時の
+  登録methodと同一であることを検査する。さらにM4有限表現から独立に再計算したexact decisionと
+  checker結果を照合し、同一Julia processで追加されたspecific methodによる判定差替えを拒否する。
 - 実行checkerは台帳の`VP-BDY-001 / body.no_terminal_setpoint /
   ERIEC.Body.NoTerminalSetPoint / check_m4_no_terminal_setpoint`に固定する。任意関数をchecker名へ
-  偽装して渡す公開入口は持たない。auditはcanonical modelをadapterで再decodeしてchecker outcomeと
-  failed predicateを再計算するため、内部保存primitiveでmodel bytesと実行値を分離しても失敗する。
+  偽装して渡す公開入口は持たない。auditは登録adapterで復元したchecker入力からoutcomeと
+  failed predicateを再計算するため、raw入力・canonical snapshot・実行値を分離しても失敗する。
 
 一状態・辺なしはM4を`pass`し、一状態・自己辺ありは終対象を持つため`reject`する。
 
@@ -85,15 +118,22 @@ M4を構成する他の条件まで一回の評価で証明したとは扱わな
 
 `counterexample_candidate`を指定できるのは、semantic manifestでreview済みの
 `exact_finite_decision` checkerが`reject`した場合だけである。draft packet生成にはさらに
-成果物audit成功を要求する。packetは次を固定する。
+成果物audit成功、`semantic_replay=passed`、drift warningなしを要求する。packetは次を固定する。
 
 - source evaluationとwitnessのhash
 - VP / contract / checker / Lean宣言 / failed predicate
-- semantic scope、assumptions、guarantee
+- registry snapshotのdigest、semantic scope、assumptions、guarantee、reviewer、basis log
 - `promotion_status="blocked"`、`automatic_promotion=false`
 - 未確定の`target_claim_id`と、Lean statement固定・起票・証明という残作業
 
-packet生成は`logs/counterexample-candidates/<evaluation_id>/`へcreate-onlyで保存し、
+packet生成は`logs/counterexample-candidates/<evaluation_id>/`へ`packet.json`と`seal.sha256`を
+create-onlyで保存する。生成直前にもsource evaluationを再auditし、evaluation bytesとregistry bytesが
+最初のaudit後から変わっていないことを再検証してからatomic renameする。これによりauditとpacket公開の
+間のTOCTOUで別世代の値を固定しない。
+
+draftにはstrict parser/read APIと、単体・一覧auditがある。draft auditはpacket seal、source evaluation
+hash、witness/model fingerprint、registry digestとsemantic/review metadataを元成果物へ照合する。
+draft inventoryも`.pending-*`、foreign entry、parse不能packetを隠さない。packet生成・read/audit/listは
 `claim-ledger-v2.toml`を変更しない。数学的反例への昇格は、packetとは別の明示的なclaim起票と
 Lean証明によってのみ行う。
 
@@ -106,14 +146,21 @@ julia --project=. bin/eriec-model-evaluation.jl run --model examples/model-evalu
 julia --project=. bin/eriec-model-evaluation.jl list --outcome reject
 julia --project=. bin/eriec-model-evaluation.jl audit --evaluation-id run-001
 julia --project=. bin/eriec-model-evaluation.jl draft --evaluation-id run-001
+julia --project=. bin/eriec-model-evaluation.jl draft-list
+julia --project=. bin/eriec-model-evaluation.jl draft-audit --evaluation-id run-001
 ```
 
 `run`のpass/rejectはexit 0、保存済みerrorはexit 1、引数エラーはexit 2。machine-readable JSONを
-標準出力または標準エラーへ出す。入力モデルは`--root`内の実体ファイルに限定し、symlinkによる
-root外参照を拒否する。
+標準出力または標準エラーへ出す。`audit` / `draft-audit`は単体指定を省略するとstore全体を検査する。
+入力モデルは`--root`内の実体ファイルに限定し、rootを`realpath`で正規化してsymlinkによるroot外参照や
+成果物pathのroot外表示を拒否する。
 
 ## Category pipelineの履歴
 
-Category pipelineの各gate logは実行ごとの一意名で保存する。impact reportも
-`logs/category-pipeline/reports/`へ一意名で履歴保存し、`specs/category-impact-report.md`は
-最新結果への可読なcopyとしてだけ更新する。過去のpass/fail reportを固定名更新で失わない。
+Category pipelineの各gate logと`logs/category-pipeline/reports/`の履歴reportは、`mktemp`でpathを
+先に予約してから書く。baselineの一時ファイルも実行ごとの一意名にし、固定`.tmp`同士を衝突させない。
+`specs/category-impact-report.md`は最新結果への可読なcopyとしてだけ更新し、過去のpass/fail reportを
+固定名更新で失わない。
+
+quiet gate scriptは、log pathを明示した場合に既存pathをnoclobberで拒否し、既定pathは`mktemp`で
+一意に予約する。Category/quietの履歴logはいずれも同時実行や同秒実行で既存証拠を上書きしない。

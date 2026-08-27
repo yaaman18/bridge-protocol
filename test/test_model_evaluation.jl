@@ -5,7 +5,21 @@ using ERIEC
 
 digest(path) = bytes2hex(SHA.sha256(read(path)))
 
+function rewrite_json_and_seal!(edit!, artifact_path::AbstractString, seal_name::AbstractString)
+    payload = JSON3.read(read(artifact_path, String), Dict{String,Any})
+    edit!(payload)
+    bytes = Vector{UInt8}(codeunits(String(JSON3.write(payload)) * "\n"))
+    write(artifact_path, bytes)
+    write(
+        joinpath(dirname(artifact_path), "seal.sha256"),
+        "$(bytes2hex(SHA.sha256(bytes)))  $seal_name\n",
+    )
+    artifact_path
+end
+
 @testset "M4 model schema and canonical fingerprint input" begin
+    @test MODEL_EVALUATION_SCHEMA_VERSION == 3
+    @test COUNTEREXAMPLE_DRAFT_SCHEMA_VERSION == 1
     unordered = """{"kind":"set_point_diagram_model","schema_version":1,"contract_id":"body.no_terminal_setpoint","carrier_complete":true,"relation_encoding":"closed_world_edge_list","objects":["b","a"],"reaches":[["b","a"],["a","b"]],"claim_status":"not_a_claim","phenomenal_claim":"not_certified"}"""
     model = parse_m4_setpoint_model_json(unordered)
     @test model.objects == ("a", "b")
@@ -23,6 +37,49 @@ digest(path) = bytes2hex(SHA.sha256(read(path)))
     @test !check_m4_no_terminal_setpoint(m4_setpoint_diagram(
         M4SetPointModel(["only"], [("only", "only")]),
     ))
+    dispatch_probe = m4_setpoint_diagram(
+        M4SetPointModel(["dispatch"], Tuple{String,String}[]),
+    )
+    dispatch_probe_type = typeof(dispatch_probe)
+    @eval ERIEC check_m4_no_terminal_setpoint(
+        diagram::$dispatch_probe_type,
+    ) = false
+    injected_method = which(
+        check_m4_no_terminal_setpoint,
+        Tuple{dispatch_probe_type},
+    )
+    try
+        @test_throws ArgumentError ERIEC._model_evaluation_registered_checker(
+            "check_m4_no_terminal_setpoint",
+            dispatch_probe,
+        )
+    finally
+        Base.delete_method(injected_method)
+    end
+    @test ERIEC._model_evaluation_registered_checker(
+        "check_m4_no_terminal_setpoint",
+        dispatch_probe,
+    )
+    raw_probe = Vector{UInt8}(codeunits(m4_setpoint_model_json(
+        M4SetPointModel(["adapter"], Tuple{String,String}[]),
+    )))
+    @eval ERIEC _decode_model_evaluation_adapter(
+        adapter_id::String,
+        bytes::Vector{UInt8},
+    ) = error("injected adapter method")
+    injected_adapter_method = which(
+        ERIEC._decode_model_evaluation_adapter,
+        Tuple{String,Vector{UInt8}},
+    )
+    try
+        decoded_probe = ERIEC._model_evaluation_decode_registered_adapter(
+            "m4-setpoint-model-v1",
+            raw_probe,
+        )
+        @test decoded_probe.decoded.objects == ("adapter",)
+    finally
+        Base.delete_method(injected_adapter_method)
+    end
 
     unknown = replace(unordered, r"}$" => ",\"extra\":true}")
     duplicate_field = replace(
@@ -50,7 +107,26 @@ digest(path) = bytes2hex(SHA.sha256(read(path)))
     @test_throws ArgumentError parse_m4_setpoint_model_json(duplicate_edge)
     @test_throws ArgumentError parse_m4_setpoint_model_json(marker_type)
     @test_throws ArgumentError M4SetPointModel(["bad/id"], Tuple{String,String}[])
+    @test_throws ArgumentError M4SetPointModel(["trailing-newline\n"], Tuple{String,String}[])
     @test_throws ArgumentError M4SetPointModel(["same", "same"], Tuple{String,String}[])
+    mktempdir() do directory
+        dangling = joinpath(directory, "dangling-model.json")
+        symlink(joinpath(directory, "missing.json"), dangling)
+        @test_throws ArgumentError write_m4_setpoint_model(
+            dangling,
+            M4SetPointModel(["only"], Tuple{String,String}[]);
+            overwrite=true,
+        )
+        @test islink(dangling)
+    end
+    @test_throws ArgumentError model_evaluation_path(
+        mktempdir(),
+        "trailing-newline\n",
+    )
+    @test_throws ArgumentError ERIEC._model_evaluation_hash(
+        repeat("a", 64) * "\n",
+        "test digest",
+    )
 
     examples = joinpath(@__DIR__, "..", "examples", "model-evaluations")
     example_pass = parse_m4_setpoint_model_json(read(
@@ -150,6 +226,61 @@ end
         draft_payload = JSON3.read(String(take!(out)))
         @test draft_payload.automatic_promotion === false
 
+        @test model_evaluation_cli(
+            ["draft-list", "--root", evidence_root];
+            project_root=project_root,
+            out=out,
+            err=err,
+        ) == 0
+        draft_list_payload = JSON3.read(String(take!(out)))
+        @test draft_list_payload.count == 1
+        @test String(only(draft_list_payload.entries).evaluation_id) == "cli-reject"
+
+        @test model_evaluation_cli(
+            [
+                "draft-audit",
+                "--root", evidence_root,
+                "--evaluation-id", "cli-reject",
+            ];
+            project_root=project_root,
+            out=out,
+            err=err,
+        ) == 0
+        @test JSON3.read(String(take!(out))).ok === true
+        @test model_evaluation_cli(
+            ["draft-audit", "--root", evidence_root];
+            project_root=project_root,
+            out=out,
+            err=err,
+        ) == 0
+        @test JSON3.read(String(take!(out))).checked == 1
+
+        mktempdir() do alias_parent
+            alias_root = joinpath(alias_parent, "evidence-alias")
+            symlink(evidence_root, alias_root)
+            @test model_evaluation_cli(
+                [
+                    "run",
+                    "--root", alias_root,
+                    "--model", pass_model_path,
+                    "--evaluation-id", "cli-alias-root",
+                ];
+                project_root=project_root,
+                out=out,
+                err=err,
+            ) == 0
+            alias_payload = JSON3.read(String(take!(out)))
+            artifact = String(alias_payload.artifact)
+            @test artifact == joinpath(
+                "logs",
+                "model-evaluations",
+                "cli-alias-root",
+                "evaluation.json",
+            )
+            @test !startswith(artifact, "..")
+            @test isfile(joinpath(evidence_root, artifact))
+        end
+
         malformed_path = joinpath(evidence_root, "models", "malformed.json")
         write(malformed_path, "{\"kind\":\"set_point_diagram_model\"}\n")
         @test model_evaluation_cli(
@@ -178,7 +309,7 @@ end
         ) == 0
         aggregate_payload = JSON3.read(String(take!(out)))
         @test aggregate_payload.ok === true
-        @test aggregate_payload.checked == 3
+        @test aggregate_payload.checked == 4
 
         @test model_evaluation_cli(
             ["list", "--root", evidence_root, "--outcome", "unknown"];
@@ -281,19 +412,50 @@ end
         @test isfile(joinpath(evidence_root, passed.record.adapter_source))
         @test passed.record.phenomenal_claim == :not_certified
         @test read_model_evaluation(passed.path).evaluation_id == "one-state-pass"
-        @test audit_model_evaluation(
+        legacy_payload = JSON3.read(
+            model_evaluation_json(passed.record),
+            Dict{String,Any},
+        )
+        legacy_payload["schema_version"] = 2
+        delete!(legacy_payload, "error_stage")
+        delete!(legacy_payload, "error_diagnostics")
+        legacy_record = parse_model_evaluation_json(String(JSON3.write(legacy_payload)))
+        @test legacy_record.schema_version == 2
+        @test Set(String.(keys(JSON3.read(model_evaluation_json(legacy_record))))) ==
+            ERIEC._MODEL_EVALUATION_PAYLOAD_KEYS_V2
+        passed_audit = audit_model_evaluation(
             evidence_root,
             "one-state-pass";
             project_root=project_root,
-        ).ok
+        )
+        @test passed_audit.ok
+        @test passed_audit.semantic_replay == :passed
+        registry = JSON3.read(read(
+            joinpath(evidence_root, passed.record.registry_snapshot),
+            String,
+        ))
+        @test String(registry.review_status) == "reviewed"
+        @test !isempty(String(registry.reviewer))
+        @test !isempty(String(registry.basis_log))
+        @test occursin(
+            r"^[0-9a-f]{64}\z",
+            String(registry.lean_declaration_source_sha256),
+        )
+        @test occursin(
+            r"^[0-9a-f]{64}\z",
+            String(registry.registry_generation_sha256),
+        )
+        @test String(registry.registry_git_commit) == passed.record.git_commit
 
         # The source may disappear; the evaluation remains reconstructible from snapshots.
         rm(pass_source)
-        @test audit_model_evaluation(
+        removed_source_audit = audit_model_evaluation(
             evidence_root,
             "one-state-pass";
             project_root=project_root,
-        ).ok
+        )
+        @test removed_source_audit.ok
+        @test removed_source_audit.semantic_replay == :passed
 
         duplicate_source = write_m4_setpoint_model(
             joinpath(models, "same-canonical-model.json"),
@@ -353,6 +515,7 @@ end
             claim_relation=:counterexample_candidate,
         )
         @test malformed.record.outcome == :error
+        @test malformed.record.error_stage == :input_schema
         @test isempty(malformed.record.failed_predicates)
         @test malformed.record.error_message !== nothing
         @test malformed.record.claim_relation == :observation_only
@@ -372,11 +535,33 @@ end
             evaluation_id="empty-input",
         )
         @test empty_input.record.outcome == :error
+        @test empty_input.record.error_stage == :input_schema
         @test audit_model_evaluation(
             evidence_root,
             "empty-input";
             project_root=project_root,
         ).ok
+
+        invalid_utf8_source = joinpath(models, "invalid-utf8.json")
+        write(invalid_utf8_source, UInt8[0xff])
+        invalid_utf8 = run_m4_model_evaluation(
+            project_root,
+            invalid_utf8_source;
+            output_root=evidence_root,
+            model_root=evidence_root,
+            evaluation_id="invalid-utf8-input",
+        )
+        @test invalid_utf8.record.outcome == :error
+        @test invalid_utf8.record.error_stage == :input_schema
+        @test isvalid(something(invalid_utf8.record.error_message, ""))
+        @test isvalid(read(invalid_utf8.path, String))
+        invalid_utf8_audit = audit_model_evaluation(
+            evidence_root,
+            "invalid-utf8-input";
+            project_root=project_root,
+        )
+        @test invalid_utf8_audit.ok
+        @test invalid_utf8_audit.semantic_replay == :passed
 
         @test_throws ArgumentError run_m4_model_evaluation(
             project_root,
@@ -404,51 +589,28 @@ end
         @test isfile(automatic_first.path)
         @test isfile(automatic_second.path)
 
-        control_error = ERIEC._run_model_evaluation(
+        # Model preparation is registry-dispatched; callers cannot inject an
+        # arbitrary value/canonical-byte pair through the private primitive.
+        @test_throws MethodError ERIEC._run_model_evaluation(
             project_root;
             output_root=evidence_root,
-            evaluation_id="control-character-error",
-            raw_model_bytes=UInt8[0x01],
-            prepare_model=_ -> error("parse\tfailure\rcontrol"),
+            evaluation_id="arbitrary-prepare-model",
+            raw_model_bytes=read(duplicate_source),
+            prepare_model=_ -> error("must never run"),
             vp_id="VP-BDY-001",
             contract_id="body.no_terminal_setpoint",
             checker_id="check_m4_no_terminal_setpoint",
             failed_predicates_on_reject=["ERIEC.Body.NoTerminalSetPoint"],
             adapter_id="m4-setpoint-model-v1",
-            adapter_source="src/m4_model_evaluation.jl",
         )
-        @test control_error.record.outcome == :error
-        evaluation_text = read(control_error.path, String)
-        @test !occursin('\t', evaluation_text)
-        @test !occursin('\r', evaluation_text)
-        @test read_model_evaluation(control_error.path).outcome == :error
+        @test !ispath(model_evaluation_path(evidence_root, "arbitrary-prepare-model"))
+
+        evaluation_text = read(invalid_utf8.path, String)
         unknown_evaluation_field = replace(
             strip(evaluation_text),
             r"}$" => ",\"unknown_field\":true}",
         )
         @test_throws ArgumentError parse_model_evaluation_json(unknown_evaluation_field)
-
-        checker_dispatch_error = ERIEC._run_model_evaluation(
-            project_root;
-            output_root=evidence_root,
-            evaluation_id="checker-dispatch-error",
-            raw_model_bytes=read(duplicate_source),
-            prepare_model=bytes -> (
-                value=1,
-                canonical_bytes=Vector{UInt8}(codeunits(m4_setpoint_model_json(
-                    parse_m4_setpoint_model_json(String(copy(bytes))),
-                ))),
-                fingerprint_algorithm=M4_SETPOINT_FINGERPRINT_ALGORITHM,
-            ),
-            vp_id="VP-BDY-001",
-            contract_id="body.no_terminal_setpoint",
-            checker_id="check_m4_no_terminal_setpoint",
-            failed_predicates_on_reject=["ERIEC.Body.NoTerminalSetPoint"],
-            adapter_id="m4-setpoint-model-v1",
-            adapter_source="src/m4_model_evaluation.jl",
-        )
-        @test checker_dispatch_error.record.outcome == :error
-        @test occursin("MethodError", checker_dispatch_error.record.error_message)
 
         candidates = list_model_evaluations(
             evidence_root;
@@ -465,7 +627,14 @@ end
             Set(["one-state-reject", "one-state-reject-observation"])
         aggregate = audit_model_evaluations(evidence_root; project_root=project_root)
         @test aggregate.ok
-        @test aggregate.checked == 10
+        @test aggregate.checked == 9
+        @test aggregate.semantic_replay_complete
+        @test aggregate.semantic_replay_counts == (
+            passed=9,
+            failed=0,
+            skipped=0,
+            not_attempted=0,
+        )
         duplicate_group = only(filter(
             group -> group.model_fingerprint == passed.record.model_fingerprint,
             aggregate.duplicate_fingerprints,
@@ -474,7 +643,6 @@ end
             Set([
                 "one-state-pass",
                 "one-state-pass-again",
-                "checker-dispatch-error",
                 automatic_first.record.evaluation_id,
                 automatic_second.record.evaluation_id,
             ])
@@ -504,6 +672,29 @@ end
         @test packet.automatic_promotion === false
         @test String(packet.phenomenal_claim) == "not_certified"
         @test packet.target_claim_id === nothing
+        parsed_packet = read_counterexample_draft(packet_path)
+        @test parsed_packet.evaluation_id == "one-state-reject"
+        @test parsed_packet.claim_status == :draft_not_a_claim
+        @test parsed_packet.phenomenal_claim == :not_certified
+        packet_audit = audit_counterexample_draft(
+            evidence_root,
+            "one-state-reject";
+            project_root=project_root,
+        )
+        @test packet_audit.ok
+        @test packet_audit.semantic_replay == :passed
+        packet_entries = list_counterexample_drafts(
+            evidence_root;
+            project_root=project_root,
+        )
+        @test length(packet_entries) == 1
+        @test only(packet_entries).audit_ok
+        packet_aggregate = audit_counterexample_drafts(
+            evidence_root;
+            project_root=project_root,
+        )
+        @test packet_aggregate.ok
+        @test packet_aggregate.checked == 1
         @test digest(claim_ledger) == claim_ledger_before
         @test_throws ArgumentError write_counterexample_draft_packet(
             evidence_root,
@@ -516,46 +707,149 @@ end
             project_root=project_root,
         )
 
-        # Even the private persistence primitive cannot smuggle a reject value
-        # under a pass model fingerprint: adapter audit recomputes the outcome.
-        pass_model = parse_m4_setpoint_model_json(read(duplicate_source, String))
-        reject_diagram = m4_setpoint_diagram(
-            M4SetPointModel(["only"], [("only", "only")]),
-        )
-        mismatched = ERIEC._run_model_evaluation(
-            project_root;
+        # Even with all persisted hashes and the evaluation seal recomputed,
+        # a valid raw model must canonicalize to the recorded model snapshot.
+        binding_tamper = run_m4_model_evaluation(
+            project_root,
+            duplicate_source;
             output_root=evidence_root,
-            evaluation_id="mismatched-value-and-model",
-            raw_model_bytes=read(duplicate_source),
-            prepare_model=_ -> (
-                value=reject_diagram,
-                canonical_bytes=Vector{UInt8}(codeunits(m4_setpoint_model_json(pass_model))),
-                fingerprint_algorithm=M4_SETPOINT_FINGERPRINT_ALGORITHM,
-            ),
-            vp_id="VP-BDY-001",
-            contract_id="body.no_terminal_setpoint",
-            checker_id="check_m4_no_terminal_setpoint",
-            failed_predicates_on_reject=["ERIEC.Body.NoTerminalSetPoint"],
-            adapter_id="m4-setpoint-model-v1",
-            adapter_source="src/m4_model_evaluation.jl",
-            claim_relation=:counterexample_candidate,
+            model_root=evidence_root,
+            evaluation_id="raw-canonical-binding-tamper",
         )
-        @test mismatched.record.outcome == :reject
-        mismatched_audit = audit_model_evaluation(
+        binding_source = joinpath(
             evidence_root,
-            "mismatched-value-and-model";
+            binding_tamper.record.source_model_artifact,
+        )
+        write(
+            binding_source,
+            m4_setpoint_model_json(M4SetPointModel(
+                ["only"],
+                [("only", "only")],
+            )),
+        )
+        rewrite_json_and_seal!(binding_tamper.path, "evaluation.json") do payload
+            payload["source_model_sha256"] = digest(binding_source)
+        end
+        binding_audit = audit_model_evaluation(
+            evidence_root,
+            "raw-canonical-binding-tamper";
             project_root=project_root,
         )
-        @test !mismatched_audit.ok
+        @test binding_audit.ok
+        @test binding_audit.semantic_replay == :failed
         @test any(
-            contains("M4 outcome does not match the canonical model"),
-            mismatched_audit.errors,
+            contains("does not canonicalize to the model snapshot"),
+            binding_audit.replay_errors,
         )
-        @test_throws ArgumentError write_counterexample_draft_packet(
+
+        # A structurally valid canonical model cannot be relabelled as an
+        # execution error, even when evaluation.json and its seal agree.
+        forged_error = run_m4_model_evaluation(
+            project_root,
+            duplicate_source;
+            output_root=evidence_root,
+            model_root=evidence_root,
+            evaluation_id="forged-error-outcome",
+        )
+        rewrite_json_and_seal!(forged_error.path, "evaluation.json") do payload
+            payload["outcome"] = "error"
+            payload["error_stage"] = "checker"
+            payload["error_message"] = "forged checker error"
+            payload["error_diagnostics"] = [Dict(
+                "stage" => "checker",
+                "message" => "forged checker error",
+            )]
+        end
+        forged_error_audit = audit_model_evaluation(
             evidence_root,
-            "mismatched-value-and-model";
+            "forged-error-outcome";
             project_root=project_root,
         )
+        @test forged_error_audit.ok
+        @test forged_error_audit.semantic_replay == :failed
+        @test any(
+            contains("outcome does not match the canonical source model"),
+            forged_error_audit.replay_errors,
+        )
+
+        draft_paths = Dict{String,String}()
+        for id in (
+            "draft-packet-tamper",
+            "draft-seal-tamper",
+            "draft-source-tamper",
+        )
+            run_m4_model_evaluation(
+                project_root,
+                reject_source;
+                output_root=evidence_root,
+                model_root=evidence_root,
+                evaluation_id=id,
+                claim_relation=:counterexample_candidate,
+            )
+            draft_paths[id] = write_counterexample_draft_packet(
+                evidence_root,
+                id;
+                project_root=project_root,
+            )
+        end
+        open(draft_paths["draft-packet-tamper"], "a") do io
+            write(io, "\n")
+        end
+        @test !audit_counterexample_draft(
+            evidence_root,
+            "draft-packet-tamper";
+            project_root=project_root,
+        ).ok
+        write(
+            joinpath(dirname(draft_paths["draft-seal-tamper"]), "seal.sha256"),
+            "invalid\n",
+        )
+        @test !audit_counterexample_draft(
+            evidence_root,
+            "draft-seal-tamper";
+            project_root=project_root,
+        ).ok
+        source_tamper_evaluation = model_evaluation_path(
+            evidence_root,
+            "draft-source-tamper",
+        )
+        open(source_tamper_evaluation, "a") do io
+            write(io, "\n")
+        end
+        source_tamper_audit = audit_counterexample_draft(
+            evidence_root,
+            "draft-source-tamper";
+            project_root=project_root,
+        )
+        @test !source_tamper_audit.ok
+        @test any(
+            contains("source evaluation"),
+            source_tamper_audit.errors,
+        )
+
+        draft_parent = joinpath(evidence_root, "logs", "counterexample-candidates")
+        mkpath(joinpath(draft_parent, ".pending-test"))
+        write(joinpath(draft_parent, "foreign.txt"), "foreign\n")
+        draft_inventory = list_counterexample_drafts(
+            evidence_root;
+            project_root=project_root,
+        )
+        @test any(
+            entry -> entry.evaluation_id == ".pending-test" &&
+                entry.entry_kind == :pending && !entry.audit_ok,
+            draft_inventory,
+        )
+        @test any(
+            entry -> entry.evaluation_id == "foreign.txt" &&
+                entry.entry_kind == :foreign && !entry.audit_ok,
+            draft_inventory,
+        )
+        draft_inventory_audit = audit_counterexample_drafts(
+            evidence_root;
+            project_root=project_root,
+        )
+        @test !draft_inventory_audit.ok
+        @test draft_inventory_audit.failed >= 5
 
         # Tampering is visible and cannot silently become a valid historical result.
         tampered_model = joinpath(
@@ -656,6 +950,94 @@ end
                 )
             end
         end
+
+        symlinked_evaluation = run_m4_model_evaluation(
+            project_root,
+            duplicate_source;
+            output_root=evidence_root,
+            model_root=evidence_root,
+            evaluation_id="external-evaluation-json-symlink",
+        )
+        mktempdir() do outside
+            external_json = joinpath(outside, "evaluation.json")
+            cp(symlinked_evaluation.path, external_json)
+            rm(symlinked_evaluation.path)
+            symlink(external_json, symlinked_evaluation.path)
+            evaluation_symlink_audit = audit_model_evaluation(
+                evidence_root,
+                "external-evaluation-json-symlink";
+                project_root=project_root,
+            )
+            @test !evaluation_symlink_audit.ok
+            @test any(
+                contains("evaluation.json must not be a symlink"),
+                evaluation_symlink_audit.errors,
+            )
+        end
+
+        symlinked_seal = run_m4_model_evaluation(
+            project_root,
+            duplicate_source;
+            output_root=evidence_root,
+            model_root=evidence_root,
+            evaluation_id="external-seal-symlink",
+        )
+        seal_path = joinpath(dirname(symlinked_seal.path), "seal.sha256")
+        mktempdir() do outside
+            external_seal = joinpath(outside, "seal.sha256")
+            cp(seal_path, external_seal)
+            rm(seal_path)
+            symlink(external_seal, seal_path)
+            seal_symlink_audit = audit_model_evaluation(
+                evidence_root,
+                "external-seal-symlink";
+                project_root=project_root,
+            )
+            @test !seal_symlink_audit.ok
+            @test any(
+                contains("seal.sha256 must not be a symlink"),
+                seal_symlink_audit.errors,
+            )
+        end
+
+        evaluation_parent = joinpath(evidence_root, "logs", "model-evaluations")
+        mkpath(joinpath(evaluation_parent, ".pending-test"))
+        write(joinpath(evaluation_parent, "foreign.txt"), "foreign\n")
+        dangling_path = joinpath(evaluation_parent, "dangling-symlink")
+        symlink(joinpath(evidence_root, "missing-target"), dangling_path)
+        filtered_broken = list_model_evaluations(
+            evidence_root;
+            project_root=project_root,
+            vp_id="VP-NOT-PRESENT",
+            outcome=:pass,
+        )
+        @test any(
+            entry -> entry.evaluation_id == "malformed-input" && !entry.audit_ok &&
+                entry.filter_match === false,
+            filtered_broken,
+        )
+        @test any(
+            entry -> entry.evaluation_id == ".pending-test" &&
+                entry.entry_kind == :pending && !entry.audit_ok,
+            filtered_broken,
+        )
+        @test any(
+            entry -> entry.evaluation_id == "foreign.txt" &&
+                entry.entry_kind == :foreign && !entry.audit_ok,
+            filtered_broken,
+        )
+        @test any(
+            entry -> entry.evaluation_id == "dangling-symlink" &&
+                entry.entry_kind == :foreign && !entry.audit_ok,
+            filtered_broken,
+        )
+        inventory_audit = audit_model_evaluations(
+            evidence_root;
+            project_root=project_root,
+        )
+        @test !inventory_audit.ok
+        @test inventory_audit.failed >= 8
+        @test !inventory_audit.semantic_replay_ok
 
         mktempdir() do symlink_root
             mktempdir() do external_logs

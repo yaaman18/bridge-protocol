@@ -1,0 +1,6 @@
+Test Summary:                                   | Pass  Total  Time
+M4 model schema and canonical fingerprint input |   17     17  3.0s
+Test Summary:        | Pass  Total     Time
+model evaluation CLI |   39     39  1m20.2s
+Test Summary:                                    | Pass  Total   Time
+append-only model evaluation execution and audit |   73     73  25.1s
