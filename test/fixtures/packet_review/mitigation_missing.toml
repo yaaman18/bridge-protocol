@@ -1,0 +1,23 @@
+schema_version = 1
+packet_id = "NEG-MITIGATION-MISSING"
+prose = "specs/packet-review-mechanization-packet.md"
+
+[[failure_mode_review]]
+id = "FM-CALLER-PROOF-BOOL"
+applicable = true
+rationale_ja = "synthetic negative fixture"
+
+[[failure_mode_review]]
+id = "FM-OPAQUE-CALLBACK"
+applicable = false
+rationale_ja = "synthetic negative fixture"
+
+[[failure_mode_review]]
+id = "FM-CIRCULAR-ORACLE"
+applicable = false
+rationale_ja = "synthetic negative fixture"
+
+[[failure_mode_review]]
+id = "FM-FALSIFICATION-NOT-GATED"
+applicable = false
+rationale_ja = "synthetic negative fixture"

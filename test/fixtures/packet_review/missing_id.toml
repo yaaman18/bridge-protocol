@@ -1,0 +1,18 @@
+schema_version = 1
+packet_id = "NEG-MISSING-ID"
+prose = "specs/packet-review-mechanization-packet.md"
+
+[[failure_mode_review]]
+id = "FM-CALLER-PROOF-BOOL"
+applicable = false
+rationale_ja = "synthetic negative fixture"
+
+[[failure_mode_review]]
+id = "FM-OPAQUE-CALLBACK"
+applicable = false
+rationale_ja = "synthetic negative fixture"
+
+[[failure_mode_review]]
+id = "FM-CIRCULAR-ORACLE"
+applicable = false
+rationale_ja = "synthetic negative fixture"

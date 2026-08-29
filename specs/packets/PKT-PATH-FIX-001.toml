@@ -1,0 +1,27 @@
+schema_version = 1
+packet_id = "PKT-PATH-FIX-001"
+prose = "specs/packet-review-path-fix-packet.md"
+
+[[failure_mode_review]]
+id = "FM-CALLER-PROOF-BOOL"
+applicable = false
+rationale_ja = "本パケットはパス解決の対称化のみを行い、呼び出し側が供給する判定結果を受理する経路を持たないため"
+
+[[failure_mode_review]]
+id = "FM-OPAQUE-CALLBACK"
+applicable = false
+rationale_ja = "callback や任意関数を受け取らず、対象は実ファイルのパス解決に閉じているため"
+
+[[failure_mode_review]]
+id = "FM-CIRCULAR-ORACLE"
+applicable = true
+rationale_ja = "負例の期待値を validator と同じパス解決経路から計算すると、同じ非対称を共有して症状を見逃す"
+mitigation_ja = "負例では symlink を実際に作成し、期待値は計算せず固定の違反符号（修正前は FM_REVIEW_PROSE_MISSING、修正後は違反ゼロ）として記述する"
+mutation_ids = []
+
+[[failure_mode_review]]
+id = "FM-FALSIFICATION-NOT-GATED"
+applicable = true
+rationale_ja = "symlink 経由ルートでの誤検出という反証条件を散文に書くだけでは、通常テストで実行されず再発を検出できない"
+mitigation_ja = "反証条件を test/test_packet_review.jl の負例として実装し、リポジトリ外脱出が依然弾かれることの確認も同じテストに含める"
+mutation_ids = []

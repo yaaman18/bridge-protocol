@@ -1,0 +1,23 @@
+ERROR: LoadError: Some tests did not pass: 16 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_packet_review.jl:7
+packet review validation: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_packet_review.jl:102
+  Expression: isempty(violations)
+   Evaluated: isempty(PacketReviewCheck[PacketReviewCheck("FM_REVIEW_PROSE_MISSING", false, "PKT-PACKET-REVIEW-001", "prose must be a repository-relative path to an existing repository file")])
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] (::var"#10#23"{String, String})(temporary_directory::String)
+   @ Main ~/bridge-protocol/test/test_packet_review.jl:102
+ [3] mktempdir(fn::var"#10#23"{String, String}, parent::String; prefix::String)
+   @ Base.Filesystem ./file.jl:819
+ [4] mktempdir(fn::Function, parent::String)
+   @ Base.Filesystem ./file.jl:815
+ [5] macro expansion
+   @ ~/bridge-protocol/test/test_packet_review.jl:76 [inlined]
+ [6] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [7] top-level scope
+   @ ~/bridge-protocol/test/test_packet_review.jl:8
+Test Summary:            | Pass  Fail  Total  Time
+packet review validation |   16     1     17  6.1s
