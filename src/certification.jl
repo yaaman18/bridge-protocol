@@ -36,6 +36,47 @@ const _CERTIFIED_LEAN_SHORT_NAME = r"^[A-Za-z_][A-Za-z0-9_']*$"
 const CERTIFIED_ENVELOPE_SCHEMA_VERSION = 1
 const JULIA_UNVERIFIED_EXECUTION_LAYER = :julia_unverified
 const UNVERIFIED_EXECUTION_BOUNDARY = :unverified_runtime
+const CERT_SCOPE_VIOLATION_CODES = (
+    "CERT_SCOPE_MISSING",
+    "CERT_SCOPE_FORBIDDEN",
+    "CERT_SCOPE_UNKNOWN",
+)
+const _CERT_SCOPE_ALLOWED = ("context_local",)
+const _CERT_SCOPE_FORBIDDEN = (
+    "permanent",
+    "final",
+    "unconditional_cross_context",
+)
+
+function _cert_scope_field(envelope)
+    if envelope isa AbstractDict
+        haskey(envelope, :claim_scope) && return true, envelope[:claim_scope]
+        haskey(envelope, "claim_scope") && return true, envelope["claim_scope"]
+    elseif hasproperty(envelope, :claim_scope)
+        return true, getproperty(envelope, :claim_scope)
+    end
+    false, nothing
+end
+
+"""Return the stable violation codes for a declared certified-envelope scope."""
+function cert_scope_violation_codes(envelope)
+    present, raw_scope = _cert_scope_field(envelope)
+    present || return ["CERT_SCOPE_MISSING"]
+    (raw_scope isa Symbol || raw_scope isa AbstractString) ||
+        return ["CERT_SCOPE_UNKNOWN"]
+    scope = String(raw_scope)
+    scope in _CERT_SCOPE_ALLOWED && return String[]
+    scope in _CERT_SCOPE_FORBIDDEN && return ["CERT_SCOPE_FORBIDDEN"]
+    ["CERT_SCOPE_UNKNOWN"]
+end
+
+function _assert_cert_scope(envelope)
+    violations = cert_scope_violation_codes(envelope)
+    isempty(violations) || throw(ArgumentError(
+        "certified envelope claim scope rejected: $(join(violations, ", "))",
+    ))
+    true
+end
 
 function _artifact_symbol(value::AbstractString)
     value == "-" && return nothing
@@ -342,7 +383,11 @@ function certificate_trust_profile(payload)
     )
 end
 
-function certified_artifact_envelope(payload, check::CertifiedArtifactCheck)
+function certified_artifact_envelope(
+    payload,
+    check::CertifiedArtifactCheck;
+    claim_scope=:context_local,
+)
     certified_artifact_ok(check) ||
         throw(ArgumentError("cannot certify payload with a failing artifact check"))
     assert_julia_unverified_execution(payload)
@@ -356,11 +401,16 @@ function certified_artifact_envelope(payload, check::CertifiedArtifactCheck)
             join(unknown_contracts, ", ")
         throw(ArgumentError(message))
     end
-    (
+    scope = (claim_scope=claim_scope,)
+    _assert_cert_scope(scope)
+    envelope = (
         payload=payload,
         certificate=certification_summary(check),
         trust=certificate_trust_profile(payload),
+        claim_scope=Symbol(String(claim_scope)),
     )
+    _assert_cert_scope(envelope)
+    envelope
 end
 
 function certificate_dependency_graph(envelope)
@@ -447,6 +497,8 @@ function certified_json_artifact_audit(
     expected_kind_ok = expected_kind === nothing ||
         (payload_ok && haskey(parsed.payload, :kind) &&
             String(parsed.payload.kind) == String(expected_kind))
+    claim_scope_violations = parse_ok ? cert_scope_violation_codes(parsed) : String[]
+    claim_scope_ok = parse_ok && isempty(claim_scope_violations)
     ok =
         exists &&
         parse_ok &&
@@ -455,6 +507,7 @@ function certified_json_artifact_audit(
         certificate_ok &&
         trust_ok &&
         certificate_result_ok &&
+        claim_scope_ok &&
         expected_kind_ok
     (
         kind=:CertifiedJsonArtifactAudit,
@@ -470,6 +523,8 @@ function certified_json_artifact_audit(
         certificate_ok=certificate_ok,
         trust_ok=trust_ok,
         certificate_result_ok=certificate_result_ok,
+        claim_scope_ok=claim_scope_ok,
+        claim_scope_violations=claim_scope_violations,
         expected_kind_ok=expected_kind_ok,
     )
 end

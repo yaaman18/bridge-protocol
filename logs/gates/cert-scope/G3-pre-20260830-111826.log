@@ -1,0 +1,11 @@
+ERROR: LoadError: SystemError: opening file "/Users/yamaguchimitsuyuki/bridge-protocol/tools/verify/cert_scope_validation.jl": No such file or directory
+Stacktrace:
+ [1] include(fname::String)
+   @ Main ./sysimg.jl:38
+ [2] top-level scope
+   @ ~/bridge-protocol/test/test_cert_scope.jl:5
+ [3] include(fname::String)
+   @ Main ./sysimg.jl:38
+ [4] top-level scope
+   @ none:1
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_cert_scope.jl:5

@@ -1,0 +1,29 @@
+schema_version = 1
+packet_id = "PKT-CERT-SCOPE-001"
+prose = "specs/cert-scope-hygiene-packet.md"
+
+[[failure_mode_review]]
+id = "FM-CALLER-PROOF-BOOL"
+applicable = true
+rationale_ja = "claim_scope は呼び出し側が選ぶラベルであり、実際に永続的な保証を context_local と自己申告すれば通る。deny-list 照合は列挙値を独立に判定するだけで、主張の意味を独立に判定しない"
+mitigation_ja = "本相では解消しない。相A1 の完了条件を『宣言された scope に対する schema 強制と deny-list 強制』という scaffold に限定し、『装置が永続性を認証しない』は establish しないと文書に明記した。意味の束縛は catalog / guarantee と結ぶ相A2 へ deferred とする。v1 の緩和策（値を禁止集合と照合する）はラベルを判定するだけで主張を判定しておらず、当該失敗様式を discharge していなかった"
+mutation_ids = []
+
+[[failure_mode_review]]
+id = "FM-OPAQUE-CALLBACK"
+applicable = false
+rationale_ja = "本パケットは関数や callback を受け取らず、対象は envelope の構造化フィールドの値検査と発行経路の fail-closed に閉じているため"
+
+[[failure_mode_review]]
+id = "FM-CIRCULAR-ORACLE"
+applicable = true
+rationale_ja = "負例の期待値を検査器と同じ経路から生成すると、同じ誤りを共有して禁止値の見逃しを検出できない"
+mitigation_ja = "負例 fixture の期待違反符号は固定の literal として記述し、検査器から導出しない。各負例で期待した符号だけが返ることを assert する。加えて判定 core を src に一本化し tools 側は wrapper とすることで、検査器と発行経路が別実装になって食い違う経路も塞ぐ"
+mutation_ids = []
+
+[[failure_mode_review]]
+id = "FM-FALSIFICATION-NOT-GATED"
+applicable = true
+rationale_ja = "禁止値の棄却を散文の反証条件として書くだけでは通常ゲートで実行されず、検査の空洞化を検出できない"
+mitigation_ja = "反証条件5項をゲート項目として G3 に含める。とくに permanent を持つ envelope が発行経路で拒否されること、claim_scope 省略が棄却されること、certified_json_artifact_audit が禁止値に ok を返さないことを、検査で後から見つけるのではなく fail-closed の確認として実行する"
+mutation_ids = []

@@ -27,6 +27,7 @@ const ERIEC_TEST_PLAN = [
     ("test_lean_architecture.jl", 0.5),
     ("test_claim_ledger.jl", 0.5),
     ("test_packet_review.jl", 0.5),
+    ("test_cert_scope.jl", 0.5),
     ("test_checker_semantic_manifest.jl", 12.0),
     ("test_ledger_consistency.jl", 0.5),
     ("test_reference_models.jl", 0.5),
