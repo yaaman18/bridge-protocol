@@ -1,0 +1,31 @@
+ERROR: LoadError: Some tests did not pass: 0 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:48
+checker semantic manifest: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:48
+  Got exception outside of a @test
+  failed process: Process(`lake env lean --run formal/ERIEC/CertifiedArtifact.lean`, ProcessExited(1)) [1]
+  
+  Stacktrace:
+    [1] pipeline_error
+      @ ./process.jl:598 [inlined]
+    [2] read(cmd::Cmd)
+      @ Base ./process.jl:482
+    [3] read
+      @ ./process.jl:491 [inlined]
+    [4] (::ERIEC.var"#1088#1089")()
+      @ ERIEC ~/bridge-protocol/src/certification.jl:483
+    [5] cd(f::ERIEC.var"#1088#1089", dir::String)
+      @ Base.Filesystem ./file.jl:112
+    [6] #lean_certified_artifact#1087
+      @ ~/bridge-protocol/src/certification.jl:482 [inlined]
+    [7] macro expansion
+      @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:60 [inlined]
+    [8] macro expansion
+      @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+    [9] top-level scope
+      @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:49
+   [10] include(fname::String)
+      @ Main ./sysimg.jl:38
+   [11] top-level scope
+      @ none:1
+Test Summary:             | Error  Total   Time
+checker semantic manifest |     1      1  25.7s

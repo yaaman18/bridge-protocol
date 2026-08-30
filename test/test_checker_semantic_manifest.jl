@@ -52,15 +52,33 @@ checker_relation_matches_contract(row, contract) =
     )
     rows = manifest["contract"]
     ids = [row["id"] for row in rows]
+    scope_registry = TOML.parsefile(
+        joinpath(project_root, "specs", "cert-scope-registry.toml"),
+    )
+    scope_rows = scope_registry["contract"]
+    scope_ids = [row["id"] for row in scope_rows]
     artifact = lean_certified_artifact(; project_root=project_root)
     artifact_ids = certified_artifact_contract_ids(artifact)
     contracts_by_id = Dict(contract.id => contract for contract in artifact.contracts)
+    catalog_declarations = Set(
+        contract.lean_full_name for contract in artifact.contracts
+    )
 
     @test manifest["schema_version"] == 2
     @test Set(manifest["allowed_relations"]) == CHECKER_RELATION_VALUES
     @test allunique(ids)
     @test Set(ids) == Set(artifact_ids)
-    @test length(rows) == length(artifact_ids) == 159
+    @test length(rows) == length(artifact_ids) == 164
+    @test scope_registry["schema_version"] == 1
+    @test allunique(scope_ids)
+    @test Set(scope_ids) == Set(ids)
+    @test length(scope_rows) == 164
+    @test isempty(ERIEC.cert_scope_registry_violation_codes(
+        scope_registry,
+        manifest;
+        catalog_declarations=catalog_declarations,
+        project_root=project_root,
+    ))
     @test all(valid_checker_semantic_row, rows)
     @test all(
         row -> checker_relation_matches_contract(row, contracts_by_id[row["id"]]),
@@ -68,7 +86,7 @@ checker_relation_matches_contract(row, contract) =
     )
 
     reviewed = filter(row -> row["review_status"] == "reviewed", rows)
-    @test count(row -> row["checker_relation"] == "lean_only", rows) == 71
+    @test count(row -> row["checker_relation"] == "lean_only", rows) == 72
     reviewed_relations = Dict(row["id"] => row["checker_relation"] for row in reviewed)
     pilot_relations = Dict(
         "adjunction.rigidity" => "exact_finite_decision",
@@ -88,9 +106,9 @@ checker_relation_matches_contract(row, contract) =
     @test sensitivity_hash == manifest["sensitivity_registry_sha256"]
     sensitivity_cases = checker_sensitivity_cases()
     exact_rows = filter(row -> row["checker_relation"] == "exact_finite_decision", rows)
-    @test length(exact_rows) == 27
-    @test count(row -> row["checker_relation"] == "witness_validator", rows) == 26
-    @test count(row -> row["checker_relation"] == "regression_only", rows) == 13
+    @test length(exact_rows) == 28
+    @test count(row -> row["checker_relation"] == "witness_validator", rows) == 28
+    @test count(row -> row["checker_relation"] == "regression_only", rows) == 14
     @test Set(keys(sensitivity_cases)) == Set(row["id"] for row in exact_rows)
     rows_by_id = Dict(row["id"] => row for row in rows)
     @test all(

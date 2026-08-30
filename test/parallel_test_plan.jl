@@ -34,6 +34,7 @@ const ERIEC_TEST_PLAN = [
     ("test_wager.jl", 0.5),
     ("test_richness.jl", 0.5),
     ("test_generation.jl", 0.5),
+    ("test_branch_novelty.jl", 0.5),
     ("test_temporal_dc.jl", 0.5),
     ("test_sigma_selection.jl", 1.0),
     ("test_sigma1_run.jl", 3.0),

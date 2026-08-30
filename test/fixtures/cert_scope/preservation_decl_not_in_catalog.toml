@@ -1,0 +1,3 @@
+id = "synthetic.preservation-decl-not-in-catalog"
+scope_kind = "cross_context_conditional"
+preservation_decl = "ERIEC.DoesNotExist.cross_context_preservation"

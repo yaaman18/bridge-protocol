@@ -1,0 +1,20 @@
+ERROR: LoadError: Some tests did not pass: 92 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:48
+checker semantic manifest: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:89
+  Expression: count((row->begin
+                #= /Users/yamaguchimitsuyuki/bridge-protocol/test/test_checker_semantic_manifest.jl:89 =#
+                row["checker_relation"] == "lean_only"
+            end), rows) == 71
+   Evaluated: 72 == 71
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:89 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_checker_semantic_manifest.jl:49
+Test Summary:             | Pass  Fail  Total   Time
+checker semantic manifest |   92     1     93  51.1s

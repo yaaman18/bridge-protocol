@@ -32,6 +32,8 @@ import ERIEC.Centering
 import ERIEC.Traceability
 import ERIEC.RefModelV52
 import ERIEC.TemporalDC
+import ERIEC.BranchNovelty
+import ERIEC.RefModel.LossAwareBranch
 
 namespace ERIEC
 
@@ -758,6 +760,47 @@ def certifiedArtifact : CertifiedArtifact :=
         leanKind := "theorem"
         juliaSymbol := "check_branched_rich_lineage_cofinal"
         juliaChecker := "check_branched_rich_lineage_cofinal"
+      },
+      {
+        id := "generation.branch_observation"
+        leanModule := "ERIEC.BranchNovelty"
+        leanName := "BranchObservation"
+        leanKind := "structure"
+        juliaSymbol := "FiniteBranchObservation"
+        juliaChecker := "check_branch_observation"
+      },
+      {
+        id := "generation.branch_novelty_route"
+        leanModule := "ERIEC.BranchNovelty"
+        leanName := "BranchNoveltyRoute"
+        leanKind := "structure"
+        juliaSymbol := "FiniteEnvironmentIdentity"
+        juliaChecker := "check_branch_novelty_route"
+      },
+      {
+        id := "generation.branch_fresh"
+        leanModule := "ERIEC.BranchNovelty"
+        leanName := "branchFresh_implies_freshSem"
+        leanKind := "theorem"
+        juliaSymbol := "-"
+        juliaChecker := "-"
+      },
+      {
+        id := "generation.finite_branch_score"
+        leanModule := "ERIEC.BranchNovelty"
+        leanName := "FiniteBranchScore"
+        leanKind := "structure"
+        juliaSymbol := "FiniteBranchScore"
+        juliaChecker := "check_finite_branch_score"
+      },
+      {
+        id := "generation.loss_aware_reference"
+        leanModule := "ERIEC.RefModel.LossAwareBranch"
+        leanName := "noveltyPositive_freshSem"
+        leanFullName := "ERIEC.RefModel.noveltyPositive_freshSem"
+        leanKind := "theorem"
+        juliaSymbol := "check_branch_novelty_route"
+        juliaChecker := "check_branch_novelty_route"
       },
       {
         id := "temporaldc.observed_termination"

@@ -28,6 +28,7 @@
         "RefModel",
         "Wager",
         "Generation",
+        "BranchNovelty",
         "TemporalDC",
         "OpenDynamics",
         "Audit",
@@ -877,7 +878,7 @@
         ),
         (
             file="RefModel.lean",
-            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean", "RefModel/LineageWitness.lean", "RefModel/CollapseTrace.lean"],
+            declaration_files=["RefModel/Basic.lean", "RefModel/Stable.lean", "RefModel/Dynamic.lean", "RefModel/Nondegenerate.lean", "RefModel/Richness.lean", "RefModel/Large.lean", "RefModel/LargeCore.lean", "RefModel/LineageWitness.lean", "RefModel/BranchNovelty.lean", "RefModel/LossAwareBranch.lean", "RefModel/CollapseTrace.lean"],
             lean=[
                 "RefState", "next", "reference_models", "StableReferenceWitness",
                 "stable_reference_model",
@@ -906,6 +907,14 @@
                 "branchedRichLineage", "BranchedRichLineageWitness",
                 "branched_rich_lineage_reference_model",
                 "branched_rich_lineage_freshSem",
+                "unitDC_hConv", "richLineageDC_hConv",
+                "branchedRichLineageDC_hConv", "stableDC_hConv",
+                "parameterizedRichDC_hConv", "largeFiniteDC_hConv",
+                "largeAXCoreDC_hConv", "collapseInitialDC_hConv",
+                "noveltyPositiveDC", "noveltyPositiveDC_hConv",
+                "noveltyPositiveLineage", "noveltyPositiveRoute",
+                "noveltyPositive_branchFresh", "noveltyPositive_branchLost",
+                "noveltyPositive_branchReflecting", "noveltyPositive_freshSem",
                 "CollapseTraceWitness", "collapse_trace_reference_model",
                 "collapse_trace_precarious", "AllMortalWitness",
                 "all_mortal_reference_model",
@@ -917,6 +926,15 @@
                 :check_arbitrarily_large_three_layer_reference_models,
                 :check_rich_lineage_cofinal,
                 :check_branched_rich_lineage_cofinal,
+                :FiniteBranchObservation,
+                :FiniteEnvironmentIdentity,
+                :FiniteBranchScore,
+                :check_branch_observation,
+                :check_environment_identity,
+                :finite_branch_score,
+                :check_finite_branch_score,
+                :check_branch_fresh_prefix,
+                :check_branch_novelty_route,
                 :check_collapse_trace_termination,
                 :check_precarious_prefix,
                 :check_no_escape_prefix,
@@ -978,6 +996,25 @@
                 :check_proliferation_morphism,
                 :check_lineage_stays_open,
                 :check_richness_inherits_generational,
+            ],
+        ),
+        (
+            file="BranchNovelty.lean",
+            lean=[
+                "BranchSigma", "branchSigma_iff_branch", "BranchObservation",
+                "BranchCarrier", "BranchFiber", "EnvironmentIdentity",
+                "BranchNoveltyRoute", "BranchImage", "StructuralImageIdentity",
+                "GenerationBranchImages", "BranchSurvives", "BranchLost",
+                "BranchHistory", "BranchFresh", "BranchReflectingSem",
+                "branchFresh_implies_freshSem", "FiniteBranchScore",
+                "FiniteBranchScore.score",
+            ],
+            julia=[
+                :FiniteBranchObservation, :FiniteEnvironmentIdentity,
+                :FiniteBranchScore, :check_branch_observation,
+                :check_environment_identity, :finite_branch_score,
+                :check_finite_branch_score, :check_branch_fresh_prefix,
+                :check_branch_novelty_route,
             ],
         ),
         (
@@ -1193,6 +1230,11 @@
         "generation.richness_inherits_generational",
         "generation.rich_lineage_cofinal",
         "generation.branched_rich_lineage_cofinal",
+        "generation.branch_observation",
+        "generation.branch_novelty_route",
+        "generation.branch_fresh",
+        "generation.finite_branch_score",
+        "generation.loss_aware_reference",
         "temporaldc.observed_termination",
         "temporaldc.permanent_termination",
         "temporaldc.collapse_trace",
@@ -1478,6 +1520,57 @@
             edge.relation == :lean_dependency
         for edge in branched_rich_lineage_graph.edges
     )
+
+    for branch_contract in [
+        (
+            id="generation.branch_observation",
+            checkers=[:check_branch_observation],
+            full_declaration="ERIEC.BranchNovelty.BranchObservation",
+        ),
+        (
+            id="generation.branch_novelty_route",
+            checkers=[:check_branch_novelty_route],
+            full_declaration="ERIEC.BranchNovelty.BranchNoveltyRoute",
+        ),
+        (
+            id="generation.branch_fresh",
+            checkers=Symbol[],
+            full_declaration="ERIEC.BranchNovelty.branchFresh_implies_freshSem",
+        ),
+        (
+            id="generation.finite_branch_score",
+            checkers=[:check_finite_branch_score],
+            full_declaration="ERIEC.BranchNovelty.FiniteBranchScore",
+        ),
+        (
+            id="generation.loss_aware_reference",
+            checkers=[:check_branch_novelty_route],
+            full_declaration="ERIEC.RefModel.noveltyPositive_freshSem",
+        ),
+    ]
+        envelope = certified_artifact_envelope(
+            (
+                kind=:loss_aware_branch_novelty,
+                lean_contracts=[branch_contract.id],
+                julia_checkers=branch_contract.checkers,
+                numeric_assumptions=NamedTuple(),
+            ),
+            artifact_check,
+        )
+        graph = certificate_dependency_graph(envelope)
+        @test any(
+            edge.from == :loss_aware_branch_novelty &&
+                edge.to == branch_contract.id &&
+                edge.relation == :lean_contract
+            for edge in graph.edges
+        )
+        @test any(
+            edge.from == branch_contract.id &&
+                edge.to == branch_contract.full_declaration &&
+                edge.relation == :lean_dependency
+            for edge in graph.edges
+        )
+    end
 
     for temporal_contract in [
         (

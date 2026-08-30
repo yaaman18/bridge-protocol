@@ -338,10 +338,35 @@ function checker_sensitivity_cases()
             negative=() -> is_branch_point(Dict(:m0 => Set([:e0])), :m0),
             negative_kind="countermodel",
         ),
+        "generation.finite_branch_score" => (
+            positive=() -> _checker_sensitivity_finite_branch_score(false),
+            negative=() -> _checker_sensitivity_finite_branch_score(true),
+            negative_kind="mutated_candidate",
+        ),
     )
     Dict(
         id => merge(case, (tolerance_assumption=nothing,))
         for (id, case) in cases
+    )
+end
+
+function _checker_sensitivity_finite_branch_score(mutated::Bool)
+    make_observation(fibre) = FiniteBranchObservation(
+        [:m0], [:e0, :e1, :e2],
+        _ -> Set(fibre),
+        environment -> environment in fibre ? Set([:m0]) : Set{Symbol}(),
+    )
+    observations = [
+        make_observation([:e0, :e1]),
+        make_observation([:e0]),
+        make_observation([:e0, :e1, :e2]),
+    ]
+    identity = FiniteEnvironmentIdentity((_, environment) -> environment)
+    check_finite_branch_score(
+        observations, identity;
+        scores=mutated ? [1, 1, 3] : [1, 1, 2],
+        novel_counts=[1, 0, 1],
+        lost_counts=[0, 1, 0],
     )
 end
 

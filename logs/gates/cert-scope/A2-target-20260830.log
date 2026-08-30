@@ -1,0 +1,14 @@
+Precompiling ERIEC...
+   5552.5 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 6 seconds. 26 already precompiled.
+FALSIFICATION-A2-1: PASS
+FALSIFICATION-A2-2: PASS
+FALSIFICATION-A2-3: PASS
+FALSIFICATION-A2-4: PASS
+FALSIFICATION-A2-5: PASS
+FALSIFICATION-A2-6: PASS
+FALSIFICATION-A2-7: PASS
+FALSIFICATION-A2-8: PASS
+FALSIFICATION-A2-9: PASS
+Test Summary:                  | Pass  Total   Time
+certified envelope claim scope |   41     41  51.6s

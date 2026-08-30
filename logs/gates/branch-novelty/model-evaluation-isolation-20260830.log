@@ -1,0 +1,57 @@
+ERROR: LoadError: Some tests did not pass: 0 passed, 1 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_evaluation.jl:144
+Test Summary:                                   | Pass  Total  Time
+M4 model schema and canonical fingerprint input |   27     27  4.7s
+model evaluation CLI: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_evaluation.jl:169
+  Expression: exit_code == 0
+   Evaluated: 2 == 0
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] (::var"#3#5"{String})(evidence_root::String)
+   @ Main ~/bridge-protocol/test/test_model_evaluation.jl:169
+ [3] mktempdir(fn::var"#3#5"{String}, parent::String; prefix::String)
+   @ Base.Filesystem ./file.jl:819
+ [4] mktempdir(fn::Function, parent::String)
+   @ Base.Filesystem ./file.jl:815
+ [5] macro expansion
+   @ ~/bridge-protocol/test/test_model_evaluation.jl:146 [inlined]
+ [6] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [7] top-level scope
+   @ ~/bridge-protocol/test/test_model_evaluation.jl:145
+model evaluation CLI: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_evaluation.jl:144
+  Got exception outside of a @test
+  ArgumentError: invalid JSON at byte position 0 while parsing type Any: UnexpectedEOF
+  
+  
+  Stacktrace:
+    [1] invalid(error::JSON3.Error, buf::Base.CodeUnits{UInt8, String}, pos::Int64, T::Type)
+      @ JSON3 ~/.julia/packages/JSON3/rT1w2/src/JSON3.jl:30
+    [2] parse(str::String; jsonlines::Bool, numbertype::Nothing, kw::@Kwargs{})
+      @ JSON3 ~/.julia/packages/JSON3/rT1w2/src/read.jl:76
+    [3] parse
+      @ ~/.julia/packages/JSON3/rT1w2/src/read.jl:36 [inlined]
+    [4] #read#5
+      @ ~/.julia/packages/JSON3/rT1w2/src/read.jl:33 [inlined]
+    [5] read
+      @ ~/.julia/packages/JSON3/rT1w2/src/read.jl:31 [inlined]
+    [6] (::var"#3#5"{String})(evidence_root::String)
+      @ Main ~/bridge-protocol/test/test_model_evaluation.jl:170
+    [7] mktempdir(fn::var"#3#5"{String}, parent::String; prefix::String)
+      @ Base.Filesystem ./file.jl:819
+    [8] mktempdir(fn::Function, parent::String)
+      @ Base.Filesystem ./file.jl:815
+    [9] macro expansion
+      @ ~/bridge-protocol/test/test_model_evaluation.jl:146 [inlined]
+   [10] macro expansion
+      @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [11] top-level scope
+      @ ~/bridge-protocol/test/test_model_evaluation.jl:145
+   [12] include(fname::String)
+      @ Main ./sysimg.jl:38
+   [13] top-level scope
+      @ none:1
+Test Summary:        | Fail  Error  Total   Time
+model evaluation CLI |    1      1      2  26.1s

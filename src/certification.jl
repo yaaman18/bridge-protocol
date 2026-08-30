@@ -1,4 +1,5 @@
 using JSON3
+using TOML
 
 struct CertifiedContract
     id::String
@@ -41,12 +42,34 @@ const CERT_SCOPE_VIOLATION_CODES = (
     "CERT_SCOPE_FORBIDDEN",
     "CERT_SCOPE_UNKNOWN",
 )
-const _CERT_SCOPE_ALLOWED = ("context_local",)
+const CERT_SCOPE_BINDING_VIOLATION_CODES = (
+    "SCOPE_KIND_MISSING",
+    "SCOPE_REGISTRY_ID_MISMATCH",
+    "SCOPE_KIND_FORBIDDEN",
+    "SCOPE_KIND_UNKNOWN",
+    "PRESERVATION_DECL_MISSING",
+    "PRESERVATION_DECL_NOT_IN_CATALOG",
+    "CLAIM_SCOPE_EXCEEDS_CONTRACT",
+    "CONTRACT_SCOPE_DISPUTED",
+)
+const _CERT_SCOPE_ALLOWED = ("context_local", "cross_context_conditional")
 const _CERT_SCOPE_FORBIDDEN = (
     "permanent",
     "final",
     "unconditional_cross_context",
 )
+const _CONTRACT_SCOPE_ALLOWED = (
+    "context_local",
+    "cross_context_conditional",
+    "disputed",
+)
+const _CONTRACT_SCOPE_FORBIDDEN = _CERT_SCOPE_FORBIDDEN
+const _CERT_SCOPE_RANK = Dict(
+    "context_local" => 1,
+    "cross_context_conditional" => 2,
+)
+const _CERT_SCOPE_CATALOG_LOCK = ReentrantLock()
+const _CERT_SCOPE_CATALOG_CACHE = Dict{Tuple{String,UInt},Set{String}}()
 
 function _cert_scope_field(envelope)
     if envelope isa AbstractDict
@@ -74,6 +97,196 @@ function _assert_cert_scope(envelope)
     violations = cert_scope_violation_codes(envelope)
     isempty(violations) || throw(ArgumentError(
         "certified envelope claim scope rejected: $(join(violations, ", "))",
+    ))
+    true
+end
+
+function _cert_scope_field(record, field::Symbol)
+    if record isa AbstractDict
+        haskey(record, field) && return true, record[field]
+        key = String(field)
+        haskey(record, key) && return true, record[key]
+    elseif hasproperty(record, field)
+        return true, getproperty(record, field)
+    end
+    false, nothing
+end
+
+function _cert_scope_string_field(record, field::Symbol)
+    present, value = _cert_scope_field(record, field)
+    present || return false, ""
+    (value isa Symbol || value isa AbstractString) || return true, ""
+    true, String(value)
+end
+
+function _cert_scope_registry_rows(registry)
+    registry isa AbstractVector && return collect(registry)
+    present, rows = _cert_scope_field(registry, :contract)
+    present && rows isa AbstractVector ||
+        throw(ArgumentError("certificate scope registry requires a contract array"))
+    collect(rows)
+end
+
+function _cert_scope_registry_ids(registry)
+    ids = String[]
+    for row in _cert_scope_registry_rows(registry)
+        present, id = _cert_scope_string_field(row, :id)
+        present && !isempty(id) || return nothing
+        push!(ids, id)
+    end
+    ids
+end
+
+function _cert_scope_load_registry(path::AbstractString)
+    isfile(path) || throw(ArgumentError("certificate scope registry is missing: $path"))
+    TOML.parsefile(path)
+end
+
+function _cert_scope_catalog_declarations(
+    project_root::AbstractString=dirname(@__DIR__),
+)
+    root = realpath(project_root)
+    source_path = joinpath(root, "formal", "ERIEC", "CertifiedArtifact.lean")
+    isfile(source_path) ||
+        throw(ArgumentError("certificate catalog source is missing"))
+    source = read(source_path)
+    key = (root, hash(source))
+    declarations = lock(_CERT_SCOPE_CATALOG_LOCK) do
+        get!(_CERT_SCOPE_CATALOG_CACHE, key) do
+            artifact = lean_certified_artifact(; project_root=root)
+            read(source_path) == source || throw(ArgumentError(
+                "certificate catalog source changed while resolving scope declarations",
+            ))
+            Set(contract.lean_full_name for contract in artifact.contracts)
+        end
+    end
+    copy(declarations)
+end
+
+"""Return stable scope-kind violations for one certificate-scope registry row."""
+function contract_scope_violation_codes(
+    contract;
+    catalog_declarations=nothing,
+    project_root::AbstractString=dirname(@__DIR__),
+)
+    present, scope_kind = _cert_scope_string_field(contract, :scope_kind)
+    present || return ["SCOPE_KIND_MISSING"]
+    isempty(scope_kind) && return ["SCOPE_KIND_UNKNOWN"]
+    scope_kind in _CONTRACT_SCOPE_FORBIDDEN && return ["SCOPE_KIND_FORBIDDEN"]
+    scope_kind in _CONTRACT_SCOPE_ALLOWED || return ["SCOPE_KIND_UNKNOWN"]
+    scope_kind == "cross_context_conditional" || return String[]
+
+    preservation_present, preservation_decl =
+        _cert_scope_string_field(contract, :preservation_decl)
+    preservation_present && !isempty(preservation_decl) ||
+        return ["PRESERVATION_DECL_MISSING"]
+    declarations = catalog_declarations === nothing ?
+        _cert_scope_catalog_declarations(project_root) :
+        Set(String(declaration) for declaration in catalog_declarations)
+    preservation_decl in declarations ||
+        return ["PRESERVATION_DECL_NOT_IN_CATALOG"]
+    String[]
+end
+
+function _ordered_cert_scope_binding_codes(codes)
+    seen = Set(String(code) for code in codes)
+    String[code for code in CERT_SCOPE_BINDING_VIOLATION_CODES if code in seen]
+end
+
+"""Validate registry IDs and every scope-kind declaration against the manifest."""
+function cert_scope_registry_violation_codes(
+    registry,
+    manifest;
+    catalog_declarations=nothing,
+    project_root::AbstractString=dirname(@__DIR__),
+)
+    registry_ids = _cert_scope_registry_ids(registry)
+    manifest_ids = _cert_scope_registry_ids(manifest)
+    codes = String[]
+    if registry_ids === nothing || manifest_ids === nothing ||
+            length(registry_ids) != length(unique(registry_ids)) ||
+            length(manifest_ids) != length(unique(manifest_ids)) ||
+            Set(registry_ids) != Set(manifest_ids)
+        push!(codes, "SCOPE_REGISTRY_ID_MISMATCH")
+    end
+    for row in _cert_scope_registry_rows(registry)
+        append!(codes, contract_scope_violation_codes(
+            row;
+            catalog_declarations=catalog_declarations,
+            project_root=project_root,
+        ))
+    end
+    _ordered_cert_scope_binding_codes(codes)
+end
+
+function _cert_scope_registry_by_id(registry)
+    rows = _cert_scope_registry_rows(registry)
+    ids = _cert_scope_registry_ids(registry)
+    ids === nothing && return Dict{String,Any}()
+    Dict(id => row for (id, row) in zip(ids, rows))
+end
+
+"""Return stable violations binding an envelope claim to its contract scopes."""
+function cert_scope_binding_violation_codes(
+    envelope,
+    registry,
+    manifest;
+    catalog_declarations=nothing,
+    project_root::AbstractString=dirname(@__DIR__),
+)
+    registry_codes = cert_scope_registry_violation_codes(
+        registry,
+        manifest;
+        catalog_declarations=catalog_declarations,
+        project_root=project_root,
+    )
+    isempty(registry_codes) || return registry_codes
+
+    claim_present, claim_scope = _cert_scope_string_field(envelope, :claim_scope)
+    claim_present && haskey(_CERT_SCOPE_RANK, claim_scope) || return String[]
+    payload_present, payload = _cert_scope_field(envelope, :payload)
+    contracts = payload_present ? _payload_lean_contracts(payload) : String[]
+    if isempty(contracts)
+        return claim_scope == "context_local" ? String[] :
+            ["CLAIM_SCOPE_EXCEEDS_CONTRACT"]
+    end
+
+    rows_by_id = _cert_scope_registry_by_id(registry)
+    codes = String[]
+    for contract_id in contracts
+        row = get(rows_by_id, String(contract_id), nothing)
+        row === nothing && return ["SCOPE_REGISTRY_ID_MISMATCH"]
+        _, scope_kind = _cert_scope_string_field(row, :scope_kind)
+        if scope_kind == "disputed"
+            push!(codes, "CONTRACT_SCOPE_DISPUTED")
+        elseif haskey(_CERT_SCOPE_RANK, scope_kind) &&
+                _CERT_SCOPE_RANK[claim_scope] > _CERT_SCOPE_RANK[scope_kind]
+            push!(codes, "CLAIM_SCOPE_EXCEEDS_CONTRACT")
+        end
+    end
+    _ordered_cert_scope_binding_codes(codes)
+end
+
+function _default_cert_scope_binding_inputs()
+    project_root = dirname(@__DIR__)
+    registry = _cert_scope_load_registry(
+        joinpath(project_root, "specs", "cert-scope-registry.toml"),
+    )
+    manifest = TOML.parsefile(
+        joinpath(project_root, "specs", "checker-semantic-manifest.toml"),
+    )
+    registry, manifest
+end
+
+function _assert_cert_scope_binding(envelope, registry, manifest; kwargs...)
+    violations = cert_scope_binding_violation_codes(
+        envelope,
+        registry,
+        manifest;
+        kwargs...,
+    )
+    isempty(violations) || throw(ArgumentError(
+        "certified envelope contract scope rejected: $(join(violations, ", "))",
     ))
     true
 end
@@ -403,6 +616,9 @@ function certified_artifact_envelope(
     end
     scope = (claim_scope=claim_scope,)
     _assert_cert_scope(scope)
+    scope_registry, semantic_manifest = _default_cert_scope_binding_inputs()
+    scope_probe = (payload=payload, claim_scope=Symbol(String(claim_scope)))
+    _assert_cert_scope_binding(scope_probe, scope_registry, semantic_manifest)
     envelope = (
         payload=payload,
         certificate=certification_summary(check),
@@ -499,6 +715,21 @@ function certified_json_artifact_audit(
             String(parsed.payload.kind) == String(expected_kind))
     claim_scope_violations = parse_ok ? cert_scope_violation_codes(parsed) : String[]
     claim_scope_ok = parse_ok && isempty(claim_scope_violations)
+    contract_scope_violations = String[]
+    contract_scope_ok = false
+    if parse_ok && claim_scope_ok
+        try
+            scope_registry, semantic_manifest = _default_cert_scope_binding_inputs()
+            contract_scope_violations = cert_scope_binding_violation_codes(
+                parsed,
+                scope_registry,
+                semantic_manifest,
+            )
+            contract_scope_ok = isempty(contract_scope_violations)
+        catch
+            contract_scope_ok = false
+        end
+    end
     ok =
         exists &&
         parse_ok &&
@@ -508,6 +739,7 @@ function certified_json_artifact_audit(
         trust_ok &&
         certificate_result_ok &&
         claim_scope_ok &&
+        contract_scope_ok &&
         expected_kind_ok
     (
         kind=:CertifiedJsonArtifactAudit,
@@ -525,6 +757,8 @@ function certified_json_artifact_audit(
         certificate_result_ok=certificate_result_ok,
         claim_scope_ok=claim_scope_ok,
         claim_scope_violations=claim_scope_violations,
+        contract_scope_ok=contract_scope_ok,
+        contract_scope_violations=contract_scope_violations,
         expected_kind_ok=expected_kind_ok,
     )
 end

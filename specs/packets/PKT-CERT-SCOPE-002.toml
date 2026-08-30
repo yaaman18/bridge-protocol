@@ -1,0 +1,29 @@
+schema_version = 1
+packet_id = "PKT-CERT-SCOPE-002"
+prose = "specs/cert-scope-binding-packet.md"
+
+[[failure_mode_review]]
+id = "FM-CALLER-PROOF-BOOL"
+applicable = true
+rationale_ja = "scope_kind も宣言値であり、保証文面が実際に永続的な内容であっても context_local と宣言すれば通る。文面は機械解析しないため、宣言と内容の不一致は検出できない"
+mitigation_ja = "完全には解消しない。改善するのは二点のみで、それを文書に明記した。第一に宣言の場所が実行時の任意呼び出し側から低頻度で審査される164行の catalog へ移ること。第二に強い射程を名乗るには preservation_decl を名指しし、その名前が catalog に実在することが必須になり、名前の裏付けなしには名乗れなくなること。ただし検証されるのは名目的参照の解決までであり、名指された宣言が当該契約の保存性を実際に establish しているかという意味的関連は検証しない。残る自己申告の余地は現時点の天井であり、閉じるには prose の形式化か人手の審査が要ると明記した"
+mutation_ids = []
+
+[[failure_mode_review]]
+id = "FM-OPAQUE-CALLBACK"
+applicable = false
+rationale_ja = "本パケットは関数や callback を受け取らず、対象は manifest と envelope の構造化フィールドの値検査、および catalog 内の宣言名の実在検査に閉じているため"
+
+[[failure_mode_review]]
+id = "FM-CIRCULAR-ORACLE"
+applicable = true
+rationale_ja = "preservation_decl の実在検査を、検査器が自分で生成した宣言名の一覧に対して行うと循環になる。また負例の期待値を検査器と同じ経路から導出すると同じ誤りを共有する"
+mitigation_ja = "実在検査の照合先を CertifiedArtifact.lean の実ファイル読み取りに固定し、検査器側で宣言名を再構成しない。負例 fixture の期待違反符号は固定の literal として記述し、各負例で期待した符号だけが返ることを assert する。判定 core は src に一本化し tools 側は wrapper とする"
+mutation_ids = []
+
+[[failure_mode_review]]
+id = "FM-FALSIFICATION-NOT-GATED"
+applicable = true
+rationale_ja = "実在しない preservation_decl を指す契約の棄却を散文の反証条件として書くだけでは通常ゲートで実行されず、検査の空洞化を検出できない。相A1 ではログに条件ごとの記載が無く、ログのみを読む者が実行を判定できない状態が残った"
+mitigation_ja = "反証条件9項をゲート項目として G3 に含める。加えて相A1 の申し送りを適用し、各条件の実行時に FALSIFICATION-A2-<n>: PASS/FAIL 形式の識別可能な1行をログへ出力させる。ログだけを読む者が、どの条件が走ったかを判定できる状態にする"
+mutation_ids = []

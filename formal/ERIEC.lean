@@ -29,7 +29,10 @@ import ERIEC.Wager
 import ERIEC.Richness
 import ERIEC.OpenEvolution
 import ERIEC.Generation
+import ERIEC.BranchNovelty
 import ERIEC.RefModel.LineageWitness
+import ERIEC.RefModel.BranchNovelty
+import ERIEC.RefModel.LossAwareBranch
 import ERIEC.RefModel.CollapseTrace
 import ERIEC.Lineage
 import ERIEC.TemporalDC

@@ -46,6 +46,7 @@ include("reference_models.jl")
 include("wager.jl")
 include("richness.jl")
 include("generation.jl")
+include("branch_novelty.jl")
 include("temporal_dc.jl")
 include("sigma_selection.jl")
 include("certification.jl")
@@ -383,6 +384,15 @@ export Relation,
     check_richness_inherits_generational,
     check_rich_lineage_cofinal,
     check_branched_rich_lineage_cofinal,
+    FiniteBranchObservation,
+    FiniteEnvironmentIdentity,
+    FiniteBranchScore,
+    check_branch_observation,
+    check_environment_identity,
+    finite_branch_score,
+    check_finite_branch_score,
+    check_branch_fresh_prefix,
+    check_branch_novelty_route,
     ReferenceBenchmarkCase,
     FourReferenceBenchmark,
     benchmark_passed,

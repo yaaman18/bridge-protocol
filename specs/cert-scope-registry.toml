@@ -1,0 +1,658 @@
+schema_version = 1
+registry_id = "erie-c-cert-scope"
+
+[[contract]]
+id = "adjunction.system"
+scope_kind = "context_local"
+
+[[contract]]
+id = "adjunction.rigidity"
+scope_kind = "context_local"
+
+[[contract]]
+id = "adjunction.galois_conn"
+scope_kind = "context_local"
+
+[[contract]]
+id = "interface.relation_linearization"
+scope_kind = "context_local"
+
+[[contract]]
+id = "interface.sensitivity_realization"
+scope_kind = "context_local"
+
+[[contract]]
+id = "interface.relation_naturality"
+scope_kind = "context_local"
+
+[[contract]]
+id = "interface.relation_lax_naturality"
+scope_kind = "context_local"
+
+[[contract]]
+id = "interface.strict_naturality_counterexample"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.alpha_only_counterexample"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.raw_gram_counterexample"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_object_classifier"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_lax_map"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_thin_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_strict_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_hilbert_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "bridge.hinge_structural_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "viability.closure_object"
+scope_kind = "context_local"
+
+[[contract]]
+id = "viability.closure_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "viability.relational_frame"
+scope_kind = "context_local"
+
+[[contract]]
+id = "viability.relational_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "layers.viable_to_hilbert"
+scope_kind = "context_local"
+
+[[contract]]
+id = "layers.nonfaithful_counterexample"
+scope_kind = "context_local"
+
+[[contract]]
+id = "grading.const_presheaf_antitone"
+scope_kind = "context_local"
+
+[[contract]]
+id = "grading.critical_rank"
+scope_kind = "context_local"
+
+[[contract]]
+id = "closure.nu_phi"
+scope_kind = "context_local"
+
+[[contract]]
+id = "closure.knaster_tarski"
+scope_kind = "context_local"
+
+[[contract]]
+id = "hinge.act"
+scope_kind = "context_local"
+
+[[contract]]
+id = "collapse.critical_slowing"
+scope_kind = "context_local"
+
+[[contract]]
+id = "dynamics.finite_collapse"
+scope_kind = "context_local"
+
+[[contract]]
+id = "dc.system"
+scope_kind = "context_local"
+
+[[contract]]
+id = "certification.critical_bound"
+scope_kind = "context_local"
+
+[[contract]]
+id = "sensitivity.dual_symmetry"
+scope_kind = "context_local"
+
+[[contract]]
+id = "sensitivity.no_order_unit"
+scope_kind = "context_local"
+
+[[contract]]
+id = "world.spectral_band"
+scope_kind = "context_local"
+
+[[contract]]
+id = "world.lambda_max"
+scope_kind = "context_local"
+
+[[contract]]
+id = "value.endogenous"
+scope_kind = "context_local"
+
+[[contract]]
+id = "world.actuated"
+scope_kind = "context_local"
+
+[[contract]]
+id = "worlddc.bridge"
+scope_kind = "context_local"
+
+[[contract]]
+id = "worlddc.no_unconditional_equivalence"
+scope_kind = "context_local"
+
+[[contract]]
+id = "worlddc.no_backward_unconditional"
+scope_kind = "context_local"
+
+[[contract]]
+id = "worlddc.representation.forward"
+scope_kind = "context_local"
+
+[[contract]]
+id = "graded.presheaf_transition_coproduct"
+scope_kind = "context_local"
+
+[[contract]]
+id = "decomp.copair_unique"
+scope_kind = "context_local"
+
+[[contract]]
+id = "graded.presheaf_transition_naturality"
+scope_kind = "context_local"
+
+[[contract]]
+id = "graded.presheaf_transition_output_copair_unique"
+scope_kind = "context_local"
+
+[[contract]]
+id = "body.no_terminal_setpoint"
+scope_kind = "context_local"
+
+[[contract]]
+id = "guard.terminal_iff"
+scope_kind = "context_local"
+
+[[contract]]
+id = "markers.fm_classification"
+scope_kind = "context_local"
+
+[[contract]]
+id = "markers.classify"
+scope_kind = "context_local"
+
+[[contract]]
+id = "opendynamics.open_graph"
+scope_kind = "context_local"
+
+[[contract]]
+id = "opendynamics.path"
+scope_kind = "context_local"
+
+[[contract]]
+id = "audit.simulation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "audit.certified_simulation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "lineage.core"
+scope_kind = "context_local"
+
+[[contract]]
+id = "theorytr.phenomenal_guard"
+scope_kind = "context_local"
+
+[[contract]]
+id = "invariance.update_bisimulation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.v5_1"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.stable_v2"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.dynamic_v2"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.nondegenerate_v2"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_dc"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_ax_core_discrete"
+scope_kind = "context_local"
+
+[[contract]]
+id = "reference_models.arbitrarily_large_three_layer"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.frozen_independence"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.w5_independence_family"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.conservative_extension"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.global_protocol_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.named_models"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.w6_cycle_soundness"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.interpretive_model_checker"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.finite_model_checker"
+scope_kind = "context_local"
+
+[[contract]]
+id = "wager.full_model_checker"
+scope_kind = "context_local"
+
+[[contract]]
+id = "richness.branch"
+scope_kind = "context_local"
+
+[[contract]]
+id = "richness.hinge_branch_pump"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.dc_viable_translation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.proliferation_morphism"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.lineage_stays_open"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.richness_inherits_generational"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.rich_lineage_cofinal"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.branched_rich_lineage_cofinal"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.branch_observation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.branch_novelty_route"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.branch_fresh"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.finite_branch_score"
+scope_kind = "context_local"
+
+[[contract]]
+id = "generation.loss_aware_reference"
+scope_kind = "context_local"
+
+[[contract]]
+id = "temporaldc.observed_termination"
+scope_kind = "context_local"
+
+[[contract]]
+id = "temporaldc.permanent_termination"
+scope_kind = "context_local"
+
+[[contract]]
+id = "temporaldc.collapse_trace"
+scope_kind = "context_local"
+
+[[contract]]
+id = "temporaldc.precarious"
+scope_kind = "context_local"
+
+[[contract]]
+id = "temporaldc.no_escape"
+scope_kind = "context_local"
+
+[[contract]]
+id = "meta.sigma_purity"
+scope_kind = "context_local"
+
+[[contract]]
+id = "meta.qd_selection"
+scope_kind = "context_local"
+
+[[contract]]
+id = "meta.sigma1_experiment"
+scope_kind = "context_local"
+
+[[contract]]
+id = "meta.individual_adapter"
+scope_kind = "context_local"
+
+[[contract]]
+id = "meta.sigma1_diversity_audit"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gate.propagation"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gate.soundness"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gate.unique"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gap.branch"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gap.degeneracy"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.gap.trichotomy"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.decay.psi"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.decay.abstract_collapse"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.decay.collapse_of_psi"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.decay.psi2"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.opensimc.identity_audit"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.opensimc.path_units"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.opensimc.erase_functor"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.kernelopen.action_gap"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.centering.horizontal_wall"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.centering.fixed_specialization"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.centering.strength_data"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.centering.quantified_closure"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.value.positive_static_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.fm1_static_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.fm2_static_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.static_hinge_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.fm3_dynlab_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.fm4_dynrep_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.conscious_dynlabrep_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.blind_dynlabrep_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.conscious_static_hinge_dynlabrep_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.blind_static_hinge_dynlabrep_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.dynlabrep_static_hinge_fixed_specialization"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.conscious_static_hinge_horizontal_wall"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.blind_static_hinge_horizontal_wall"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.analyticfm4.coordinate_swap_unitary"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.analyticfm4.eigenspace_transport"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.analyticfm4.hilbert_unitary_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.analyticfm4.complex_hilbert_unitary_invariant"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.analyticfm4.complex_full_marker_link"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.traceability.vocabulary"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.traceability.soundness"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.recurrent_gate_viability"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.standard_gate_profile"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_positive_value"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_full_marker"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_analytic_fm4"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_euclidean_hilbert_fm4"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_complex_hilbert_fm4"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_complex_full_marker"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_three_stage_dynamics"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_obs_lab_exchange"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_converse_relations"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_orthogonal_projection"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_conjugacy"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_orbit_invariance"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.markers.analytic_fm4_unitary"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.analytic_symmetric_double"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.full_marker_analytic_fm4"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamics"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_dynamic_iso"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_update_bisim"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_full_witness"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.full_marker_conscious_wall"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.full_marker_blind_wall"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_blind"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_not_conscious"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.symmetric_double_fm1"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.noniso_multiplicity"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.nondegenerate_recur_full"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.nondegenerate_recur_integrated"
+scope_kind = "context_local"
+
+[[contract]]
+id = "v52.refmodel.horizontal_wall_witness"
+scope_kind = "context_local"

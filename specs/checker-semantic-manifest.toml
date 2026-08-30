@@ -1,7 +1,7 @@
 schema_version = 2
 allowed_relations = ["exact_finite_decision", "sound_only", "complete_only", "witness_validator", "counterexample_generator", "counterexample_validator", "observation_only", "regression_only", "lean_only", "unclassified"]
 sensitivity_registry = "test/checker_sensitivity_cases.jl"
-sensitivity_registry_sha256 = "ed803d461f6c680518cc78cf8e5bf9fb93e165b91b5579f642ae028a22b57eac"
+sensitivity_registry_sha256 = "8732555cb6c96a641b62f3d4856d24ce97487c54e611bb87022e72447abb49f1"
 
 [[contract]]
 id = "adjunction.system"
@@ -948,6 +948,59 @@ assumptions = ["finite branch and transport flags do not establish an infinite b
 guarantee = "regresses canonical finite-prefix growth, branching, transport, and bound checks"
 reviewer = "codex"
 basis_log = "logs/gates/checker-semantic-manifest/batch-05-20260803.log"
+
+[[contract]]
+id = "generation.branch_observation"
+checker_relation = "witness_validator"
+review_status = "reviewed"
+checker = "check_branch_observation"
+lean_decl = "ERIEC.BranchNovelty.BranchObservation"
+scope = "one supplied finite generation over duplicate-free complete motor and environment carriers"
+assumptions = ["the supplied carriers exhaust the encoded generation", "alpha_rel and sigma_rel are total on those carriers and their returned collections represent relation membership"]
+guarantee = "exhaustively validates hConv on the supplied finite generation; it does not establish that the runtime object is a particular Lean observation"
+reviewer = "codex"
+basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
+
+[[contract]]
+id = "generation.branch_novelty_route"
+checker_relation = "witness_validator"
+review_status = "reviewed"
+checker = "check_branch_novelty_route"
+lean_decl = "ERIEC.BranchNovelty.BranchNoveltyRoute"
+scope = "one nonempty closed finite lineage prefix, a lineage-fixed environment identity function, and a finite cutoff"
+assumptions = ["every supplied generation carrier is complete and duplicate-free", "the identity function is stable input data for the whole prefix and is injective within each generation", "finite-prefix freshness does not establish the Lean route's infinite BranchFresh premise"]
+guarantee = "validates every finite observation and per-generation identity injection, derives loss and cumulative novelty from structural image equality, and checks a fresh image at or after the finite cutoff"
+reviewer = "codex"
+basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
+
+[[contract]]
+id = "generation.branch_fresh"
+checker_relation = "lean_only"
+review_status = "machine_verified"
+
+[[contract]]
+id = "generation.finite_branch_score"
+checker_relation = "exact_finite_decision"
+review_status = "reviewed"
+checker = "check_finite_branch_score"
+lean_decl = "ERIEC.BranchNovelty.FiniteBranchScore"
+scope = "one nonempty closed finite lineage prefix with complete finite carriers and claimed score, novelty, and loss traces"
+assumptions = ["Julia set equality represents StructuralImageIdentity on the lineage-fixed medium", "the supplied identity is injective within every generation", "the claimed traces cover the entire supplied prefix"]
+guarantee = "independently derives cumulative distinct branch-image scores and adjacent-generation novelty and loss counts, then decides exact equality with all claimed traces"
+reviewer = "codex"
+basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
+
+[[contract]]
+id = "generation.loss_aware_reference"
+checker_relation = "regression_only"
+review_status = "reviewed"
+checker = "check_branch_novelty_route"
+lean_decl = "ERIEC.RefModel.noveltyPositive_freshSem"
+scope = "a caller-supplied finite prefix corresponding to the loss-aware positive reference pattern"
+assumptions = ["finite replay cannot establish the Lean theorem's unbounded FreshSem conclusion", "the caller supplies the prefix rather than the checker constructing the Lean reference model"]
+guarantee = "regresses finite loss-aware novelty behavior while the Lean theorem proves the infinite reference lineage is semantically fresh"
+reviewer = "codex"
+basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
 
 [[contract]]
 id = "temporaldc.observed_termination"

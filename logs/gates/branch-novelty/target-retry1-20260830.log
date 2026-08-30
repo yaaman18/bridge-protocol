@@ -1,0 +1,5 @@
+Precompiling ERIEC...
+   7810.6 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 8 seconds. 26 already precompiled.
+Test Summary:             | Pass  Total  Time
+loss-aware branch novelty |   19     19  2.8s
