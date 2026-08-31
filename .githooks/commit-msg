@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# Reject placeholder commit messages.
+#
+# 2026-07-11 から 2026-08-30 のあいだに作られた 33 コミットのうち 28 件が
+# 「コミット」「commit」という本文のみだった。GitHub 上で何をした変更なのか
+# 追跡できない。このフックは同じことが再び起きるのを機械的に防ぐ。
+#
+# 有効化（clone ごとに一度）:
+#   git config core.hooksPath .githooks
+set -u
+
+msg_file="$1"
+
+# 本文（コメント行を除く）の最初の非空行を subject とする。
+subject="$(grep -v '^#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -1)"
+subject="$(printf '%s' "$subject" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+
+reject() {
+  printf '\n[commit-msg] コミットメッセージが拒否されました: %s\n' "$1" >&2
+  printf '  subject: %s\n\n' "${subject:-（空）}" >&2
+  cat >&2 <<'USAGE'
+  何を変えたかではなく「何をしたか」が読み取れる一行を書いてください。
+  例:
+    branch novelty の Lean 形式化と Julia checker を追加し G1-G4 を通す
+    cert-scope レジストリを導入し 164 contract を context_local として登録
+    README を現行仕様に合わせて全面改訂（checker manifest・検証実践 v2 を追記）
+
+  検証作業のコミットでは、本文にゲート証拠のログパスを添えると後から辿れます。
+
+  やむを得ず回避する場合: git commit --no-verify
+USAGE
+  exit 1
+}
+
+[ -z "$subject" ] && reject "メッセージが空です"
+
+# merge / revert / fixup / squash は git が生成する定型文なので通す。
+case "$subject" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *|amend!\ *) exit 0 ;;
+esac
+
+# 内容を持たない定型語の単独使用を拒否する。
+lowered="$(printf '%s' "$subject" | tr '[:upper:]' '[:lower:]')"
+case "$lowered" in
+  commit|commits|コミット|こみっと|wip|tmp|temp|test|tests|save|saved|\
+  update|updates|updated|fix|fixes|fixed|add|added|change|changes|changed|\
+  misc|minor|cleanup|clean|refactor|stuff|work|作業|修正|更新|変更|追加|削除|対応|\
+  いろいろ|諸々|なおした|直した|.|..|...|-)
+    reject "内容を持たない定型語です"
+    ;;
+esac
+
+# 上記の定型語に句読点や絵文字だけを足したものも拒否する。
+stripped="$(printf '%s' "$lowered" | sed 's/[[:space:].,:;!?、。・…ー-]//g')"
+case "$stripped" in
+  commit|コミット|wip|update|fix|作業|修正|更新|変更|追加|対応)
+    reject "内容を持たない定型語です"
+    ;;
+esac
+
+# 長さ検査。python3 があれば文字数、無ければバイト数で近似する。
+if command -v python3 >/dev/null 2>&1; then
+  len="$(printf '%s' "$subject" | python3 -c 'import sys; print(len(sys.stdin.read()))')"
+  min=10
+  unit="文字"
+else
+  len="$(printf '%s' "$subject" | wc -c | tr -d ' ')"
+  min=20
+  unit="バイト"
+fi
+
+if [ "$len" -lt "$min" ]; then
+  reject "subject が短すぎます（${len}${unit} < ${min}${unit}）"
+fi
+
+exit 0
