@@ -59,6 +59,7 @@ include("trm_experiments.jl")
 include("trm_python_bridge.jl")
 include("boundary.jl")
 include("field_system.jl")
+include("field_bridge.jl")
 include("architecture.jl")
 include("lenia_experiments.jl")
 include("visualization.jl")
@@ -389,10 +390,12 @@ export Relation,
     FiniteBranchScore,
     check_branch_observation,
     check_environment_identity,
+    check_shared_environment_carrier,
     finite_branch_score,
     check_finite_branch_score,
     check_branch_fresh_prefix,
     check_branch_novelty_route,
+    check_canonical_branch_novelty_route,
     ReferenceBenchmarkCase,
     FourReferenceBenchmark,
     benchmark_passed,

@@ -51,6 +51,7 @@ const ERIEC_TEST_PLAN = [
     ("test_formal_julia_contract.jl", 7.0),
     ("test_v52_formal_statements.jl", 2.0),
     ("test_field_system.jl", 84.0),
+    ("test_field_bridge.jl", 4.0),
     ("test_lenia_experiments.jl", 29.0),
     ("test_trm_python_bridge.jl", 1.0),
     ("test_visualization.jl", 3.0),

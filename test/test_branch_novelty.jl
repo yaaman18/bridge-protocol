@@ -35,6 +35,8 @@ using ERIEC
     @test check_branch_fresh_prefix(score; cutoff=4)
     @test check_branch_fresh_prefix(score; cutoff=2)
     @test check_branch_novelty_route(observations, identity; cutoff=4)
+    @test check_shared_environment_carrier(observations)
+    @test check_canonical_branch_novelty_route(observations; cutoff=4)
 
     # Branch-free observations never create a positive score.
     branch_free = [observation(Dict(:m0 => [:e0]))]
@@ -73,6 +75,18 @@ using ERIEC
     rename_score = finite_branch_score([first, renamed_first], rename_identity)
     @test rename_score.scores == [1, 1]
     @test rename_score.novel_counts == [1, 0]
+    @test !check_shared_environment_carrier([first, renamed_first])
+    @test !check_canonical_branch_novelty_route([first, renamed_first])
+
+    # The generic trusted boundary can manufacture novelty by separating the
+    # same carrier across generations.  The certified checker has no identity
+    # input and therefore rejects the same false-positive claim.
+    separated = FiniteEnvironmentIdentity(
+        (generation, environment) -> (generation, environment))
+    separated_score = finite_branch_score([first, first], separated)
+    @test separated_score.scores == [1, 2]
+    @test separated_score.novel_counts == [1, 1]
+    @test !check_canonical_branch_novelty_route([first, first]; cutoff=2)
 
     # Incomplete and duplicate closed carriers are rejected.
     duplicate_carrier = FiniteBranchObservation(

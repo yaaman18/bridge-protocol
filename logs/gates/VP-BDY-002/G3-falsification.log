@@ -1,0 +1,25 @@
+ERROR: LoadError: Some tests did not pass: 17 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_field_bridge.jl:73
+FALSIFICATION-BDY-002-DEAD-SUPPORT: PASS
+FALSIFICATION-BDY-002-RANDOM-PERSISTENCE: PASS
+Test Summary:           | Pass  Total   Time
+field to sensory bridge |   19     19  16.1s
+FALSIFICATION-BDY-002-SIGMA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-ALPHA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-PROVENANCE-ONLY: PASS
+FALSIFICATION-BDY-002-INDEPENDENT-DEPENDENCY: PASS
+independent alpha and clamp sigma measurement: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_field_bridge.jl:206
+  Expression: :check_clamp_sigma_identification in graph.julia_checkers
+   Evaluated: check_clamp_sigma_identification in ["check_clamp_sigma_identification", "check_measured_hconv"]
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_field_bridge.jl:206 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_field_bridge.jl:74
+Test Summary:                                 | Pass  Fail  Total   Time
+independent alpha and clamp sigma measurement |   17     1     18  25.8s

@@ -77,6 +77,15 @@ function check_environment_identity(
     end
 end
 
+"""Every finite generation must enumerate the same closed environment carrier."""
+function check_shared_environment_carrier(
+    observations::AbstractVector{<:FiniteBranchObservation},
+)::Bool
+    isempty(observations) && return false
+    baseline = Set(first(observations).environments)
+    all(observation -> Set(observation.environments) == baseline, observations)
+end
+
 function _branch_image_equal(left::Set{Any}, right::Set{Any})
     left == right
 end
@@ -187,4 +196,20 @@ function check_branch_novelty_route(
     catch
         false
     end
+end
+
+"""
+Validate the certified finite route boundary.
+
+The environment carrier is literally shared and structural identity is the
+identity map, so a caller cannot separate generations by supplying a custom
+medium embedding.
+"""
+function check_canonical_branch_novelty_route(
+    observations::AbstractVector{<:FiniteBranchObservation};
+    cutoff::Integer=1,
+)::Bool
+    check_shared_environment_carrier(observations) || return false
+    identity = FiniteEnvironmentIdentity((_, environment) -> environment)
+    check_branch_novelty_route(observations, identity; cutoff=cutoff)
 end

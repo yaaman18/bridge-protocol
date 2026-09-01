@@ -5,6 +5,7 @@ import ERIEC.StructuralHinge
 import ERIEC.ViabilityClosure
 import ERIEC.LayerComposition
 import ERIEC.Body
+import ERIEC.FieldBridge
 import ERIEC.Closure
 import ERIEC.Hinge
 import ERIEC.Collapse
@@ -487,6 +488,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "check_m4_no_terminal_setpoint"
       },
       {
+        id := "body.clamp_sigma_identification"
+        leanModule := "ERIEC.FieldBridge"
+        leanName := "ClampSigmaIdentificationAssumption"
+        leanKind := "structure"
+        juliaSymbol := "ClampSigmaMeasurementCertificate"
+        juliaChecker := "check_clamp_sigma_identification"
+      },
+      {
         id := "guard.terminal_iff"
         leanModule := "ERIEC.Guard"
         leanName := "hasTStar_iff_terminal"
@@ -772,10 +781,10 @@ def certifiedArtifact : CertifiedArtifact :=
       {
         id := "generation.branch_novelty_route"
         leanModule := "ERIEC.BranchNovelty"
-        leanName := "BranchNoveltyRoute"
+        leanName := "CanonicalBranchNoveltyRoute"
         leanKind := "structure"
-        juliaSymbol := "FiniteEnvironmentIdentity"
-        juliaChecker := "check_branch_novelty_route"
+        juliaSymbol := "FiniteBranchObservation"
+        juliaChecker := "check_canonical_branch_novelty_route"
       },
       {
         id := "generation.branch_fresh"
@@ -799,8 +808,8 @@ def certifiedArtifact : CertifiedArtifact :=
         leanName := "noveltyPositive_freshSem"
         leanFullName := "ERIEC.RefModel.noveltyPositive_freshSem"
         leanKind := "theorem"
-        juliaSymbol := "check_branch_novelty_route"
-        juliaChecker := "check_branch_novelty_route"
+        juliaSymbol := "check_canonical_branch_novelty_route"
+        juliaChecker := "check_canonical_branch_novelty_route"
       },
       {
         id := "temporaldc.observed_termination"

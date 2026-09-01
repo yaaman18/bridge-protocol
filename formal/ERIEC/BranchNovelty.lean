@@ -32,6 +32,24 @@ structure BranchObservation where
   dc : DC M E C S
   hConv : ∀ m e, e ∈ dc.alphaRel m ↔ m ∈ dc.sigmaRel e
 
+/-- A branch observation whose environment type is fixed by the enclosing
+certified route. -/
+structure SharedBranchObservation (E : Type u) where
+  M : Type u
+  C : Type u
+  S : Type u
+  dc : DC M E C S
+  hConv : ∀ m e, e ∈ dc.alphaRel m ↔ m ∈ dc.sigmaRel e
+
+def SharedBranchObservation.toBranchObservation {E : Type u}
+    (observation : SharedBranchObservation E) : BranchObservation.{u} where
+  M := observation.M
+  E := E
+  C := observation.C
+  S := observation.S
+  dc := observation.dc
+  hConv := observation.hConv
+
 /-- A branch anchor together with its sigma-only branching proof. -/
 def BranchCarrier (observation : BranchObservation.{u}) : Type u :=
   {m : observation.M // BranchSigma observation.dc.sigmaRel m}
@@ -69,6 +87,27 @@ structure BranchNoveltyRoute
     Generation.dcToOpenSystem (observations n).dc = lineage.system n
   environmentIdentity :
     EnvironmentIdentity (fun n ↦ (observations n).E)
+
+/-- Certified route boundary.  All generations literally share one environment
+type and therefore use the canonical identity map.  The more general
+`BranchNoveltyRoute` remains available as an explicitly trusted observation
+boundary, but is not the route registered by the certificate catalog. -/
+structure CanonicalBranchNoveltyRoute
+    {generation : OpenEvolution.GenEvent.{u}}
+    (lineage : OpenEvolution.Lineage generation) where
+  E : Type u
+  observations : Nat → SharedBranchObservation E
+  system_eq : ∀ n,
+    Generation.dcToOpenSystem (observations n).dc = lineage.system n
+
+def CanonicalBranchNoveltyRoute.toBranchNoveltyRoute
+    {generation : OpenEvolution.GenEvent.{u}}
+    {lineage : OpenEvolution.Lineage generation}
+    (route : CanonicalBranchNoveltyRoute lineage) :
+    BranchNoveltyRoute lineage where
+  observations := fun n ↦ (route.observations n).toBranchObservation
+  system_eq := route.system_eq
+  environmentIdentity := EnvironmentIdentity.shared route.E
 
 /-- The structural image of one branching sigma-fibre in the lineage's fixed
 medium. -/

@@ -6,6 +6,7 @@ import ERIEC.StructuralHinge
 import ERIEC.ViabilityClosure
 import ERIEC.LayerComposition
 import ERIEC.Body
+import ERIEC.FieldBridge
 import ERIEC.Guard
 import ERIEC.Closure
 import ERIEC.Hinge

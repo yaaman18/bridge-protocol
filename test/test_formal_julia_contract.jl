@@ -556,6 +556,18 @@
             ],
         ),
         (
+            file="FieldBridge.lean",
+            lean=[
+                "ClampSigmaIdentificationAssumption",
+                "measuredSigma_eq_theoreticalSigma",
+            ],
+            julia=[
+                :ClampSigmaMeasurementCertificate,
+                :check_clamp_sigma_identification,
+            ],
+            exported=false,
+        ),
+        (
             file="Guard.lean",
             lean=["HasTStar", "NoTStar", "hasTStar_iff_terminal", "M4", "TraceSafe", "traceSafe_to_M4Safe", "kleisli"],
             julia=[:check_terminal_guard, :check_trace_safe],
@@ -913,6 +925,8 @@
                 "largeAXCoreDC_hConv", "collapseInitialDC_hConv",
                 "noveltyPositiveDC", "noveltyPositiveDC_hConv",
                 "noveltyPositiveLineage", "noveltyPositiveRoute",
+                "noveltyPositiveCanonicalRoute",
+                "noveltyPositiveCanonicalRoute_toRoute",
                 "noveltyPositive_branchFresh", "noveltyPositive_branchLost",
                 "noveltyPositive_branchReflecting", "noveltyPositive_freshSem",
                 "CollapseTraceWitness", "collapse_trace_reference_model",
@@ -931,10 +945,12 @@
                 :FiniteBranchScore,
                 :check_branch_observation,
                 :check_environment_identity,
+                :check_shared_environment_carrier,
                 :finite_branch_score,
                 :check_finite_branch_score,
                 :check_branch_fresh_prefix,
                 :check_branch_novelty_route,
+                :check_canonical_branch_novelty_route,
                 :check_collapse_trace_termination,
                 :check_precarious_prefix,
                 :check_no_escape_prefix,
@@ -1002,8 +1018,11 @@
             file="BranchNovelty.lean",
             lean=[
                 "BranchSigma", "branchSigma_iff_branch", "BranchObservation",
+                "SharedBranchObservation", "SharedBranchObservation.toBranchObservation",
                 "BranchCarrier", "BranchFiber", "EnvironmentIdentity",
-                "BranchNoveltyRoute", "BranchImage", "StructuralImageIdentity",
+                "BranchNoveltyRoute", "CanonicalBranchNoveltyRoute",
+                "CanonicalBranchNoveltyRoute.toBranchNoveltyRoute",
+                "BranchImage", "StructuralImageIdentity",
                 "GenerationBranchImages", "BranchSurvives", "BranchLost",
                 "BranchHistory", "BranchFresh", "BranchReflectingSem",
                 "branchFresh_implies_freshSem", "FiniteBranchScore",
@@ -1013,8 +1032,9 @@
                 :FiniteBranchObservation, :FiniteEnvironmentIdentity,
                 :FiniteBranchScore, :check_branch_observation,
                 :check_environment_identity, :finite_branch_score,
+                :check_shared_environment_carrier,
                 :check_finite_branch_score, :check_branch_fresh_prefix,
-                :check_branch_novelty_route,
+                :check_branch_novelty_route, :check_canonical_branch_novelty_route,
             ],
         ),
         (
@@ -1138,7 +1158,9 @@
             @test any(text -> occursin(declaration_regex(lean_name), text), texts)
         end
         for julia_name in contract.julia
-            @test julia_name in exported
+            if !hasproperty(contract, :exported) || contract.exported
+                @test julia_name in exported
+            end
             @test isdefined(ERIEC, julia_name)
         end
     end
@@ -1196,6 +1218,7 @@
         "graded.presheaf_transition_naturality",
         "graded.presheaf_transition_output_copair_unique",
         "body.no_terminal_setpoint",
+        "body.clamp_sigma_identification",
         "guard.terminal_iff",
         "markers.fm_classification",
         "markers.classify",
@@ -1529,8 +1552,8 @@
         ),
         (
             id="generation.branch_novelty_route",
-            checkers=[:check_branch_novelty_route],
-            full_declaration="ERIEC.BranchNovelty.BranchNoveltyRoute",
+            checkers=[:check_canonical_branch_novelty_route],
+            full_declaration="ERIEC.BranchNovelty.CanonicalBranchNoveltyRoute",
         ),
         (
             id="generation.branch_fresh",
@@ -1544,7 +1567,7 @@
         ),
         (
             id="generation.loss_aware_reference",
-            checkers=[:check_branch_novelty_route],
+            checkers=[:check_canonical_branch_novelty_route],
             full_declaration="ERIEC.RefModel.noveltyPositive_freshSem",
         ),
     ]

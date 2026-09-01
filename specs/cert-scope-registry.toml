@@ -186,6 +186,10 @@ id = "body.no_terminal_setpoint"
 scope_kind = "context_local"
 
 [[contract]]
+id = "body.clamp_sigma_identification"
+scope_kind = "context_local"
+
+[[contract]]
 id = "guard.terminal_iff"
 scope_kind = "context_local"
 

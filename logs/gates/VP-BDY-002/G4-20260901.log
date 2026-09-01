@@ -1,0 +1,10 @@
+ERROR: MethodError: no method matching certified_artifact_envelope(::@NamedTuple{kind::Symbol, lean_contracts::Vector{String}, julia_checkers::Vector{Symbol}, numeric_assumptions::@NamedTuple{body_threshold::Float64}}; check::CertifiedArtifactCheck)
+The function `certified_artifact_envelope` exists, but no method is defined for this combination of argument types.
+
+Closest candidates are:
+  certified_artifact_envelope(::Any, !Matched::CertifiedArtifactCheck; claim_scope) got unsupported keyword argument "check"
+   @ ERIEC ~/bridge-protocol/src/certification.jl:599
+
+Stacktrace:
+ [1] top-level scope
+   @ none:1

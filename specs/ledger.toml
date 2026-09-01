@@ -133,6 +133,21 @@ status      = "certified"                     # G4: logs/gates/VP-BDY-001/G4-202
 pinned      = false
 coverage_audit = "unreviewed"
 
+[[vp]]
+id          = "VP-BDY-002"
+source      = "specs/sensory-carrier-contract.md#0-決定済みユーザー決定-2026-09-01"
+claim_ja    = "独立なクランプ測定を理論上のσと同定する仮定を明示し、有限測定の来歴分離とhConv不一致を検査する"
+lean_decl   = "ERIEC.FieldBridge.ClampSigmaIdentificationAssumption"
+lean_file   = "formal/ERIEC/FieldBridge.lean"
+julia_api   = "check_clamp_sigma_identification"
+julia_file  = "src/field_bridge.jl"
+contract_id = "body.clamp_sigma_identification"
+owner       = "codex"
+depends_on  = ["VP-BDY-001"]
+status      = "certified"                   # G3C: logs/gates/VP-BDY-002/G3C-20260901-full-retry1.log; G4: logs/gates/VP-BDY-002/G4-20260901-after-G3C.log
+pinned      = false
+coverage_audit = "unreviewed"
+
 # ---- 検証点 5: Wld の内生計算と Umwelt 相対性 ------------------------------
 
 [[vp]]

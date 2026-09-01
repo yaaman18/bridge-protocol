@@ -1,0 +1,10 @@
+FALSIFICATION-BDY-002-DEAD-SUPPORT: PASS
+FALSIFICATION-BDY-002-RANDOM-PERSISTENCE: PASS
+Test Summary:           | Pass  Total   Time
+field to sensory bridge |   19     19  16.2s
+FALSIFICATION-BDY-002-SIGMA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-ALPHA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-PROVENANCE-ONLY: PASS
+FALSIFICATION-BDY-002-INDEPENDENT-DEPENDENCY: PASS
+Test Summary:                                 | Pass  Total   Time
+independent alpha and clamp sigma measurement |   18     18  23.4s

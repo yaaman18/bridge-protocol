@@ -158,7 +158,7 @@ end
     registry_ids = [String(row["id"]) for row in registry["contract"]]
     manifest_ids = [String(row["id"]) for row in manifest["contract"]]
     current_registry_ok = isempty(registry_codes) &&
-        length(registry_ids) == length(manifest_ids) == 164 &&
+        length(registry_ids) == length(manifest_ids) == 165 &&
         Set(registry_ids) == Set(manifest_ids)
     record_a2_falsification(7, current_registry_ok)
 

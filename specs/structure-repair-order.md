@@ -231,8 +231,10 @@ codex がパケット化の前提として固定を求めている。
     `BranchSurvives` / `BranchLost` は隣接世代の正準 `BranchImage` の存在／不在から導出する。
     caller が partial carry の定義域を選ぶ入力は設けない。失われた image は `BranchHistory` に残し、
     後の再出現を新規として数えない。共有環境型の正準インスタンスは identity を用いる。
-    一般の外部 `EnvironmentIdentity` は信頼された観測境界であり、有限 Julia 境界では世代内単射を
-    全数検査する。この境界を越えた無条件の正準性は主張しない。
+    一般の外部 `EnvironmentIdentity` を持つ `BranchNoveltyRoute` は非認証の信頼観測境界として残す。
+    catalog に登録する `CanonicalBranchNoveltyRoute` は全世代で同じ環境型 `E` を共有し
+    `identify=id` を型から構成する。有限 Julia 境界でも全世代の完全環境 carrier が同一であることを
+    全数検査し、caller-supplied medium embedding は受け取らない。
   - 能力喪失を含む正例として `ERIEC.RefModel.noveltyPositive_branchLost` を置き、同じ系譜で
     richer replacement と `noveltyPositive_freshSem` が成立することを Lean で証明する。
 - (b) **【解決・codex 2026-08-30】「分岐」の担い手は分岐する σ-繊維とする。**

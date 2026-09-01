@@ -68,11 +68,11 @@ checker_relation_matches_contract(row, contract) =
     @test Set(manifest["allowed_relations"]) == CHECKER_RELATION_VALUES
     @test allunique(ids)
     @test Set(ids) == Set(artifact_ids)
-    @test length(rows) == length(artifact_ids) == 164
+    @test length(rows) == length(artifact_ids) == 165
     @test scope_registry["schema_version"] == 1
     @test allunique(scope_ids)
     @test Set(scope_ids) == Set(ids)
-    @test length(scope_rows) == 164
+    @test length(scope_rows) == 165
     @test isempty(ERIEC.cert_scope_registry_violation_codes(
         scope_registry,
         manifest;
@@ -107,7 +107,7 @@ checker_relation_matches_contract(row, contract) =
     sensitivity_cases = checker_sensitivity_cases()
     exact_rows = filter(row -> row["checker_relation"] == "exact_finite_decision", rows)
     @test length(exact_rows) == 28
-    @test count(row -> row["checker_relation"] == "witness_validator", rows) == 28
+    @test count(row -> row["checker_relation"] == "witness_validator", rows) == 29
     @test count(row -> row["checker_relation"] == "regression_only", rows) == 14
     @test Set(keys(sensitivity_cases)) == Set(row["id"] for row in exact_rows)
     rows_by_id = Dict(row["id"] => row for row in rows)

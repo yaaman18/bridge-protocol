@@ -549,6 +549,18 @@ reviewer = "codex"
 basis_log = "logs/gates/checker-strengthening/exact-13-type-audit-20260817.log"
 
 [[contract]]
+id = "body.clamp_sigma_identification"
+checker_relation = "witness_validator"
+review_status = "reviewed"
+checker = "check_clamp_sigma_identification"
+lean_decl = "ERIEC.FieldBridge.ClampSigmaIdentificationAssumption"
+scope = "complete caller-supplied finite action and sensory carriers, independently hashed alpha and clamp trial families, and one supplied theoretical sigma relation"
+assumptions = ["the clamp protocol is assumed to identify the theoretical sigma relation rather than proving that semantic identification", "the profile hash identifies the preregistered geometric discretization and numeric thresholds", "the caller-supplied finite carriers exhaust the measured relation", "distinct alpha and clamp provenance hashes denote independently generated trial families"]
+guarantee = "validates carrier completeness, relation range closure, distinct alpha and clamp provenance, and extensional equality of measured and caller-supplied theoretical sigma; reports hConv independently and does not prove the semantic identification assumption"
+reviewer = "codex"
+basis_log = "logs/gates/VP-BDY-002/G3-falsification-retry1.log"
+
+[[contract]]
 id = "guard.terminal_iff"
 checker_relation = "regression_only"
 review_status = "reviewed"
@@ -965,11 +977,11 @@ basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
 id = "generation.branch_novelty_route"
 checker_relation = "witness_validator"
 review_status = "reviewed"
-checker = "check_branch_novelty_route"
-lean_decl = "ERIEC.BranchNovelty.BranchNoveltyRoute"
-scope = "one nonempty closed finite lineage prefix, a lineage-fixed environment identity function, and a finite cutoff"
-assumptions = ["every supplied generation carrier is complete and duplicate-free", "the identity function is stable input data for the whole prefix and is injective within each generation", "finite-prefix freshness does not establish the Lean route's infinite BranchFresh premise"]
-guarantee = "validates every finite observation and per-generation identity injection, derives loss and cumulative novelty from structural image equality, and checks a fresh image at or after the finite cutoff"
+checker = "check_canonical_branch_novelty_route"
+lean_decl = "ERIEC.BranchNovelty.CanonicalBranchNoveltyRoute"
+scope = "one nonempty closed finite lineage prefix whose generations enumerate one literally shared environment carrier, and a finite cutoff"
+assumptions = ["every supplied generation carrier is complete and duplicate-free", "every generation enumerates exactly the same environment values", "structural identity is Julia equality on the shared carrier and no caller-supplied medium embedding is accepted", "finite-prefix freshness does not establish the Lean route's infinite BranchFresh premise"]
+guarantee = "validates every finite observation, rejects generation-specific carrier separation, derives loss and cumulative novelty using the canonical identity map, and checks a fresh image at or after the finite cutoff"
 reviewer = "codex"
 basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
 
@@ -994,10 +1006,10 @@ basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"
 id = "generation.loss_aware_reference"
 checker_relation = "regression_only"
 review_status = "reviewed"
-checker = "check_branch_novelty_route"
+checker = "check_canonical_branch_novelty_route"
 lean_decl = "ERIEC.RefModel.noveltyPositive_freshSem"
 scope = "a caller-supplied finite prefix corresponding to the loss-aware positive reference pattern"
-assumptions = ["finite replay cannot establish the Lean theorem's unbounded FreshSem conclusion", "the caller supplies the prefix rather than the checker constructing the Lean reference model"]
+assumptions = ["finite replay cannot establish the Lean theorem's unbounded FreshSem conclusion", "the caller supplies the prefix rather than the checker constructing the Lean reference model", "every supplied generation enumerates the same complete environment carrier and uses literal equality as structural identity"]
 guarantee = "regresses finite loss-aware novelty behavior while the Lean theorem proves the infinite reference lineage is semantically fresh"
 reviewer = "codex"
 basis_log = "logs/gates/branch-novelty/target-retry1-20260830.log"

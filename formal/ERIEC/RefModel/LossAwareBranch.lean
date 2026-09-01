@@ -119,6 +119,24 @@ def noveltyPositiveRoute :
   system_eq := fun _ ↦ rfl
   environmentIdentity := BranchNovelty.EnvironmentIdentity.shared Nat
 
+/-- The certified route uses the shared `Nat` environment carrier directly;
+no caller-selected cross-generation identity map remains. -/
+def noveltyPositiveCanonicalRoute :
+    BranchNovelty.CanonicalBranchNoveltyRoute noveltyPositiveLineage where
+  E := Nat
+  observations := fun n ↦ {
+    M := Unit
+    C := Unit
+    S := Fin (n + 1)
+    dc := noveltyPositiveDC n
+    hConv := noveltyPositiveDC_hConv n
+  }
+  system_eq := fun _ ↦ rfl
+
+theorem noveltyPositiveCanonicalRoute_toRoute :
+    noveltyPositiveCanonicalRoute.toBranchNoveltyRoute = noveltyPositiveRoute := by
+  rfl
+
 def noveltyPositiveBranch (n : Nat) :
     BranchNovelty.BranchCarrier (noveltyPositiveObservation n) :=
   ⟨(), (BranchNovelty.branchSigma_iff_branch

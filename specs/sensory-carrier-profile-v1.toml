@@ -1,0 +1,48 @@
+schema_version = 1
+profile_id = "lenia-geometric-sensory-v1"
+
+[grid]
+requires_square = true
+periodic = true
+exact_rotation_quarters = 4
+
+[body]
+threshold = 0.05
+connectivity = 8
+boundary_connectivity = 4
+minimum_area = 16
+require_unique_largest_component = true
+mask_smoothing_sigma_cells = 1.0
+minimum_normal_norm = 1.0e-12
+
+[features]
+angular_sectors = 16
+radial_bands = 4
+families = [
+  "boundary_sector",
+  "radial_gradient",
+  "normal_flux",
+  "curvature_shape",
+  "contact_obstacle",
+]
+channel_count = 68
+
+[obstacle]
+solid = true
+zero_before_step = true
+zero_after_step = true
+mask_interventions = true
+contact_connectivity = 8
+
+[persistence]
+horizon_steps = 8
+minimum_recentered_iou = 0.75
+
+[measurement]
+feature_change_absolute_tolerance = 1.0e-6
+feature_change_relative_tolerance = 1.0e-3
+
+[provenance]
+alpha_trial_kind = "paired_intervention"
+sigma_trial_kind = "clamp"
+require_distinct_hashes = true
