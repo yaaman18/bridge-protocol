@@ -70,7 +70,7 @@ pinned      = false                                         # true なら driver
 以下は status progression の設計モデルである。現行の runner はこの遷移を書き込まない。
 
 ```
-proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ implemented ──G4──▶ certified
+proposed ──G1──▶ formalized ──G2──▶ bound ──G3/G3C──▶ implemented ──G4──▶ certified
    │               │                  │              │
    └──G1 fail──┐   └──G2 fail──┐      └──G3 fail──┐  └──G4 fail──┐
                ▼               ▼                  ▼              ▼
@@ -81,11 +81,32 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 |---|---|---|---|---|
 | **G1 証明** | proposed→formalized | `lake build` 成功 ∧ `lean_decl` が `lean_file` に存在し typecheck 済み | `lake build` | codex（Lean実装） |
 | **G2 接続** | formalized→bound | `lean_decl`↔`julia_api` 対応が contract test を通過 | `julia ... test_formal_julia_contract.jl` | codex |
-| **G3 実装** | bound→implemented | 当該 `julia_api` を含むテスト群が通過 | `Pkg.test()`（対象 testset） | codex |
+| **G3 実装** | bound→implemented | 単一の完全 `Pkg.test()` が通常commit上で通過、または§2.1のcommit束縛済みG3Cが通過 | `Pkg.test()` / `tools/quiet-test-clone.sh` | codex |
 | **G4 認証** | implemented→certified | `contract_id` が certificate catalog に登録され、`certificate_dependency_graph` に `payload_kind→contract→Lean decl` の edge が存在 | `verify_lean_certified_artifact` / 依存グラフ抽出 | codex |
 
 - ゲートは台帳順序を `depends_on` でトポロジカルソートしてから評価（先行 VP が certified 未満なら後続はスキップし `blocked` 表示、status は据え置き）。
 - 各ゲートは純関数。`pinned=true` のエントリは driver が触らない（人間凍結・実験用）。
+
+### §2.1 G3C — commit前snapshotの正式G3代替
+
+G3C v2は、dirty worktreeを兄弟clone内のephemeral commitへ複製し、main repoとpath依存の
+source・Git state・`.lake` cacheを分離して、単一の完全`Pkg.test()`を実行する。G3Vの分割検証や
+対象testsetだけの実行はG3Cではない。詳細契約は`specs/g3c-clone-gate.md`を唯一の運用仕様とする。
+
+G3Cで`bound → implemented`を行うには、次の全条件を満たす。
+
+1. 対象VPが`bound`のsnapshotでG3C v2がPASSする。
+2. snapshotとG3Cログをevidence commit Aへ保存し、Aの完全SHAに対して
+   `verify-g3c-evidence.sh evidence`がPASSする。
+3. Aではstatusを進めない。Aの直接の子commit Bで対象VPだけを`implemented`へ進める。
+4. AとBの完全SHAに対して`verify-g3c-evidence.sh transition`がPASSする。
+
+証拠検査はAにcommitされたログを直接読み、必須markerの一意性・順序、main入力digest、
+path依存commit/tree、cleanup、origin不変を検査する。一般の`logs/**`は入力projectionから除くが、
+semantic manifestの`basis_log`は含め、`specs/ledger.toml`は除外しない。
+
+G3Cの隔離保証はrepository source、HEAD/index、main/path依存の`.lake`までであり、Julia depotや
+OS全体のhermeticityは含まない。runnerのPASSだけ、短縮SHA、未commitログではstatusを進めない。
 
 ---
 

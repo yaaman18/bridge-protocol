@@ -1,7 +1,8 @@
-# G3C clone gate（v2 草案）
+# G3C clone gate（v2 正式仕様）
 
-状態: G3C v2 runner実装候補。下記の検証ログが必須成功条件をすべて満たす場合に検証済みと扱う。
-`specs/loop-orchestration-spec.md` には未反映。
+状態: **2026-09-05 ユーザー承認により正式G3代替へ昇格。** runnerのPASSだけではstatusを
+進めず、commit済みログに対する証拠検証とstatus専用commitの検査を必須とする。
+`specs/loop-orchestration-spec.md` §2.1 に反映済み。
 
 検証証拠（PASS時に有効）: `logs/gates/G3C-v2/G3C-20260904-final-dirty-snapshot.log`
 
@@ -12,8 +13,9 @@ cache隔離監査（PASS時に有効）: `logs/gates/G3C-v2/cache-isolation-2026
 G3C は、HEAD の byte 束縛を弱めず、かつ本番リポジトリを commit せずに、現在の変更集合へ
 単一の `Pkg.test()` を適用する補助ゲートである。G3/G3V の分割実行証拠とは区別する。
 
-G3C v2 が出力する snapshot digest と後続 commit の digest を照合する規則が運用仕様へ確定するまでは、
-G3C 単独で `implemented` または `certified` へ status を進めない。commit 後の通常 G3 を主証拠とする。
+G3C v2 が出力するsnapshot digestと後続の証拠commitを照合し、さらにその直接の子commitが
+対象VPの `bound → implemented` だけを行う場合、通常G3の代替として使用できる。runnerのPASSだけで
+`implemented` または `certified` へstatusを進めてはならない。
 
 ## 実行
 
@@ -69,6 +71,49 @@ tools/quiet-test-clone.sh --print-input-digest <commit>
 
 v1ログにはこのdigestが無いため、v1のephemeral snapshotと後続commitの同一性は事後証明できない。
 
+## commit済み証拠の機械検査
+
+証拠検査はworktree上のログではなく、明示した完全commit SHAに格納されたログを読む。
+
+```bash
+tools/verify-g3c-evidence.sh evidence \
+  logs/gates/<VP-id>/G3C-<timestamp>.log \
+  <40桁または64桁のevidence-commit>
+```
+
+検査内容は次のとおり。
+
+- 必須marker、単一値field、section境界の一意性と順序
+- `G3C_RESULT=PASS`、単一の完全 `Pkg.test()` command、cleanupとorigin不変marker
+- logのtest-input digestとevidence commitから再計算したdigestの一致
+- commitの`lake-manifest.json`にあるpath依存とlog内の依存集合の一致
+- 各path依存のcommit objectが存在し、そのtreeがclean index tree記録と一致
+- log pathのrepository内制約と完全commit SHAの強制
+
+path依存の検査ではlogに書かれた絶対`origin`をfilesystem accessへ使用しない。evidence commitの
+manifestにある正規な兄弟相対pathだけから検査対象を解決する。
+
+## status遷移 — 2 commit方式
+
+test-input projectionからledgerを除外しない。次の順序を固定する。
+
+1. 対象VPを `status="bound"` のままG3Cを実行する。
+2. 実装、テスト、仕様、G3Cログを**evidence commit A**へ保存する。Aではstatusを進めない。
+3. 上記 `evidence` commandでAを検証する。
+4. Aの直接の子である**status commit B**で、対象VPだけを `bound → implemented` へ進める。
+5. 次のcommandでA→Bを検査する。
+
+```bash
+tools/verify-g3c-evidence.sh transition \
+  <evidence-commit-A> \
+  <status-commit-B> \
+  <VP-id>
+```
+
+Bで変更できるpathは`specs/ledger.toml`だけであり、TOMLとして解釈した内容のうち変更できるfieldは
+対象VPの`status`だけである。証拠pathなどのコメント追記は許すが、他の意味fieldは変更できない。
+これにより実行後metadataをprojectionから除外する弱化を行わない。
+
 ## 必須来歴と成功条件
 
 G3C v2ログは、少なくとも次を同じファイルに持つ。
@@ -96,13 +141,14 @@ G3C_END
 
 ## ledger表記
 
-G3Cを補助証拠として使う間は、通常G3と区別して次のように併記する。
+正式代替として使う場合は、status commitのコメントにlogとevidence commitを併記する。
 
 ```text
-G3: <通常Pkg.test()ログ>; G3C(aux): <clone実行ログ>
+G3C: <clone実行ログ>; evidence_commit=<full SHA>
 ```
 
-`G3C: <path>` だけを根拠に status を進めない。
+`G3C: <path>`だけ、短縮SHA、worktree上の未commitログを根拠にstatusを進めない。
+VP-BDY-002では通常G3がすでに主証拠であるため、既存の`G3C(aux)`表記を遡及変更しない。
 
 ## 旧ログとの関係
 
@@ -115,11 +161,14 @@ G3: <通常Pkg.test()ログ>; G3C(aux): <clone実行ログ>
 
 旧ログは失敗または移行履歴として保持し、再取得しない。
 
-## 将来の昇格条件
+## 昇格判定（2026-09-05 解決済み）
 
-G3Cを通常G3の代替へ昇格するには、少なくとも次を別途確定する。
+正式昇格時に次を確定した。
 
-1. v2の隔離条件と必須成功markerを機械検査する。
-2. G3C snapshot digestと後続commit digestの一致をstatus遷移前に検査する。
-3. ledger更新など実行後にだけ書ける証拠metadataをprojectionへ含めるか除外するかを固定する。
-4. `specs/loop-orchestration-spec.md` のG3定義とstatus遷移へ反映し、ユーザーが意味変更を承認する。
+1. v2の隔離条件と必須成功markerを`g3c_evidence_validation.jl`で機械検査する。
+2. snapshot digestとevidence commit digestをstatus遷移前に照合する。
+3. ledgerをprojectionに残し、2 commit方式で実行後metadataとの循環を解消する。
+4. `specs/loop-orchestration-spec.md`のG3定義とstatus遷移へ反映する。
+
+保証する隔離範囲はmain/path依存のsource、Git HEAD/index、`.lake` cacheである。machine-wideな
+Julia depotやOS環境までhermeticであるとは主張しない。これは通常G3と共通の実行環境上限である。

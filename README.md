@@ -277,6 +277,11 @@ julia --project=. bin/eriec-category-pipeline.jl check
 
 # Mutation and ratchet checks (G3V); --base-ref must be named explicitly
 tools/quiet-verify.sh logs/gates/<batch>/G3V-<timestamp>.log --base-ref <commit>
+
+# Commit前snapshotで完全Pkg.test()を行う正式G3代替
+tools/quiet-test-clone.sh logs/gates/<VP-id>/G3C-<timestamp>.log
+tools/verify-g3c-evidence.sh evidence logs/gates/<VP-id>/G3C-<timestamp>.log <full-evidence-commit>
+tools/verify-g3c-evidence.sh transition <full-evidence-commit> <full-status-commit> <VP-id>
 ```
 
 ## License — not open source

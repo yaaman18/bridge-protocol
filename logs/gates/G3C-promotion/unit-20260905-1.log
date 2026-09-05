@@ -1,0 +1,8 @@
+fatal: Needed a single revision
+fatal: ambiguous argument '0000000000000000000000000000000000000000^{tree}': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+Test Summary:                     | Pass  Total  Time
+G3C committed evidence validation |    8      8  8.5s
+Test Summary:                         | Pass  Total  Time
+G3C status-only transition validation |    2      2  1.7s
