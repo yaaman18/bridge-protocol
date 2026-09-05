@@ -144,7 +144,9 @@ julia_file  = "src/field_bridge.jl"
 contract_id = "body.clamp_sigma_identification"
 owner       = "codex"
 depends_on  = ["VP-BDY-001"]
-status      = "certified"                   # G3C: logs/gates/VP-BDY-002/G3C-20260901-full-retry1.log; G4: logs/gates/VP-BDY-002/G4-20260901-after-G3C.log
+# G1: logs/gates/VP-BDY-002/G1-20260904-214720-head-4621fa1.log; G2: logs/gates/VP-BDY-002/G2-20260904-214737-head-4621fa1.log
+# G3: logs/gates/VP-BDY-002/G3-20260904-214849-head-4621fa1.log; G3C(aux): logs/gates/G3C-v2/G3C-20260904-final-dirty-snapshot.log
+status      = "certified"                   # G4: logs/gates/VP-BDY-002/G4-20260904-220352-head-4621fa1-retry1.log
 pinned      = false
 coverage_audit = "unreviewed"
 

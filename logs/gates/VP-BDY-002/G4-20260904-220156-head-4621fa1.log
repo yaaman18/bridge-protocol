@@ -1,0 +1,7 @@
+ERROR: AssertionError: any((edge->begin
+            #= none:1 =#
+            edge.from == :ClampSigmaIdentification && (edge.to == :check_clamp_sigma_identification && edge.relation == :julia_checker)
+        end), graph.edges)
+Stacktrace:
+ [1] top-level scope
+   @ none:1

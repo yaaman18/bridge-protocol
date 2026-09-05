@@ -1,0 +1,3 @@
+(from = :ClampSigmaIdentification, to = "body.clamp_sigma_identification", relation = :lean_contract)
+(from = :ClampSigmaIdentification, to = "check_clamp_sigma_identification", relation = :julia_checker)
+(from = "body.clamp_sigma_identification", to = "ERIEC.FieldBridge.ClampSigmaIdentificationAssumption", relation = :lean_dependency)

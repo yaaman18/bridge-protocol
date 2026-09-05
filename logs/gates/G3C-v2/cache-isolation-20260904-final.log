@@ -1,0 +1,13 @@
+G3C_CACHE_AUDIT_MAIN_BEFORE=23fd4c8f48c56e380daf14a952c73d7be24b935f5629ba58b0b725ea5d798581
+G3C_CACHE_AUDIT_DEPENDENCY_BEFORE=2bc2f5dbcae9f77c31c740f7ccd1666de4d44b2a52e5f87694d4b56dcd166859
+PASS G3C ephemeral_commit=03987568dd8a5115c8a1aeeafabb0859f6856a4b origin_head=4621fa1cfa18c49c956c516670bd9272501a8569 log=/Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/G3C-v2/G3C-20260904-final-dirty-snapshot.log
+v5.2 Lean formal statement smoke test |   37     37  8.5s
+Test Summary:    | Pass  Total     Time
+Lenia report CLI |   75     75  2m33.9s
+Test Summary:             | Pass  Total   Time
+TRM neural experiment CLI |   40     40  26.5s
+     Testing ERIEC tests passed 
+G3C_CACHE_AUDIT_MAIN_AFTER=23fd4c8f48c56e380daf14a952c73d7be24b935f5629ba58b0b725ea5d798581
+G3C_CACHE_AUDIT_DEPENDENCY_AFTER=2bc2f5dbcae9f77c31c740f7ccd1666de4d44b2a52e5f87694d4b56dcd166859
+G3C_CACHE_AUDIT_MAIN_UNCHANGED=true
+G3C_CACHE_AUDIT_DEPENDENCY_UNCHANGED=true

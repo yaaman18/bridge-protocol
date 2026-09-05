@@ -1,0 +1,260 @@
+G3C_PROVENANCE_VERSION=2
+G3C_EXECUTION=single Pkg.test() in sibling clone at ephemeral commit
+G3C_EPHEMERAL_COMMIT=03987568dd8a5115c8a1aeeafabb0859f6856a4b
+G3C_EPHEMERAL_TREE=479d8799c42ed2886b3291dc87fddec69ebc8e52
+G3C_TEST_INPUT_POLICY=exclude logs/** except semantic-manifest basis_log dependencies
+G3C_TEST_INPUT_OBJECT_FORMAT=sha1
+G3C_TEST_INPUT_DIGEST=65f06e15e397f342d5a27b2ac01bcc4dd9a2709b
+G3C_ORIGIN_HEAD=4621fa1cfa18c49c956c516670bd9272501a8569
+G3C_ORIGIN_INDEX_TREE=1cc99e8588758ca987b54d51c47860bd53287a18
+G3C_ORIGIN_WORKTREE_DIRTY=true
+G3C_ORIGIN_REPOSITORY=/Users/yamaguchimitsuyuki/bridge-protocol
+G3C_SANDBOX=/Users/yamaguchimitsuyuki/.bridge-protocol-g3c.D4wsFs
+G3C_CLONE=/Users/yamaguchimitsuyuki/.bridge-protocol-g3c.D4wsFs/bridge-protocol
+G3C_SOURCE_CAPTURE_STABLE=true
+G3C_LAKE_CACHE_MODE=copy_on_write_macos
+G3C_LAKE_SHARED_MUTABLE=false
+G3C_PATH_DEPENDENCIES_BEGIN
+path=../proof-carrying-intersubjectivity origin=/Users/yamaguchimitsuyuki/proof-carrying-intersubjectivity head=2811d511e7ef6ab992c87ee20369f12c5f384c1c index_tree=0350f2e28b85682d0f252b1151d15ac3f5e3721b cache_mode=copy_on_write_macos shared_mutable=false
+G3C_PATH_DEPENDENCIES_END
+G3C_LOG_POLICY=exclude logs/** except semantic-manifest basis_log dependencies
+G3C_INCLUDED_CHANGES_BEGIN
+M	specs/drafts/g3c-clone-gate.md
+M	specs/ledger.toml
+M	tools/quiet-test-clone.sh
+G3C_INCLUDED_CHANGES_END
+G3C_TEST_COMMAND=julia --project=. -e 'using Pkg; Pkg.test()'
+G3C_TEST_OUTPUT_BEGIN
+┌ Warning: The project dependencies or compat requirements have changed since the manifest was last resolved.
+│ It is recommended to `Pkg.resolve()` or consider `Pkg.update()` if necessary.
+└ @ Pkg.API /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Pkg/src/API.jl:1206
+     Testing ERIEC
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_9w38j6/Project.toml`
+  [f6f58f5d] ERIEC v0.1.0 `~/.bridge-protocol-g3c.D4wsFs/bridge-protocol`
+  [f6369f11] ForwardDiff v1.4.1
+  [0f8b85d8] JSON3 v1.14.3
+  [37e2e46d] LinearAlgebra v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v0.7.0
+  [fa267f1f] TOML v1.0.3
+  [8dfed614] Test v1.11.0
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_9w38j6/Manifest.toml`
+  [bbf7d656] CommonSubexpressions v0.3.1
+  [163ba53b] DiffResults v1.1.0
+  [b552c78f] DiffRules v1.16.0
+  [ffbed154] DocStringExtensions v0.9.5
+  [f6f58f5d] ERIEC v0.1.0 `~/.bridge-protocol-g3c.D4wsFs/bridge-protocol`
+  [f6369f11] ForwardDiff v1.4.1
+  [92d709cd] IrrationalConstants v0.2.6
+  [692b3bcd] JLLWrappers v1.8.0
+  [0f8b85d8] JSON3 v1.14.3
+  [2ab3a3ac] LogExpFunctions v1.0.1
+  [1914dd2f] MacroTools v0.5.16
+  [77ba4419] NaNMath v1.1.4
+  [69de0a69] Parsers v2.8.6
+⌅ [aea7be01] PrecompileTools v1.2.1
+  [21216c6a] Preferences v1.5.2
+  [276daf66] SpecialFunctions v2.8.0
+  [1e83bf80] StaticArraysCore v1.4.4
+  [856f2bd8] StructTypes v1.11.0
+  [efe28fd5] OpenSpecFun_jll v0.5.6+0
+  [56f22d72] Artifacts v1.11.0
+  [2a0f44e3] Base64 v1.11.0
+  [ade2ca70] Dates v1.11.0
+  [b77e0a4c] InteractiveUtils v1.11.0
+  [8f399da3] Libdl v1.11.0
+  [37e2e46d] LinearAlgebra v1.11.0
+  [56ddb016] Logging v1.11.0
+  [d6f4376e] Markdown v1.11.0
+  [a63ad114] Mmap v1.11.0
+  [de0858da] Printf v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v0.7.0
+  [9e88b42a] Serialization v1.11.0
+  [fa267f1f] TOML v1.0.3
+  [8dfed614] Test v1.11.0
+  [cf7118a7] UUIDs v1.11.0
+  [4ec0a83e] Unicode v1.11.0
+  [e66e0078] CompilerSupportLibraries_jll v1.1.1+0
+  [4536629a] OpenBLAS_jll v0.3.27+1
+  [05823500] OpenLibm_jll v0.8.5+0
+  [8e850b90] libblastrampoline_jll v5.11.0+0
+        Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading.
+Precompiling project for configuration --code-coverage=none --color=auto --check-bounds=yes --warn-overwrite=yes --depwarn=yes --inline=yes --startup-file=no --track-allocation=none...
+   7738.1 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 8 seconds. 32 already precompiled.
+     Testing Running tests...
+Running 55 ERIEC test files in 4 isolated processes, then 4 exclusive file(s)
+
+===== ERIEC parallel test group 1/4 (estimated 84.0s) =====
+Test Summary:                | Pass  Total     Time
+field coupled system adapter |  151    151  2m39.9s
+
+===== ERIEC parallel test group 2/4 (estimated 72.5s) =====
+Test Summary:                                     | Pass  Total     Time
+ordered reachability graded dynamics and boundary |   57     57  1m30.5s
+Test Summary: | Pass  Total   Time
+worlddc       |   56     56  24.0s
+Test Summary:            | Pass  Total  Time
+category update pipeline |   93     93  7.9s
+Test Summary:        | Pass  Total  Time
+finite open dynamics |   16     16  3.6s
+Test Summary:      | Pass  Total  Time
+finite audit layer |    7      7  2.3s
+Test Summary:        | Pass  Total  Time
+finite lineage layer |    9      9  0.4s
+Test Summary:                            | Pass  Total  Time
+finite theory translation and guarantees |    4      4  0.3s
+Test Summary:  | Pass  Total  Time
+system adapter |   13     13  8.1s
+Test Summary:                     | Pass  Total   Time
+Sigma1 diversity resolution audit |   15     15  12.9s
+Test Summary: | Pass  Total  Time
+value         |   25     25  2.0s
+Test Summary:              | Pass  Total  Time
+official TRM Python bridge |    3      3  1.3s
+Test Summary:           | Pass  Total  Time
+three-layer composition |   26     26  2.0s
+Test Summary: | Pass  Total  Time
+dc            |   13     13  0.8s
+Test Summary:                | Pass  Total  Time
+critical certification bound |    3      3  0.0s
+Test Summary:       | Pass  Total  Time
+observation summary |    8      8  0.1s
+Test Summary:    | Pass  Total  Time
+critical slowing |   11     11  0.4s
+Test Summary:            | Pass  Total  Time
+Lean module architecture |   11     11  0.7s
+FALSIFICATION-A2-1: PASS
+FALSIFICATION-A2-2: PASS
+FALSIFICATION-A2-3: PASS
+FALSIFICATION-A2-4: PASS
+FALSIFICATION-A2-5: PASS
+FALSIFICATION-A2-6: PASS
+FALSIFICATION-A2-7: PASS
+FALSIFICATION-A2-8: PASS
+FALSIFICATION-A2-9: PASS
+Test Summary:                  | Pass  Total   Time
+certified envelope claim scope |   41     41  16.9s
+Test Summary: | Pass  Total   Time
+Frozen wagers |   42     42  12.4s
+Test Summary:             | Pass  Total  Time
+loss-aware branch novelty |   28     28  5.1s
+Test Summary:                | Pass  Total  Time
+umwelt comparison and series |    4      4  6.0s
+
+===== ERIEC parallel test group 3/4 (estimated 72.5s) =====
+Test Summary:               | Pass  Total     Time
+minimal policy and topology |  201    201  1m20.9s
+Test Summary: | Pass  Total  Time
+world         |   47     47  7.2s
+Test Summary:       | Pass  Total   Time
+Lean Julia contract | 1313   1313  23.8s
+Test Summary: | Pass  Total  Time
+sensitivity   |    6      6  1.9s
+FALSIFICATION-BDY-002-DEAD-SUPPORT: PASS
+FALSIFICATION-BDY-002-RANDOM-PERSISTENCE: PASS
+Test Summary:           | Pass  Total   Time
+field to sensory bridge |   19     19  27.4s
+FALSIFICATION-BDY-002-SIGMA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-ALPHA-FLIP-HCONV-ONLY: PASS
+FALSIFICATION-BDY-002-PROVENANCE-ONLY: PASS
+FALSIFICATION-BDY-002-INDEPENDENT-DEPENDENCY: PASS
+Test Summary:                                 | Pass  Total   Time
+independent alpha and clamp sigma measurement |   18     18  21.1s
+Test Summary:            | Pass  Total   Time
+experiment visualization |   28     28  10.8s
+Test Summary:        | Pass  Total  Time
+weighted sensitivity |    6      6  0.7s
+Test Summary:                 | Pass  Total  Time
+finite relation linearization |   14     14  4.9s
+Test Summary:               | Pass  Total  Time
+bridge functor obstructions |  143    143  2.2s
+Test Summary: | Pass  Total  Time
+closure       |   20     20  1.3s
+Test Summary:                | Pass  Total  Time
+terminal and mutation guards |    4      4  0.2s
+Test Summary: | Pass  Total  Time
+reachability  |    7      7  0.1s
+Test Summary:   | Pass  Total  Time
+finite dynamics |   21     21  3.1s
+Test Summary:          | Pass  Total  Time
+claim ledger integrity |  861    861  0.7s
+Test Summary:            | Pass  Total   Time
+v1 ledger coverage audit |  378    378  14.4s
+Test Summary: | Pass  Total  Time
+Richness      |    6      6  1.3s
+Test Summary:                     | Pass  Total  Time
+TemporalDC finite boundary audits |   16     16  1.6s
+Test Summary:     | Pass  Total  Time
+copair uniqueness |    2      2  0.0s
+
+===== ERIEC parallel test group 4/4 (estimated 72.5s) =====
+Test Summary:               | Pass  Total     Time
+Lenia experiment management |  138    138  3m40.0s
+Test Summary: | Pass  Total   Time
+body          |   33     33  37.9s
+Test Summary:           | Pass  Total  Time
+observation artifact v1 |   32     32  4.9s
+Test Summary:        | Pass  Total  Time
+toy recurrent system |   28     28  5.6s
+Test Summary:                   | Pass  Total  Time
+benchmarks collapse and reports |   40     40  4.3s
+Test Summary:             | Pass  Total   Time
+Sigma1 individual adapter |   31     31  11.0s
+Test Summary: | Pass  Total  Time
+checkpoints   |   17     17  2.9s
+Test Summary: | Pass  Total  Time
+adjunction    |   13     13  0.9s
+Test Summary:            | Pass  Total  Time
+Sigma selection contract |   23     23  1.6s
+Test Summary:                | Pass  Total  Time
+viability closure object map |   74     74  4.9s
+Test Summary: | Pass  Total  Time
+hinge         |   11     11  0.3s
+Test Summary: | Pass  Total  Time
+consume       |    4      4  0.1s
+Test Summary:         | Pass  Total  Time
+experiment acceptance |   18     18  0.3s
+Test Summary:       | Pass  Total  Time
+update bisimulation |    2      2  0.0s
+Test Summary:            | Pass  Total  Time
+packet review validation |   21     21  2.1s
+Test Summary:    | Pass  Total  Time
+reference models |   35     35  7.8s
+Test Summary:                            | Pass  Total   Time
+order-11 closed large-reference decoders |   23     23  10.3s
+Test Summary:              | Pass  Total  Time
+generation boundary audits |   52     52  7.8s
+Test Summary:      | Pass  Total  Time
+functional markers |   60     60  0.0s
+Test Summary:            | Pass  Total  Time
+ranked relation presheaf |    2      2  0.1s
+Test Summary:                | Pass  Total  Time
+critical rank collapse bound |    2      2  0.1s
+
+===== ERIEC exclusive test group 1/1 (estimated 114.0s) =====
+Test Summary:             | Pass  Total   Time
+checker semantic manifest |   93     93  51.6s
+Test Summary:                                   | Pass  Total  Time
+M4 model schema and canonical fingerprint input |   27     27  5.0s
+Test Summary:        | Pass  Total     Time
+model evaluation CLI |   50     50  1m13.7s
+Test Summary:                                    | Pass  Total   Time
+append-only model evaluation execution and audit |  119    119  44.0s
+Test Summary:                         | Pass  Total  Time
+v5.2 Lean formal statement smoke test |   37     37  8.5s
+Test Summary:    | Pass  Total     Time
+Lenia report CLI |   75     75  2m33.9s
+Test Summary:             | Pass  Total   Time
+TRM neural experiment CLI |   40     40  26.5s
+     Testing ERIEC tests passed 
+G3C_TEST_OUTPUT_END
+G3C_RESULT=PASS
+G3C_CLONE_DESTROYED=true
+G3C_METADATA_DESTROYED=true
+G3C_ORIGIN_HEAD_AFTER=4621fa1cfa18c49c956c516670bd9272501a8569
+G3C_ORIGIN_INDEX_TREE_AFTER=1cc99e8588758ca987b54d51c47860bd53287a18
+G3C_ORIGIN_HEAD_OR_INDEX_MUTATED=false
+G3C_PATH_DEPENDENCY_HEAD_OR_INDEX_MUTATED=false
+G3C_END
