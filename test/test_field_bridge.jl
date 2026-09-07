@@ -126,7 +126,49 @@ end
     @test !ERIEC.check_periodic_body_boundary(wrong_profile; profile=profile)
     println("FALSIFICATION-BDY-003-PROFILE-DIGEST: PASS")
 
+    @testset "reject malformed masks and profile identity" begin
+        for (label, invalid_support, invalid_boundary, profile_id) in (
+            ("shape mismatch", support, falses(2, 2), profile.profile_id),
+            ("zero-sized masks", falses(0, 0), falses(0, 0), profile.profile_id),
+            ("empty support", falses(3, 3), boundary, profile.profile_id),
+            ("empty boundary", support, falses(3, 3), profile.profile_id),
+            ("nonsquare grid", trues(2, 3), trues(2, 3), profile.profile_id),
+            ("profile ID mismatch", support, boundary, "wrong-profile"),
+        )
+            @testset "$label" begin
+                invalid = ERIEC.PeriodicBoundaryCertificate(
+                    invalid_support,
+                    invalid_boundary,
+                    profile_id,
+                    certificate.profile_sha256,
+                )
+                @test !ERIEC.check_periodic_body_boundary(invalid; profile=profile)
+            end
+        end
+    end
+
+    @testset "wrap-around in all four directions" begin
+        # The missing cell at [2, 3] makes [2, 1] a boundary through the seam.
+        # Rotate both this witness and its missing-boundary falsification.
+        for quarter_turns in 0:3
+            rotated_support = BitMatrix(rotl90(support, quarter_turns))
+            rotated_boundary = BitMatrix(rotl90(boundary, quarter_turns))
+            rotated_missing = BitMatrix(rotl90(missing, quarter_turns))
+            for (candidate, expected_ok) in ((rotated_boundary, true), (rotated_missing, false))
+                rotated = ERIEC.PeriodicBoundaryCertificate(
+                    rotated_support,
+                    candidate,
+                    certificate.profile_id,
+                    certificate.profile_sha256,
+                )
+                @test ERIEC.check_periodic_body_boundary(rotated; profile=profile) == expected_ok
+            end
+        end
+    end
+    println("FALSIFICATION-BDY-003-PERIODIC-WRAP: PASS")
+
     artifact_check = verify_lean_certified_artifact()
+    @test certified_artifact_ok(artifact_check)
     envelope = ERIEC.certified_periodic_body_boundary(certificate, artifact_check)
     graph = certificate_dependency_graph(envelope)
     @test graph.payload_kind == :PeriodicBoundaryExtraction
@@ -134,6 +176,73 @@ end
     @test "ERIEC.FieldBridge.PeriodicBoundaryWitness" in
         getfield.(graph.lean_dependencies, :full_declaration)
     @test "check_periodic_body_boundary" in graph.julia_checkers
+    for edge in (
+        (
+            from=:PeriodicBoundaryExtraction,
+            to="body.periodic_boundary_extraction",
+            relation=:lean_contract,
+        ),
+        (
+            from="body.periodic_boundary_extraction",
+            to="ERIEC.FieldBridge.PeriodicBoundaryWitness",
+            relation=:lean_dependency,
+        ),
+        (
+            from=:PeriodicBoundaryExtraction,
+            to="check_periodic_body_boundary",
+            relation=:julia_checker,
+        ),
+    )
+        @test edge in graph.edges
+        println("G4-BDY-003-EDGE: ", edge)
+    end
+    @test envelope.claim_scope == :context_local
+    @test envelope.trust.execution_layer == :julia_unverified
+    @test !envelope.trust.execution_certified
+    @test envelope.trust.execution_boundary == :unverified_runtime
+    @test_throws ArgumentError certified_artifact_envelope(
+        merge(envelope.payload, (lean_contracts=["missing.contract"],)),
+        artifact_check,
+    )
+    @test_throws ArgumentError certified_artifact_envelope(
+        merge(envelope.payload, (execution_certified=true,)),
+        artifact_check,
+    )
+    @test_throws ArgumentError ERIEC.certified_periodic_body_boundary(
+        missing_certificate,
+        artifact_check,
+    )
+end
+
+@testset "periodic boundary independent finite oracle" begin
+    profile = ERIEC.load_sensory_carrier_profile()
+    digest = ERIEC.sensory_carrier_profile_sha256()
+    for side in 1:3, bits in 0:((1 << (side * side)) - 1)
+        support = reshape(
+            BitVector(!iszero(bits & (1 << (index - 1))) for index in 1:(side * side)),
+            side,
+            side,
+        )
+        # Independent of the extractor/checker's shared _periodic_neighbors.
+        boundary = support .& (
+            .!circshift(support, (1, 0)) .| .!circshift(support, (-1, 0)) .|
+            .!circshift(support, (0, 1)) .| .!circshift(support, (0, -1))
+        )
+        certificate = ERIEC.PeriodicBoundaryCertificate(
+            support, boundary, profile.profile_id, digest,
+        )
+        # The packet excludes empty masks, including a full torus's empty boundary.
+        @test ERIEC.check_periodic_body_boundary(certificate; profile=profile) ==
+            (any(support) && any(boundary))
+        for index in eachindex(boundary)
+            altered = copy(boundary)
+            altered[index] = !altered[index]
+            invalid = ERIEC.PeriodicBoundaryCertificate(
+                support, altered, profile.profile_id, digest,
+            )
+            @test !ERIEC.check_periodic_body_boundary(invalid; profile=profile)
+        end
+    end
 end
 
 @testset "independent alpha and clamp sigma measurement" begin

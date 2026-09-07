@@ -1,0 +1,46 @@
+VP=VP-BDY-003
+REVIEWER=codex
+BASIS=type_review
+IMPLEMENTATION_COMMIT=862a0aeb555b7b3ad747d866837fabad30ff29a8
+REVIEW: Cell : Type u; supplied neighbors, support, boundary; forall cell, boundary membership iff support membership and an outside neighbor.
+REVIEW: boundary_subset_support takes the forward implication and the first conjunct; no converse or universal periodicity claim.
+REVIEW: Julia supplies periodic four-neighbors and validates caller-supplied finite masks, not field provenance, DC.hBound, or viability.
+INPUT_SHA256 specs/packets/VP-BDY-003.md 29d7b5e0fbdc51fb3d8d9001d1b5747a71249e9781883955cbb2a612797ea8ba
+INPUT_SHA256 formal/ERIEC/FieldBridge/Boundary.lean 2ff6072b635c1d08a2a0bd1375a6c74522a986d3baeb4a5ef2a567b18bb04976
+INPUT_SHA256 formal/ERIEC/FieldBridge.lean 6431fb29a91cb6f1436989dab2f3c4908a9f4fb6eb3daddb1e81b6a95fbb0b2f
+INPUT_SHA256 formal/ERIEC/CertifiedArtifact.lean 9cf39ac1614374d40338bec0b898eaa6b5f2ffce815dd6265f8311287b6940d1
+INPUT_SHA256 src/field_bridge.jl 7591866694a90f8c3d6bd6c5cc4e94d3009a9101d3c4a849d39c2d2ef3332f0d
+INPUT_SHA256 src/certification.jl 58216776abccc0a6c77b3dfef4f34369c21d14f722e45f3b097945586e3ecf9e
+INPUT_SHA256 specs/sensory-carrier-profile-v1.toml bde917ed9d0b7649e0c256d8f64e19cfed47063f36ae50e928f479d3b89e5745
+INPUT_SHA256 specs/checker-semantic-manifest.toml 4615b1fce7affecf7e60cbe8fe4dfb6c3360a2ebd379deb8640735e4cf93ee2e
+INPUT_SHA256 specs/cert-scope-registry.toml d9691a2f16e385f3002c96888875ed7c60bdda6bae75dd44eebf1404b570be55
+IMPLEMENTATION_MATCHES_EVIDENCE_COMMIT=true
+COMMAND=lake env lean --stdin
+LEAN_INPUT_BEGIN
+import ERIEC.FieldBridge.Boundary
+#check ERIEC.FieldBridge.PeriodicBoundaryWitness
+#print ERIEC.FieldBridge.PeriodicBoundaryWitness
+#print ERIEC.FieldBridge.boundary_subset_support
+#print axioms ERIEC.FieldBridge.boundary_subset_support
+LEAN_INPUT_END
+ERIEC.FieldBridge.PeriodicBoundaryWitness.{u} (Cell : Type u) : Type u
+structure ERIEC.FieldBridge.PeriodicBoundaryWitness.{u} (Cell : Type u) : Type u
+number of parameters: 1
+fields:
+  ERIEC.FieldBridge.PeriodicBoundaryWitness.neighbors : Cell → Set Cell
+  ERIEC.FieldBridge.PeriodicBoundaryWitness.support : Set Cell
+  ERIEC.FieldBridge.PeriodicBoundaryWitness.boundary : Set Cell
+  ERIEC.FieldBridge.PeriodicBoundaryWitness.exact_boundary : ∀ (cell : Cell),
+      cell ∈ self.boundary ↔ cell ∈ self.support ∧ ∃ neighbor, neighbor ∈ self.neighbors cell ∧ ¬neighbor ∈ self.support
+constructor:
+  ERIEC.FieldBridge.PeriodicBoundaryWitness.mk.{u} {Cell : Type u} (neighbors : Cell → Set Cell)
+    (support boundary : Set Cell)
+    (exact_boundary :
+      ∀ (cell : Cell), cell ∈ boundary ↔ cell ∈ support ∧ ∃ neighbor, neighbor ∈ neighbors cell ∧ ¬neighbor ∈ support) :
+    ERIEC.FieldBridge.PeriodicBoundaryWitness Cell
+theorem ERIEC.FieldBridge.boundary_subset_support.{u} : ∀ {Cell : Type u}
+  (witness : ERIEC.FieldBridge.PeriodicBoundaryWitness Cell), witness.boundary ⊆ witness.support :=
+fun {Cell} witness ⦃cell⦄ hcell => ((witness.exact_boundary cell).mp hcell).left
+'ERIEC.FieldBridge.boundary_subset_support' does not depend on any axioms
+LEAN_EXIT_CODE=0
+TYPE_REVIEW_RESULT=PASS

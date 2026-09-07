@@ -163,9 +163,9 @@ owner       = "codex"
 depends_on  = ["VP-BDY-002"]
 # G1: logs/gates/VP-BDY-003/G1-retry1-20260905.log; G2: logs/gates/VP-BDY-003/G2-retry1-20260905.log
 # G3C: logs/gates/VP-BDY-003/G3C-20260905.log; evidence_commit=862a0aeb555b7b3ad747d866837fabad30ff29a8
-status      = "implemented"
+status      = "certified"                     # G4: logs/gates/VP-BDY-003/G4-coverage-20260907.log
 pinned      = false
-coverage_audit = "unreviewed"
+coverage_audit = "complete"
 
 # ---- 検証点 5: Wld の内生計算と Umwelt 相対性 ------------------------------
 
@@ -1004,6 +1004,21 @@ pinned      = false                           # 2026-07-20 Codex直接セッシ�
 coverage_audit = "unreviewed"
 
 # ---- Legacy contract coverage audit ----------------------------------------
+
+[[legacy_coverage]]
+legacy_vp_id = "VP-BDY-003"
+contract_id = "body.periodic_boundary_extraction"
+audit_status = "complete"
+basis = "type_review"
+reviewer = "codex"
+basis_log = "logs/gates/VP-BDY-003/coverage-type-review-20260907.log"
+# No v2 claim_group currently maps VP-BDY-003 to child claims. This audit covers
+# the packet's supplied boundary witness and subset consequence, not field
+# provenance, DC.hBound, viability, or periodicity of arbitrary Lean neighbors.
+# Runtime boundary checks and all three dependency edges:
+# logs/gates/VP-BDY-003/G4-coverage-20260907.log
+covers_claim_ids = []
+not_covered_claim_ids = []
 
 [[legacy_coverage]]
 legacy_vp_id = "VP-CLP-001"
