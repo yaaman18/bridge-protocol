@@ -162,7 +162,8 @@ contract_id = "body.periodic_boundary_extraction"
 owner       = "codex"
 depends_on  = ["VP-BDY-002"]
 # G1: logs/gates/VP-BDY-003/G1-retry1-20260905.log; G2: logs/gates/VP-BDY-003/G2-retry1-20260905.log
-status      = "bound"
+# G3C: logs/gates/VP-BDY-003/G3C-20260905.log; evidence_commit=862a0aeb555b7b3ad747d866837fabad30ff29a8
+status      = "implemented"
 pinned      = false
 coverage_audit = "unreviewed"
 
