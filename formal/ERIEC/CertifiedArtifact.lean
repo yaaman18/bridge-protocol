@@ -496,6 +496,14 @@ def certifiedArtifact : CertifiedArtifact :=
         juliaChecker := "check_clamp_sigma_identification"
       },
       {
+        id := "body.periodic_boundary_extraction"
+        leanModule := "ERIEC.FieldBridge"
+        leanName := "PeriodicBoundaryWitness"
+        leanKind := "structure"
+        juliaSymbol := "PeriodicBoundaryCertificate"
+        juliaChecker := "check_periodic_body_boundary"
+      },
+      {
         id := "guard.terminal_iff"
         leanModule := "ERIEC.Guard"
         leanName := "hasTStar_iff_terminal"

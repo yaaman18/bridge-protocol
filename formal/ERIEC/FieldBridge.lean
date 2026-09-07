@@ -1,4 +1,5 @@
 import ERIEC.Adjunction
+import ERIEC.FieldBridge.Boundary
 
 namespace ERIEC
 

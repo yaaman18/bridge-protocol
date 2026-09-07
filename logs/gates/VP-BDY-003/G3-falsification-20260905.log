@@ -1,0 +1,34 @@
+Precompiling ERIEC...
+   7642.4 ms  ✓ ERIEC
+  1 dependency successfully precompiled in 8 seconds. 26 already precompiled.
+ERROR: LoadError: Some tests did not pass: 5 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_field_bridge.jl:80
+FALSIFICATION-BDY-002-DEAD-SUPPORT: PASS
+FALSIFICATION-BDY-002-RANDOM-PERSISTENCE: PASS
+Test Summary:           | Pass  Total   Time
+field to sensory bridge |   20     20  17.1s
+FALSIFICATION-BDY-003-MISSING-BOUNDARY: PASS
+FALSIFICATION-BDY-003-OUTSIDE-SUPPORT: PASS
+FALSIFICATION-BDY-003-PROFILE-DIGEST: PASS
+periodic body boundary witness: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_field_bridge.jl:80
+  Got exception outside of a @test
+  ArgumentError: cannot certify payload with a failing artifact check
+  Stacktrace:
+   [1] certified_artifact_envelope(payload::@NamedTuple{kind::Symbol, ok::Bool, lean_contracts::Vector{String}, julia_checkers::Vector{Symbol}, numeric_assumptions::@NamedTuple{profile_id::String, profile_sha256::String, periodic::Bool, boundary_connectivity::Int64}, execution_layer::Symbol, execution_certified::Bool, execution_boundary::Symbol, execution_note::String}, check::CertifiedArtifactCheck; claim_scope::Symbol)
+     @ ERIEC ~/bridge-protocol/src/certification.jl:604
+   [2] certified_artifact_envelope
+     @ ~/bridge-protocol/src/certification.jl:599 [inlined]
+   [3] certified_periodic_body_boundary(cert::ERIEC.PeriodicBoundaryCertificate, artifact_check::CertifiedArtifactCheck)
+     @ ERIEC ~/bridge-protocol/src/field_bridge.jl:648
+   [4] macro expansion
+     @ ~/bridge-protocol/test/test_field_bridge.jl:130 [inlined]
+   [5] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [6] top-level scope
+     @ ~/bridge-protocol/test/test_field_bridge.jl:81
+   [7] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [8] top-level scope
+     @ none:1
+Test Summary:                  | Pass  Error  Total   Time
+periodic body boundary witness |    5      1      6  41.7s

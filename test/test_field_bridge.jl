@@ -32,6 +32,13 @@ using Random
     @test count(channel -> first(channel) == :contact_obstacle, extracted.state.channels) == 16
     @test all(isfinite, extracted.state.values)
 
+    geometry_result = ERIEC.extract_body_geometry(field, obstacle; profile=profile)
+    boundary_certificate = ERIEC.PeriodicBoundaryCertificate(
+        geometry_result;
+        profile=profile,
+    )
+    @test ERIEC.check_periodic_body_boundary(boundary_certificate; profile=profile)
+
     translated_field = circshift(field, (5, -7))
     translated_obstacle = ERIEC.ObstacleField(circshift(obstacle.mask, (5, -7)))
     translated = ERIEC.extract_geometric_sensory(
@@ -68,6 +75,65 @@ using Random
         :body_support_too_small,
     )
     println("FALSIFICATION-BDY-002-RANDOM-PERSISTENCE: PASS")
+end
+
+@testset "periodic body boundary witness" begin
+    profile = ERIEC.load_sensory_carrier_profile()
+    support = trues(3, 3)
+    support[2, 3] = false
+    boundary = falses(3, 3)
+    boundary[1, 3] = true
+    boundary[2, 1] = true
+    boundary[2, 2] = true
+    boundary[3, 3] = true
+    certificate = ERIEC.PeriodicBoundaryCertificate(
+        BitMatrix(support),
+        BitMatrix(boundary),
+        profile.profile_id,
+        ERIEC.sensory_carrier_profile_sha256(),
+    )
+    @test ERIEC.check_periodic_body_boundary(certificate; profile=profile)
+    @test certificate.boundary[2, 1]
+
+    missing = copy(certificate.boundary)
+    missing[2, 1] = false
+    missing_certificate = ERIEC.PeriodicBoundaryCertificate(
+        certificate.support,
+        missing,
+        certificate.profile_id,
+        certificate.profile_sha256,
+    )
+    @test !ERIEC.check_periodic_body_boundary(missing_certificate; profile=profile)
+    println("FALSIFICATION-BDY-003-MISSING-BOUNDARY: PASS")
+
+    outside = copy(certificate.boundary)
+    outside[2, 3] = true
+    outside_certificate = ERIEC.PeriodicBoundaryCertificate(
+        certificate.support,
+        outside,
+        certificate.profile_id,
+        certificate.profile_sha256,
+    )
+    @test !ERIEC.check_periodic_body_boundary(outside_certificate; profile=profile)
+    println("FALSIFICATION-BDY-003-OUTSIDE-SUPPORT: PASS")
+
+    wrong_profile = ERIEC.PeriodicBoundaryCertificate(
+        certificate.support,
+        certificate.boundary,
+        certificate.profile_id,
+        repeat("0", 64),
+    )
+    @test !ERIEC.check_periodic_body_boundary(wrong_profile; profile=profile)
+    println("FALSIFICATION-BDY-003-PROFILE-DIGEST: PASS")
+
+    artifact_check = verify_lean_certified_artifact()
+    envelope = ERIEC.certified_periodic_body_boundary(certificate, artifact_check)
+    graph = certificate_dependency_graph(envelope)
+    @test graph.payload_kind == :PeriodicBoundaryExtraction
+    @test "body.periodic_boundary_extraction" in graph.lean_contracts
+    @test "ERIEC.FieldBridge.PeriodicBoundaryWitness" in
+        getfield.(graph.lean_dependencies, :full_declaration)
+    @test "check_periodic_body_boundary" in graph.julia_checkers
 end
 
 @testset "independent alpha and clamp sigma measurement" begin

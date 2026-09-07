@@ -150,6 +150,22 @@ status      = "certified"                   # G4: logs/gates/VP-BDY-002/G4-20260
 pinned      = false
 coverage_audit = "unreviewed"
 
+[[vp]]
+id          = "VP-BDY-003"
+source      = "specs/packets/VP-BDY-003.md#frozen-statement"
+claim_ja    = "周期4近傍に対する有限身体境界が台の内点かつ外部近傍を持つ点と完全一致し、境界が台に含まれることを検査する"
+lean_decl   = "ERIEC.FieldBridge.PeriodicBoundaryWitness"
+lean_file   = "formal/ERIEC/FieldBridge/Boundary.lean"
+julia_api   = "check_periodic_body_boundary"
+julia_file  = "src/field_bridge.jl"
+contract_id = "body.periodic_boundary_extraction"
+owner       = "codex"
+depends_on  = ["VP-BDY-002"]
+# G1: logs/gates/VP-BDY-003/G1-retry1-20260905.log; G2: logs/gates/VP-BDY-003/G2-retry1-20260905.log
+status      = "bound"
+pinned      = false
+coverage_audit = "unreviewed"
+
 # ---- 検証点 5: Wld の内生計算と Umwelt 相対性 ------------------------------
 
 [[vp]]

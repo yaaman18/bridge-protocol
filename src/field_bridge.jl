@@ -72,6 +72,27 @@ struct BodyGeometryResult
     geometry::Union{BodyGeometry,Nothing}
 end
 
+struct PeriodicBoundaryCertificate
+    support::BitMatrix
+    boundary::BitMatrix
+    profile_id::String
+    profile_sha256::String
+end
+
+function PeriodicBoundaryCertificate(
+    result::BodyGeometryResult;
+    profile::SensoryCarrierProfile=load_sensory_carrier_profile(),
+)
+    result.valid || throw(ArgumentError("a valid body geometry is required"))
+    geometry = result.geometry::BodyGeometry
+    PeriodicBoundaryCertificate(
+        copy(geometry.support),
+        copy(geometry.boundary),
+        profile.profile_id,
+        sensory_carrier_profile_sha256(),
+    )
+end
+
 struct GeometricSensoryState
     channels::Vector{Tuple{Symbol,Int}}
     values::Vector{Float64}
@@ -175,6 +196,29 @@ function _periodic_components(mask::BitMatrix; connectivity::Integer=8)
         push!(components, component)
     end
     components
+end
+
+function check_periodic_body_boundary(
+    certificate::PeriodicBoundaryCertificate;
+    profile::SensoryCarrierProfile=load_sensory_carrier_profile(),
+)
+    size(certificate.support) == size(certificate.boundary) || return false
+    !isempty(certificate.support) || return false
+    size(certificate.support, 1) == size(certificate.support, 2) || return false
+    any(certificate.support) || return false
+    any(certificate.boundary) || return false
+    certificate.profile_id == profile.profile_id || return false
+    certificate.profile_sha256 == sensory_carrier_profile_sha256() || return false
+
+    expected = falses(size(certificate.support))
+    for point in CartesianIndices(certificate.support)
+        certificate.support[point] || continue
+        expected[point] = any(
+            neighbor -> !certificate.support[neighbor],
+            _periodic_neighbors(point, size(certificate.support), 4),
+        )
+    end
+    certificate.boundary == expected
 end
 
 function _periodic_center(field::AbstractMatrix, support::BitMatrix, minimum_norm::Real)
@@ -575,6 +619,33 @@ function clamp_sigma_identification_certificate(cert::ClampSigmaMeasurementCerti
         hconv=check.hconv,
         julia_unverified_execution_boundary()...,
     )
+end
+
+function periodic_boundary_extraction_certificate(cert::PeriodicBoundaryCertificate)
+    (
+        kind=:PeriodicBoundaryExtraction,
+        ok=check_periodic_body_boundary(cert),
+        lean_contracts=["body.periodic_boundary_extraction"],
+        julia_checkers=[:check_periodic_body_boundary],
+        numeric_assumptions=(
+            profile_id=cert.profile_id,
+            profile_sha256=cert.profile_sha256,
+            periodic=true,
+            boundary_connectivity=4,
+        ),
+        julia_unverified_execution_boundary(
+            note="Julia validates a finite boundary witness; it does not certify field provenance or DC.hBound.",
+        )...,
+    )
+end
+
+function certified_periodic_body_boundary(
+    cert::PeriodicBoundaryCertificate,
+    artifact_check::CertifiedArtifactCheck,
+)
+    payload = periodic_boundary_extraction_certificate(cert)
+    payload.ok || throw(ArgumentError("periodic boundary witness is invalid"))
+    certified_artifact_envelope(payload, artifact_check)
 end
 
 function certified_clamp_sigma_identification(

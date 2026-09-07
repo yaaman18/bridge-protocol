@@ -568,6 +568,15 @@
             exported=false,
         ),
         (
+            file="FieldBridge/Boundary.lean",
+            lean=["PeriodicBoundaryWitness", "boundary_subset_support"],
+            julia=[
+                :PeriodicBoundaryCertificate,
+                :check_periodic_body_boundary,
+            ],
+            exported=false,
+        ),
+        (
             file="Guard.lean",
             lean=["HasTStar", "NoTStar", "hasTStar_iff_terminal", "M4", "TraceSafe", "traceSafe_to_M4Safe", "kleisli"],
             julia=[:check_terminal_guard, :check_trace_safe],
@@ -1219,6 +1228,7 @@
         "graded.presheaf_transition_output_copair_unique",
         "body.no_terminal_setpoint",
         "body.clamp_sigma_identification",
+        "body.periodic_boundary_extraction",
         "guard.terminal_iff",
         "markers.fm_classification",
         "markers.classify",

@@ -561,6 +561,18 @@ reviewer = "codex"
 basis_log = "logs/gates/VP-BDY-002/G3-falsification-retry1.log"
 
 [[contract]]
+id = "body.periodic_boundary_extraction"
+checker_relation = "witness_validator"
+review_status = "reviewed"
+checker = "check_periodic_body_boundary"
+lean_decl = "ERIEC.FieldBridge.PeriodicBoundaryWitness"
+scope = "complete caller-supplied finite square support and boundary masks together with the preregistered sensory-carrier profile identity"
+assumptions = ["the supplied masks are claimed to be output of the preregistered observation-layer extractor", "the profile digest identifies the fixed periodic grid and four-neighbor boundary convention", "the checker does not establish field provenance, DC.hBound, or viability"]
+guarantee = "exhaustively validates that each boundary cell is exactly a supported cell with a periodic four-neighbor outside support; therefore validates boundary subset support for the supplied finite witness"
+reviewer = "codex"
+basis_log = "logs/gates/VP-BDY-003/G3-falsification-retry1-20260905.log"
+
+[[contract]]
 id = "guard.terminal_iff"
 checker_relation = "regression_only"
 review_status = "reviewed"
