@@ -10,7 +10,9 @@
 #   G4 認証   implemented→certified certificate catalog 登録 + 依存グラフ edge
 # coverage_audit 値域: unreviewed | complete
 #   unreviewed = claim_ja が contract_id によってどこまで裏付けられているかは未監査
-#   complete   = 監査済み（段階3以降で使用。段階1では出現しない）
+#   complete   = 監査済み。対応する [[legacy_coverage]] エントリ（basis と basis_log 付き）を
+#                本ファイル内に持つことを条件とする。この対応を検査するコードは無く、
+#                規約として保たれている（2026-09-07 時点）。
 #
 # ブートストラップ時のゲート証拠（2026-07-05 実行）:
 #   G1: lake build 成功（2377 jobs）        → logs/gates/bootstrap/G1-lake-build.log
