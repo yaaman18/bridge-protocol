@@ -91,8 +91,7 @@ using ERIEC
         all(claim_id -> claim_id in children, not_covered)
     end
 
-    function type_review_has_evidence(coverage, root)
-        get(coverage, "basis", nothing) == "type_review" || return true
+    function coverage_has_evidence(coverage, root)
         reviewer = get(coverage, "reviewer", nothing)
         basis_log = get(coverage, "basis_log", nothing)
         reviewer isa AbstractString && !isempty(strip(reviewer)) || return false
@@ -127,9 +126,7 @@ using ERIEC
             children,
         )
 
-        if get(coverage, "basis", nothing) == "type_review"
-            @test type_review_has_evidence(coverage, project_root)
-        end
+        @test coverage_has_evidence(coverage, project_root)
     end
     @test complete_vps_have_rows(vps_by_id, legacy_coverages)
 
@@ -145,7 +142,9 @@ using ERIEC
         Dict("not_covered_claim_ids" => ["CLM-OUTSIDE"]),
         Set(["CLM-INSIDE"]),
     )
-    @test !type_review_has_evidence(Dict("basis" => "type_review"), project_root)
+    for basis in allowed_coverage_bases
+        @test !coverage_has_evidence(Dict("basis" => basis), project_root)
+    end
     synthetic_vp = Dict("id" => "VP-SYNTHETIC", "lean_decl" => "ERIEC.Synthetic.Root")
     synthetic_claims = Dict(
         "CLM-EQUAL" => Dict("lean_decl" => "ERIEC.Synthetic.Root"),

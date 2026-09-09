@@ -1,0 +1,16 @@
+VP=VP-WLD-002
+REVIEWER=codex
+BASIS=exact_ledger_decl
+SCOPE=exact declaration identity and complete partition of mapped v2 child claims
+NOTE=not_covered denotes absence of exact declaration coverage; it does not prove semantic non-derivability
+LEAN_DECL=ERIEC.World.Wld_band
+CONTRACT=world.spectral_band
+CATALOG_DECL=ERIEC.World.Wld_band
+COVERS=["VP2-WLD-BAND-001"]
+NOT_COVERED=["VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]
+INPUT_SHA256 formal/ERIEC/CertifiedArtifact.lean 9cf39ac1614374d40338bec0b898eaa6b5f2ffce815dd6265f8311287b6940d1
+INPUT_SHA256 formal/ERIEC/World.lean 651556877b25817f23b1f634a80458d66e265dc7991f46ed6bc1df91c29f1247
+INPUT_SHA256 specs/claim-ledger-v2.toml b542d09dbdcd9f9424d58c81a630794f0c9bf41c3c78474b3ce7ef7a158bd4aa
+Test Summary:                         | Pass  Total  Time
+exact declaration coverage VP-WLD-002 |   16     16  0.0s
+EXACT_COVERAGE_AUDIT_RESULT=PASS

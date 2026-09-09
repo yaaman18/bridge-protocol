@@ -1,0 +1,16 @@
+VP=VP-CLP-001
+REVIEWER=codex
+BASIS=exact_ledger_decl
+SCOPE=exact declaration identity and complete partition of mapped v2 child claims
+NOTE=not_covered denotes absence of exact declaration coverage; it does not prove semantic non-derivability
+LEAN_DECL=ERIEC.Collapse.hingeCollapse
+CONTRACT=collapse.critical_slowing
+CATALOG_DECL=ERIEC.Collapse.hingeCollapse
+COVERS=Union{}[]
+NOT_COVERED=["VP2-DYN-BD-ONEWAY-001", "VP2-DYN-BDPAIR-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-CONF-001", "VP2-DYN-COREOF-001", "VP2-DYN-DESCENT-001", "VP2-DYN-DOWNV-001", "VP2-DYN-HINGE-COLLAPSE-001", "VP2-DYN-INS-001", "VP2-DYN-INS-FIBER-001", "VP2-DYN-K-001", "VP2-DYN-K-ABSORB-001", "VP2-DYN-PATH-ITERATE-001", "VP2-DYN-R2P-001", "VP2-DYN-REACHABLE-001", "VP2-DYN-TOTAL-DATA-001", "VP2-DYN-TOTAL-ORBIT-001", "VP2-DYN-TOTAL-PROP-001", "VP2-DYN-TRANSPORT-001", "VP2-DYN-UPD-001", "VP2-WLD-BAND-001", "VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]
+INPUT_SHA256 formal/ERIEC/CertifiedArtifact.lean 9cf39ac1614374d40338bec0b898eaa6b5f2ffce815dd6265f8311287b6940d1
+INPUT_SHA256 formal/ERIEC/Collapse.lean 370cf3a1101d5f3cd0a74de35c87dac8ea122775468ef90c1f1a8295a2775ab9
+INPUT_SHA256 specs/claim-ledger-v2.toml b542d09dbdcd9f9424d58c81a630794f0c9bf41c3c78474b3ce7ef7a158bd4aa
+Test Summary:                         | Pass  Total  Time
+exact declaration coverage VP-CLP-001 |   13     13  0.3s
+EXACT_COVERAGE_AUDIT_RESULT=PASS

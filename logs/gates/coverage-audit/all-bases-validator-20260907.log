@@ -1,0 +1,4 @@
+Test Summary:          | Pass  Total  Time
+claim ledger integrity | 1021   1021  6.2s
+Test Summary:                                   | Pass  Total  Time
+claim validator enforces legacy coverage audits |  100    100  5.7s

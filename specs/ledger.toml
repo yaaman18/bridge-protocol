@@ -10,9 +10,10 @@
 #   G4 認証   implemented→certified certificate catalog 登録 + 依存グラフ edge
 # coverage_audit 値域: unreviewed | complete
 #   unreviewed = claim_ja が contract_id によってどこまで裏付けられているかは未監査
-#   complete   = 監査済み。対応する [[legacy_coverage]] エントリ（basis と basis_log 付き）を
-#                本ファイル内に持つことを条件とする。この対応を検査するコードは無く、
-#                規約として保たれている（2026-09-07 時点）。
+#   complete   = 同じ VP・contract の監査済み [[legacy_coverage]] を本ファイル内に1件持つ。
+#                basis にかかわらず reviewer と実在する相対パスの basis_log を必須とする。
+#                tools/verify/claim_ledger_validation.jl と test/test_ledger_consistency.jl が
+#                対応を検査する（2026-09-07 時点）。型による被覆判断自体は監査者が行う。
 #
 # ブートストラップ時のゲート証拠（2026-07-05 実行）:
 #   G1: lake build 成功（2377 jobs）        → logs/gates/bootstrap/G1-lake-build.log
@@ -1027,6 +1028,8 @@ legacy_vp_id = "VP-CLP-001"
 contract_id = "collapse.critical_slowing"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-CLP-001-exact-ledger-20260907.log"
 covers_claim_ids = []
 not_covered_claim_ids = ["VP2-DYN-BD-ONEWAY-001", "VP2-DYN-BDPAIR-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-CONF-001", "VP2-DYN-COREOF-001", "VP2-DYN-DESCENT-001", "VP2-DYN-DOWNV-001", "VP2-DYN-HINGE-COLLAPSE-001", "VP2-DYN-INS-001", "VP2-DYN-INS-FIBER-001", "VP2-DYN-K-001", "VP2-DYN-K-ABSORB-001", "VP2-DYN-PATH-ITERATE-001", "VP2-DYN-R2P-001", "VP2-DYN-REACHABLE-001", "VP2-DYN-TOTAL-DATA-001", "VP2-DYN-TOTAL-ORBIT-001", "VP2-DYN-TOTAL-PROP-001", "VP2-DYN-TRANSPORT-001", "VP2-DYN-UPD-001", "VP2-WLD-BAND-001", "VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]
 
@@ -1035,6 +1038,8 @@ legacy_vp_id = "VP-DYN-001"
 contract_id = "dynamics.finite_collapse"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-DYN-001-exact-ledger-20260907.log"
 covers_claim_ids = []
 not_covered_claim_ids = ["VP2-DYN-BD-ONEWAY-001", "VP2-DYN-BDPAIR-001", "VP2-DYN-COLLAPSE-CONF-001", "VP2-DYN-CONF-001", "VP2-DYN-COREOF-001", "VP2-DYN-DESCENT-001", "VP2-DYN-DOWNV-001", "VP2-DYN-HINGE-COLLAPSE-001", "VP2-DYN-INS-001", "VP2-DYN-INS-FIBER-001", "VP2-DYN-K-001", "VP2-DYN-K-ABSORB-001", "VP2-DYN-PATH-ITERATE-001", "VP2-DYN-R2P-001", "VP2-DYN-REACHABLE-001", "VP2-DYN-TOTAL-DATA-001", "VP2-DYN-TOTAL-ORBIT-001", "VP2-DYN-TOTAL-PROP-001", "VP2-DYN-TRANSPORT-001", "VP2-DYN-UPD-001"]
 
@@ -1043,6 +1048,8 @@ legacy_vp_id = "VP-INV-001"
 contract_id = "invariance.update_bisimulation"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-INV-001-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-INV-UPD-001"]
 not_covered_claim_ids = ["VP2-INV-DRIFT-001", "VP2-INV-E5-001", "VP2-INV-INS-001", "VP2-INV-INTERNAL-EPS-001", "VP2-INV-INTERNAL-KAPPA-001", "VP2-INV-STATIC-CLOSURE-001", "VP2-INV-STATIC-DC-001", "VP2-INV-STATIC-REL-001", "VP2-INV-UNITARY-001"]
 
@@ -1051,6 +1058,8 @@ legacy_vp_id = "VP-M1-001"
 contract_id = "reference_models.arbitrarily_large_dc"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-M1-001-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-M1-LARGE-DC-001"]
 not_covered_claim_ids = ["VP2-M1-FULL-001a", "VP2-M1-FULL-001b"]
 
@@ -1059,6 +1068,8 @@ legacy_vp_id = "VP-M1-FULL-001a"
 contract_id = "reference_models.arbitrarily_large_ax_core_discrete"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-M1-FULL-001a-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-M1-FULL-001a"]
 not_covered_claim_ids = ["VP2-M1-FULL-001b", "VP2-M1-LARGE-DC-001"]
 
@@ -1067,6 +1078,8 @@ legacy_vp_id = "VP-M1-FULL-001b"
 contract_id = "reference_models.arbitrarily_large_three_layer"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-M1-FULL-001b-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-M1-FULL-001b"]
 not_covered_claim_ids = ["VP2-M1-FULL-001a", "VP2-M1-LARGE-DC-001"]
 
@@ -1075,6 +1088,8 @@ legacy_vp_id = "VP-REF-001"
 contract_id = "reference_models.v5_1"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-REF-001-exact-ledger-20260907.log"
 covers_claim_ids = []
 not_covered_claim_ids = ["VP2-REF-DYN-001", "VP2-REF-NONDEG-001", "VP2-REF-STABLE-001"]
 
@@ -1083,6 +1098,8 @@ legacy_vp_id = "VP-VAL-002"
 contract_id = "value.endogenous"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-VAL-002-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-VAL-ENDOGENOUS-001"]
 not_covered_claim_ids = ["VP2-VAL-COUNTERMODEL-001", "VP2-VAL-NORMALIZED-001", "VP2-VAL-RANGE-001", "VP2-VAL-RAW-001", "VP2-VAL-WEIGHTED-001", "VP2-VAL-WEIGHTED-PURE-001", "VP2-VAL-WELLDEF-001"]
 
@@ -1091,6 +1108,8 @@ legacy_vp_id = "VP-WDC-002"
 contract_id = "worlddc.no_unconditional_equivalence"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-WDC-002-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-WDC-FORWARD-CE-001"]
 not_covered_claim_ids = ["VP2-WDC-BACKWARD-CE-001"]
 
@@ -1099,5 +1118,7 @@ legacy_vp_id = "VP-WLD-002"
 contract_id = "world.spectral_band"
 audit_status = "complete"
 basis = "exact_ledger_decl"
+reviewer = "codex"
+basis_log = "logs/gates/coverage-audit/VP-WLD-002-exact-ledger-20260907.log"
 covers_claim_ids = ["VP2-WLD-BAND-001"]
 not_covered_claim_ids = ["VP2-WLD-CHI-001", "VP2-WLD-CHI-NONTRIV-001", "VP2-WLD-EETA-001", "VP2-WLD-INVARIANT-001", "VP2-WLD-LAMBDAMAX-001", "VP2-WLD-MONO-001", "VP2-WLD-SLOWING-001", "VP2-WLD-SUBSET-EETA-001", "VP2-WLD-ZERO-FIX-001"]

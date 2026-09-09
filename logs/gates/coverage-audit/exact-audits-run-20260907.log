@@ -1,0 +1,10 @@
+PASS VP-CLP-001 log=logs/gates/coverage-audit/VP-CLP-001-exact-ledger-20260907.log
+PASS VP-DYN-001 log=logs/gates/coverage-audit/VP-DYN-001-exact-ledger-20260907.log
+PASS VP-INV-001 log=logs/gates/coverage-audit/VP-INV-001-exact-ledger-20260907.log
+PASS VP-M1-001 log=logs/gates/coverage-audit/VP-M1-001-exact-ledger-20260907.log
+PASS VP-M1-FULL-001a log=logs/gates/coverage-audit/VP-M1-FULL-001a-exact-ledger-20260907.log
+PASS VP-M1-FULL-001b log=logs/gates/coverage-audit/VP-M1-FULL-001b-exact-ledger-20260907.log
+PASS VP-REF-001 log=logs/gates/coverage-audit/VP-REF-001-exact-ledger-20260907.log
+PASS VP-VAL-002 log=logs/gates/coverage-audit/VP-VAL-002-exact-ledger-20260907.log
+PASS VP-WDC-002 log=logs/gates/coverage-audit/VP-WDC-002-exact-ledger-20260907.log
+PASS VP-WLD-002 log=logs/gates/coverage-audit/VP-WLD-002-exact-ledger-20260907.log
