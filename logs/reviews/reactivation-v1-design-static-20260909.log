@@ -1,0 +1,4 @@
+PASS candidate static consistency using Python 3.12: N=8, cases=256, edges=16, abs_weight_sum=16
+Expected trajectories=3328, transitions=19968; not executed
+Candidate-only canonical SHA-256=7ec93658a76a9b0777abaf1e3f8a58221213cb7b9420dcf4abbd0079fdba081e
+No profile registration, dynamics, measurement, DC evaluation, or G1-G4 execution performed.

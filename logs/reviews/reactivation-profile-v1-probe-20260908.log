@@ -1,0 +1,3 @@
+PASS empty-window DC: hSelf=true hSMC=true hAct=false hBound=false; finite check=false
+Finite Int arithmetic example: typemax(Int)+1=-9223372036854775808
+PASS overflow counterexample: integer storage alone does not guarantee exact update

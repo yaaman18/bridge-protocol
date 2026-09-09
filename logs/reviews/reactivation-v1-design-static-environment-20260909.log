@@ -1,0 +1,2 @@
+Initial attempt with Python 3.10 failed before parsing: ModuleNotFoundError: No module named tomllib
+Re-run with installed Python 3.12; see reactivation-v1-design-static-20260909.log

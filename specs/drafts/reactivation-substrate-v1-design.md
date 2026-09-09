@@ -1,0 +1,227 @@
+# 再活性化基体 v1 — Codex 設計案
+
+状態: 2026-09-09 の設計案。未凍結・未実装・未認証。
+ユーザーの「Claude Code を使わず Codex が設計する」指示に基づく。
+数値候補は `reactivation-substrate-v1-candidate.toml`。旧 items 草案に代わる検討対象とする。
+固定する前提は C=ユニット、M→E の環境写像を基体に含める、κはpersistenceのみ。
+本案の具体的な観測・介入規則は新たな設計候補であり、過去のユーザー決定とは記載しない。
+
+## 1. 何を確かめるか
+
+有限のBoolean配置を更新する自作基体について、登録済みの手順で関係を測り、
+各初期配置から得た一つの観測窓に既存DCの4述語が成立するかを記録する。
+関係はその初期配置と期間に限定する。DC通過を産出・viable・意識・全時刻の維持とは呼ばない。
+全配置を調べて0件通過でも完了した負の結果とし、profileを自動調整しない。
+
+## 2. 台と具体的な候補
+
+| 要素 | v1候補 |
+|---|---|
+| C | u0〜u7の8ユニット |
+| E=I | u0,u1（入力） |
+| M=O | u6,u7（出力） |
+| 内部 | u2,u3,u4,u5 |
+| 状態 | x: C→{0,1} |
+| 更新幅 | H=6遷移、配置はx0〜x6の7点 |
+| persistence | k=3遷移、最終窓x3〜x6の4点 |
+| 初期配置 | 整数0〜255の全256件 |
+
+候補の配線は2組の内部相互結合(u2,u3)/(u4,u5)、各組から出力への2入力、
+各入力から対応組への駆動、出力から別組への辺、出力から入力への環境帰還で構成する。
+出力閾値を2、それ以外を1、全辺重みを1とする。
+役割は相互結合・合流・組間作用・環境帰還を小さい台で表現すること。
+DCの正例を作れることを選定理由にしない。この候補の軌道・測定・DCは本設計作成時に未評価。
+数値・辺の完全な一覧は候補TOMLに置き、乱数や省略されたデフォルトに依存しない。
+
+## 3. 更新と入力の意味
+
+Wの宛先はC\Iのみ、W_envの始点はO・宛先はIのみを許す。
+両者の未定義成分は0とし、全j∈Cについて
+
+`F(x)(j) = 1[ Σ_i W(i,j)x(i) + Σ_o W_env(o,j)x(o) ≥ θ(j) ]`
+
+で同期更新する。右辺はすべて同じ旧配置xを使い、ユニット順に更新値を混ぜない。
+出力x_tが入力x_(t+1)へ作用する。閉世界で、時変の外生入力は設けない。
+初期配置は入力も自由に与える一回限りの初期条件であり、以後の入力はW_env経由のみ。
+θは正整数なので、入力onをゼロ入力からの自発点灯と混同しない。
+この正閾値の下で全offは固定点だが、任意軌道から全offへ到達するとは主張しない。
+
+整数はInt64に固定。全辺絶対値総和Bを任意精度で検証し、
+`B ≤ weight_sum_bound < 2^63-1`、各θ∈[1,2^63-1]、各重みのInt64表現可能性を要求。
+実行時もchecked加算を使い、変換前・abs計算中のoverflowを許さない。
+負の重みはschema上許すが、この候補はすべて正。自己辺・重複辺・ゼロ辺は拒否する。
+既存Leniaのthreshold/tolは変更も流用もしない。
+
+## 4. 窓・κ・ε・境界
+
+対照軌道Bの最終窓をs=(B3,B4,B5,B6)とする。履歴paddingを行わない。
+`K=κ(s)={c | ∀t∈{3,4,5,6}, B_t(c)=1}`。
+`ε(s)={i∈I | B6(i)=1}`。名前はactive_inputs_at_final_stepとする。
+これは最終時点の入力活性であり、期間全体の受信、到達可能性、情報量を表す名称を付けない。
+κは持続、εは最終時点という別の観測を担う。εに持続条件を暗黙に加えない。
+
+`neighbors(c)={d | W(c,d)≠0 ∨ W_env(c,d)≠0}`。
+`boundary(K)={c∈K | ∃d∈neighbors(c), d∉K}`。
+境界は、支持集合から外へ出る構造上の接続を観測する。環境帰還も実在する基体の辺なので含める。
+無向境界から出方向を選ぶ理由は、観測する向きを固定するためであり、DC通過率の大小ではない。
+この境界は非零重みの存在に基づく。測定した因果効果や、現在その辺に流れる量を認証するものではない。
+
+抽象型 `ERIEC.FieldBridge.PeriodicBoundaryWitness` のneighborsに上記を代入できる。
+必要なのは既存のpointwise同値どおりの境界抽出。既存の周期格子Julia checkerは流用しない。
+support=Cなら境界は空、support=∅でも空。全onのDC通過を期待するfixtureは置かない。
+
+## 5. 介入を再現可能にする
+
+case q の初期配置は `x0(u_j)=(q >> j)&1`。jは0から始まる。
+対照Bはx0からFを6回適用する。
+単一ユニットaを値b∈{0,1}に固定する作用をP_(a,b)とし、介入軌道Jは
+
+`J0=P_(a,b)(x0)`、`J_(t+1)=P_(a,b)(F(J_t))` （t=0〜5）
+
+と定義する。これで初期時点と各更新後に強制値が保たれ、次の更新は強制済み配置を読む。
+clampを短いpulseへ置き換えず、介入終了後の回復もv1では測らない。
+比較に使う対照・介入は同一q、H、窓、profile、実装版に束縛する。
+
+各caseで対照1本、全Cのoff介入8本、I∪Oのon介入4本を実行する。
+同じ物理介入を重複実行せず共有し、1case13本、全3328本、更新回数19968回となる。
+これらは必要件数の算術であり、実行済みログではない。
+
+## 6. 四つの関係の定義
+
+qごとに別の関係を作る。caseをまたぐunion/intersectionや代表caseの選択は行わない。
+
+`α_q(m)={e∈I | J_(m,1),6(e) ≠ J_(m,0),6(e)}`。
+`σ_q(e)={m∈O | J_(e,1),6(m) ≠ J_(e,0),6(m)}`。
+
+α/σはon対offで最終配置が異なる対象の集合。差の大きさやtolを使わない。
+過渡的に変化して最終時点に戻った効果は拾わない。Hを変えた場合の安定性も保証しない。
+既存VP-BDY-002のclamp retainedや理論σとの同定とは別の測定契約である。
+αとσのconverse性・随伴性は仮定しない。W/W_envを読むだけでα/σを作らない。
+
+任意軌道Xの最終4点すべてでonの集合をPersist(X)とし、
+`D_q(a)=(Persist(B)\Persist(J_(a,0)))\{a}` と置く。
+
+`π_q(m)=D_q(m)`、`ρ_q(c)=D_q(c)∩O`。
+
+意味は「単一off介入によって、介入対象以外で持続活性を失うもの」。
+対象自身の強制offを除くことで、直接強制した自己喪失を再帰的な依存の証拠に数えない。
+これは元草案からの明示的な候補変更であり、自己喪失を含める定義と同値ではない。
+産出の十分性や原因の完全性を主張せず、冗長な支援や抑制解除による活性増加を拾わないことを明示する。
+出力mはCにも属するので、同じ介入を使う `ρ_q(m)=π_q(m)∩O` を整合検査する。
+単に異なるハッシュを付けて独立測定と呼ぶことは禁止。
+
+## 7. DCへの入力と結果
+
+Sは4点のBoolean配置列を持つ有限データ。長さをruntime検証し、kをJulia型のパラメータに入れない。
+一つのERIEStateには、そのqで測った関係と、そのqの対照最終窓s、上記のboundary(K)を渡す。
+M=O、E=I、C=全ユニットの完全な台を渡す `check_DC(sys, all_M, all_E, all_C)` を使う。
+hGCを要求しないERIEState構築経路を選び、追加の随伴条件を暗黙に持ち込まない。
+結果の意味は既存Lean `ERIEC.DC` の4フィールドのまま。
+
+`hSelf: K ⊆ π⋆(ρ⋆(K))`、`hSMC: ε ⊆ α⋆(σ⋆(ε))`、
+`hAct: ρ⋆(K)∩σ⋆(ε) ≠ ∅`、`hBound: K∩boundary ≠ ∅`。
+
+新規の結果レコードにはq、入力digest、各関係、K、ε、境界、4真偽値、Act、
+kappa_nonempty、epsilon_nonempty、DCの合取を保存する。
+非空性は同じ状態から計算する診断情報であり第五・第六の判定条件ではない。
+全空窓ではhSelf/hSMC=true、hAct/hBound=false、DC=false。
+callbackは可変状態に依存しないよう凍結した関係・集合から構成する。
+
+個別caseはvalid_dc/valid_non_dcを区別し、入力不正や再現失敗はinvalid_artifactとする。
+run状態complete/incomplete/invalidはDC通過件数とは独立。
+全256件について同じcase集合と順序を照合し、complete時だけ通過件数を確定する。
+全結果、失敗理由、各述語の件数を保存し、case削除・成功時の早期終了を拒否する。
+すべてのcertificate終端でphenomenal_claim=:not_certifiedを保持する。
+
+## 8. digestと測定の検証
+
+profileファイルは候補TOMLの全項目を意味データとして含む。未知キー・省略キーは拒否。
+root/schema/profile_idもdigest範囲に含める。注釈・空白以外の意味変更は新しいdigestになる。
+派生値L=k+1、H=2k、readout_start=H-k、end=H、case_count=2^Nを照合する。
+配列の順序は意味を持つ。台・辺はindex昇順に固定し、辺は(from,to)順、重複を拒否する。
+
+rsb-ascii-records-v1はrootを`$`として次の前順走査のUTF-8/ASCII bytesをSHA-256する。
+各行はpath、type、valueをTABで区切りLFで終える。先頭に `rsb-ascii-records-v1` とLFを置く。
+tableはT/キー数を出力しASCIIキー順に再帰、arrayはA/要素数を出力してindex順に再帰する。
+pathはtableが`/key`、arrayが`/[0]`の形。integerはI/標準10進（負数以外の符号・先頭0なし）、
+BooleanはB/trueまたはfalse、stringはS/そのままの値。
+v1のキーは英小文字・数字・underscore、文字列はASCII英数字・underscore・hyphenのみを許す。
+float/date/nullやその他文字は拒否し、serializer実装やTOMLの表順に依存させない。
+digest自体と未凍結等の管理状態はこのファイルに自己参照で入れず、外の登録記録に置く。
+
+trace artifactはprofile digest、protocol版、runner code commit、q、target、clamp値、
+全7配置、観測窓を持つ。別のroleが同じtraceを参照することを許す。
+測定validatorは登録profileから全traceを再実行し、関係を再抽出して完全一致を調べる。
+hashは同一性の照合に使う。hash不一致を独立実験、hash一致を物理的な測定履歴の証明とは解釈しない。
+再現されたsimulationの観測であり、実世界の実験をしたことを認証しない。
+
+## 9. 登録と実行の順序
+
+管理状態をcandidate→registered→measured→evaluatedと分ける（台帳statusとは別のartifact状態）。
+candidateの段階で許すのはschema、整数範囲、辺の整合、期待case件数など静的検証のみ。
+profileを登録する前にこの候補の軌道・介入・DCを評価しない。
+
+登録媒体は既存gitリモートを利用する設計とする。登録commit Pのblobからprofile digestを得る。
+登録するリモート/refは既存値を調査して明示的に固定し、run要求から任意に差し替えさせない。
+実装版を含むrunner commit Rも固定する。RとPは同一でもよく、PはRの祖先とする。
+runnerは開始前に信頼する登録refでPを確認し、実際に読むprofileをPのblobと照合してrun記録を作る。
+run記録には一意run ID、P、R、digest、期待case集合のdigest、登録確認イベントを保存する。
+終了manifestはそのrun IDへ束縛する。結果をgitへ格納するcommit QはPの厳密な子孫とする。
+Qの祖先検査は補助検査であり、開始前登録確認の代用にしない。
+
+保証は信頼するrunnerと登録refに従ったrun内の順序・入力同一性・結果完全性に限定する。
+記録外の事前探索や自由に捏造されたログをgitだけで排除できるとは書かない。
+commit/pushは本案の作成では行わない。登録先とrunnerの信頼境界は登録作業時に確定する。
+途中失敗は同じrun IDで記録を残し、再試行は新run IDと元run IDへの参照を持つ。
+profile変更は理由付きの新候補に戻し、測定・判定・certificateを新digestで作り直す。
+旧runの負の結果を置換・削除しない。
+
+## 10. 実装単位と検証契約の候補
+
+| 単位 | 内容 | 新規ファイルの配置候補 |
+|---|---|---|
+| RSB-001 | profileの型・静的validator・digest・登録照合 | src/reactivation/Profile.jl、test/test_reactivation_profile.jl |
+| RSB-002 | 更新・介入・関係測定・trace再実行 | src/reactivation/Dynamics.jl、Measurement.jl、test/test_reactivation_measurement.jl |
+| RSB-003 | グラフ境界・既存DCへのadapter・全件manifest | src/reactivation/DCAdapter.jl、test/test_reactivation_dc.jl |
+
+src/reactivation.jlをfacadeとし、既存パッケージへのincludeは確定パケットで指定する。
+新規Julia APIは初期段階ではmodule-visibleとし、公開exportを増やさない。
+この表は予約名や台帳登録ではない。実装開始前に宣言名・契約ID・変更可能ファイルを確定する。
+理論的な実装義務は有限グラフ境界の同値、Boolean介入の定義、関係抽出の有限照合に限定して切り出す。
+必要なら新しい観測層モジュールに置くが、対象層に新しい公理・対象を足さない。
+既存PeriodicBoundaryWitness/DCは型と定理名を保ち、測定妥当性をその証明から推定しない。
+新規認証分類はパケットで照合する。既存dc.systemのwitness_validator分類を変更しない。
+
+検証項目は次を必須とし、基体の通過率とは分離する。
+
+- 不正台、I/O重複、入力へのW辺、環境辺の向き、自己辺、重複辺、overflow、派生窓値の不一致を拒否。
+- 小さい独立fixtureで旧配置同期更新、環境辺の1遷移遅延、初期/各遷移後のclampを手計算と照合。
+- trace改ざん、別case流用、関係改ざん、profile/実装版不一致を拒否。
+- 同一介入共有とρ(m)=π(m)∩O、対象自身の除外を独立fixtureで確認。
+- 空窓、全支持、出辺のない支持、境界の余分/欠落、4述語の独立失敗を確認。
+- 登録前run要求、case欠落/重複、途中停止、profile差替えを拒否し、全件不通過のcomplete結果を受理。
+
+G1→G2→対象G3/必要な全体G3またはG3C→G4を実装パケットに沿って実行する。
+G1でLeanが通ることと、profile上にDCの正例が存在することは別の主張。
+現在は設計と候補の静的整合だけを扱い、ゲート・台帳状態を進めない。
+
+## 11. 元の未決項目からの選択
+
+| 論点 | 本案 |
+|---|---|
+| A 同期/非同期 | 旧配置からの同期更新、環境項も同じ式に含める |
+| B 外生駆動 | なし。入力への通常辺を禁止し、正閾値を指定 |
+| C ε | 最終時点の入力活性 |
+| D 境界 | WとW_envの出方向、非零辺の支持外接続 |
+| E π/ρ | paired lesionの持続喪失、直接介入対象を除外 |
+| F 算術 | Int64＋検証済み総和上界＋checked算術 |
+
+これらを一組の候補として提示する。ε・境界・介入規則の変更は通過率の調整スイッチにしない。
+設計の残作業は凍結時の意味の採択、登録ref/runnerの確定、実装パケットと観測層statementの作成。
+今回の候補は静的に検証できる具体値まで記載済みであり、成功する配置の探索はしていない。
+
+静的確認（2026-09-09）: TOML読取、台の分割、辺の向き・重複・順序、整数上界、派生窓値、
+case件数、canonical表現の生成はPASS。実装validatorの完全性を検証したものではない。
+結果: `logs/reviews/reactivation-v1-design-static-20260909.log`。
+初回Python 3.10のtomllib不在は別ログ `logs/reviews/reactivation-v1-design-static-environment-20260909.log` に記録。
+既存Python 3.12で再実行済み。profileは未登録、G1〜G4と基体の評価は未実行。

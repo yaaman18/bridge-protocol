@@ -1,0 +1,67 @@
+schema_version = 1
+profile_id = "reactivation-substrate-v1-candidate-01"
+protocol_version = "reactivation-paired-traces-v1"
+digest_format = "rsb-ascii-records-v1"
+
+[substrate]
+unit_count = 8
+units = ["u0", "u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+input_units = ["u0", "u1"]
+output_units = ["u6", "u7"]
+internal_units = ["u2", "u3", "u4", "u5"]
+require_disjoint_io = true
+state_values = [0, 1]
+arithmetic = "checked_int64"
+weight_sum_bound = 16
+thresholds = [1, 1, 1, 1, 1, 1, 2, 2]
+weights = [
+  [0, 2, 1], [0, 3, 1], [1, 4, 1], [1, 5, 1],
+  [2, 3, 1], [2, 6, 1], [3, 2, 1], [3, 6, 1],
+  [4, 5, 1], [4, 7, 1], [5, 4, 1], [5, 7, 1],
+  [6, 4, 1], [7, 2, 1],
+]
+environment_map = [[6, 0, 1], [7, 1, 1]]
+update_rule = "synchronous_old_state_sum_ge_threshold"
+ordinary_edges_to_input = "forbidden"
+exogenous_drive = "none"
+self_edges = "forbidden"
+duplicate_edges = "reject"
+zero_weight_edges = "reject"
+
+[observation]
+kappa_rule = "persistent_active"
+kappa_transitions = 3
+state_window_points = 4
+run_horizon_steps = 6
+readout_start_step = 3
+readout_end_step = 6
+epsilon_rule = "active_inputs_at_final_step"
+boundary_rule = "outgoing_nonzero_edges"
+boundary_edge_sources = ["weights", "environment_map"]
+initial_history = "none"
+persistence_only = true
+carrier = "units"
+
+[measurement]
+intervention_rule = "clamp_initial_and_every_next_state"
+intervention_values = [0, 1]
+alpha_rule = "final_input_difference_on_vs_off"
+sigma_rule = "final_output_difference_on_vs_off"
+pi_rule = "baseline_persistence_loss_excluding_target"
+rho_rule = "baseline_persistence_loss_excluding_target_intersect_outputs"
+relation_scope = "one_initial_configuration"
+trial_sharing = "same_case_target_value_protocol"
+relation_aggregation = "none"
+
+[enumeration]
+policy = "exhaustive"
+bit_order = "unit_index_is_lsb_index"
+case_order = "ascending_integer"
+case_count = 256
+early_success_stop = false
+
+[reporting]
+record_all_cases = true
+zero_pass_count = "valid_result"
+nonempty_flags = "derived_diagnostics"
+phenomenal_claim = "not_certified"
