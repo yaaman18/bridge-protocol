@@ -1,0 +1,683 @@
+attempts = 32768
+claim = "exploratory_finite_witnesses"
+declared_cases = 32768
+domain = "four_unit_exhaustive"
+execution_certified = false
+exhaustive_in_declared_domain = true
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+saved_witness_stage = "all_subsets"
+schema_version = 1
+search_stage = "control_and_singletons"
+seed = 20260910
+sequence_completed = true
+unfound_patterns = ["without_hSelf", "without_hAct"]
+
+[pattern_counts_including_degenerate]
+0000 = 4293
+0001 = 505
+0010 = 1115
+0011 = 181
+0100 = 1080
+0101 = 36
+0110 = 128
+1000 = 6549
+1001 = 1036
+1010 = 302
+1011 = 112
+1100 = 14433
+1101 = 194
+1110 = 2360
+1111 = 444
+
+[[witnesses]]
+active_boundary = true
+actual = [true, true, true, true]
+all_interventions = true
+case_id = 690
+circuit_digest = "e215b2d8afa2d56f35ed9576d18b831398217f58b8ed8530b716dd1098ec33e4"
+collective_only_loss = []
+execution_certified = false
+name = "all_four"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[false, true, false, false], [false, false, true, false], [true, false, false, false], [false, true, true, false], [true, false, true, false], [true, true, true, false], [true, true, true, false]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [1, 3, 1], [2, 3, 1], [3, 1, 1]]
+    initial = [false, true, false, false]
+    inputs = ["u1"]
+    motors = ["u3", "u4"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [1, 4]
+    u2 = [1, 4]
+    u3 = [1, 4]
+    u4 = []
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4"]
+    E = ["u1"]
+    M = ["u3", "u4"]
+    epsilon = ["u1"]
+    kappa = ["u3"]
+
+        [witnesses.model.alpha]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.neighbors]
+        u1 = ["u2", "u3"]
+        u2 = ["u3"]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.pi]
+        u3 = ["u1", "u2", "u3"]
+        u4 = []
+
+        [witnesses.model.rho]
+        u1 = ["u3"]
+        u2 = []
+        u3 = ["u3"]
+        u4 = []
+
+        [witnesses.model.sigma]
+        u1 = ["u3"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 1
+    states = [[true, true, true, false], [true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 2
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 3
+    states = [[true, true, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 4
+    states = [[true, true, true, false], [false, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 5
+    states = [[true, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 6
+    states = [[true, true, true, false], [false, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 7
+    states = [[true, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 9
+    states = [[true, true, true, false], [true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 10
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 11
+    states = [[true, true, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 12
+    states = [[true, true, true, false], [false, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 13
+    states = [[true, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 14
+    states = [[true, true, true, false], [false, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 15
+    states = [[true, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+[[witnesses]]
+active_boundary = true
+actual = [true, true, true, true]
+all_interventions = true
+case_id = 690
+circuit_digest = "e215b2d8afa2d56f35ed9576d18b831398217f58b8ed8530b716dd1098ec33e4"
+collective_only_loss = []
+execution_certified = false
+name = "all_four_active_boundary"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[false, true, false, false], [false, false, true, false], [true, false, false, false], [false, true, true, false], [true, false, true, false], [true, true, true, false], [true, true, true, false]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [1, 3, 1], [2, 3, 1], [3, 1, 1]]
+    initial = [false, true, false, false]
+    inputs = ["u1"]
+    motors = ["u3", "u4"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [1, 4]
+    u2 = [1, 4]
+    u3 = [1, 4]
+    u4 = []
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4"]
+    E = ["u1"]
+    M = ["u3", "u4"]
+    epsilon = ["u1"]
+    kappa = ["u3"]
+
+        [witnesses.model.alpha]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.neighbors]
+        u1 = ["u2", "u3"]
+        u2 = ["u3"]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.pi]
+        u3 = ["u1", "u2", "u3"]
+        u4 = []
+
+        [witnesses.model.rho]
+        u1 = ["u3"]
+        u2 = []
+        u3 = ["u3"]
+        u4 = []
+
+        [witnesses.model.sigma]
+        u1 = ["u3"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 1
+    states = [[true, true, true, false], [true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 2
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 3
+    states = [[true, true, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 4
+    states = [[true, true, true, false], [false, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 5
+    states = [[true, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 6
+    states = [[true, true, true, false], [false, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 7
+    states = [[true, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 9
+    states = [[true, true, true, false], [true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 10
+    states = [[true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 11
+    states = [[true, true, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 12
+    states = [[true, true, true, false], [false, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 13
+    states = [[true, true, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 14
+    states = [[true, true, true, false], [false, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3"]
+    source_mask = 15
+    states = [[true, true, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+[[witnesses]]
+active_boundary = false
+actual = [true, true, true, false]
+all_interventions = true
+case_id = 549
+circuit_digest = "822d696a1542801624feda79182955dbb912c1982406c8ddeb8f1e44238e0433"
+collective_only_loss = []
+execution_certified = false
+name = "without_hBound"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 3, 1], [3, 1, 1]]
+    initial = [true, false, true, false]
+    inputs = ["u1"]
+    motors = ["u3", "u4"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [1, 4]
+    u2 = []
+    u3 = [1, 4]
+    u4 = []
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4"]
+    E = ["u1"]
+    M = ["u3", "u4"]
+    epsilon = ["u1"]
+    kappa = ["u1", "u3"]
+
+        [witnesses.model.alpha]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.neighbors]
+        u1 = ["u3"]
+        u2 = []
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.pi]
+        u3 = ["u1", "u3"]
+        u4 = []
+
+        [witnesses.model.rho]
+        u1 = ["u3"]
+        u2 = []
+        u3 = ["u3"]
+        u4 = []
+
+        [witnesses.model.sigma]
+        u1 = ["u3"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 1
+    states = [[true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 2
+    states = [[true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 3
+    states = [[true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 4
+    states = [[true, false, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 5
+    states = [[true, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 6
+    states = [[true, false, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 7
+    states = [[true, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 9
+    states = [[true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 10
+    states = [[true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false], [true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 11
+    states = [[true, false, true, false], [true, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 12
+    states = [[true, false, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 13
+    states = [[true, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 14
+    states = [[true, false, true, false], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u3"]
+    source_mask = 15
+    states = [[true, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+[[witnesses]]
+active_boundary = true
+actual = [true, false, true, true]
+all_interventions = true
+case_id = 1745
+circuit_digest = "95f205c7465b87f973a07045b69e361da07dcee56c80e71b8659163ad0761525"
+collective_only_loss = []
+execution_certified = false
+name = "without_hSMC"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[true, false, false, false], [false, true, false, true], [false, false, true, false], [true, true, false, false], [false, true, true, true], [true, true, true, false], [true, true, true, true]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [1, 4, 1], [2, 3, 1], [3, 1, 1], [3, 2, 1]]
+    initial = [true, false, false, false]
+    inputs = ["u1"]
+    motors = ["u3", "u4"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [2, 4]
+    u2 = [2, 4]
+    u3 = [2, 4]
+    u4 = [1, 2, 4]
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4"]
+    E = ["u1"]
+    M = ["u3", "u4"]
+    epsilon = ["u1"]
+    kappa = ["u2"]
+
+        [witnesses.model.alpha]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.neighbors]
+        u1 = ["u2", "u4"]
+        u2 = ["u3"]
+        u3 = ["u1", "u2"]
+        u4 = []
+
+        [witnesses.model.pi]
+        u3 = ["u1", "u2", "u3", "u4"]
+        u4 = []
+
+        [witnesses.model.rho]
+        u1 = ["u4"]
+        u2 = ["u3", "u4"]
+        u3 = ["u3", "u4"]
+        u4 = []
+
+        [witnesses.model.sigma]
+        u1 = ["u4"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 1
+    states = [[true, true, true, true], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 2
+    states = [[true, true, true, true], [true, true, false, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 3
+    states = [[true, true, true, true], [true, true, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 4
+    states = [[true, true, true, true], [false, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 5
+    states = [[true, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 6
+    states = [[true, true, true, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 7
+    states = [[true, true, true, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 9
+    states = [[true, true, true, true], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 10
+    states = [[true, true, true, true], [true, true, false, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 11
+    states = [[true, true, true, true], [true, true, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 12
+    states = [[true, true, true, true], [false, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 13
+    states = [[true, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 14
+    states = [[true, true, true, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 15
+    states = [[true, true, true, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+[[witnesses]]
+active_boundary = true
+actual = [true, false, true, true]
+all_interventions = true
+case_id = 1745
+circuit_digest = "95f205c7465b87f973a07045b69e361da07dcee56c80e71b8659163ad0761525"
+collective_only_loss = []
+execution_certified = false
+name = "without_hSMC_active_boundary"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[true, false, false, false], [false, true, false, true], [false, false, true, false], [true, true, false, false], [false, true, true, true], [true, true, true, false], [true, true, true, true]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [1, 4, 1], [2, 3, 1], [3, 1, 1], [3, 2, 1]]
+    initial = [true, false, false, false]
+    inputs = ["u1"]
+    motors = ["u3", "u4"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [2, 4]
+    u2 = [2, 4]
+    u3 = [2, 4]
+    u4 = [1, 2, 4]
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4"]
+    E = ["u1"]
+    M = ["u3", "u4"]
+    epsilon = ["u1"]
+    kappa = ["u2"]
+
+        [witnesses.model.alpha]
+        u3 = ["u1"]
+        u4 = []
+
+        [witnesses.model.neighbors]
+        u1 = ["u2", "u4"]
+        u2 = ["u3"]
+        u3 = ["u1", "u2"]
+        u4 = []
+
+        [witnesses.model.pi]
+        u3 = ["u1", "u2", "u3", "u4"]
+        u4 = []
+
+        [witnesses.model.rho]
+        u1 = ["u4"]
+        u2 = ["u3", "u4"]
+        u3 = ["u3", "u4"]
+        u4 = []
+
+        [witnesses.model.sigma]
+        u1 = ["u4"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 1
+    states = [[true, true, true, true], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 2
+    states = [[true, true, true, true], [true, true, false, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 3
+    states = [[true, true, true, true], [true, true, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 4
+    states = [[true, true, true, true], [false, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 5
+    states = [[true, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 6
+    states = [[true, true, true, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 7
+    states = [[true, true, true, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 9
+    states = [[true, true, true, true], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false], [true, true, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 10
+    states = [[true, true, true, true], [true, true, false, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 11
+    states = [[true, true, true, true], [true, true, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 12
+    states = [[true, true, true, true], [false, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 13
+    states = [[true, true, true, true], [false, false, true, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 14
+    states = [[true, true, true, true], [false, true, false, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u2", "u3", "u4"]
+    source_mask = 15
+    states = [[true, true, true, true], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false], [false, false, false, false]]

@@ -1,0 +1,31 @@
+/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_k8yuOL/viewer.js:10
+function renderNetwork(c,t){const host=byId('network');host.replaceChildren();const width=760,height=500,cx=width/2,cy=height/2,r=Math.min(width,height)*.34;host.setAttribute('viewBox',`0 0 ${width} ${height}`);const pts=c.units.map((_,i)=>[cx+r*Math.cos(2*Math.PI*i/c.units.length-Math.PI/2),cy+r*Math.sin(2*Math.PI*i/c.units.length-Math.PI/2)]);for(const [s,d,w] of c.edges){const [x1,y1]=pts[s-1],[x2,y2]=pts[d-1],dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),pad=31;host.append(svg('line',{x1:x1+dx/len*pad,y1:y1+dy/len*pad,x2:x2-dx/len*pad,y2:y2-dy/len*pad,class:w<0?'edge neg':'edge'}));host.append(svg('text',{x:(x1+x2)/2,y:(y1+y2)/2-5,class:'edge-label'},w>0?`+${w}`:String(w))}const state=stateAt(c,selectedMask,t),base=stateAt(c,0,t);c.units.forEach((u,i)=>{const [x,y]=pts[i];for(const [set,klass,rad] of [[c.nu_phi,'set-ring set-nu',34],[c.future_Q,'set-ring set-q',30],[c.kappa,'set-ring set-k',26]])if(inSet(set,u))host.append(svg('circle',{cx:x,cy:y,r:rad,class:klass}));const circle=svg('circle',{cx:x,cy:y,r:21,class:`node${state&(1<<i)?' on':''}${(state^base)&(1<<i)?' diff':''}`});host.append(circle);host.append(svg('text',{x,y:y+4,class:'node-label'},u));host.append(svg('text',{x,y:y+48,class:'role-label'},role(c,u)))})}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1666:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v23.11.0
+ERROR: LoadError: Some tests did not pass: 62 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit_viewer.jl:6
+self-contained audit viewer preserves the measured evidence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit_viewer.jl:41
+  Test threw exception
+  Expression: success(run(`node --check $script_path`; wait = true))
+  failed process: Process(`node --check /var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_k8yuOL/viewer.js`, ProcessExited(1)) [1]
+  
+  Stacktrace:
+   [1] pipeline_error
+     @ ./process.jl:598 [inlined]
+   [2] run(::Cmd; wait::Bool)
+     @ Base ./process.jl:513
+   [3] run
+     @ ./process.jl:510 [inlined]
+   [4] macro expansion
+     @ ~/bridge-protocol/test/test_model_audit_viewer.jl:41 [inlined]
+   [5] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [6] (::var"#5#10"{Dict{String, Any}})(dir::String)
+     @ Main ~/bridge-protocol/test/test_model_audit_viewer.jl:41
+Test Summary:                                               | Pass  Error  Total   Time
+self-contained audit viewer preserves the measured evidence |   62      1     63  20.6s

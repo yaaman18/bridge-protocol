@@ -1,0 +1,6 @@
+PASS all_four DC=[True, True, True, True] M2=True branches=64
+PASS without_hSelf DC=[False, True, True, True] M2=True branches=64
+PASS without_hSMC DC=[True, False, True, True] M2=True branches=128
+PASS without_hAct DC=[True, True, False, True] M2=True branches=2048
+PASS without_hBound DC=[True, True, True, False] M2=True branches=64
+PASS independent replay of 2368 complete intervention branches; phenomenal_claim=not_certified

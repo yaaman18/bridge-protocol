@@ -1,0 +1,5 @@
+all_four DC=(true, true, true, true) M2=true; K=["u1", "u2", "u5", "u6"]
+without_hSelf DC=(false, true, true, true) M2=true; K=["u1", "u2", "u3", "u5", "u6"]
+without_hBound DC=(true, true, true, false) M2=true; K=["u1", "u2", "u5", "u6"]
+Test Summary:                   | Pass  Total   Time
+explicit two-input M2 witnesses |   27     27  13.4s

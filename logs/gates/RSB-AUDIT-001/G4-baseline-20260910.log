@@ -1,0 +1,35 @@
+ERROR: LoadError: Some tests did not pass: 5 passed, 1 failed, 1 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:5
+existing DC dependency anchor (no new certification): Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:10
+  Expression: detail.julia_checker == "check_DC"
+   Evaluated: check_DC == "check_DC"
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:10 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:6
+existing DC dependency anchor (no new certification): Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:5
+  Got exception outside of a @test
+  type NamedTuple has no field trust
+  Stacktrace:
+   [1] getproperty
+     @ ./Base.jl:49 [inlined]
+   [2] certificate_dependency_graph(envelope::@NamedTuple{payload::@NamedTuple{kind::Symbol, lean_contracts::Vector{String}, julia_checkers::Vector{String}}, certificate::@NamedTuple{schema_version::Int64, artifact_id::String, version::Int64, ok::Bool, contracts::Vector{String}, contract_details::Vector{NamedTuple{(:id, :lean_module, :lean_name, :lean_full_name, :lean_kind, :julia_symbol, :julia_checker)}}, missing_imports::Vector{String}, missing_lean::Vector{String}, missing_julia::Vector{String}, missing_checkers::Vector{String}}})
+     @ ERIEC ~/bridge-protocol/src/certification.jl:668
+   [3] macro expansion
+     @ ~/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:19 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/bridge-protocol/logs/gates/RSB-AUDIT-001/check-existing-anchor.jl:6
+   [6] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [7] top-level scope
+     @ none:1
+Test Summary:                                        | Pass  Fail  Error  Total   Time
+existing DC dependency anchor (no new certification) |    5     1      1      7  54.1s

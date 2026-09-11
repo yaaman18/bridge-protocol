@@ -1,0 +1,1214 @@
+N = 7
+adjunction_pass_count = 24
+attempts = 20000
+background = "finite_relational_galois_connection"
+execution_certified = false
+exhaustive = false
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+schema_version = 1
+seed = 20260918
+unfound_patterns = ["without_hSMC", "without_hAct", "without_hBound"]
+
+[all_pattern_counts]
+0000 = 1
+0001 = 133
+0011 = 30
+0100 = 5
+0101 = 614
+0111 = 21
+1000 = 570
+1001 = 320
+1011 = 19
+1100 = 17299
+1101 = 561
+1111 = 427
+
+[background_pattern_counts]
+0101 = 1
+0111 = 1
+1000 = 1
+1100 = 5
+1101 = 2
+1111 = 14
+
+[[witnesses]]
+active_boundary = true
+actual = [true, true, true, true]
+adjunction_holds = true
+all_interventions = true
+case_id = 536
+checked_subset_pairs = 16
+circuit_digest = "1a81eeb8d292fe4e7c927832a2571d2ba1d2731efa3142a548dbce9a9d5b98e2"
+collective_only_loss = []
+execution_certified = false
+name = "all_four"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[true, true, true, false, true, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 3, -1], [1, 4, -1], [1, 5, 1], [1, 6, 1], [1, 7, 1], [2, 3, 1], [2, 4, 1], [2, 5, -1], [2, 6, 1], [2, 7, -1], [3, 6, 1], [3, 7, 1], [4, 3, 1], [4, 5, -1], [5, 4, 1], [5, 6, -1], [6, 1, 1], [6, 2, 1], [6, 3, 1], [7, 1, 1], [7, 2, -1], [7, 3, -1], [7, 4, -1], [7, 5, -1], [7, 6, 1]]
+    initial = [true, true, true, false, true, true, true]
+    inputs = ["u1", "u2"]
+    motors = ["u6", "u7"]
+    schema_version = 1
+    thresholds = [2, 1, 1, 1, 2, 2, 1]
+    units = ["u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = [1, 32, 64]
+    u2 = []
+    u3 = []
+    u4 = []
+    u5 = []
+    u6 = [1, 32, 64]
+    u7 = [1, 32, 64]
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+    E = ["u1", "u2"]
+    M = ["u6", "u7"]
+    epsilon = ["u1"]
+    kappa = ["u1", "u6", "u7"]
+
+        [witnesses.model.alpha]
+        u6 = ["u1"]
+        u7 = ["u1"]
+
+        [witnesses.model.neighbors]
+        u1 = ["u3", "u4", "u5", "u6", "u7"]
+        u2 = ["u3", "u4", "u5", "u6", "u7"]
+        u3 = ["u6", "u7"]
+        u4 = ["u3", "u5"]
+        u5 = ["u4", "u6"]
+        u6 = ["u1", "u2", "u3"]
+        u7 = ["u1", "u2", "u3", "u4", "u5", "u6"]
+
+        [witnesses.model.pi]
+        u6 = ["u1", "u6", "u7"]
+        u7 = ["u1", "u6", "u7"]
+
+        [witnesses.model.rho]
+        u1 = ["u6", "u7"]
+        u2 = []
+        u3 = []
+        u4 = []
+        u5 = []
+        u6 = ["u6", "u7"]
+        u7 = ["u6", "u7"]
+
+        [witnesses.model.sigma]
+        u1 = ["u6", "u7"]
+        u2 = []
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 1
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 2
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 3
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 4
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 5
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 6
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 7
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 9
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 10
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 11
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 12
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 13
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 14
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 15
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 16
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 17
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 18
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 19
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 20
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 21
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 22
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 23
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 24
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 25
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 26
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 27
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 28
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 29
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 30
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true], [true, false, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 31
+    states = [[true, false, false, false, false, true, true], [true, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 32
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 33
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 34
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 35
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 36
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 37
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 38
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 39
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 40
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 41
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 42
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 43
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 44
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 45
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 46
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 47
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 48
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 49
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 50
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 51
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 52
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 53
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 54
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 55
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 56
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 57
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 58
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 59
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 60
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 61
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 62
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 63
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 64
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, true, false, false, false, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 65
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 66
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 67
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 68
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 69
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, false, false], [false, false, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 70
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 71
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 72
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 73
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 74
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 75
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 76
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 77
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 78
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 79
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 80
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, true, false, false, false, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 81
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 82
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 83
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 84
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 85
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, false, false], [false, false, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 86
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 87
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 88
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 89
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false], [false, true, true, false, false, false, true], [false, false, true, true, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 90
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 91
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 92
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, true, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 93
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, true, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 94
+    states = [[true, false, false, false, false, true, true], [false, true, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 95
+    states = [[true, false, false, false, false, true, true], [false, true, true, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 96
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 97
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 98
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 99
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 100
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 101
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 102
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 103
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 104
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 105
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 106
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 107
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 108
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 109
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 110
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 111
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 112
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 113
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 114
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 115
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 116
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 117
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 118
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 119
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 120
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 121
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 122
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 123
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 124
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 125
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 126
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u1", "u6", "u7"]
+    source_mask = 127
+    states = [[true, false, false, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+[[witnesses]]
+active_boundary = true
+actual = [false, true, true, true]
+adjunction_holds = true
+all_interventions = true
+case_id = 42
+checked_subset_pairs = 16
+circuit_digest = "8c539ced70010134f936a0afb999deab7ce420605ad718c1350fafc46748b415"
+collective_only_loss = []
+execution_certified = false
+name = "without_hSelf"
+nondegenerate = true
+origin = "measured_source_silencing"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+prefix = [[true, false, false, false, true, true, true], [false, true, true, false, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+schema_version = 1
+valid = true
+
+    [witnesses.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 4, -1], [1, 5, -1], [1, 6, -1], [1, 7, 1], [2, 3, 1], [2, 6, 1], [2, 7, 1], [3, 4, 1], [3, 5, 1], [3, 6, -1], [3, 7, -1], [5, 3, 1], [5, 6, 1], [5, 7, -1], [6, 4, -1], [6, 7, 1], [7, 1, -1], [7, 2, 1], [7, 4, 1], [7, 5, -1], [7, 6, 1]]
+    initial = [true, false, false, false, true, true, true]
+    inputs = ["u1", "u2"]
+    motors = ["u6", "u7"]
+    schema_version = 1
+    thresholds = [2, 1, 1, 1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+
+    [witnesses.minimal_loss_masks]
+    u1 = []
+    u2 = [2, 32, 64]
+    u3 = [2, 48, 68, 80]
+    u4 = [2, 4, 48, 80]
+    u5 = []
+    u6 = [2, 32, 64]
+    u7 = [2, 32, 64]
+
+    [witnesses.model]
+    C = ["u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+    E = ["u1", "u2"]
+    M = ["u6", "u7"]
+    epsilon = ["u2"]
+    kappa = ["u2", "u3", "u4", "u6", "u7"]
+
+        [witnesses.model.alpha]
+        u6 = ["u2"]
+        u7 = ["u2"]
+
+        [witnesses.model.neighbors]
+        u1 = ["u4", "u5", "u6", "u7"]
+        u2 = ["u3", "u6", "u7"]
+        u3 = ["u4", "u5", "u6", "u7"]
+        u4 = []
+        u5 = ["u3", "u6", "u7"]
+        u6 = ["u4", "u7"]
+        u7 = ["u1", "u2", "u4", "u5", "u6"]
+
+        [witnesses.model.pi]
+        u6 = ["u2", "u6", "u7"]
+        u7 = ["u2", "u6", "u7"]
+
+        [witnesses.model.rho]
+        u1 = []
+        u2 = ["u6", "u7"]
+        u3 = []
+        u4 = []
+        u5 = []
+        u6 = ["u6", "u7"]
+        u7 = ["u6", "u7"]
+
+        [witnesses.model.sigma]
+        u1 = []
+        u2 = ["u6", "u7"]
+
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 0
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 1
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 2
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 3
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 4
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 5
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 6
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 7
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 8
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 9
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 10
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 11
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 12
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 13
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 14
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 15
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 16
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 17
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 18
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 19
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 20
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 21
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 22
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 23
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 24
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 25
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 26
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 27
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 28
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u4"]
+    source_mask = 29
+    states = [[false, true, true, true, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true], [false, true, true, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 30
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u3", "u4"]
+    source_mask = 31
+    states = [[false, true, true, true, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true], [false, true, false, false, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 32
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 33
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 34
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 35
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 36
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 37
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 38
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 39
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 40
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 41
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 42
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 43
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 44
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 45
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 46
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 47
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 48
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 49
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 50
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 51
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 52
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 53
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 54
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 55
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 56
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 57
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, false], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 58
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 59
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 60
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = []
+    source_mask = 61
+    states = [[false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true], [false, true, true, true, false, true, true]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 62
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 63
+    states = [[false, true, true, true, false, true, true], [false, true, false, true, false, true, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 64
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 65
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 66
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 67
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 68
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 69
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 70
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 71
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 72
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 73
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 74
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 75
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false], [false, false, false, false, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 76
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 77
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 78
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 79
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 80
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 81
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 82
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 83
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 84
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 85
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 86
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 87
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 88
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 89
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, true, false, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 90
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 91
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 92
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 93
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 94
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 95
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 96
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 97
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 98
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 99
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 100
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 101
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 102
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 103
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 104
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u6", "u7"]
+    source_mask = 105
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false], [false, false, true, true, true, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 106
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 107
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false], [false, false, false, true, true, false, false], [false, false, true, false, false, true, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 108
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 109
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 110
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 111
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 112
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 113
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 114
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 115
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 116
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 117
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 118
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 119
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 120
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 121
+    states = [[false, true, true, true, false, true, true], [false, false, true, true, true, false, false], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 122
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 123
+    states = [[false, true, true, true, false, true, true], [false, false, false, true, true, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 124
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 125
+    states = [[false, true, true, true, false, true, true], [false, false, true, false, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 126
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    losses = ["u2", "u3", "u4", "u6", "u7"]
+    source_mask = 127
+    states = [[false, true, true, true, false, true, true], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false], [false, false, false, false, false, false, false]]

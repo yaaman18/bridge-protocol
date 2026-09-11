@@ -1,0 +1,3 @@
+scope=context_local phenomenal_claim=not_certified new_certification=false
+Test Summary:                                        | Pass  Total   Time
+existing DC dependency anchor (no new certification) |    8      8  25.9s

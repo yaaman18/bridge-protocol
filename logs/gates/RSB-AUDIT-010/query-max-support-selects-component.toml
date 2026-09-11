@@ -1,0 +1,11 @@
+schema_version = 1
+query_id = "p3-max-support-selects-component"
+contexts = ["two_inputs_two_motors_P3_H6_L4_R4"]
+
+[premises]
+adjunction = true
+all_dc = true
+kappa_equals_nu = true
+
+[conclusion]
+candidate_selection_obstructed = false

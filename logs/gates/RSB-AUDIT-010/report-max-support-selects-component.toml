@@ -1,0 +1,71 @@
+classification = "counterexample_found"
+context_model_count = 7
+contexts = ["two_inputs_two_motors_P3_H6_L4_R4"]
+countermodel_count = 1
+eligible_count = 1
+execution_certified = false
+general_impossibility = "not_established"
+implication_proved = false
+phenomenal_claim = "not_certified"
+query_id = "p3-max-support-selects-component"
+schema_version = 1
+
+[conclusion]
+candidate_selection_obstructed = false
+
+[[countermodels]]
+circuit_digest = "fa54724a2b462638025434b01c448b79b2c56477d9b8bd4c1e85e45567fa2c1e"
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+id = "p3-adjoint-symmetric-union"
+origin = "symmetric_component_fixture"
+
+    [countermodels.circuit]
+    H = 6
+    L = 4
+    P = 3
+    R = 4
+    edges = [[1, 5, 1], [2, 6, 1], [5, 1, 1], [5, 3, 1], [5, 4, -1], [6, 2, 1], [6, 3, -1], [6, 4, 1]]
+    initial = [true, true, false, false, true, true]
+    inputs = ["u1", "u2"]
+    motors = ["u5", "u6"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1, 1, 1]
+    units = ["u1", "u2", "u3", "u4", "u5", "u6"]
+
+    [countermodels.observations]
+    active_boundary = true
+    adjunction = true
+    all_dc = true
+    candidate_selection_obstructed = true
+    hAct = true
+    hBound = true
+    hSMC = true
+    hSelf = true
+    kappa_equals_nu = true
+    kappa_subset_future = true
+    kappa_subset_nu = true
+    nondegenerate = true
+
+[premises]
+adjunction = true
+all_dc = true
+kappa_equals_nu = true
+
+[[unknown_models]]
+id = "p3-adjoint-all_four"
+unknown_predicates = ["candidate_selection_obstructed"]
+[[unknown_models]]
+id = "p3-adjoint-without_hSelf"
+unknown_predicates = ["candidate_selection_obstructed"]
+[[unknown_models]]
+id = "p3-adjoint-without_hSMC"
+unknown_predicates = ["candidate_selection_obstructed"]
+[[unknown_models]]
+id = "p3-adjoint-without_hAct"
+unknown_predicates = ["candidate_selection_obstructed"]
+[[unknown_models]]
+id = "p3-adjoint-without_hBound"
+unknown_predicates = ["candidate_selection_obstructed"]
+[[unknown_models]]
+id = "p3-adjoint-support-expansion"
+unknown_predicates = ["candidate_selection_obstructed"]

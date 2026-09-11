@@ -1,0 +1,465 @@
+all_expected_patterns_matched = true
+execution_certified = false
+measured_single_failure_rows = "not_established"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+schema_version = 1
+scope = "finite_model_audit"
+
+[symmetry]
+candidates = ["left", "right"]
+fixed_choices = []
+swap = [2, 1]
+
+[[witnesses]]
+actual = [true, true, true, true]
+expected = [true, true, true, true]
+matched = true
+name = "all_four"
+nondegenerate = true
+origin = "abstract_relations"
+
+    [witnesses.model]
+    C = ["c1", "c2", "e1", "e2", "m1", "m2"]
+    E = ["e1", "e2"]
+    M = ["m1", "m2"]
+    epsilon = ["e1"]
+    kappa = ["c1"]
+
+        [witnesses.model.alpha]
+        m1 = ["e1"]
+        m2 = ["e2"]
+
+        [witnesses.model.neighbors]
+        c1 = ["c2"]
+        c2 = []
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.pi]
+        m1 = ["c1"]
+        m2 = ["c2"]
+
+        [witnesses.model.rho]
+        c1 = ["m1"]
+        c2 = ["m2"]
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.sigma]
+        e1 = ["m1"]
+        e2 = ["m2"]
+[[witnesses]]
+actual = [false, true, true, true]
+expected = [false, true, true, true]
+matched = true
+name = "without_hSelf"
+nondegenerate = true
+origin = "abstract_relations"
+
+    [witnesses.model]
+    C = ["c1", "c2", "e1", "e2", "m1", "m2"]
+    E = ["e1", "e2"]
+    M = ["m1", "m2"]
+    epsilon = ["e1"]
+    kappa = ["c1"]
+
+        [witnesses.model.alpha]
+        m1 = ["e1"]
+        m2 = ["e2"]
+
+        [witnesses.model.neighbors]
+        c1 = ["c2"]
+        c2 = []
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.pi]
+        m1 = []
+        m2 = ["c2"]
+
+        [witnesses.model.rho]
+        c1 = ["m1"]
+        c2 = ["m2"]
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.sigma]
+        e1 = ["m1"]
+        e2 = ["m2"]
+[[witnesses]]
+actual = [true, false, true, true]
+expected = [true, false, true, true]
+matched = true
+name = "without_hSMC"
+nondegenerate = true
+origin = "abstract_relations"
+
+    [witnesses.model]
+    C = ["c1", "c2", "e1", "e2", "m1", "m2"]
+    E = ["e1", "e2"]
+    M = ["m1", "m2"]
+    epsilon = ["e1"]
+    kappa = ["c1"]
+
+        [witnesses.model.alpha]
+        m1 = ["e2"]
+        m2 = ["e2"]
+
+        [witnesses.model.neighbors]
+        c1 = ["c2"]
+        c2 = []
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.pi]
+        m1 = ["c1"]
+        m2 = ["c2"]
+
+        [witnesses.model.rho]
+        c1 = ["m1"]
+        c2 = ["m2"]
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.sigma]
+        e1 = ["m1"]
+        e2 = ["m2"]
+[[witnesses]]
+actual = [true, true, false, true]
+expected = [true, true, false, true]
+matched = true
+name = "without_hAct"
+nondegenerate = true
+origin = "abstract_relations"
+
+    [witnesses.model]
+    C = ["c1", "c2", "e1", "e2", "m1", "m2"]
+    E = ["e1", "e2"]
+    M = ["m1", "m2"]
+    epsilon = ["e1"]
+    kappa = ["c1"]
+
+        [witnesses.model.alpha]
+        m1 = ["e1"]
+        m2 = ["e1"]
+
+        [witnesses.model.neighbors]
+        c1 = ["c2"]
+        c2 = []
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.pi]
+        m1 = ["c1"]
+        m2 = ["c2"]
+
+        [witnesses.model.rho]
+        c1 = ["m1"]
+        c2 = ["m2"]
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.sigma]
+        e1 = ["m2"]
+        e2 = ["m2"]
+[[witnesses]]
+actual = [true, true, true, false]
+expected = [true, true, true, false]
+matched = true
+name = "without_hBound"
+nondegenerate = true
+origin = "abstract_relations"
+
+    [witnesses.model]
+    C = ["c1", "c2", "e1", "e2", "m1", "m2"]
+    E = ["e1", "e2"]
+    M = ["m1", "m2"]
+    epsilon = ["e1"]
+    kappa = ["c1"]
+
+        [witnesses.model.alpha]
+        m1 = ["e1"]
+        m2 = ["e2"]
+
+        [witnesses.model.neighbors]
+        c1 = []
+        c2 = []
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.pi]
+        m1 = ["c1"]
+        m2 = ["c2"]
+
+        [witnesses.model.rho]
+        c1 = ["m1"]
+        c2 = ["m2"]
+        e1 = []
+        e2 = []
+        m1 = []
+        m2 = []
+
+        [witnesses.model.sigma]
+        e1 = ["m1"]
+        e2 = ["m2"]
+[[witnesses]]
+active_boundary = true
+actual = [true, true, true, true]
+edges_one_based = [[3, 1, 1], [1, 2, 1], [2, 3, 1], [5, 4, 1], [4, 5, 1], [3, 6, 1], [4, 6, 1]]
+effect_points = 4
+expected = [true, true, true, true]
+horizon_steps = 6
+initial = [true, true, true, true, false, false]
+kappa_points = 4
+matched = true
+name = "source_silencing_six_units"
+nondegenerate = true
+origin = "measured_source_silencing"
+prefix = [[true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false]]
+preparation_steps = 6
+thresholds = [1, 1, 1, 1, 1, 2]
+unit_order = ["e", "c", "m", "a", "b", "d"]
+
+    [witnesses.model]
+    C = ["a", "b", "c", "d", "e", "m"]
+    E = ["e"]
+    M = ["m"]
+    epsilon = ["e"]
+    kappa = ["c", "e", "m"]
+
+        [witnesses.model.alpha]
+        m = ["e"]
+
+        [witnesses.model.neighbors]
+        a = ["b", "d"]
+        b = ["a"]
+        c = ["m"]
+        d = []
+        e = ["c"]
+        m = ["d", "e"]
+
+        [witnesses.model.pi]
+        m = ["c", "e", "m"]
+
+        [witnesses.model.rho]
+        a = []
+        b = []
+        c = ["m"]
+        d = []
+        e = ["m"]
+        m = ["m"]
+
+        [witnesses.model.sigma]
+        e = ["m"]
+
+    [[witnesses.traces]]
+    source_mask = 0
+    states = [[true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 1
+    states = [[true, true, true, true, false, false], [true, false, true, false, true, true], [true, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 2
+    states = [[true, true, true, true, false, false], [true, true, false, false, true, true], [false, true, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 3
+    states = [[true, true, true, true, false, false], [true, false, false, false, true, true], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 4
+    states = [[true, true, true, true, false, false], [false, true, true, false, true, false], [false, false, true, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 5
+    states = [[true, true, true, true, false, false], [false, false, true, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 6
+    states = [[true, true, true, true, false, false], [false, true, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 7
+    states = [[true, true, true, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 8
+    states = [[true, true, true, true, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 9
+    states = [[true, true, true, true, false, false], [true, false, true, false, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 10
+    states = [[true, true, true, true, false, false], [true, true, false, false, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 11
+    states = [[true, true, true, true, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 12
+    states = [[true, true, true, true, false, false], [false, true, true, false, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 13
+    states = [[true, true, true, true, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 14
+    states = [[true, true, true, true, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 15
+    states = [[true, true, true, true, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 16
+    states = [[true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 17
+    states = [[true, true, true, true, false, false], [true, false, true, false, true, true], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 18
+    states = [[true, true, true, true, false, false], [true, true, false, false, true, true], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 19
+    states = [[true, true, true, true, false, false], [true, false, false, false, true, true], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 20
+    states = [[true, true, true, true, false, false], [false, true, true, false, true, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 21
+    states = [[true, true, true, true, false, false], [false, false, true, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 22
+    states = [[true, true, true, true, false, false], [false, true, false, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 23
+    states = [[true, true, true, true, false, false], [false, false, false, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 24
+    states = [[true, true, true, true, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 25
+    states = [[true, true, true, true, false, false], [true, false, true, false, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 26
+    states = [[true, true, true, true, false, false], [true, true, false, false, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 27
+    states = [[true, true, true, true, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 28
+    states = [[true, true, true, true, false, false], [false, true, true, false, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 29
+    states = [[true, true, true, true, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 30
+    states = [[true, true, true, true, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 31
+    states = [[true, true, true, true, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 32
+    states = [[true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 33
+    states = [[true, true, true, true, false, false], [true, false, true, false, true, true], [true, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 34
+    states = [[true, true, true, true, false, false], [true, true, false, false, true, true], [false, true, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 35
+    states = [[true, true, true, true, false, false], [true, false, false, false, true, true], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 36
+    states = [[true, true, true, true, false, false], [false, true, true, false, true, false], [false, false, true, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 37
+    states = [[true, true, true, true, false, false], [false, false, true, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 38
+    states = [[true, true, true, true, false, false], [false, true, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 39
+    states = [[true, true, true, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false], [false, false, false, false, true, false], [false, false, false, true, false, false]]
+    [[witnesses.traces]]
+    source_mask = 40
+    states = [[true, true, true, true, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 41
+    states = [[true, true, true, true, false, false], [true, false, true, false, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 42
+    states = [[true, true, true, true, false, false], [true, true, false, false, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 43
+    states = [[true, true, true, true, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 44
+    states = [[true, true, true, true, false, false], [false, true, true, false, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 45
+    states = [[true, true, true, true, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 46
+    states = [[true, true, true, true, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 47
+    states = [[true, true, true, true, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 48
+    states = [[true, true, true, true, false, false], [true, true, true, false, true, true], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 49
+    states = [[true, true, true, true, false, false], [true, false, true, false, true, true], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 50
+    states = [[true, true, true, true, false, false], [true, true, false, false, true, true], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 51
+    states = [[true, true, true, true, false, false], [true, false, false, false, true, true], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 52
+    states = [[true, true, true, true, false, false], [false, true, true, false, true, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 53
+    states = [[true, true, true, true, false, false], [false, false, true, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 54
+    states = [[true, true, true, true, false, false], [false, true, false, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 55
+    states = [[true, true, true, true, false, false], [false, false, false, false, true, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 56
+    states = [[true, true, true, true, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false], [true, true, true, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 57
+    states = [[true, true, true, true, false, false], [true, false, true, false, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 58
+    states = [[true, true, true, true, false, false], [true, true, false, false, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 59
+    states = [[true, true, true, true, false, false], [true, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 60
+    states = [[true, true, true, true, false, false], [false, true, true, false, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 61
+    states = [[true, true, true, true, false, false], [false, false, true, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 62
+    states = [[true, true, true, true, false, false], [false, true, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
+    [[witnesses.traces]]
+    source_mask = 63
+    states = [[true, true, true, true, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]

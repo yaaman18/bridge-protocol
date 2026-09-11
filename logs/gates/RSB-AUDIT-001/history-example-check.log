@@ -1,0 +1,16 @@
+event_count = 2
+interpretation = "requires_review"
+phenomenal_claim = "not_certified"
+question_count = 1
+trusted_receipt_checked = true
+unresolved_count = 0
+valid_history = true
+
+[counts]
+conditional = 1
+explained = 0
+open = 0
+out_of_scope = 0
+reformulated = 0
+refuted = 0
+underdetermined = 0

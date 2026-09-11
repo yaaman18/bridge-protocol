@@ -1,0 +1,9 @@
+schema_version = 1
+query_id = "p6-one-input-dc-implies-active-boundary"
+contexts = ["one_input_one_motor_P6_H6_L4_R4"]
+
+[premises]
+all_dc = true
+
+[conclusion]
+active_boundary = true

@@ -1,0 +1,19 @@
+classification = "not_found_in_finite_catalog"
+context_model_count = 1
+contexts = ["one_input_one_motor_P6_H6_L4_R4"]
+countermodel_count = 0
+countermodels = []
+eligible_count = 1
+execution_certified = false
+general_impossibility = "not_established"
+implication_proved = false
+phenomenal_claim = "not_certified"
+query_id = "p6-one-input-dc-implies-active-boundary"
+schema_version = 1
+unknown_models = []
+
+[conclusion]
+active_boundary = true
+
+[premises]
+all_dc = true

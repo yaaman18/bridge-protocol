@@ -1,0 +1,4 @@
+N=6 attempts=20000 M2_pass=16 found=all_four
+N=7 attempts=20000 M2_pass=24 found=all_four,without_hSelf
+Test Summary:                                | Pass  Total   Time
+two-input measured search with M2 background |   16     16  43.3s

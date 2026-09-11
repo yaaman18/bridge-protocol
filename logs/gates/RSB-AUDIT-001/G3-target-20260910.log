@@ -1,0 +1,17 @@
+ERROR: LoadError: Some tests did not pass: 42 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:18
+model audit records: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:27
+  Expression: (ModelAudit.compare_audit_claims(claim(:affirmed), claim(:undetermined))).classification == :undetermined
+   Evaluated: underdetermined == undetermined
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_model_audit.jl:27 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_model_audit.jl:19
+Test Summary:       | Pass  Fail  Total   Time
+model audit records |   42     1     43  27.6s

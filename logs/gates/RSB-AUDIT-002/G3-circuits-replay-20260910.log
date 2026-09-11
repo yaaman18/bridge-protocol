@@ -1,0 +1,6 @@
+Test Summary:                              | Pass  Total   Time
+circuit inputs and observational semantics | 8237   8237  50.2s
+Test Summary:                                     | Pass  Total  Time
+bounded measured search never overstates coverage |   16     16  9.9s
+Test Summary:                                             | Pass  Total  Time
+frozen measured witnesses separate all four DC conditions |   33     33  3.8s

@@ -1,0 +1,37 @@
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+[[events]]
+digest = "c7534c66ba2f59047fac374871651c7769e45dcf282a72ff0a75f67914881f3f"
+evidence = []
+previous = "0000000000000000000000000000000000000000000000000000000000000000"
+reason = "元の問いを保存"
+sequence = 1
+status = "open"
+successor = ""
+
+    [events.context]
+    assumptions = ["交換(2,1)を許された作用とする", "候補はleftとrightのみ"]
+    definition = "与えた全置換で固定される候補"
+    definition_version = "finite-action-v1"
+    observation = "ModelAudit.invariant_choices"
+    question = "交換対称な二候補から不変な一候補を選べるか"
+    question_id = "symmetry-example"
+    subject = "抽象二候補モデル"
+[[events]]
+digest = "b8201238998bc38b60c1ab72b7ffed896d9324bbdaf81f8b95db52e53504cc29"
+evidence = ["model-witnesses-20260910.toml#symmetry", "test/test_model_audit.jl"]
+previous = "c7534c66ba2f59047fac374871651c7769e45dcf282a72ff0a75f67914881f3f"
+reason = "指定した交換作用には固定候補がない。物理系の対称性や経験所有者については未判定。"
+sequence = 2
+status = "conditional"
+successor = ""
+
+    [events.context]
+    assumptions = ["交換(2,1)を許された作用とする", "候補はleftとrightのみ"]
+    definition = "与えた全置換で固定される候補"
+    definition_version = "finite-action-v1"
+    observation = "ModelAudit.invariant_choices"
+    question = "交換対称な二候補から不変な一候補を選べるか"
+    question_id = "symmetry-example"
+    subject = "抽象二候補モデル"

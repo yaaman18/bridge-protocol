@@ -1,0 +1,7 @@
+all_four: 18 -> 5 edges; (true, true, true, true)
+without_hSelf: 20 -> 10 edges; (false, true, true, true)
+without_hSMC: 19 -> 9 edges; (true, false, true, true)
+without_hAct: 18 -> 7 edges; (true, true, false, true)
+without_hBound: 2 -> 2 edges; (true, true, true, false)
+Test Summary:                                        | Pass  Total   Time
+exploratory witness reduction and full-subset replay |   48     48  40.2s

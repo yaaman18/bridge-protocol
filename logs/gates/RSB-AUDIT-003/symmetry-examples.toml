@@ -1,0 +1,90 @@
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+[[examples]]
+automorphism_count = 2
+automorphisms_one_based = [[1, 2, 3, 4], [3, 4, 1, 2]]
+candidate_class_closed = true
+candidate_class_externally_supplied = true
+candidate_orbit_masks = [[3, 12], [3, 12]]
+candidates = [["e1", "m1"], ["e2", "m2"]]
+classification = "obstructed_by_symmetry"
+context = "dynamics_roles_and_initial_state"
+execution_certified = false
+fixed_candidates = []
+include_initial = true
+intrinsic_decomposition_certified = false
+name = "symmetric_initial"
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+    [examples.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [2, 1, 1], [3, 4, 1], [4, 3, 1]]
+    initial = [true, true, true, true]
+    inputs = ["e1", "e2"]
+    motors = ["m1", "m2"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["e1", "m1", "e2", "m2"]
+[[examples]]
+automorphism_count = 1
+automorphisms_one_based = [[1, 2, 3, 4]]
+candidate_class_closed = true
+candidate_class_externally_supplied = true
+candidate_orbit_masks = [[3], [12]]
+candidates = [["e1", "m1"], ["e2", "m2"]]
+classification = "multiple_symmetry_compatible_candidates"
+context = "dynamics_roles_and_initial_state"
+execution_certified = false
+fixed_candidates = [["e1", "m1"], ["e2", "m2"]]
+include_initial = true
+intrinsic_decomposition_certified = false
+name = "asymmetric_initial_included"
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+    [examples.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [2, 1, 1], [3, 4, 1], [4, 3, 1]]
+    initial = [true, true, false, false]
+    inputs = ["e1", "e2"]
+    motors = ["m1", "m2"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["e1", "m1", "e2", "m2"]
+[[examples]]
+automorphism_count = 2
+automorphisms_one_based = [[1, 2, 3, 4], [3, 4, 1, 2]]
+candidate_class_closed = true
+candidate_class_externally_supplied = true
+candidate_orbit_masks = [[3, 12], [3, 12]]
+candidates = [["e1", "m1"], ["e2", "m2"]]
+classification = "obstructed_by_symmetry"
+context = "dynamics_and_roles"
+execution_certified = false
+fixed_candidates = []
+include_initial = false
+intrinsic_decomposition_certified = false
+name = "asymmetric_initial_omitted"
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+    [examples.circuit]
+    H = 6
+    L = 4
+    P = 6
+    R = 4
+    edges = [[1, 2, 1], [2, 1, 1], [3, 4, 1], [4, 3, 1]]
+    initial = [true, true, false, false]
+    inputs = ["e1", "e2"]
+    motors = ["m1", "m2"]
+    schema_version = 1
+    thresholds = [1, 1, 1, 1]
+    units = ["e1", "m1", "e2", "m2"]

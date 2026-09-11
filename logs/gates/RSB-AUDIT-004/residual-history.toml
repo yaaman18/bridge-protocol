@@ -1,0 +1,54 @@
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+[[events]]
+digest = "9199126ac30f957cb1b9b132edb4c321b068828b04ca7027033f3e02aca9791d"
+evidence = []
+previous = "0000000000000000000000000000000000000000000000000000000000000000"
+reason = "元の問いを先に保持"
+sequence = 1
+status = "open"
+successor = ""
+
+    [events.context]
+    assumptions = []
+    definition = "元の問い。機能的支持候補の存在に置換しない。"
+    definition_version = "original-question-v1"
+    observation = "not operationalized"
+    question = "なぜこの視点から経験しているのか"
+    question_id = "original-experience"
+    subject = "original first-person question"
+[[events]]
+digest = "5311c678e612e80533ad4c78310f20d95a2400623a2916478dde8ad789ea5d5b"
+evidence = []
+previous = "9199126ac30f957cb1b9b132edb4c321b068828b04ca7027033f3e02aca9791d"
+reason = "限定された機能的な問いを別に登録"
+sequence = 2
+status = "open"
+successor = ""
+
+    [events.context]
+    assumptions = ["候補は二つのe-m対のみ", "重み・閾値・入出力役割を保存する"]
+    definition = "指定contextの全自己同型で固定される候補"
+    definition_version = "automorphism-support-v1"
+    observation = "dynamics_roles_and_initial_state"
+    question = "固定された支持候補が存在するか"
+    question_id = "functional-support"
+    subject = "c67a34e98bc6a011df1d6046a7162bc6de963ce041c7fcadf1249c2d3207f41e"
+[[events]]
+digest = "28f025756f15aa7483f7fed12539dc32d9817cb4f61e9b22e6852e7d43796fda"
+evidence = ["with-initial.toml", "comparison.toml"]
+previous = "5311c678e612e80533ad4c78310f20d95a2400623a2916478dde8ad789ea5d5b"
+reason = "初期状態を含むcontextでは固定候補が存在する。存在の一意性や経験所有者については答えていない。"
+sequence = 3
+status = "conditional"
+successor = ""
+
+    [events.context]
+    assumptions = ["候補は二つのe-m対のみ", "重み・閾値・入出力役割を保存する"]
+    definition = "指定contextの全自己同型で固定される候補"
+    definition_version = "automorphism-support-v1"
+    observation = "dynamics_roles_and_initial_state"
+    question = "固定された支持候補が存在するか"
+    question_id = "functional-support"
+    subject = "c67a34e98bc6a011df1d6046a7162bc6de963ce041c7fcadf1249c2d3207f41e"

@@ -1,0 +1,18 @@
+Test Summary:                                 | Pass  Total   Time
+persistent claims retain context and evidence |   26     26  28.2s
+Test Summary:                                               | Pass  Total   Time
+adjunction is an explicit background, not a hidden DC field |   38     38  54.7s
+Test Summary:       | Pass  Total   Time
+model audit records |   43     43  24.7s
+Test Summary:                              | Pass  Total  Time
+DC witnesses preserve the other conditions |   31     31  3.2s
+Test Summary:                              | Pass  Total   Time
+circuit inputs and observational semantics | 8237   8237  34.3s
+Test Summary:                                     | Pass  Total  Time
+bounded measured search never overstates coverage |   16     16  6.4s
+Test Summary:                                             | Pass  Total  Time
+frozen measured witnesses separate all four DC conditions |   33     33  0.9s
+Test Summary:                             | Pass  Total   Time
+physical symmetries and candidate closure |  533    533  28.6s
+Test Summary:                                | Pass  Total  Time
+audit sibling modules share the context type |    3      3  0.0s

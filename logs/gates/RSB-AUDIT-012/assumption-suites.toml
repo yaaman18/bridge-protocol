@@ -1,0 +1,286 @@
+catalog_scope = "finite_recomputed_models"
+definition = "dc_four_predicates_boolean_v1"
+execution_certified = false
+full_M1_M4 = "not_established"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+predicate_order = ["hSelf", "hSMC", "hAct", "hBound"]
+scenario_count = 3
+schema_version = 1
+
+[[suites]]
+complete_five_pattern_suite = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+scenario = "p3-adjunction"
+target_count = 5
+witnessed_target_count = 5
+
+    [suites.fixed_conditions]
+    adjunction = true
+    nondegenerate = true
+
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 7
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "all_four"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 3
+    witnesses = ["p3-adjoint-all_four", "p3-adjoint-support-expansion", "p3-adjoint-symmetric-union"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 7
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hSelf"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p3-adjoint-without_hSelf"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = false
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 7
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hSMC"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p3-adjoint-without_hSMC"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = false
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 7
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hAct"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p3-adjoint-without_hAct"]
+
+        [suites.targets.expected]
+        hAct = false
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 7
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hBound"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p3-adjoint-without_hBound"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = false
+        hSMC = true
+        hSelf = true
+[[suites]]
+complete_five_pattern_suite = false
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+scenario = "p6-one-input-adjunction"
+target_count = 5
+witnessed_target_count = 1
+
+    [suites.fixed_conditions]
+    adjunction = true
+    nondegenerate = true
+
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 1
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "all_four"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-one-input-all-four"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 1
+    phenomenal_claim = "not_certified"
+    status = "not_found_in_finite_catalog"
+    target = "without_hSelf"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 0
+    witnesses = []
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = false
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 1
+    phenomenal_claim = "not_certified"
+    status = "not_found_in_finite_catalog"
+    target = "without_hSMC"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 0
+    witnesses = []
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = false
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 1
+    phenomenal_claim = "not_certified"
+    status = "not_found_in_finite_catalog"
+    target = "without_hAct"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 0
+    witnesses = []
+
+        [suites.targets.expected]
+        hAct = false
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 1
+    phenomenal_claim = "not_certified"
+    status = "not_found_in_finite_catalog"
+    target = "without_hBound"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 0
+    witnesses = []
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = false
+        hSMC = true
+        hSelf = true
+[[suites]]
+complete_five_pattern_suite = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 5
+scenario = "p6-two-motor-no-adjunction"
+target_count = 5
+witnessed_target_count = 5
+
+    [suites.fixed_conditions]
+    adjunction = false
+    nondegenerate = true
+
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 5
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "all_four"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-dc-only-all_four"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 5
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hSelf"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-dc-only-without_hSelf"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = true
+        hSelf = false
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 5
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hSMC"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-dc-only-without_hSMC"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = true
+        hSMC = false
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 5
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hAct"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-dc-only-without_hAct"]
+
+        [suites.targets.expected]
+        hAct = false
+        hBound = true
+        hSMC = true
+        hSelf = true
+    [[suites.targets]]
+    general_impossibility = "not_established"
+    known_model_count = 5
+    phenomenal_claim = "not_certified"
+    status = "witness_found"
+    target = "without_hBound"
+    unknown_model_count = 0
+    unknown_models = []
+    witness_count = 1
+    witnesses = ["p6-dc-only-without_hBound"]
+
+        [suites.targets.expected]
+        hAct = true
+        hBound = false
+        hSMC = true
+        hSelf = true

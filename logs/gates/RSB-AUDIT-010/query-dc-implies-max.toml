@@ -1,0 +1,10 @@
+schema_version = 1
+query_id = "p3-dc-implies-kappa-equals-nu"
+contexts = ["two_inputs_two_motors_P3_H6_L4_R4"]
+
+[premises]
+adjunction = true
+all_dc = true
+
+[conclusion]
+kappa_equals_nu = true

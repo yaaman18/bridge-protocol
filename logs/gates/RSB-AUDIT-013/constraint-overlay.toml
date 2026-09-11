@@ -1,0 +1,216 @@
+certificate_registered = false
+conflict_count = 0
+constraint_count = 1
+execution_certified = false
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+schema_version = 1
+target_count = 15
+
+[[constraints]]
+certificate_registered = false
+constraint_id = "one-input-gc-self-implies-smc-and-act"
+context = "one_input_one_motor_P6_H6_L4_R4"
+default_target = false
+evidence_class = "lean_checked_experiment"
+lean_decl = "ERIEC.ModelAuditExperiment.one_input_gc_self_implies_smc_and_act"
+source = "formal-experiments/OneInputAdjunction.lean"
+source_sha256 = "1d7030a44002e3cb220d44e32d529e513bacf290ba7d4c7397179ed8f9f53c3c"
+
+    [constraints.conclusions]
+    hAct = true
+    hSMC = true
+
+    [constraints.premises]
+    adjunction = true
+    hSelf = true
+    nondegenerate = true
+
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p3-adjunction"
+target = "all_four"
+witnesses = ["p3-adjoint-all_four", "p3-adjoint-support-expansion", "p3-adjoint-symmetric-union"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p3-adjunction"
+target = "without_hSelf"
+witnesses = ["p3-adjoint-without_hSelf"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p3-adjunction"
+target = "without_hSMC"
+witnesses = ["p3-adjoint-without_hSMC"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p3-adjunction"
+target = "without_hAct"
+witnesses = ["p3-adjoint-without_hAct"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p3-adjunction"
+target = "without_hBound"
+witnesses = ["p3-adjoint-without_hBound"]
+[[targets]]
+applicable_constraints = ["one-input-gc-self-implies-smc-and-act"]
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_one_motor_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-one-input-adjunction"
+target = "all_four"
+witnesses = ["p6-one-input-all-four"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "not_found_in_finite_catalog"
+certificate_registered = false
+classification = "not_found_in_finite_catalog"
+constraint_conflicts = []
+context = "one_input_one_motor_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-one-input-adjunction"
+target = "without_hSelf"
+witnesses = []
+[[targets]]
+applicable_constraints = ["one-input-gc-self-implies-smc-and-act"]
+catalog_status = "not_found_in_finite_catalog"
+certificate_registered = false
+classification = "incompatible_with_checked_experimental_statement"
+context = "one_input_one_motor_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-one-input-adjunction"
+target = "without_hSMC"
+witnesses = []
+
+    [[targets.constraint_conflicts]]
+    constraint_id = "one-input-gc-self-implies-smc-and-act"
+    lean_decl = "ERIEC.ModelAuditExperiment.one_input_gc_self_implies_smc_and_act"
+    violated_conclusions = ["hSMC"]
+[[targets]]
+applicable_constraints = ["one-input-gc-self-implies-smc-and-act"]
+catalog_status = "not_found_in_finite_catalog"
+certificate_registered = false
+classification = "incompatible_with_checked_experimental_statement"
+context = "one_input_one_motor_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-one-input-adjunction"
+target = "without_hAct"
+witnesses = []
+
+    [[targets.constraint_conflicts]]
+    constraint_id = "one-input-gc-self-implies-smc-and-act"
+    lean_decl = "ERIEC.ModelAuditExperiment.one_input_gc_self_implies_smc_and_act"
+    violated_conclusions = ["hAct"]
+[[targets]]
+applicable_constraints = ["one-input-gc-self-implies-smc-and-act"]
+catalog_status = "not_found_in_finite_catalog"
+certificate_registered = false
+classification = "not_found_in_finite_catalog"
+constraint_conflicts = []
+context = "one_input_one_motor_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-one-input-adjunction"
+target = "without_hBound"
+witnesses = []
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_two_motors_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-two-motor-no-adjunction"
+target = "all_four"
+witnesses = ["p6-dc-only-all_four"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_two_motors_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-two-motor-no-adjunction"
+target = "without_hSelf"
+witnesses = ["p6-dc-only-without_hSelf"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_two_motors_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-two-motor-no-adjunction"
+target = "without_hSMC"
+witnesses = ["p6-dc-only-without_hSMC"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_two_motors_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-two-motor-no-adjunction"
+target = "without_hAct"
+witnesses = ["p6-dc-only-without_hAct"]
+[[targets]]
+applicable_constraints = []
+catalog_status = "witness_found"
+certificate_registered = false
+classification = "witness_found"
+constraint_conflicts = []
+context = "one_input_two_motors_P6_H6_L4_R4"
+general_impossibility = "not_established"
+phenomenal_claim = "not_certified"
+scenario = "p6-two-motor-no-adjunction"
+target = "without_hBound"
+witnesses = ["p6-dc-only-without_hBound"]

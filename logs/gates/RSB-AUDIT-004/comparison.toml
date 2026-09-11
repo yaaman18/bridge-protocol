@@ -1,0 +1,48 @@
+classification = "different_context"
+comparison_basis = "exact_context_and_proposition_values"
+differences = ["observation"]
+evidence_verified = false
+interpretation = "requires_review"
+opposite_verdicts = true
+phenomenal_claim = "not_certified"
+residual_status_updated = false
+same_context = false
+schema_version = 1
+
+[left]
+claim_id = "with-initial"
+digest = "e0175de5e3072e3b8b3d6af6287f3bf100ab2ec0e13ee6c99a9a3518e3003249"
+evidence = ["logs/gates/RSB-AUDIT-003/symmetry-examples.toml", "computed-report-sha256:21c16db1f5b55d3fbf7b8b069331bfb971f5493ddacefd2d6e2f17e59d7e260b"]
+phenomenal_claim = "not_certified"
+proposition = "固定候補が存在する"
+reason = "明示したcontextで自己同型と固定候補を全列挙した。選択の一意性は主張しない。"
+schema_version = 1
+verdict = "affirmed"
+
+    [left.context]
+    assumptions = ["候補は二つのe-m対のみ", "重み・閾値・入出力役割を保存する"]
+    definition = "指定contextの全自己同型で固定される候補"
+    definition_version = "automorphism-support-v1"
+    observation = "dynamics_roles_and_initial_state"
+    question = "固定された支持候補が存在するか"
+    question_id = "functional-support"
+    subject = "c67a34e98bc6a011df1d6046a7162bc6de963ce041c7fcadf1249c2d3207f41e"
+
+[right]
+claim_id = "dynamics-only"
+digest = "8142d4e74fc8c303db902cb35d58a5c95e7da245d0490208954f262760d7b255"
+evidence = ["logs/gates/RSB-AUDIT-003/symmetry-examples.toml", "computed-report-sha256:f41e939a90feaaa81aebbd1fd5bc1801a265203b96afd8ca3dca2ac49b25070c"]
+phenomenal_claim = "not_certified"
+proposition = "固定候補が存在する"
+reason = "明示したcontextで自己同型と固定候補を全列挙した。選択の一意性は主張しない。"
+schema_version = 1
+verdict = "denied"
+
+    [right.context]
+    assumptions = ["候補は二つのe-m対のみ", "重み・閾値・入出力役割を保存する"]
+    definition = "指定contextの全自己同型で固定される候補"
+    definition_version = "automorphism-support-v1"
+    observation = "dynamics_and_roles"
+    question = "固定された支持候補が存在するか"
+    question_id = "functional-support"
+    subject = "c67a34e98bc6a011df1d6046a7162bc6de963ce041c7fcadf1249c2d3207f41e"

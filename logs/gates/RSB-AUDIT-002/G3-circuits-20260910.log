@@ -1,0 +1,4 @@
+Test Summary:                              | Pass  Total   Time
+circuit inputs and observational semantics | 4132   4132  43.3s
+Test Summary:                                     | Pass  Total  Time
+bounded measured search never overstates coverage |   14     14  8.9s
