@@ -1,7 +1,7 @@
-schema_version = 1
-profile_id = "reactivation-substrate-v1-candidate-01"
-protocol_version = "reactivation-paired-traces-v1"
-digest_format = "rsb-ascii-records-v1"
+schema_version = 2
+profile_id = "reactivation-substrate-v1-candidate-02"
+protocol_version = "reactivation-snapshot-source-silencing-v2"
+digest_format = "sha256_file_bytes"
 
 [substrate]
 unit_count = 8
@@ -32,10 +32,10 @@ zero_weight_edges = "reject"
 kappa_rule = "persistent_active"
 kappa_transitions = 3
 state_window_points = 4
-run_horizon_steps = 6
-readout_start_step = 3
-readout_end_step = 6
-epsilon_rule = "active_inputs_at_final_step"
+preparation_steps = 6
+intervention_horizon_steps = 6
+effect_window_points = 4
+epsilon_rule = "active_inputs_at_branch_snapshot"
 boundary_rule = "outgoing_nonzero_edges"
 boundary_edge_sources = ["weights", "environment_map"]
 initial_history = "none"
@@ -43,14 +43,18 @@ persistence_only = true
 carrier = "units"
 
 [measurement]
-intervention_rule = "clamp_initial_and_every_next_state"
-intervention_values = [0, 1]
-alpha_rule = "final_input_difference_on_vs_off"
-sigma_rule = "final_output_difference_on_vs_off"
-pi_rule = "baseline_persistence_loss_excluding_target"
-rho_rule = "baseline_persistence_loss_excluding_target_intersect_outputs"
-relation_scope = "one_initial_configuration"
-trial_sharing = "same_case_target_value_protocol"
+intervention_rule = "silence_outgoing_signals_preserve_state_update"
+intervention_scope = "weights_and_environment_map"
+intervention_subsets = "exhaustive_all_source_subsets"
+alpha_rule = "final_input_difference_natural_vs_single_source_silenced"
+sigma_rule = "final_output_difference_natural_vs_single_source_silenced"
+pi_rule = "future_persistence_loss_single_output_silenced"
+rho_rule = "future_persistence_loss_single_source_silenced_intersect_outputs"
+direct_self_effect = "record_feedback_effect_without_forcing_state"
+coalition_rule = "all_inclusion_minimal_loss_sets"
+coalition_projection_to_unary_relations = "forbidden"
+relation_scope = "one_branch_snapshot_and_fixed_future_horizon"
+trial_sharing = "same_case_source_subset_protocol"
 relation_aggregation = "none"
 
 [enumeration]
@@ -64,4 +68,6 @@ early_success_stop = false
 record_all_cases = true
 zero_pass_count = "valid_result"
 nonempty_flags = "derived_diagnostics"
+non_dc_interpretation = "supplied_unary_relations_not_certified"
+claim_scope = "finite_horizon_signal_contribution"
 phenomenal_claim = "not_certified"

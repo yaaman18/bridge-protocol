@@ -1,0 +1,4 @@
+PASS revision 2 static consistency; substrate exactly matches HEAD (9b0e781)
+Candidate file SHA-256=751985aac334ac22374775f21ed6f872b9c97c64a1e480bc29302668950202ad
+P=6, H=6, L=4, R=4; expected branches=65536, updates=394752
+No candidate dynamics, measurement, DC evaluation, registration or G1-G4 gates executed.
