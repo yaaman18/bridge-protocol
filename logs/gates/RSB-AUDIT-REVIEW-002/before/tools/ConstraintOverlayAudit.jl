@@ -87,7 +87,6 @@ function constraint_overlay_report(suite_report=AssumptionSuiteAudit.assumption_
         "constraints"=>constraints,
         "targets"=>rows,
         "conflict_count"=>count(row -> row["classification"] == "conflict_requires_review", rows),
-        "incomplete_check_count"=>count(row -> !row["constraint_check_complete"], rows),
         "certificate_registered"=>false,
         "general_impossibility"=>"not_established",
         "phenomenal_claim"=>"not_certified",

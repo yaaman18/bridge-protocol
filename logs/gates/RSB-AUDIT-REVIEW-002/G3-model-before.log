@@ -1,0 +1,19 @@
+ERROR: LoadError: Some tests did not pass: 12289 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:138
+Test Summary:       | Pass  Total   Time
+model audit records |   88     88  50.0s
+DC predicates match direct quantifiers on all tiny encodings: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:169
+  Expression: boundary_differs_from_proper_support > 0
+   Evaluated: 0 > 0
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/test/test_model_audit.jl:169 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/test/test_model_audit.jl:141
+Test Summary:                                                |  Pass  Fail  Total  Time
+DC predicates match direct quantifiers on all tiny encodings | 12289     1  12290  6.0s

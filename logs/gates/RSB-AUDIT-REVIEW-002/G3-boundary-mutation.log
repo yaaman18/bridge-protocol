@@ -1,0 +1,19 @@
+ERROR: LoadError: Some tests did not pass: 15360 passed, 1 failed, 0 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/RSB-AUDIT-REVIEW-002/boundary-mutation-test.jl:3
+DC predicates match direct quantifiers on all tiny encodings: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/logs/gates/RSB-AUDIT-REVIEW-002/boundary-mutation-test.jl:28
+  Expression: result.valid && result.actual == reference
+
+Stacktrace:
+ [1] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:680 [inlined]
+ [2] macro expansion
+   @ ~/bridge-protocol/logs/gates/RSB-AUDIT-REVIEW-002/boundary-mutation-test.jl:28 [inlined]
+ [3] macro expansion
+   @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+ [4] top-level scope
+   @ ~/bridge-protocol/logs/gates/RSB-AUDIT-REVIEW-002/boundary-mutation-test.jl:6
+
+Fail-fast enabled: Fail or Error occurred
+
+Test Summary:                                                |  Pass  Fail  Total  Time
+DC predicates match direct quantifiers on all tiny encodings | 15360     1  15361  6.1s

@@ -21,8 +21,7 @@ function check_dc_pattern(model, expected::NTuple{4,Bool})
     _finite_encoding_valid(model) ||
         return (valid=false, nondegenerate=false, actual=(), matches=false)
     snapshot = deepcopy(model)
-    boundary = Set(c for c in snapshot.kappa
-                   if any(d ∉ snapshot.kappa for d in snapshot.neighbors[c]))
+    boundary = snapshot.kappa == Set(snapshot.C) ? Set{Symbol}() : copy(snapshot.kappa)
     sys = ERIEC.ERIEState{Symbol,Symbol,Symbol,Nothing}(
         m -> copy(snapshot.alpha[m]), e -> copy(snapshot.sigma[e]),
         m -> copy(snapshot.pi[m]), c -> copy(snapshot.rho[c]),

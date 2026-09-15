@@ -1,0 +1,52 @@
+ERROR: LoadError: Some tests did not pass: 21 passed, 0 failed, 3 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:18
+model audit records: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:55
+  Test threw exception
+  Expression: summary.context_shift_count == 0 && isempty(summary.context_shifts)
+  type NamedTuple has no field context_shift_count
+  Stacktrace:
+   [1] getproperty(x::@NamedTuple{event_count::Int64, question_count::Int64, counts::Dict{String, Int64}, unresolved_count::Int64, interpretation::Symbol, phenomenal_claim::Symbol}, f::Symbol)
+     @ Base ./Base.jl:49
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_model_audit.jl:55 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [4] macro expansion
+     @ ~/bridge-protocol/test/test_model_audit.jl:55 [inlined]
+   [5] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [6] top-level scope
+     @ ~/bridge-protocol/test/test_model_audit.jl:19
+model audit records: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:67
+  Test threw exception
+  Expression: shifted_summary.context_shift_count == 1
+  type NamedTuple has no field context_shift_count
+  Stacktrace:
+   [1] getproperty(x::@NamedTuple{event_count::Int64, question_count::Int64, counts::Dict{String, Int64}, unresolved_count::Int64, interpretation::Symbol, phenomenal_claim::Symbol}, f::Symbol)
+     @ Base ./Base.jl:49
+   [2] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [3] macro expansion
+     @ ~/bridge-protocol/test/test_model_audit.jl:67 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/bridge-protocol/test/test_model_audit.jl:19
+model audit records: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_model_audit.jl:18
+  Got exception outside of a @test
+  type NamedTuple has no field context_shifts
+  Stacktrace:
+   [1] getproperty(x::@NamedTuple{event_count::Int64, question_count::Int64, counts::Dict{String, Int64}, unresolved_count::Int64, interpretation::Symbol, phenomenal_claim::Symbol}, f::Symbol)
+     @ Base ./Base.jl:49
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_model_audit.jl:68 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_model_audit.jl:19
+   [5] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [6] top-level scope
+     @ none:1
+Test Summary:       | Pass  Error  Total  Time
+model audit records |   21      3     24  7.5s

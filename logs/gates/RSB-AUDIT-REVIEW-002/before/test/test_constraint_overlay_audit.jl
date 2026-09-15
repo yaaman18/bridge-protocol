@@ -9,7 +9,6 @@ isdefined(@__MODULE__, :ConstraintOverlayAudit) ||
     @test report["constraint_count"] == 1
     @test report["target_count"] == 15
     @test report["conflict_count"] == 0
-    @test report["incomplete_check_count"] == 0
     @test all(row["constraint_check_complete"] && isempty(row["unknown_conclusions"])
               for row in report["targets"])
     @test !report["certificate_registered"] && !report["execution_certified"]
@@ -69,33 +68,10 @@ isdefined(@__MODULE__, :ConstraintOverlayAudit) ||
     @test isempty(skipped["applicable_constraints"]) && isempty(skipped["unknown_conclusions"])
     @test skipped["constraint_check_complete"] # Scoped to applicable constraints only.
 
-    # Use the public report builder, so a constant or disconnected aggregate fails.
-    for status in ("witness_found", "not_found_in_finite_catalog"), violates in (false, true)
-        synthetic = deepcopy(suites)
-        suite = only(filter(s -> s["scenario"] == "p6-one-input-adjunction", synthetic["suites"]))
-        target = only(filter(t -> t["target"] == "without_hSMC", suite["targets"]))
-        target["status"] = status
-        target["expected"]["hSMC"] = !violates
-        delete!(target["expected"], "hAct")
-        mixed = ConstraintOverlayAudit.constraint_overlay_report(synthetic)
-        @test mixed["target_count"] == 15
-        @test mixed["incomplete_check_count"] == 1
-        @test mixed["conflict_count"] == Int(status == "witness_found" && violates)
-        incomplete = only(filter(row -> !row["constraint_check_complete"], mixed["targets"]))
-        @test only(incomplete["unknown_conclusions"])["conclusions"] == ["hAct"]
-        # Two unknown conclusions in one target still count as one incomplete check.
-        delete!(target["expected"], "hSMC")
-        @test ConstraintOverlayAudit.constraint_overlay_report(synthetic)["incomplete_check_count"] == 1
-        second_target = only(filter(t -> t["target"] == "all_four", suite["targets"]))
-        delete!(second_target["expected"], "hAct")
-        @test ConstraintOverlayAudit.constraint_overlay_report(synthetic)["incomplete_check_count"] == 2
-    end
-
     root = dirname(@__DIR__)
     cli = joinpath(root, "bin", "eriec-constraint-overlay-audit.jl")
     parsed = TOML.parse(read(`$(Base.julia_cmd()) --startup-file=no --project=$root $cli overlay`, String))
     @test parsed["target_count"] == 15 && parsed["conflict_count"] == 0
-    @test parsed["incomplete_check_count"] == 0
     @test parsed["phenomenal_claim"] == "not_certified"
     @test all(haskey(row, "unknown_conclusions") && row["constraint_check_complete"] for row in parsed["targets"])
 end

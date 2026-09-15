@@ -25,12 +25,19 @@ check_dc_pattern、model_witness_report、invariant_choices。
 phenomenal marker、対象層公理、既存の数値許容誤差。Claudeへの連絡を行わない。
 
 実装の意味:
-- contextはquestion ID/原文、定義版/内容、前提、観測対応、対象の不変値。
+- 各contextはquestion ID/原文、定義版/内容、前提、観測対応、対象を持つ不変値。
+  履歴中の同IDへの文脈変更はdesign §12のconditional等で許す。
+  summary/CLIのcontext_shiftsに直前の同ID eventからの変更項目・sequence・前後の値を記録する。
+  context_shift_countは変更遷移の数であり、元の文脈へ戻る遷移も数える。
+  unresolved_countは最新statusの集計であり、元の文脈での解決を意味しない。
 - 証拠参照は不透明な文字列。ファイル読取・コード実行・ネットワーク要求を起動しない。
 - TOMLはデータとして厳格に検査し、未知キー/不正status/切れたdigest鎖を拒否。
 - 履歴はimmutable tupleの追加で返す。receiptを指定すれば切り詰めも拒否する。
 - 残余の全状態は記録された申告であり、その真理や経験の有無を認証しない。
 - DCの全4真偽値を既存関数で再計算し、期待patternと完全一致させる。
+  1引数/4引数checker間の一致はAPI整合の検査で、独立した意味検証ではない。
+  nondegenerateはκ≠∅ ∧ κ≠C ∧ ε≠∅だけを表し、境界や介入の実効性を含まない。
+  active_boundaryは別診断として扱う。
 - 抽象モデルと改訂2方式で測定した小モデルを区別し、独立性の範囲を混同しない。
 
 検証:

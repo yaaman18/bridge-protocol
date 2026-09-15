@@ -1,0 +1,130 @@
+--- a/specs/packets/RSB-AUDIT-013.md
++++ b/specs/packets/RSB-AUDIT-013.md
+@@ -21,6 +21,8 @@
+ Lean宣言を記録し、constraint_check_complete=falseとする。既知の矛盾は同時に保持する。
+ classificationは既存の有限探索結果/既知矛盾の分類であり、未知結論の適合判定ではない。
+ constraint_check_completeは適用済み制約の結論に限る診断で、前提不明の非適用制約の検査済みを意味しない。
++最上位incomplete_check_countはconstraint_check_complete=falseのtarget行数を集計する。
++1行に未知結論が複数あっても1件と数え、conflict_countとは独立に出力する。
+ 
+ 対象G3: source digest、15 targets、該当2件、単なる未発見2件、背景外非適用、
+ 人工的な証人衝突のreview分類、CLI。個別Lean再検査を別ログに保存する。
+--- a/test/test_constraint_overlay_audit.jl
++++ b/test/test_constraint_overlay_audit.jl
+@@ -9,6 +9,7 @@
+     @test report["constraint_count"] == 1
+     @test report["target_count"] == 15
+     @test report["conflict_count"] == 0
++    @test report["incomplete_check_count"] == 0
+     @test all(row["constraint_check_complete"] && isempty(row["unknown_conclusions"])
+               for row in report["targets"])
+     @test !report["certificate_registered"] && !report["execution_certified"]
+@@ -68,10 +69,33 @@
+     @test isempty(skipped["applicable_constraints"]) && isempty(skipped["unknown_conclusions"])
+     @test skipped["constraint_check_complete"] # Scoped to applicable constraints only.
+ 
++    # Use the public report builder, so a constant or disconnected aggregate fails.
++    for status in ("witness_found", "not_found_in_finite_catalog"), violates in (false, true)
++        synthetic = deepcopy(suites)
++        suite = only(filter(s -> s["scenario"] == "p6-one-input-adjunction", synthetic["suites"]))
++        target = only(filter(t -> t["target"] == "without_hSMC", suite["targets"]))
++        target["status"] = status
++        target["expected"]["hSMC"] = !violates
++        delete!(target["expected"], "hAct")
++        mixed = ConstraintOverlayAudit.constraint_overlay_report(synthetic)
++        @test mixed["target_count"] == 15
++        @test mixed["incomplete_check_count"] == 1
++        @test mixed["conflict_count"] == Int(status == "witness_found" && violates)
++        incomplete = only(filter(row -> !row["constraint_check_complete"], mixed["targets"]))
++        @test only(incomplete["unknown_conclusions"])["conclusions"] == ["hAct"]
++        # Two unknown conclusions in one target still count as one incomplete check.
++        delete!(target["expected"], "hSMC")
++        @test ConstraintOverlayAudit.constraint_overlay_report(synthetic)["incomplete_check_count"] == 1
++        second_target = only(filter(t -> t["target"] == "all_four", suite["targets"]))
++        delete!(second_target["expected"], "hAct")
++        @test ConstraintOverlayAudit.constraint_overlay_report(synthetic)["incomplete_check_count"] == 2
++    end
++
+     root = dirname(@__DIR__)
+     cli = joinpath(root, "bin", "eriec-constraint-overlay-audit.jl")
+     parsed = TOML.parse(read(`$(Base.julia_cmd()) --startup-file=no --project=$root $cli overlay`, String))
+     @test parsed["target_count"] == 15 && parsed["conflict_count"] == 0
++    @test parsed["incomplete_check_count"] == 0
+     @test parsed["phenomenal_claim"] == "not_certified"
+     @test all(haskey(row, "unknown_conclusions") && row["constraint_check_complete"] for row in parsed["targets"])
+ end
+--- a/test/test_model_audit.jl
++++ b/test/test_model_audit.jl
+@@ -139,8 +139,11 @@
+     # Enumerate all alpha/sigma/pi/rho relations and supports on this fixed carrier.
+     # No ERIEC operators or checker results are used to obtain the reference values.
+     C = (:e, :m, :c)
++    complete_graph = Dict(c => Set(d for d in C if d != c) for c in C)
++    chain_graph = Dict(:e => Set([:m]), :m => Set([:c]), :c => Set{Symbol}())
+     observed_patterns = Set{NTuple{4,Bool}}()
+-    for bits in 0:4095
++    boundary_differs_from_proper_support = zeros(Int, 2)
++    for (graph_index, neighbors) in enumerate((complete_graph, chain_graph)), bits in 0:4095
+         bit(i) = !iszero(bits & (1 << i))
+         model = (M=(:m,), E=(:e,), C=C,
+             alpha=Dict(:m => Set{Symbol}(bit(0) ? (:e,) : ())),
+@@ -149,7 +152,7 @@
+             rho=Dict(C[i] => Set{Symbol}(bit(i+4) ? (:m,) : ()) for i in 1:3),
+             kappa=Set(C[i] for i in 1:3 if bit(i+7)),
+             epsilon=Set{Symbol}(bit(11) ? (:e,) : ()),
+-            neighbors=Dict(c => Set(d for d in C if d != c) for c in C))
++            neighbors=neighbors)
+         K, I = model.kappa, model.epsilon
+         produced(c) = any(c in model.pi[m] && any(m in model.rho[d] for d in K) for m in model.M)
+         returned(e) = any(e in model.alpha[m] && any(m in model.sigma[d] for d in I) for m in model.M)
+@@ -161,9 +164,12 @@
+         @test result.act == Set(m for m in model.M if active(m))
+         @test result.matches == (!isempty(K) && K != Set(C) && !isempty(I))
+         push!(observed_patterns, reference)
++        boundary_differs_from_proper_support[graph_index] += Int(reference[4] != (!isempty(K) && K != Set(C)))
+     end
+     # Every component was observed both true and false; this is not a general independence claim.
+     @test all(Set(p[i] for p in observed_patterns) == Set((false, true)) for i in 1:4)
++    @test boundary_differs_from_proper_support[1] == 0
++    @test boundary_differs_from_proper_support[2] > 0
+ end
+ 
+ @testset "DC witnesses preserve the other conditions" begin
+--- a/tools/ConstraintOverlayAudit.jl
++++ b/tools/ConstraintOverlayAudit.jl
+@@ -87,6 +87,7 @@
+         "constraints"=>constraints,
+         "targets"=>rows,
+         "conflict_count"=>count(row -> row["classification"] == "conflict_requires_review", rows),
++        "incomplete_check_count"=>count(row -> !row["constraint_check_complete"], rows),
+         "certificate_registered"=>false,
+         "general_impossibility"=>"not_established",
+         "phenomenal_claim"=>"not_certified",
+--- /dev/null
++++ b/specs/packets/RSB-AUDIT-REVIEW-002.md
+@@ -0,0 +1,25 @@
++# RSB-AUDIT-REVIEW-002 — LOW-A/B 修正とセルフレビュー
++
++2026-09-13、ユーザー直接依頼。修正・対象テスト・セルフレビューを行い、Claude Codeには送信しない。
++先行REVIEW-001の未コミット変更とレビューsnapshotを保存したまま、今回の差分を分離する。
++
++対象: ConstraintOverlayAudit.constraint_overlay_report、DC参照テスト。
++変更可能: tools/ConstraintOverlayAudit.jl、test/test_constraint_overlay_audit.jl、
++test/test_model_audit.jl、specs/packets/RSB-AUDIT-013.md、本packet、
++logs/gates/RSB-AUDIT-REVIEW-002/、logs/reviews/rsb-audit-review-002-self-review-20260913*。
++直接依存: 既存AssumptionSuiteAudit、ModelAudit.check_dc_pattern、Julia Test/TOML。
++
++固定契約:
++- 最上位incomplete_check_countはconstraint_check_complete=falseのtarget行数。
++  未指定の結論キーの数ではなく、適用済み制約に関する既存の行診断を集計する。
++  conflict_count/classificationとは別軸とし、未知と既知の矛盾が併存できる。
++- CLIは既存のreport全体をTOML出力する経路を利用し、出力を対象テストで確認する。
++- DCの参照式は保持。完全グラフと鎖e→m→cの各4096通りを検証する。
++  鎖でhBoundがκの非空真部分集合性と異なるケースを必須とする。
++- 公開API名・export・既存分類・formal/src/ledger/catalog/Project/Manifest・数値条件・markerは保持。
++
++検証: 集計欠落と既存完全グラフの被覆不足を示す修正前テストの失敗ログを保存し、
++修正後に対象2ファイルのG3を実行する。境界をneighbors無視へ変えた一時コピーで新テストの拒否を確認。
++実行計画や正式API接続は無変更なので全体Pkg.test/G1/G4は再実行しない。
++先行REVIEW-001の全体成功を今回の差分の全体再検証と呼ばない。ledger statusの更新なし。
++セルフレビュー結果・今回のみのdiff/hashをローカルに保存する。commit/push/agent送信は行わない。

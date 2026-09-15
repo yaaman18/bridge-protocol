@@ -1,0 +1,28 @@
+{
+  "head": "12d7be911b5b87ae4dbca68ddc80d680529678c1",
+  "baseline": "working tree after RSB-AUDIT-REVIEW-001; saved in logs/gates/RSB-AUDIT-REVIEW-002/before",
+  "patch": "logs/reviews/rsb-audit-review-002-self-review-20260913.patch",
+  "patch_sha256": "2417015cf0cbd02e1b5990e4b8ca5097867b145d865b02b7461dcd351ecc86d4",
+  "files": {
+    "specs/packets/RSB-AUDIT-013.md": {
+      "before_sha256": "8cd4313065ef9cbb114852890c4526f6139255054e74bbbdc16d3c7add3d2bc7",
+      "after_sha256": "790c1ebdc1dd8cdc6e45cf4a328a026e341b2c59ce38cb76c3f8f73f4500a2e3"
+    },
+    "test/test_constraint_overlay_audit.jl": {
+      "before_sha256": "ee9841e7cb76a4b4f3dadf58aa5d96c37e535057b37adf70cb77412ddd653e9e",
+      "after_sha256": "e11bf4d4616e2c9e5b3545bc7e1c50ba8c3cabae0b3dc195e989836c787e2856"
+    },
+    "test/test_model_audit.jl": {
+      "before_sha256": "84b8dd19553f2cb954f5cb765dc31d4881d247887b5e8bf0469f862d90d5f134",
+      "after_sha256": "033c34b50ec95fa3e083109137161a46fe3550ab03fb8977db95a6816b98c978"
+    },
+    "tools/ConstraintOverlayAudit.jl": {
+      "before_sha256": "3161adaeded1bcb12052a6523a352a66c60430829c08518d209e841ae7315898",
+      "after_sha256": "b95bf631aab5f9bd9f3160c4aad695dc9296b1dd6dfc20a9fd486422e42ceacb"
+    },
+    "specs/packets/RSB-AUDIT-REVIEW-002.md": {
+      "before_sha256": null,
+      "after_sha256": "cdcf6204113554a703d18f61ddfa7a7c9779981fe573abf14022069d34f547b8"
+    }
+  }
+}

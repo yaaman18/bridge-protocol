@@ -21,8 +21,6 @@ statementと衝突するtargetに将来witness_foundが入った場合は`confli
 Lean宣言を記録し、constraint_check_complete=falseとする。既知の矛盾は同時に保持する。
 classificationは既存の有限探索結果/既知矛盾の分類であり、未知結論の適合判定ではない。
 constraint_check_completeは適用済み制約の結論に限る診断で、前提不明の非適用制約の検査済みを意味しない。
-最上位incomplete_check_countはconstraint_check_complete=falseのtarget行数を集計する。
-1行に未知結論が複数あっても1件と数え、conflict_countとは独立に出力する。
 
 対象G3: source digest、15 targets、該当2件、単なる未発見2件、背景外非適用、
 人工的な証人衝突のreview分類、CLI。個別Lean再検査を別ログに保存する。

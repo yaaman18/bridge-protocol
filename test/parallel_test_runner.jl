@@ -49,10 +49,8 @@ function run_parallel_test_groups(groups, estimated_loads; phase="parallel")
 end
 
 function run_eriec_tests()
+    validate_eriec_test_plan()
     files = first.(ERIEC_TEST_PLAN)
-    length(files) == length(unique(files)) || error("ERIEC test plan contains duplicate files")
-    missing = filter(file -> !isfile(joinpath(@__DIR__, file)), files)
-    isempty(missing) || error("ERIEC test plan contains missing files: $(join(missing, ", "))")
 
     jobs = configured_test_jobs()
     if jobs == 1

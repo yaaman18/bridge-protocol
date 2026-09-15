@@ -1,0 +1,2 @@
+Test Summary:                                                 | Pass  Total   Time
+observed support is not silently replaced by greatest closure |   38     38  30.5s

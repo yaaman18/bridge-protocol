@@ -1,0 +1,6 @@
+Test Summary:       | Pass  Total   Time
+model audit records |   88     88  49.4s
+Test Summary:                                                |  Pass  Total  Time
+DC predicates match direct quantifiers on all tiny encodings | 24579  24579  4.3s
+Test Summary:                              | Pass  Total  Time
+DC witnesses preserve the other conditions |   32     32  7.2s

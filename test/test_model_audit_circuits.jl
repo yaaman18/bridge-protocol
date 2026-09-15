@@ -21,6 +21,15 @@ end
     singles = ModelAudit.measure_circuit(c; all_interventions=false)
     @test singles.model == measured.model
     @test length(singles.traces) == 7 && !singles.all_interventions && singles.minima === nothing
+    @test ModelAudit._check_search_replay(singles, measured)
+    corrupted_trace = deepcopy(measured)
+    corrupted_trace.traces[0][2] = ntuple(i -> !corrupted_trace.traces[0][2][i], 6)
+    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_trace)
+    corrupted_loss = deepcopy(measured)
+    push!(corrupted_loss.losses[0], :e)
+    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_loss)
+    corrupted_result = merge(measured, (result=merge(measured.result, (actual=(false, true, true, true),)),))
+    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_result)
     @test_throws ArgumentError ModelAudit.minimal_loss_masks(singles.losses, :e, 6)
     for state_mask in 0:63, source_mask in 0:63
         state = ntuple(i -> !iszero(state_mask & (1 << (i-1))), 6)

@@ -1,0 +1,134 @@
+ERROR: LoadError: Some tests did not pass: 58 passed, 0 failed, 10 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:6
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:12
+  Test threw exception
+  Expression: report["incomplete_check_count"] == 0
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:12 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:82
+  Test threw exception
+  Expression: mixed["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:82 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:88
+  Test threw exception
+  Expression: (ConstraintOverlayAudit.constraint_overlay_report(synthetic))["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:88 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:82
+  Test threw exception
+  Expression: mixed["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:82 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:88
+  Test threw exception
+  Expression: (ConstraintOverlayAudit.constraint_overlay_report(synthetic))["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:88 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:82
+  Test threw exception
+  Expression: mixed["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:82 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:88
+  Test threw exception
+  Expression: (ConstraintOverlayAudit.constraint_overlay_report(synthetic))["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:88 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:82
+  Test threw exception
+  Expression: mixed["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:82 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:88
+  Test threw exception
+  Expression: (ConstraintOverlayAudit.constraint_overlay_report(synthetic))["incomplete_check_count"] == 1
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:88 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:95
+  Test threw exception
+  Expression: parsed["incomplete_check_count"] == 0
+  KeyError: key "incomplete_check_count" not found
+  Stacktrace:
+   [1] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [2] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:95 [inlined]
+   [3] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [4] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+Test Summary:                                                        | Pass  Error  Total     Time
+checked experimental constraints remain distinct from finite absence |   58     10     68  1m21.4s

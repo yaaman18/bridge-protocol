@@ -1,0 +1,24 @@
+{
+  "base_commit": "12d7be911b5b87ae4dbca68ddc80d680529678c1",
+  "patch": "logs/reviews/rsb-audit-review-fixes-20260913.patch",
+  "patch_sha256": "d31c835b3d0b399d60528f888cae4e7498edee2ebed6b318128f2338c9ea8f29",
+  "files": {
+    "bin/eriec-model-audit.jl": "7c9b0958d2e69bec68f43dbb8da0e82587d2fad7878c10c9fbbed88a22be3c95",
+    "specs/packets/RSB-AUDIT-001.md": "6197506aa59f80b7958f9073daf380dec1efa9d6a46dc4b00af2faaa7e14a5ae",
+    "specs/packets/RSB-AUDIT-002.md": "eb4aee6e5403282d9d6ed915c650fefbb7d8eb3b0cbaa040a6af1ad2d63e00f2",
+    "specs/packets/RSB-AUDIT-009.md": "669c523203617b9d6cd523d4e4bff9d766a6aa7c5e7ee5370f2cd1f40a7810a4",
+    "specs/packets/RSB-AUDIT-013.md": "8cd4313065ef9cbb114852890c4526f6139255054e74bbbdc16d3c7add3d2bc7",
+    "specs/packets/RSB-AUDIT-REVIEW-001.md": "1034bb90c7a0254264f8a8e38ec3f97e015a59366d1adab85fe22e7dac9a808b",
+    "test/parallel_test_plan.jl": "1fb60e1ca0c56bddc7316f84e24971a35a1518d8f2b0021c1c8ff4126fbce2cf",
+    "test/parallel_test_runner.jl": "9c9d88bf070e6029104a8f5ccc7cf687ac88b5f9ae18542d4aae4a6e12b275ba",
+    "test/test_constraint_overlay_audit.jl": "ee9841e7cb76a4b4f3dadf58aa5d96c37e535057b37adf70cb77412ddd653e9e",
+    "test/test_model_audit.jl": "84b8dd19553f2cb954f5cb765dc31d4881d247887b5e8bf0469f862d90d5f134",
+    "test/test_model_audit_circuits.jl": "019b6b2a98c0f025b64c8a22290a871d242e4f208d92f0c1950ef54754ac9413",
+    "test/test_test_plan.jl": "ee99c0d44246bf7520179fadadd21999ef63a1325e428a5c88f90e9874d1324e",
+    "tools/ConstraintOverlayAudit.jl": "3161adaeded1bcb12052a6523a352a66c60430829c08518d209e841ae7315898",
+    "tools/CountermodelAudit.jl": "16ac1cb5803100a2aeb8dc08dbeb068897fb1418ddf5cd567f9ffcfef90e6a7e",
+    "tools/model_audit/Records.jl": "04a67190251b5321c35c999c5b18fb610add21ded2944596896ee86fc35ef108",
+    "tools/model_audit/Search.jl": "771335d09d9e6a22328c6bba547a21bd174f1e7e935d1eec3810a2173d396778",
+    "tools/model_audit/Witnesses.jl": "8ea8b9d310295bc45e264a3efdb07c6eebdde805184a73640a8e3e0f41001235"
+  }
+}

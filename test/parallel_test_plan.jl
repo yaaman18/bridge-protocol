@@ -5,6 +5,8 @@ const ERIEC_TEST_PLAN = [
     ("test_viability_closure.jl", 0.5),
     ("test_layer_composition.jl", 0.5),
     ("test_closure.jl", 0.5),
+    ("test_closure_audit.jl", 5.0),
+    ("test_test_plan.jl", 0.5),
     ("test_hinge.jl", 0.5),
     ("test_dc.jl", 0.5),
     ("test_model_audit.jl", 3.0),
@@ -80,6 +82,18 @@ const ERIEC_EXCLUSIVE_TEST_FILES = Set([
     "test_model_evaluation.jl",
     "test_v52_formal_statements.jl",
 ])
+
+function validate_eriec_test_plan(test_dir::AbstractString=@__DIR__, plan=ERIEC_TEST_PLAN)
+    files = first.(plan)
+    length(files) == length(unique(files)) || error("ERIEC test plan contains duplicate files")
+    missing_files = filter(file -> !isfile(joinpath(test_dir, file)), files)
+    isempty(missing_files) || error("ERIEC test plan contains missing files: $(join(missing_files, ", "))")
+    discovered = filter(file -> startswith(file, "test_") && endswith(file, ".jl") &&
+        isfile(joinpath(test_dir, file)), readdir(test_dir))
+    unregistered = sort!(setdiff(discovered, files))
+    isempty(unregistered) || error("ERIEC test plan omits test files: $(join(unregistered, ", "))")
+    true
+end
 
 function eriec_test_groups(job_count::Integer)
     parallel_plan = filter(entry -> first(entry) ∉ ERIEC_EXCLUSIVE_TEST_FILES, ERIEC_TEST_PLAN)

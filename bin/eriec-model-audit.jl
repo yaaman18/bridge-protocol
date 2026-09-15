@@ -45,6 +45,8 @@ function main(args)
         result = Dict("valid_history" => true, "event_count" => summary.event_count,
             "question_count" => summary.question_count, "unresolved_count" => summary.unresolved_count,
             "counts" => summary.counts, "interpretation" => String(summary.interpretation),
+            "context_shift_count" => summary.context_shift_count,
+            "context_shifts" => summary.context_shifts,
             "phenomenal_claim" => "not_certified", "trusted_receipt_checked" => receipt !== nothing)
         TOML.print(stdout, result; sorted=true)
         return 0

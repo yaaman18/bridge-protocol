@@ -1,0 +1,60 @@
+ERROR: LoadError: Some tests did not pass: 20 passed, 0 failed, 3 errored, 0 broken.
+in expression starting at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:6
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:12
+  Test threw exception
+  Expression: all((row["constraint_check_complete"] && isempty(row["unknown_conclusions"]) for row = report["targets"]))
+  KeyError: key "constraint_check_complete" not found
+  Stacktrace:
+    [1] getindex
+      @ ./dict.jl:477 [inlined]
+    [2] (::var"#1#9")(row::Dict{String, Any})
+      @ Main ./none:0
+    [3] iterate
+      @ ./generator.jl:48 [inlined]
+    [4] _all
+      @ ./reduce.jl:1309 [inlined]
+    [5] all
+      @ ./reduce.jl:1301 [inlined]
+    [6] all(itr::Base.Generator{Vector{Dict{String, Any}}, var"#1#9"})
+      @ Base ./reduce.jl:1193
+    [7] macro expansion
+      @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:12 [inlined]
+    [8] macro expansion
+      @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+    [9] macro expansion
+      @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:12 [inlined]
+   [10] macro expansion
+      @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [11] top-level scope
+      @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:56
+  Test threw exception
+  Expression: !(row["constraint_check_complete"])
+  KeyError: key "constraint_check_complete" not found
+  Stacktrace:
+   [1] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:56 [inlined]
+   [2] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:677 [inlined]
+   [3] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:56 [inlined]
+   [4] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [5] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+checked experimental constraints remain distinct from finite absence: Error During Test at /Users/yamaguchimitsuyuki/bridge-protocol/test/test_constraint_overlay_audit.jl:6
+  Got exception outside of a @test
+  KeyError: key "unknown_conclusions" not found
+  Stacktrace:
+   [1] macro expansion
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:57 [inlined]
+   [2] macro expansion
+     @ /usr/local/Cellar/julia/1.11.6/share/julia/stdlib/v1.11/Test/src/Test.jl:1709 [inlined]
+   [3] top-level scope
+     @ ~/bridge-protocol/test/test_constraint_overlay_audit.jl:7
+   [4] include(fname::String)
+     @ Main ./sysimg.jl:38
+   [5] top-level scope
+     @ none:1
+Test Summary:                                                        | Pass  Error  Total   Time
+checked experimental constraints remain distinct from finite absence |   20      3     23  29.9s

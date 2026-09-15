@@ -110,9 +110,9 @@ function query_countermodels(query::CountermodelQuery,catalog=finite_model_catal
     unknown = Dict{String,Any}[]
     for row in context_rows
         obs = row["observations"]
-        missing = [String(key) for (key,_) in (query.premises... , query.conclusion) if !haskey(obs,String(key))]
-        if !isempty(missing)
-            push!(unknown,Dict("id"=>row["id"],"unknown_predicates"=>sort!(unique(missing))))
+        missing_predicates = [String(key) for (key,_) in (query.premises... , query.conclusion) if !haskey(obs,String(key))]
+        if !isempty(missing_predicates)
+            push!(unknown,Dict("id"=>row["id"],"unknown_predicates"=>sort!(unique(missing_predicates))))
             continue
         end
         all(obs[String(key)] == value for (key,value) in query.premises) && push!(eligible,row)

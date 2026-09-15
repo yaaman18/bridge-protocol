@@ -1,0 +1,486 @@
+diff --git a/bin/eriec-model-audit.jl b/bin/eriec-model-audit.jl
+index ea92956..70d0377 100644
+--- a/bin/eriec-model-audit.jl
++++ b/bin/eriec-model-audit.jl
+@@ -45,6 +45,8 @@ function main(args)
+         result = Dict("valid_history" => true, "event_count" => summary.event_count,
+             "question_count" => summary.question_count, "unresolved_count" => summary.unresolved_count,
+             "counts" => summary.counts, "interpretation" => String(summary.interpretation),
++            "context_shift_count" => summary.context_shift_count,
++            "context_shifts" => summary.context_shifts,
+             "phenomenal_claim" => "not_certified", "trusted_receipt_checked" => receipt !== nothing)
+         TOML.print(stdout, result; sorted=true)
+         return 0
+diff --git a/specs/packets/RSB-AUDIT-001.md b/specs/packets/RSB-AUDIT-001.md
+index 17fbaea..91a2ba7 100644
+--- a/specs/packets/RSB-AUDIT-001.md
++++ b/specs/packets/RSB-AUDIT-001.md
+@@ -25,12 +25,19 @@ check_dc_pattern、model_witness_report、invariant_choices。
+ phenomenal marker、対象層公理、既存の数値許容誤差。Claudeへの連絡を行わない。
+ 
+ 実装の意味:
+-- contextはquestion ID/原文、定義版/内容、前提、観測対応、対象の不変値。
++- 各contextはquestion ID/原文、定義版/内容、前提、観測対応、対象を持つ不変値。
++  履歴中の同IDへの文脈変更はdesign §12のconditional等で許す。
++  summary/CLIのcontext_shiftsに直前の同ID eventからの変更項目・sequence・前後の値を記録する。
++  context_shift_countは変更遷移の数であり、元の文脈へ戻る遷移も数える。
++  unresolved_countは最新statusの集計であり、元の文脈での解決を意味しない。
+ - 証拠参照は不透明な文字列。ファイル読取・コード実行・ネットワーク要求を起動しない。
+ - TOMLはデータとして厳格に検査し、未知キー/不正status/切れたdigest鎖を拒否。
+ - 履歴はimmutable tupleの追加で返す。receiptを指定すれば切り詰めも拒否する。
+ - 残余の全状態は記録された申告であり、その真理や経験の有無を認証しない。
+ - DCの全4真偽値を既存関数で再計算し、期待patternと完全一致させる。
++  1引数/4引数checker間の一致はAPI整合の検査で、独立した意味検証ではない。
++  nondegenerateはκ≠∅ ∧ κ≠C ∧ ε≠∅だけを表し、境界や介入の実効性を含まない。
++  active_boundaryは別診断として扱う。
+ - 抽象モデルと改訂2方式で測定した小モデルを区別し、独立性の範囲を混同しない。
+ 
+ 検証:
+diff --git a/specs/packets/RSB-AUDIT-002.md b/specs/packets/RSB-AUDIT-002.md
+index 470b515..de0ee4e 100644
+--- a/specs/packets/RSB-AUDIT-002.md
++++ b/specs/packets/RSB-AUDIT-002.md
+@@ -24,6 +24,9 @@ minimal_loss_masks、search_measured_models、measured_search_report。
+ Eへの辺はMからのみ、各許容辺の有無を全列挙、全重み/閾値1、全16初期配置。
+ 許容辺11本、2048回路×16初期配置=32768ケース。P=H=6/L=R=4。
+ この域での未発見は当該有限域の結果に限る。
++four_unit_exhaustiveは上記の重み・閾値・役割等を固定した領域の全探索であり、4ユニット回路全体ではない。
++単独停止と全停止集合の再測定では共通trace/loss・model・DC patternを照合する。
++この一致は再実行の整合であり、独立した意味検証は対象G3の別計算が担う。
+ 第二探索域: 6ユニット、E={u1},M={u5,u6}、許容辺の重みを{-1,0,1}、閾値{1,2}、
+ 初期配置を固定LCG列から生成する探索。seed=20260910、試行数20000、途中成功で打ち切らない。
+ 列挙域の網羅性も一般的不可能性も主張しない。探索で選んだモデルは探索的証人として記録する。
+diff --git a/specs/packets/RSB-AUDIT-009.md b/specs/packets/RSB-AUDIT-009.md
+index d59a64e..d2d073b 100644
+--- a/specs/packets/RSB-AUDIT-009.md
++++ b/specs/packets/RSB-AUDIT-009.md
+@@ -18,6 +18,8 @@ DCとM2の値は、そのcaseの全測定から算出した値。表示中の単
+ 固定tool API: AuditViewer.audit_viewer_data、render_audit_viewer、write_audit_viewer。
+ HTMLのContent-Security-Policyは外部resourceと通信を拒否し、script/styleは自己完結したinlineだけを許す。
+ 埋込JSONはBase64化し、動的文字列はtextContent/SVG text nodeで表示する。
++文字列注入への防御はBase64埋込みとinnerHTMLを使わないDOM構築による。
++inline scriptを許すCSP自体を、埋込み文字列注入を防ぐ根拠にはしない。
+ 
+ 全体G3統合時の追加範囲: `Project.toml` と `Manifest.toml`。閲覧モジュールが直接使う
+ Julia標準ライブラリBase64をpackageの直接依存に加える。通常projectでの対象テストは通ったが、
+diff --git a/specs/packets/RSB-AUDIT-013.md b/specs/packets/RSB-AUDIT-013.md
+index 8d013cd..30d9659 100644
+--- a/specs/packets/RSB-AUDIT-013.md
++++ b/specs/packets/RSB-AUDIT-013.md
+@@ -17,6 +17,11 @@ statementと衝突するtargetに将来witness_foundが入った場合は`confli
+ 実験statementで排除されない未発見は`not_found_in_finite_catalog`のままにする。
+ 異なるcontextやadjunction=falseのsuiteへstatementを適用しない。
+ 
++適用制約の結論がtargetのvaluationで未指定なら、unknown_conclusionsへ制約ID・結論キー・
++Lean宣言を記録し、constraint_check_complete=falseとする。既知の矛盾は同時に保持する。
++classificationは既存の有限探索結果/既知矛盾の分類であり、未知結論の適合判定ではない。
++constraint_check_completeは適用済み制約の結論に限る診断で、前提不明の非適用制約の検査済みを意味しない。
++
+ 対象G3: source digest、15 targets、該当2件、単なる未発見2件、背景外非適用、
+ 人工的な証人衝突のreview分類、CLI。個別Lean再検査を別ログに保存する。
+ 既存G1/G2/G4接続・対象層・formal/・src/・ledger・catalog・candidateは変更しない。
+diff --git a/test/parallel_test_plan.jl b/test/parallel_test_plan.jl
+index 48fe398..081cae9 100644
+--- a/test/parallel_test_plan.jl
++++ b/test/parallel_test_plan.jl
+@@ -5,6 +5,8 @@ const ERIEC_TEST_PLAN = [
+     ("test_viability_closure.jl", 0.5),
+     ("test_layer_composition.jl", 0.5),
+     ("test_closure.jl", 0.5),
++    ("test_closure_audit.jl", 5.0),
++    ("test_test_plan.jl", 0.5),
+     ("test_hinge.jl", 0.5),
+     ("test_dc.jl", 0.5),
+     ("test_model_audit.jl", 3.0),
+@@ -81,6 +83,18 @@ const ERIEC_EXCLUSIVE_TEST_FILES = Set([
+     "test_v52_formal_statements.jl",
+ ])
+ 
++function validate_eriec_test_plan(test_dir::AbstractString=@__DIR__, plan=ERIEC_TEST_PLAN)
++    files = first.(plan)
++    length(files) == length(unique(files)) || error("ERIEC test plan contains duplicate files")
++    missing_files = filter(file -> !isfile(joinpath(test_dir, file)), files)
++    isempty(missing_files) || error("ERIEC test plan contains missing files: $(join(missing_files, ", "))")
++    discovered = filter(file -> startswith(file, "test_") && endswith(file, ".jl") &&
++        isfile(joinpath(test_dir, file)), readdir(test_dir))
++    unregistered = sort!(setdiff(discovered, files))
++    isempty(unregistered) || error("ERIEC test plan omits test files: $(join(unregistered, ", "))")
++    true
++end
++
+ function eriec_test_groups(job_count::Integer)
+     parallel_plan = filter(entry -> first(entry) ∉ ERIEC_EXCLUSIVE_TEST_FILES, ERIEC_TEST_PLAN)
+     1 <= job_count <= length(parallel_plan) ||
+diff --git a/test/parallel_test_runner.jl b/test/parallel_test_runner.jl
+index c3c9280..e7d4f60 100644
+--- a/test/parallel_test_runner.jl
++++ b/test/parallel_test_runner.jl
+@@ -49,10 +49,8 @@ function run_parallel_test_groups(groups, estimated_loads; phase="parallel")
+ end
+ 
+ function run_eriec_tests()
++    validate_eriec_test_plan()
+     files = first.(ERIEC_TEST_PLAN)
+-    length(files) == length(unique(files)) || error("ERIEC test plan contains duplicate files")
+-    missing = filter(file -> !isfile(joinpath(@__DIR__, file)), files)
+-    isempty(missing) || error("ERIEC test plan contains missing files: $(join(missing, ", "))")
+ 
+     jobs = configured_test_jobs()
+     if jobs == 1
+diff --git a/test/test_constraint_overlay_audit.jl b/test/test_constraint_overlay_audit.jl
+index fb0f038..7a23e96 100644
+--- a/test/test_constraint_overlay_audit.jl
++++ b/test/test_constraint_overlay_audit.jl
+@@ -9,6 +9,8 @@ isdefined(@__MODULE__, :ConstraintOverlayAudit) ||
+     @test report["constraint_count"] == 1
+     @test report["target_count"] == 15
+     @test report["conflict_count"] == 0
++    @test all(row["constraint_check_complete"] && isempty(row["unknown_conclusions"])
++              for row in report["targets"])
+     @test !report["certificate_registered"] && !report["execution_certified"]
+     @test report["general_impossibility"] == "not_established"
+     constraint = only(report["constraints"])
+@@ -43,9 +45,33 @@ isdefined(@__MODULE__, :ConstraintOverlayAudit) ||
+     @test conflict_report["conflict_count"] == 1
+     @test conflict_row["classification"] == "conflict_requires_review"
+ 
++    # Exercise an applicable constraint with a conclusion absent from the target.
++    extra = deepcopy(constraint)
++    extra["conclusions"]["unobserved_predicate"] = true
++    for status in ("witness_found", "not_found_in_finite_catalog"), violates in (false, true)
++        target = deepcopy(smc)
++        target["status"] = status
++        target["expected"]["hSMC"] = !violates
++        row = ConstraintOverlayAudit._overlay_target(one_suite, target, [extra])
++        @test !row["constraint_check_complete"]
++        unknown = only(row["unknown_conclusions"])
++        @test unknown["constraint_id"] == extra["constraint_id"]
++        @test unknown["conclusions"] == ["unobserved_predicate"]
++        @test isempty(row["constraint_conflicts"]) == !violates
++        expected_class = violates ? (status == "witness_found" ? "conflict_requires_review" :
++            "incompatible_with_checked_experimental_statement") : status
++        @test row["classification"] == expected_class
++    end
++    not_applicable = deepcopy(extra)
++    not_applicable["premises"]["unobserved_premise"] = true
++    skipped = ConstraintOverlayAudit._overlay_target(one_suite, smc, [not_applicable])
++    @test isempty(skipped["applicable_constraints"]) && isempty(skipped["unknown_conclusions"])
++    @test skipped["constraint_check_complete"] # Scoped to applicable constraints only.
++
+     root = dirname(@__DIR__)
+     cli = joinpath(root, "bin", "eriec-constraint-overlay-audit.jl")
+     parsed = TOML.parse(read(`$(Base.julia_cmd()) --startup-file=no --project=$root $cli overlay`, String))
+     @test parsed["target_count"] == 15 && parsed["conflict_count"] == 0
+     @test parsed["phenomenal_claim"] == "not_certified"
++    @test all(haskey(row, "unknown_conclusions") && row["constraint_check_complete"] for row in parsed["targets"])
+ end
+diff --git a/test/test_model_audit.jl b/test/test_model_audit.jl
+index ca17544..02e0236 100644
+--- a/test/test_model_audit.jl
++++ b/test/test_model_audit.jl
+@@ -52,6 +52,28 @@ end
+     @test summary.interpretation == :requires_review
+     @test summary.phenomenal_claim == :not_certified
+     @test !hasproperty(summary, :success)
++    @test summary.context_shift_count == 0 && isempty(summary.context_shifts)
++    # Status changes stay legal, but cannot hide a change of context.
++    for (field, value) in ((:definition_version, "v2"), (:definition, "different definition"),
++                          (:assumptions, ("A",)), (:observation, "different observation"),
++                          (:subject, "different subject"))
++        shifted = audit_test_context(; (field => value,)...)
++        shifted_history = ModelAudit.append_audit_event(h1, shifted, :explained;
++            reason="別文脈での申告", evidence=("fixture:shift",))
++        # Recompute from serialized events, without a caller-supplied diagnostic.
++        shifted_summary = ModelAudit.audit_history_summary(ModelAudit.parse_audit_history(
++            ModelAudit.audit_history_toml(shifted_history)))
++        @test shifted_summary.unresolved_count == 0
++        @test shifted_summary.context_shift_count == 1
++        change = only(shifted_summary.context_shifts)
++        @test change["question_id"] == "q1"
++        @test (change["from_sequence"], change["to_sequence"]) == (1, 2)
++        @test change["changed_fields"] == [String(field)]
++        @test change["before"] == ModelAudit._context_dict(c)
++        @test change["after"] == ModelAudit._context_dict(shifted)
++        returned = ModelAudit.append_audit_event(shifted_history, c, :open; reason="元の文脈へ戻る")
++        @test ModelAudit.audit_history_summary(returned).context_shift_count == 2
++    end
+     @test_throws ArgumentError ModelAudit.append_audit_event((), c, :explained;
+         reason="問いの登録なし", evidence=("ref",))
+     @test_throws ArgumentError ModelAudit.append_audit_event(h1, c, :explained; reason="証拠なし")
+@@ -61,6 +83,7 @@ end
+     hc = ModelAudit.append_audit_event(h1, frozen, :conditional;
+         reason="前提Aの下での解消", evidence=("premise:A",))
+     @test ModelAudit.audit_history_summary(hc).counts["conditional"] == 1
++    @test only(ModelAudit.audit_history_summary(hc).context_shifts)["changed_fields"] == ["assumptions"]
+     next_context = audit_test_context(question_id="q2", question="機能的な索引は一意か")
+     h3 = ModelAudit.append_audit_event(h2, next_context, :open; reason="問いを分ける")
+     h4 = ModelAudit.append_audit_event(h3, c, :reformulated; reason="所有者と機能を区別",
+@@ -103,7 +126,44 @@ end
+         checked = TOML.parse(output)
+         @test checked["valid_history"] && checked["trusted_receipt_checked"]
+         @test checked["interpretation"] == "requires_review"
++        @test checked["context_shift_count"] == 0 && isempty(checked["context_shifts"])
++        write(path, ModelAudit.audit_history_toml(hc))
++        shifted_output = read(`$(Base.julia_cmd()) --startup-file=no --project=$root $cli check-history $path`, String)
++        shifted_checked = TOML.parse(shifted_output)
++        @test shifted_checked["context_shift_count"] == 1
++        @test only(shifted_checked["context_shifts"])["after"]["assumptions"] == ["A"]
++    end
++end
++
++@testset "DC predicates match direct quantifiers on all tiny encodings" begin
++    # Enumerate all alpha/sigma/pi/rho relations and supports on this fixed carrier.
++    # No ERIEC operators or checker results are used to obtain the reference values.
++    C = (:e, :m, :c)
++    observed_patterns = Set{NTuple{4,Bool}}()
++    for bits in 0:4095
++        bit(i) = !iszero(bits & (1 << i))
++        model = (M=(:m,), E=(:e,), C=C,
++            alpha=Dict(:m => Set{Symbol}(bit(0) ? (:e,) : ())),
++            sigma=Dict(:e => Set{Symbol}(bit(1) ? (:m,) : ())),
++            pi=Dict(:m => Set(C[i] for i in 1:3 if bit(i+1))),
++            rho=Dict(C[i] => Set{Symbol}(bit(i+4) ? (:m,) : ()) for i in 1:3),
++            kappa=Set(C[i] for i in 1:3 if bit(i+7)),
++            epsilon=Set{Symbol}(bit(11) ? (:e,) : ()),
++            neighbors=Dict(c => Set(d for d in C if d != c) for c in C))
++        K, I = model.kappa, model.epsilon
++        produced(c) = any(c in model.pi[m] && any(m in model.rho[d] for d in K) for m in model.M)
++        returned(e) = any(e in model.alpha[m] && any(m in model.sigma[d] for d in I) for m in model.M)
++        active(m) = any(m in model.rho[d] for d in K) && any(m in model.sigma[e] for e in I)
++        reference = (all(produced, K), all(returned, I), any(active, model.M),
++            any(any(d ∉ K for d in model.neighbors[c]) for c in K))
++        result = ModelAudit.check_dc_pattern(model, reference)
++        @test result.valid && result.actual == reference
++        @test result.act == Set(m for m in model.M if active(m))
++        @test result.matches == (!isempty(K) && K != Set(C) && !isempty(I))
++        push!(observed_patterns, reference)
+     end
++    # Every component was observed both true and false; this is not a general independence claim.
++    @test all(Set(p[i] for p in observed_patterns) == Set((false, true)) for i in 1:4)
+ end
+ 
+ @testset "DC witnesses preserve the other conditions" begin
+@@ -120,7 +180,9 @@ end
+     @test result.actual == (false, true, false, true)
+     @test !result.matches
+     bad.pi[:m1] = Set([:outside_carrier])
+-    @test !ModelAudit.check_dc_pattern(bad, (false, true, false, true)).valid
++    invalid = ModelAudit.check_dc_pattern(bad, (false, true, false, true))
++    @test !invalid.valid
++    @test invalid.actual == () # Encoding rejection, not checker disagreement.
+ 
+     measured = ModelAudit.measured_dc_model()
+     result = ModelAudit.check_dc_pattern(measured.model, (true, true, true, true))
+diff --git a/test/test_model_audit_circuits.jl b/test/test_model_audit_circuits.jl
+index 924a8bc..695a883 100644
+--- a/test/test_model_audit_circuits.jl
++++ b/test/test_model_audit_circuits.jl
+@@ -21,6 +21,15 @@ end
+     singles = ModelAudit.measure_circuit(c; all_interventions=false)
+     @test singles.model == measured.model
+     @test length(singles.traces) == 7 && !singles.all_interventions && singles.minima === nothing
++    @test ModelAudit._check_search_replay(singles, measured)
++    corrupted_trace = deepcopy(measured)
++    corrupted_trace.traces[0][2] = ntuple(i -> !corrupted_trace.traces[0][2][i], 6)
++    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_trace)
++    corrupted_loss = deepcopy(measured)
++    push!(corrupted_loss.losses[0], :e)
++    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_loss)
++    corrupted_result = merge(measured, (result=merge(measured.result, (actual=(false, true, true, true),)),))
++    @test_throws r"singleton/full measurement mismatch" ModelAudit._check_search_replay(singles, corrupted_result)
+     @test_throws ArgumentError ModelAudit.minimal_loss_masks(singles.losses, :e, 6)
+     for state_mask in 0:63, source_mask in 0:63
+         state = ntuple(i -> !iszero(state_mask & (1 << (i-1))), 6)
+diff --git a/tools/ConstraintOverlayAudit.jl b/tools/ConstraintOverlayAudit.jl
+index acc3707..6a54a98 100644
+--- a/tools/ConstraintOverlayAudit.jl
++++ b/tools/ConstraintOverlayAudit.jl
+@@ -37,7 +37,12 @@ function _overlay_target(suite, target, constraints)
+                      all(haskey(valuation, key) && valuation[key] == value
+                          for (key, value) in constraint["premises"])]
+     conflicts = Dict{String,Any}[]
++    unknown_conclusions = Dict{String,Any}[]
+     for constraint in applicable
++        unknown = sort!([key for key in keys(constraint["conclusions"]) if !haskey(valuation, key)])
++        isempty(unknown) || push!(unknown_conclusions, Dict{String,Any}(
++            "constraint_id"=>constraint["constraint_id"], "conclusions"=>unknown,
++            "lean_decl"=>constraint["lean_decl"]))
+         violated = sort!([key for (key, value) in constraint["conclusions"]
+                           if haskey(valuation, key) && valuation[key] != value])
+         isempty(violated) || push!(conflicts, Dict(
+@@ -63,6 +68,8 @@ function _overlay_target(suite, target, constraints)
+         "witnesses"=>target["witnesses"],
+         "applicable_constraints"=>sort!(getindex.(applicable, "constraint_id")),
+         "constraint_conflicts"=>conflicts,
++        "unknown_conclusions"=>unknown_conclusions,
++        "constraint_check_complete"=>isempty(unknown_conclusions),
+         "classification"=>classification,
+         "certificate_registered"=>false,
+         "general_impossibility"=>"not_established",
+diff --git a/tools/CountermodelAudit.jl b/tools/CountermodelAudit.jl
+index 620e8f4..4861204 100644
+--- a/tools/CountermodelAudit.jl
++++ b/tools/CountermodelAudit.jl
+@@ -110,9 +110,9 @@ function query_countermodels(query::CountermodelQuery,catalog=finite_model_catal
+     unknown = Dict{String,Any}[]
+     for row in context_rows
+         obs = row["observations"]
+-        missing = [String(key) for (key,_) in (query.premises... , query.conclusion) if !haskey(obs,String(key))]
+-        if !isempty(missing)
+-            push!(unknown,Dict("id"=>row["id"],"unknown_predicates"=>sort!(unique(missing))))
++        missing_predicates = [String(key) for (key,_) in (query.premises... , query.conclusion) if !haskey(obs,String(key))]
++        if !isempty(missing_predicates)
++            push!(unknown,Dict("id"=>row["id"],"unknown_predicates"=>sort!(unique(missing_predicates))))
+             continue
+         end
+         all(obs[String(key)] == value for (key,value) in query.premises) && push!(eligible,row)
+diff --git a/tools/model_audit/Records.jl b/tools/model_audit/Records.jl
+index 2c26c82..b185f32 100644
+--- a/tools/model_audit/Records.jl
++++ b/tools/model_audit/Records.jl
+@@ -198,9 +198,26 @@ end
+ 
+ function audit_history_summary(history::Tuple)
+     _validate_history(history)
++    previous = Dict{String,Tuple{Int,AuditContext}}()
++    context_shifts = Dict{String,Any}[]
++    for (sequence, event) in enumerate(history)
++        context = event.context
++        if haskey(previous, context.question_id)
++            from_sequence, before = previous[context.question_id]
++            changed = [String(field) for field in fieldnames(AuditContext)
++                       if getfield(before, field) != getfield(context, field)]
++            isempty(changed) || push!(context_shifts, Dict{String,Any}(
++                "question_id" => context.question_id,
++                "from_sequence" => from_sequence, "to_sequence" => sequence,
++                "changed_fields" => changed,
++                "before" => _context_dict(before), "after" => _context_dict(context)))
++        end
++        previous[context.question_id] = (sequence, context)
++    end
+     latest = Dict(event.context.question_id => event.status for event in history)
+     counts = Dict(String(status) => count(==(status), values(latest)) for status in AUDIT_STATUSES)
+     (; event_count=length(history), question_count=length(latest), counts,
+        unresolved_count=counts["open"] + counts["underdetermined"],
++       context_shift_count=length(context_shifts), context_shifts,
+        interpretation=:requires_review, phenomenal_claim=:not_certified)
+ end
+diff --git a/tools/model_audit/Search.jl b/tools/model_audit/Search.jl
+index 640002d..89b76d6 100644
+--- a/tools/model_audit/Search.jl
++++ b/tools/model_audit/Search.jl
+@@ -4,6 +4,21 @@ const AUDIT_TARGET_PATTERNS = ((true, true, true, true), (false, true, true, tru
+ _pattern_name(pattern) = pattern == first(AUDIT_TARGET_PATTERNS) ? "all_four" :
+     "without_$(DC_FIELDS[only(findall(!, collect(pattern)))])"
+ 
++function _check_search_replay(partial, complete)
++    # Shared observations must survive recomputation with all intervention subsets.
++    # Agreement is a replay invariant, not independent validation of the DC predicates.
++    same = complete.all_interventions && partial.prefix == complete.prefix &&
++        partial.anchor == complete.anchor && partial.baseline == complete.baseline &&
++        partial.model == complete.model && partial.result.actual == complete.result.actual &&
++        partial.active_boundary == complete.active_boundary &&
++        all(haskey(complete.traces, mask) && complete.traces[mask] == trace
++            for (mask, trace) in partial.traces) &&
++        all(haskey(complete.losses, mask) && complete.losses[mask] == loss
++            for (mask, loss) in partial.losses)
++    same || error("singleton/full measurement mismatch")
++    true
++end
++
+ function _record_search_case!(counts, found, circuit, case_id)
+     measured = measure_circuit(circuit; all_interventions=false)
+     measured.result.valid || error("finite checker disagreement")
+@@ -18,7 +33,7 @@ function _record_search_case!(counts, found, circuit, case_id)
+             full_name = name * suffix
+             if !haskey(found, full_name)
+                 complete = measure_circuit(circuit)
+-                complete.result.actual == pattern || error("singleton/full measurement mismatch")
++                _check_search_replay(measured, complete)
+                 found[full_name] = (case_id=case_id, measurement=complete)
+             end
+         end
+diff --git a/tools/model_audit/Witnesses.jl b/tools/model_audit/Witnesses.jl
+index ea565be..2ae160d 100644
+--- a/tools/model_audit/Witnesses.jl
++++ b/tools/model_audit/Witnesses.jl
+@@ -30,8 +30,11 @@ function check_dc_pattern(model, expected::NTuple{4,Bool})
+     result = ERIEC.check_DC(sys)
+     actual = Tuple(getproperty(result, field) for field in DC_FIELDS)
+     finite_dc = ERIEC.check_DC(sys, snapshot.M, snapshot.E, snapshot.C)
++    # Minimal support diagnostic; effective boundary/intervention checks are separate.
+     nondegenerate = !isempty(snapshot.kappa) && snapshot.kappa != Set(snapshot.C) &&
+                     !isempty(snapshot.epsilon)
++    # The finite checker delegates to the one-argument checker after validating carriers.
++    # This guards API agreement, not independent semantic correctness.
+     valid = finite_dc == all(actual)
+     (; valid, nondegenerate, actual,
+        matches=valid && nondegenerate && actual == expected, boundary, act=copy(result.act))
+diff --git a/specs/packets/RSB-AUDIT-REVIEW-001.md b/specs/packets/RSB-AUDIT-REVIEW-001.md
+new file mode 100644
+index 0000000..3bdb3d4
+--- /dev/null
++++ b/specs/packets/RSB-AUDIT-REVIEW-001.md
+@@ -0,0 +1,34 @@
++# RSB-AUDIT-REVIEW-001 — 12d7be9 レビュー修正
++
++2026-09-13、ユーザー依頼: 修正と検証の後、Claude Codeへ再レビューを依頼する。
++新規certified VPではなく、ledgerのstatusを動かさない。
++
++変更可能:
++- test/parallel_test_plan.jl、test/parallel_test_runner.jl、test/test_test_plan.jl
++- tools/model_audit/{Records,Witnesses,Search}.jl、tools/CountermodelAudit.jl
++- tools/ConstraintOverlayAudit.jl、bin/eriec-model-audit.jl
++- test/test_model_audit.jl、test/test_model_audit_circuits.jl、test/test_constraint_overlay_audit.jl
++- 本packet、specs/packets/RSB-AUDIT-{001,002,009,013}.md
++- logs/gates/RSB-AUDIT-REVIEW-001/、logs/reviews/rsb-audit-review-fixes-20260913*
++
++依存理由: runner起動時の登録網羅性検査により、登録されないテスト自身では検出できない
++欠落を防ぐ。CLI変更は履歴診断を実際の利用者にも届けるため。
++直接依存: 既存ModelAudit/check_DC、AssumptionSuiteAudit、Julia標準ライブラリ。
++既存tool API名、正式export、formal/src/catalog、数値条件、対象層、markerは保持。
++
++修正契約:
++- test_*.jlは全件登録する。重複・存在しない登録・登録漏れはworker起動前に拒否。
++- contextの全体固定は採用しない。既存テストとdesign §12は同IDへの追加前提による
++  conditional遷移を許す。question ID/原文の不変性と既存status集計を保持し、
++  同IDの直前eventからの文脈変更を、sequence・差分・変更前後のcontext付きで公開する。
++  unresolved_countは最新申告statusの集計であり、元の文脈での解決数ではない。
++- 制約の結論がtargetのvaluationに無い場合はunknown_conclusionsに記録する。
++  constraint_check_complete=falseを併記し、既知のconflictと両立させる。
++  classificationは既存の有限探索/既知矛盾の分類を保持し、新分類には置換しない。
++- checker間の一致は独立な意味検証ではない。入力検査を弱めず、一致assertionを保持。
++  テストに小有限台の独立な述語計算を追加する。探索再測定では共通trace/lossとmodelも照合。
++- nondegenerateはκ≠∅ ∧ κ≠C ∧ ε≠∅のみ。active_boundary等の効力は別診断。
++
++検証: 修正前に回帰テストの失敗を記録、修正後に対象G3、全体Pkg.test()。
++formal/src/接続は無変更なので既存G1/G2/G4 baselineを利用し、全体テスト中の接続検査も確認。
++各成功・失敗ログを分離し、差分と対応表をClaude Codeへ送る。commit/pushは含めない。
+diff --git a/test/test_test_plan.jl b/test/test_test_plan.jl
+new file mode 100644
+index 0000000..0662406
+--- /dev/null
++++ b/test/test_test_plan.jl
+@@ -0,0 +1,22 @@
++using Test
++
++module TestPlanAuditFixture
++include("parallel_test_plan.jl")
++end
++
++@testset "test discovery is checked before scheduling" begin
++    validate = TestPlanAuditFixture.validate_eriec_test_plan
++    @test validate()
++    mktempdir() do dir
++        write(joinpath(dir, "test_registered.jl"), "")
++        plan = [("test_registered.jl", 0.5)]
++        @test validate(dir, plan)
++        write(joinpath(dir, "test_forgotten.jl"), "")
++        @test_throws r"omits test files: test_forgotten.jl" validate(dir, plan)
++        push!(plan, ("test_forgotten.jl", 0.5))
++        @test validate(dir, plan)
++        @test_throws r"duplicate files" validate(dir, [plan; plan])
++        rm(joinpath(dir, "test_registered.jl"))
++        @test_throws r"missing files: test_registered.jl" validate(dir, plan)
++    end
++end

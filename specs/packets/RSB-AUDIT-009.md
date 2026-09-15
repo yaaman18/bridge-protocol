@@ -18,6 +18,8 @@ DCとM2の値は、そのcaseの全測定から算出した値。表示中の単
 固定tool API: AuditViewer.audit_viewer_data、render_audit_viewer、write_audit_viewer。
 HTMLのContent-Security-Policyは外部resourceと通信を拒否し、script/styleは自己完結したinlineだけを許す。
 埋込JSONはBase64化し、動的文字列はtextContent/SVG text nodeで表示する。
+文字列注入への防御はBase64埋込みとinnerHTMLを使わないDOM構築による。
+inline scriptを許すCSP自体を、埋込み文字列注入を防ぐ根拠にはしない。
 
 全体G3統合時の追加範囲: `Project.toml` と `Manifest.toml`。閲覧モジュールが直接使う
 Julia標準ライブラリBase64をpackageの直接依存に加える。通常projectでの対象テストは通ったが、
