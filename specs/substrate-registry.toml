@@ -1,0 +1,19 @@
+# RSB-001 registry. Append-only: registered rows are never edited or removed.
+# A registration is withdrawn by appending a [[withdrawal]] row (RSB-001 §14).
+registry_schema_version = 1
+withdrawal = []
+
+[[registration]]
+registration_id = "rsb-001-reactivation-substrate-v1"
+profile_path = "specs/reactivation-substrate-v1.toml"
+analysis_plan_path = "specs/reactivation-analysis-plan-v1.toml"
+profile_blob_sha256 = "43c86df817eeece6f0b34f608e0108b955017ae2477ed8a50a7a1129f2318571"
+analysis_plan_digest = "23762f1fa8af69332e9ce7207bab45c3d87c077f87fea3a561f9e60de9115401"
+profile_commit = "39bd60ef3096f938f6173a137bbc7e840cd24632"
+remote_url = "https://github.com/yaaman18/bridge-protocol.git"
+remote_ref = "refs/heads/main"
+profile_schema_validation_version = "rsb-profile-schema-v1"
+analysis_schema_validation_version = "rsb-analysis-schema-v1"
+author_declared_at = "2026-09-27T11:55:54Z"
+author_declared_at_semantics = "self_declared_not_used_for_ordering"
+supersedes = ""
