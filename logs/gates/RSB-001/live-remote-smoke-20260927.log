@@ -1,0 +1,7 @@
+# RSB-001 live remote smoke, 2026-09-27T10:09:28Z
+# julia --startup-file=no bin/eriec-substrate-registry.jl verify 526748573a068becc25063060fa91191ec71c59f rsb-001-smoke <repo>
+code = "REGISTRY_MISSING"
+detail = "specs/substrate-registry.toml is not a regular blob at registration_commit"
+phenomenal_claim = "not_certified"
+status = "FAILED"
+exit=1

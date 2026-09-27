@@ -72,6 +72,7 @@ const ERIEC_TEST_PLAN = [
     ("test_cli.jl", 35.0),
     ("test_category_pipeline.jl", 6.0),
     ("test_open_categorical_layers.jl", 5.0),
+    ("test_substrate_registry.jl", 30.0),
 ]
 
 """Suites that spawn subprocesses or use shared Lake artifacts and must not
@@ -81,6 +82,7 @@ const ERIEC_EXCLUSIVE_TEST_FILES = Set([
     "test_cli.jl",
     "test_model_evaluation.jl",
     "test_v52_formal_statements.jl",
+    "test_substrate_registry.jl",
 ])
 
 function validate_eriec_test_plan(test_dir::AbstractString=@__DIR__, plan=ERIEC_TEST_PLAN)
