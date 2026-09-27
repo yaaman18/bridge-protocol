@@ -1,0 +1,72 @@
+# RSB-001: frozen reactivation substrate profile (what is run and what is output).
+# Numbers are taken unchanged from specs/drafts/reactivation-substrate-v1-candidate.toml
+# (candidate-02). How results are read lives in reactivation-analysis-plan-v1.toml.
+schema_version = 3
+profile_id = "reactivation-substrate-v1"
+protocol_version = "reactivation-snapshot-source-silencing-v2"
+digest_format = "sha256_file_bytes"
+
+[substrate]
+unit_count = 8
+units = ["u0", "u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+input_units = ["u0", "u1"]
+output_units = ["u6", "u7"]
+internal_units = ["u2", "u3", "u4", "u5"]
+require_disjoint_io = true
+state_values = [0, 1]
+arithmetic = "checked_int64"
+weight_sum_bound = 16
+thresholds = [1, 1, 1, 1, 1, 1, 2, 2]
+weights = [
+  [0, 2, 1], [0, 3, 1], [1, 4, 1], [1, 5, 1],
+  [2, 3, 1], [2, 6, 1], [3, 2, 1], [3, 6, 1],
+  [4, 5, 1], [4, 7, 1], [5, 4, 1], [5, 7, 1],
+  [6, 4, 1], [7, 2, 1],
+]
+environment_map = [[6, 0, 1], [7, 1, 1]]
+update_rule = "synchronous_old_state_sum_ge_threshold"
+ordinary_edges_to_input = "forbidden"
+exogenous_drive = "none"
+self_edges = "forbidden"
+duplicate_edges = "reject"
+zero_weight_edges = "reject"
+
+[observation]
+kappa_rule = "persistent_active"
+kappa_transitions = 3
+state_window_points = 4
+preparation_steps = 6
+intervention_horizon_steps = 6
+effect_window_points = 4
+epsilon_rule = "active_inputs_at_branch_snapshot"
+boundary_rule = "outgoing_nonzero_edges"
+boundary_edge_sources = ["weights", "environment_map"]
+initial_history = "none"
+persistence_only = true
+carrier = "units"
+
+[measurement]
+intervention_rule = "silence_outgoing_signals_preserve_state_update"
+intervention_scope = "weights_and_environment_map"
+intervention_subsets = "exhaustive_all_source_subsets"
+alpha_rule = "final_input_difference_natural_vs_single_source_silenced"
+sigma_rule = "final_output_difference_natural_vs_single_source_silenced"
+pi_rule = "future_persistence_loss_single_output_silenced"
+rho_rule = "future_persistence_loss_single_source_silenced_intersect_outputs"
+direct_self_effect = "record_feedback_effect_without_forcing_state"
+coalition_rule = "all_inclusion_minimal_loss_sets"
+coalition_projection_to_unary_relations = "forbidden"
+relation_scope = "one_branch_snapshot_and_fixed_future_horizon"
+trial_sharing = "same_case_source_subset_protocol"
+relation_aggregation = "none"
+
+[enumeration]
+policy = "exhaustive"
+bit_order = "unit_index_is_lsb_index"
+case_order = "ascending_integer"
+case_count = 256
+early_success_stop = false
+
+[output]
+record_all_cases = true
+phenomenal_claim = "not_certified"

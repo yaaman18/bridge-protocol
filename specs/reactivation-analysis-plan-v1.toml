@@ -1,0 +1,81 @@
+# RSB-001: frozen analysis plan for reactivation-substrate-v1 (how results are read).
+# Frozen together with the profile before the first candidate run (RSB-001 §3, §13).
+# Falsification rows are adapted from specs/drafts/reactivation-substrate-profile-v1-items.md §8.
+analysis_schema_version = 1
+profile_id = "reactivation-substrate-v1"
+analysis_plan_id = "reactivation-analysis-plan-v1"
+
+[interpretation]
+zero_pass_count = "valid_result"
+nonempty_flags = "derived_diagnostics"
+non_dc_interpretation = "supplied_unary_relations_not_certified"
+claim_scope = "finite_horizon_signal_contribution"
+# The existing DC decides; DC2 (formal-experiments/M1Refinement.lean, not ratified) is recorded
+# for every case as evidence for the DC2 ratification decision only.
+primary_criterion = "dc"
+recorded_criteria = ["dc", "dc2"]
+# Where every internally enabled action is sensed (rho*(kappa) is a subset of sigma*(epsilon)),
+# HingeNeeded holds trivially, so a DC2 pass there is not evidence of hinge dependence.
+dc2_sigma_cover_cases = "recorded_not_counted_as_hinge_evidence"
+# A registration that replaces one withdrawn after its results were seen is reported, but not
+# read as preregistered evidence (registry [[withdrawal]], results_seen_before_withdrawal).
+post_results_replacement = "not_preregistered_evidence"
+
+[incomplete_runs]
+missing_case = "run_incomplete_not_analyzed"
+duplicate_case = "run_invalid_not_analyzed"
+
+[decisions]
+retraction_conditions = [
+  "DISCRIMINATION: all enumerated cases pass DC, or none pass DC -> reject substrate v1; the run is not evidence for or against DC",
+  "ALL-OFF or ISOLATED passes DC -> retract the run as a measurement or adapter error",
+  "any case with DC2 true and DC false -> retract all DC2 records as an implementation error (DC2 implies DC)",
+  "PROVENANCE: relations read directly from weights or environment_map are accepted -> retract the run",
+]
+stop_conditions = [
+  "registration verification is not VERIFIED -> do not start the run",
+  "completion manifest status is not complete -> do not analyze",
+  "any missing or duplicate case -> do not analyze",
+]
+forbidden_adjustments = [
+  "do not change thresholds, weights, windows or horizons after seeing pass rates",
+  "do not change falsification rows or interpretation after seeing pass rates",
+  "do not add preferences to kappa",
+  "do not change the carrier C = units",
+  "do not count DC2 passes in sigma-cover cases as evidence of hinge dependence",
+]
+
+[[falsification]]
+id = "FALSIFICATION-RSB-ALL-OFF"
+condition = "the case with every unit off"
+expected = "DC false (hSelf and hBound false); DC2 false"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DISCRIMINATION"
+condition = "all enumerated cases of the profile"
+expected = "DC passes for some but not all cases; otherwise reject substrate v1"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-PROVENANCE"
+condition = "relations taken directly from weights or environment_map instead of measured"
+expected = "rejected by the provenance check"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-ISOLATED"
+condition = "a unit set with no outgoing nonzero edge"
+expected = "hBound false"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-PROFILE-DIGEST"
+condition = "profile or analysis plan bytes differ from the registered digests"
+expected = "RSB-001 verification rejects; no run starts"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DECOUPLING"
+condition = "a change only to kappa_transitions and state_window_points in a scratch profile"
+expected = "no change to measurement code or the DC adapter is required"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DC2-IMPLIES-DC"
+condition = "every case where DC2 is evaluated true"
+expected = "DC is also true (DC2.toDC in formal-experiments/M1Refinement.lean)"
