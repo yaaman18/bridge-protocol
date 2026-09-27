@@ -33,9 +33,13 @@ function main(args::Vector{String}; io::IO=stdout)
         result isa VerifiedRegistration && return 0
         return result.status === :UNVERIFIED ? 2 : 1
     elseif length(args) == 2 && args[1] in ("validate-profile", "validate-analysis")
-        validate = args[1] == "validate-profile" ? validate_profile : validate_analysis_plan
         try
-            validate(read(args[2]))
+            bytes = read(args[2])
+            if args[1] == "validate-profile"
+                validate_profile(bytes; version=profile_schema_version_of(bytes))
+            else
+                validate_analysis_plan(bytes)
+            end
             println(io, "valid")
             return 0
         catch e

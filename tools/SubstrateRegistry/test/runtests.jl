@@ -9,6 +9,8 @@ using SHA
 using TOML
 using SubstrateRegistry
 const SR = SubstrateRegistry
+# The scratch profile below uses schema v1 (schema_version = 3); SCRATCH_PROFILE_V2 uses v2.
+vp1(bytes) = SR.validate_profile(bytes; version=SR.PROFILE_SCHEMA_V1)
 
 const PROJECT_DIR = normpath(joinpath(@__DIR__, ".."))
 
@@ -79,6 +81,16 @@ early_success_stop = false
 record_all_cases = true
 phenomenal_claim = "not_certified"
 """
+
+const CASE_RECORD_FIELDS_TOML = """["case_id", "q", "preparation_trace", "z", "kappa", "epsilon", "future_final", "future_persistent", "pi", "rho", "alpha", "sigma", "loss_sets", "collective_only_loss"]"""
+
+const SCRATCH_PROFILE_V2 = replace(SCRATCH_PROFILE,
+    "schema_version = 3" => "schema_version = 4",
+    "phenomenal_claim = \"not_certified\"\n" => """phenomenal_claim = "not_certified"
+    case_record_format = "rsb-case-record-v1"
+    set_encoding = "unit_index_lsb_bitmask"
+    case_record_fields = $CASE_RECORD_FIELDS_TOML
+    """)
 
 const SCRATCH_ANALYSIS = """
 analysis_schema_version = 1
@@ -153,7 +165,8 @@ function withdrawal_row(id; superseded_by="", seen=false)
 end
 
 function registry_row(; id="scratch-reg-01", profile_commit, remote, ref="refs/heads/main",
-        profile=SCRATCH_PROFILE, analysis=SCRATCH_ANALYSIS, supersedes="")
+        profile=SCRATCH_PROFILE, analysis=SCRATCH_ANALYSIS, supersedes="",
+        version="rsb-profile-schema-v1")
     """
 
     [[registration]]
@@ -165,7 +178,7 @@ function registry_row(; id="scratch-reg-01", profile_commit, remote, ref="refs/h
     profile_commit = "$profile_commit"
     remote_url = "$remote"
     remote_ref = "$ref"
-    profile_schema_validation_version = "rsb-profile-schema-v1"
+    profile_schema_validation_version = "$version"
     analysis_schema_validation_version = "rsb-analysis-schema-v1"
     author_declared_at = "2026-09-27T00:00:00Z"
     author_declared_at_semantics = "self_declared_not_used_for_ordering"
@@ -190,14 +203,15 @@ function publish(root, work)
 end
 
 """Valid baseline: P adds the two files, R adds the registry row on top of P."""
-function baseline(root; profile=SCRATCH_PROFILE, analysis=SCRATCH_ANALYSIS)
+function baseline(root; profile=SCRATCH_PROFILE, analysis=SCRATCH_ANALYSIS,
+        version="rsb-profile-schema-v1")
     work = new_work(root)
     write_file(work, PROFILE_PATH, profile)
     write_file(work, ANALYSIS_PATH, analysis)
     P = commit_all(work, "profile")
     bare = joinpath(root, "remote.git")
     write_file(work, "specs/substrate-registry.toml",
-        registry_toml([registry_row(; profile_commit=P, remote=bare, profile, analysis)]))
+        registry_toml([registry_row(; profile_commit=P, remote=bare, profile, analysis, version)]))
     R = commit_all(work, "registration")
     _, runner = publish(root, work)
     (; work, bare, runner, P, R)
@@ -230,24 +244,24 @@ rejected(result, code) = result isa SR.RegistrationRejected && result.code === c
     end
 
     @testset "schemas" begin
-        p = SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE))
+        p = vp1(Vector{UInt8}(SCRATCH_PROFILE))
         a = SR.validate_analysis_plan(Vector{UInt8}(SCRATCH_ANALYSIS))
         @test SR.validate_pair(p, a)
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}("not = [toml"))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}("not = [toml"))
         bad_edges = replace(SCRATCH_PROFILE, "[2, 3, 1]]" => "[2, 3, 1], [1, 1, 1]]")
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(bad_edges))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(bad_edges))
         into_input = replace(SCRATCH_PROFILE, "[2, 3, 1]]" => "[2, 3, 1], [1, 0, 1]]")
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(into_input))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(into_input))
         promoted = replace(SCRATCH_PROFILE, "phenomenal_claim = \"not_certified\"" => "phenomenal_claim = \"certified\"")
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(promoted))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(promoted))
         negative = replace(SCRATCH_PROFILE, "unit_count = 4" => "unit_count = -1")
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(negative))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(negative))
         other_id = replace(SCRATCH_ANALYSIS, "profile_id = \"scratch-fixture-01\"" => "profile_id = \"scratch-fixture-02\"")
         @test_throws SR.SchemaViolation SR.validate_pair(p, SR.validate_analysis_plan(Vector{UInt8}(other_id)))
     end
 
     @testset "ordered case digest (§7b)" begin
-        ids = SR.canonical_case_ids(SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE)))
+        ids = SR.canonical_case_ids(vp1(Vector{UInt8}(SCRATCH_PROFILE)))
         @test ids == ["case-" * lpad(string(i), 2, '0') for i in 0:15]
         @test SR.case_digest(ids) == SR.case_digest(copy(ids))
         @test SR.case_digest(["ab", "c"]) != SR.case_digest(["a", "bc"])
@@ -305,23 +319,25 @@ rejected(result, code) = result isa SR.RegistrationRejected && result.code === c
             f = baseline(root)
             changed = replace(SCRATCH_PROFILE, "# synthetic fixture" => "# synthetic  fixture")
             @test sha(changed) != sha(SCRATCH_PROFILE)
-            @test SR.validate_profile(Vector{UInt8}(changed)) isa AbstractDict
+            @test vp1(Vector{UInt8}(changed)) isa AbstractDict
             write_file(f.runner, PROFILE_PATH, changed)
             commit_all(f.runner, "comment")
             @test rejected(verify(f), :RUNNER_PROFILE_MISMATCH)
         end
         # UNKNOWN-KEY: unknown key, unknown section, and a key shared by both files.
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE * "\nextra = 1\n"))
-        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE * "\n[extra]\nx = 1\n"))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(SCRATCH_PROFILE * "\nextra = 1\n"))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(SCRATCH_PROFILE * "\n[extra]\nx = 1\n"))
         @test_throws SR.SchemaViolation SR.validate_analysis_plan(Vector{UInt8}("schema_version = 3\n" * SCRATCH_ANALYSIS))
-        p = SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE))
+        p = vp1(Vector{UInt8}(SCRATCH_PROFILE))
         a = SR.validate_analysis_plan(Vector{UInt8}(SCRATCH_ANALYSIS))
         a2 = copy(a); a2["protocol_version"] = "scratch-protocol"
         @test_throws SR.SchemaViolation SR.validate_pair(p, a2)
         # The exact schemas themselves share no key except the identity allowlist, so no file
         # that passes its schema can carry a key of the other file.
-        @test intersect(Set(keys(SR.PROFILE_SCHEMA)), Set(keys(SR.ANALYSIS_SCHEMA))) ==
-            Set(SR.SHARED_IDENTITY_FIELDS)
+        for schema in values(SR.PROFILE_SCHEMAS)
+            @test intersect(Set(keys(schema)), Set(keys(SR.ANALYSIS_SCHEMA))) ==
+                Set(SR.SHARED_IDENTITY_FIELDS)
+        end
         # UNREGISTERED: no registry row for the requested registration.
         mktempdir() do root
             f = baseline(root)
@@ -584,6 +600,33 @@ rejected(result, code) = result isa SR.RegistrationRejected && result.code === c
             r = SR._verify(R; registration_id="scratch-reg-01", runner_repo=runner,
                 remote_url=bare, remote_ref="refs/heads/main")
             @test rejected(r, :REGISTRY_SCHEMA)
+        end
+    end
+
+    @testset "profile schema v2 (output schema, RSB-002 R2)" begin
+        p2 = SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE_V2))
+        @test p2["output"]["case_record_format"] == "rsb-case-record-v1"
+        @test SR.profile_schema_version_of(Vector{UInt8}(SCRATCH_PROFILE_V2)) == SR.PROFILE_SCHEMA_V2
+        @test SR.profile_schema_version_of(Vector{UInt8}(SCRATCH_PROFILE)) == SR.PROFILE_SCHEMA_V1
+        # v1 files do not pass v2 and vice versa.
+        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(SCRATCH_PROFILE))
+        @test_throws SR.SchemaViolation vp1(Vector{UInt8}(SCRATCH_PROFILE_V2))
+        # design-r2 §2 window constraints are enforced from v2 on.
+        bad_window = replace(SCRATCH_PROFILE_V2, "state_window_points = 3" => "state_window_points = 2")
+        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(bad_window))
+        bad_effect = replace(SCRATCH_PROFILE_V2, "effect_window_points = 2" => "effect_window_points = 4")
+        @test_throws SR.SchemaViolation SR.validate_profile(Vector{UInt8}(bad_effect))
+        mktempdir() do root
+            f = baseline(root; profile=SCRATCH_PROFILE_V2, version="rsb-profile-schema-v2")
+            t = verify(f)
+            @test t isa SR.VerifiedRegistration
+            @test t.profile_schema_validation_version == SR.PROFILE_SCHEMA_V2
+            @test SR.validate_run_start_record(SR.build_run_start_record(t; run_id="scratch-run-20"))
+        end
+        # A v2 file registered under the v1 version fails the exact schema.
+        mktempdir() do root
+            f = baseline(root; profile=SCRATCH_PROFILE_V2)
+            @test rejected(verify(f), :SCHEMA)
         end
     end
 

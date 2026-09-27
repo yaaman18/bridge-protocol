@@ -20,7 +20,7 @@ const RUN_START_SCHEMA = Dict{String,Any}(
     "remote_ref" => field(:string),
     "observed_remote_oid" => field(:hex40),
     "preregistration_strength" => field(:string; allowed=["full", "post_results_replacement"]),
-    "profile_schema_validation_version" => field(:string; allowed=[PROFILE_SCHEMA_VALIDATION_VERSION]),
+    "profile_schema_validation_version" => field(:string; allowed=PROFILE_SCHEMA_VERSIONS),
     "analysis_schema_validation_version" => field(:string; allowed=[ANALYSIS_SCHEMA_VALIDATION_VERSION]),
     "runner_commit" => field(:hex40),
     "runner_tree" => field(:hex40),

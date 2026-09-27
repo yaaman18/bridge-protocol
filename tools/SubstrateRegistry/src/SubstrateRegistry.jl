@@ -18,6 +18,7 @@ using TOML
 export VerifiedRegistration, RegistrationRejected, SchemaViolation,
     verify_substrate_registration,
     validate_profile, validate_analysis_plan, validate_registry, validate_pair,
+    profile_schema_version_of,
     canonical_case_ids, case_digest,
     runner_state, build_run_start_record, validate_run_start_record,
     write_run_start_record, completion_manifest, validate_completion_manifest,

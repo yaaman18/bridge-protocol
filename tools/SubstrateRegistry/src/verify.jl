@@ -183,7 +183,7 @@ function _verify_in(workdir, registration_commit, registration_id, runner_repo,
 
     # Exact schemas; only a successful validation may yield a registration (RSB-001 §3).
     profile, analysis = try
-        p = validate_profile(reg_profile)
+        p = validate_profile(reg_profile; version=row["profile_schema_validation_version"])
         a = validate_analysis_plan(reg_analysis)
         validate_pair(p, a)
         (p, a)
@@ -214,7 +214,7 @@ function _verify_in(workdir, registration_commit, registration_id, runner_repo,
         registration_id, registration_commit, pcommit, ppath, apath,
         row["profile_blob_sha256"], row["analysis_plan_digest"], profile["profile_id"],
         remote_url, remote_ref, observed_oid,
-        PROFILE_SCHEMA_VALIDATION_VERSION, ANALYSIS_SCHEMA_VALIDATION_VERSION,
+        row["profile_schema_validation_version"], ANALYSIS_SCHEMA_VALIDATION_VERSION,
         row["author_declared_at"], row["author_declared_at_semantics"], strength,
         canonical_case_ids(profile), runner)
 end

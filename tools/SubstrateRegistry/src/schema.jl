@@ -1,7 +1,12 @@
 # Exact schemas (RSB-001 §3, §4). Unknown sections and keys are rejected, so the raw-byte
 # digest never covers content that the schema does not name.
 
-const PROFILE_SCHEMA_VALIDATION_VERSION = "rsb-profile-schema-v1"
+# v1 is kept so that registrations made under it still verify; v2 adds the output schema
+# (RSB-002 R2). New registrations use the latest version.
+const PROFILE_SCHEMA_V1 = "rsb-profile-schema-v1"
+const PROFILE_SCHEMA_V2 = "rsb-profile-schema-v2"
+const PROFILE_SCHEMA_VERSIONS = [PROFILE_SCHEMA_V1, PROFILE_SCHEMA_V2]
+const PROFILE_SCHEMA_VALIDATION_VERSION = PROFILE_SCHEMA_V2
 const ANALYSIS_SCHEMA_VALIDATION_VERSION = "rsb-analysis-schema-v1"
 const REGISTRY_SCHEMA_VERSION = 1
 
@@ -99,7 +104,7 @@ function _check!(errors::Vector{String}, data, schema::Dict{String,Any}, path::S
     errors
 end
 
-const PROFILE_SCHEMA = Dict{String,Any}(
+const PROFILE_SCHEMA_V1_KEYS = Dict{String,Any}(
     "schema_version" => field(:int; allowed=[3]),
     "profile_id" => field(:id),
     "protocol_version" => field(:string),
@@ -159,6 +164,25 @@ const PROFILE_SCHEMA = Dict{String,Any}(
     ),
 )
 
+# v2: same substrate, observation, measurement and enumeration keys; schema_version 4 and an
+# output section that fixes the case-record format under the profile digest (RSB-001 §3).
+const PROFILE_SCHEMA_V2_KEYS = let d = deepcopy(PROFILE_SCHEMA_V1_KEYS)
+    d["schema_version"] = field(:int; allowed=[4])
+    d["output"] = Dict{String,Any}(
+        "record_all_cases" => field(:bool; allowed=[true]),
+        "phenomenal_claim" => field(:string; allowed=["not_certified"]),
+        "case_record_format" => field(:string; allowed=["rsb-case-record-v1"]),
+        "set_encoding" => field(:string; allowed=["unit_index_lsb_bitmask"]),
+        "case_record_fields" => field(:string_list),
+    )
+    d
+end
+
+const PROFILE_SCHEMAS = Dict{String,Dict{String,Any}}(
+    PROFILE_SCHEMA_V1 => PROFILE_SCHEMA_V1_KEYS,
+    PROFILE_SCHEMA_V2 => PROFILE_SCHEMA_V2_KEYS,
+)
+
 const ANALYSIS_SCHEMA = Dict{String,Any}(
     "analysis_schema_version" => field(:int; allowed=[1]),
     "profile_id" => field(:id),
@@ -203,7 +227,7 @@ const REGISTRY_SCHEMA = Dict{String,Any}(
         "remote_url" => field(:string),
         "remote_ref" => field(:string),
         "profile_schema_validation_version" =>
-            field(:string; allowed=[PROFILE_SCHEMA_VALIDATION_VERSION]),
+            field(:string; allowed=PROFILE_SCHEMA_VERSIONS),
         "analysis_schema_validation_version" =>
             field(:string; allowed=[ANALYSIS_SCHEMA_VALIDATION_VERSION]),
         "author_declared_at" => field(:timestamp),
@@ -278,13 +302,36 @@ function _profile_semantics!(errors::Vector{String}, p::AbstractDict)
     errors
 end
 
-"""Parse and validate a profile from raw bytes; throws `SchemaViolation`."""
-function validate_profile(bytes::AbstractVector{UInt8})
+"""Parse and validate a profile from raw bytes under the given schema version;
+throws `SchemaViolation`."""
+function validate_profile(bytes::AbstractVector{UInt8}; version::AbstractString=PROFILE_SCHEMA_VALIDATION_VERSION)
+    haskey(PROFILE_SCHEMAS, version) || throw(SchemaViolation(["unknown profile schema version $(repr(version))"]))
     p = _parse_toml(bytes, "profile")
-    errors = _check!(String[], p, PROFILE_SCHEMA, "")
+    errors = _check!(String[], p, PROFILE_SCHEMAS[version], "")
     isempty(errors) && _profile_semantics!(errors, p)
+    isempty(errors) && version == PROFILE_SCHEMA_V2 && _protocol_semantics!(errors, p)
     isempty(errors) || throw(SchemaViolation(errors))
     p
+end
+
+# Time-window constraints of design-r2 §2, enforced from schema v2 on.
+function _protocol_semantics!(errors::Vector{String}, p::AbstractDict)
+    o = p["observation"]
+    P, k, L = o["preparation_steps"], o["kappa_transitions"], o["state_window_points"]
+    H, R = o["intervention_horizon_steps"], o["effect_window_points"]
+    L == k + 1 || push!(errors, "observation: state_window_points must equal kappa_transitions + 1")
+    L <= P + 1 || push!(errors, "observation: state_window_points must not exceed preparation_steps + 1")
+    R <= H || push!(errors, "observation: effect_window_points must not exceed intervention_horizon_steps")
+    errors
+end
+
+"""The profile schema version whose `schema_version` value matches the file, for tools that
+are given a file without a registry row."""
+function profile_schema_version_of(bytes::AbstractVector{UInt8})
+    v = get(_parse_toml(bytes, "profile"), "schema_version", nothing)
+    v == 3 && return PROFILE_SCHEMA_V1
+    v == 4 && return PROFILE_SCHEMA_V2
+    throw(SchemaViolation(["unknown profile schema_version $(repr(v))"]))
 end
 
 """Parse and validate an analysis plan from raw bytes; throws `SchemaViolation`."""
