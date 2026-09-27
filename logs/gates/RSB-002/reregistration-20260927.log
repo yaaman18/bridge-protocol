@@ -1,0 +1,36 @@
+# RSB-002 re-registration against the fixed remote, 2026-09-27T12:29:01Z
+## new registration: verify 62d602758d557d0ab47ee9b74302149f1a5c1990 rsb-002-reactivation-substrate-v1-r2 <repo>
+analysis_plan_digest = "23762f1fa8af69332e9ce7207bab45c3d87c077f87fea3a561f9e60de9115401"
+analysis_plan_path = "specs/reactivation-analysis-plan-v1.toml"
+analysis_schema_validation_version = "rsb-analysis-schema-v1"
+author_declared_at = "2026-09-27T12:28:37Z"
+author_declared_at_semantics = "self_declared_not_used_for_ordering"
+case_count = 256
+case_digest = "6dbe5ea3a7e854240915a44649e2902bc4df2a6874f49b59ab4c7e94d6cf0f2e"
+observed_remote_oid = "62d602758d557d0ab47ee9b74302149f1a5c1990"
+phenomenal_claim = "not_certified"
+preregistration_strength = "full"
+profile_blob_sha256 = "b6457ac8558141f01845b04f44cfa71b797e729b00a4b9ee62809d6a9d8699b8"
+profile_commit = "3c4c2d81dc2bdb6ba53d481925f92157dfea003e"
+profile_id = "reactivation-substrate-v1"
+profile_path = "specs/reactivation-substrate-v1-r2.toml"
+profile_schema_validation_version = "rsb-profile-schema-v2"
+registration_commit = "62d602758d557d0ab47ee9b74302149f1a5c1990"
+registration_id = "rsb-002-reactivation-substrate-v1-r2"
+remote_ref = "refs/heads/main"
+remote_url = "https://github.com/yaaman18/bridge-protocol.git"
+status = "VERIFIED"
+
+[runner]
+julia_version = "1.11.6"
+manifest_sha256 = "eb190dc7862767aa574fdfea78b1271beb7f9fedfcc896e21c55d824c1317e12"
+runner_commit = "62d602758d557d0ab47ee9b74302149f1a5c1990"
+runner_dirty = false
+runner_tree = "3ec497048d7307c89d2ae952fdc35a746e10f5cf"
+exit=0
+## withdrawn registration: verify 0f9789155c1a69fcc3acc71d28660d21a2791848 rsb-001-reactivation-substrate-v1 <repo>
+code = "WITHDRAWN"
+detail = "registration \"rsb-001-reactivation-substrate-v1\" is withdrawn at the observed tip"
+phenomenal_claim = "not_certified"
+status = "FAILED"
+exit=1
