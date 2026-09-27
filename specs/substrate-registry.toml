@@ -1,7 +1,6 @@
 # RSB-001 registry. Append-only: registered rows are never edited or removed.
 # A registration is withdrawn by appending a [[withdrawal]] row (RSB-001 §14).
 registry_schema_version = 1
-withdrawal = []
 
 [[registration]]
 registration_id = "rsb-001-reactivation-substrate-v1"
@@ -17,3 +16,26 @@ analysis_schema_validation_version = "rsb-analysis-schema-v1"
 author_declared_at = "2026-09-27T11:55:54Z"
 author_declared_at_semantics = "self_declared_not_used_for_ordering"
 supersedes = ""
+
+[[registration]]
+registration_id = "rsb-002-reactivation-substrate-v1-r2"
+profile_path = "specs/reactivation-substrate-v1-r2.toml"
+analysis_plan_path = "specs/reactivation-analysis-plan-v1.toml"
+profile_blob_sha256 = "b6457ac8558141f01845b04f44cfa71b797e729b00a4b9ee62809d6a9d8699b8"
+analysis_plan_digest = "23762f1fa8af69332e9ce7207bab45c3d87c077f87fea3a561f9e60de9115401"
+profile_commit = "3c4c2d81dc2bdb6ba53d481925f92157dfea003e"
+remote_url = "https://github.com/yaaman18/bridge-protocol.git"
+remote_ref = "refs/heads/main"
+profile_schema_validation_version = "rsb-profile-schema-v2"
+analysis_schema_validation_version = "rsb-analysis-schema-v1"
+author_declared_at = "2026-09-27T12:28:37Z"
+author_declared_at_semantics = "self_declared_not_used_for_ordering"
+supersedes = "rsb-001-reactivation-substrate-v1"
+
+[[withdrawal]]
+registration_id = "rsb-001-reactivation-substrate-v1"
+reason = "the profile did not fix the output schema required by RSB-001 §3; withdrawn before any run (RSB-002 R2, user decision 2026-09-27)"
+superseded_by = "rsb-002-reactivation-substrate-v1-r2"
+results_seen_before_withdrawal = false
+declared_at = "2026-09-27T12:28:37Z"
+declared_at_semantics = "self_declared_not_used_for_ordering"
