@@ -3,8 +3,11 @@
 # The run-start record is the authority; the completion manifest refers to it by the SHA-256
 # of its written bytes and re-checks the runner. Neither schema has a field for relations,
 # trajectories or DC conditions, so such values cannot be recorded here (RSB-001 §8(3)).
+#
+# Version 2 (RSB-GEN-001 §5) adds `criteria`: the labels "id|version|module" of the criteria
+# bound to the run, fixed before any case is measured. It holds names, never criterion values.
 
-const RECORD_SCHEMA_VERSION = 1
+const RECORD_SCHEMA_VERSION = 2
 
 const RUN_START_SCHEMA = Dict{String,Any}(
     "record_kind" => field(:string; allowed=["rsb_run_start"]),
@@ -31,6 +34,7 @@ const RUN_START_SCHEMA = Dict{String,Any}(
     "case_count" => field(:int),
     "case_ids" => field(:string_list),
     "case_digest" => field(:hex64),
+    "criteria" => field(:string_list),
     "phenomenal_claim" => field(:string; allowed=["not_certified"]),
 )
 
@@ -50,7 +54,8 @@ const COMPLETION_SCHEMA = Dict{String,Any}(
 )
 
 """Build the run-start record. Requires the verification capability."""
-function build_run_start_record(token::VerifiedRegistration; run_id::AbstractString)
+function build_run_start_record(token::VerifiedRegistration; run_id::AbstractString,
+        criteria::AbstractVector{<:AbstractString}=String[])
     r = token.runner
     Dict{String,Any}(
         "record_kind" => "rsb_run_start",
@@ -77,6 +82,7 @@ function build_run_start_record(token::VerifiedRegistration; run_id::AbstractStr
         "case_count" => length(token.case_ids),
         "case_ids" => copy(token.case_ids),
         "case_digest" => case_digest(token.case_ids),
+        "criteria" => collect(String, criteria),
         "phenomenal_claim" => "not_certified",
     )
 end

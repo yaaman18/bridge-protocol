@@ -1,4 +1,4 @@
-# RSB-002 tests. Run in isolation:
+# RSB-002 and RSB-GEN-001 tests. Run in isolation:
 #   JULIA_LOAD_PATH=@:@stdlib julia --startup-file=no --project=tools/ReactivationMeasurement \
 #       tools/ReactivationMeasurement/test/runtests.jl
 # Everything here is synthetic. The frozen reactivation profile is never measured (RSB-002 R1).
@@ -20,6 +20,81 @@ module Oracle
 include(joinpath(@__DIR__, "..", "..", "experiments", "reactivation_measurement_fixtures.jl"))
 end
 
+# The RSB-002 engine before the RSB-GEN-001 split, kept verbatim as the golden reference.
+include(joinpath(@__DIR__, "legacy_engine.jl"))
+
+# Test-only stand-ins that carry the registered criterion NAMES "dc" and "dc2". They are not DC
+# or DC2: their label records the defining module (StandIn), so a run made with them is visible
+# as such in its run-start record. Real DC and DC2 criteria are RSB-003.
+module StandIn
+using ReactivationMeasurement
+const RM = ReactivationMeasurement
+struct Criterion <: RM.AbstractCriterion
+    id::String
+end
+RM.criterion_id(c::Criterion) = c.id
+RM.criterion_version(::Criterion) = "stand-in-0"
+RM.required_structure(::Criterion) = [:n]
+RM.evaluate(::Criterion, record, structure) = Dict(
+    "values" => Dict("kappa_nonempty" => record["kappa"] != 0),
+    "diagnostics" => Dict("n" => structure[:n]))
+const PAIR = [Criterion("dc"), Criterion("dc2")]
+end
+
+# Systems and criteria that break the contracts on purpose.
+module Stubs
+using ReactivationMeasurement
+const RM = ReactivationMeasurement
+mutable struct Counter <: RM.AbstractSystem   # hidden state: not deterministic
+    calls::Int
+end
+RM.nunits(::Counter) = 3
+RM.step(s::Counter, x::Integer, ::Integer) = (s.calls += 1; (Int(x) + s.calls) & 0b111)
+struct Leaky <: RM.AbstractSystem end          # ignores silencing: rotates the state
+RM.nunits(::Leaky) = 3
+RM.step(::Leaky, x::Integer, ::Integer) = ((Int(x) << 1) | (Int(x) >> 2)) & 0b111
+struct OutOfRange <: RM.AbstractSystem end
+RM.nunits(::OutOfRange) = 2
+RM.step(::OutOfRange, ::Integer, ::Integer) = 0b100
+
+struct Peeking <: RM.AbstractCriterion end     # reads a structure entry it did not declare
+RM.criterion_id(::Peeking) = "peeking"
+RM.criterion_version(::Peeking) = "0"
+RM.required_structure(::Peeking) = [:n]
+RM.evaluate(::Peeking, record, structure) =
+    Dict("values" => Dict("x" => structure[:outputs] != 0), "diagnostics" => Dict())
+struct HoldsSystem <: RM.AbstractCriterion     # keeps the system to read its weights
+    sys::RM.Substrate
+end
+RM.criterion_id(::HoldsSystem) = "holds-system"
+RM.criterion_version(::HoldsSystem) = "0"
+RM.required_structure(::HoldsSystem) = Symbol[]
+RM.evaluate(c::HoldsSystem, record, structure) =
+    Dict("values" => Dict("x" => !isempty(c.sys.edges)), "diagnostics" => Dict())
+struct Drifting <: RM.AbstractCriterion        # not deterministic
+    calls::Base.RefValue{Int}
+end
+RM.criterion_id(::Drifting) = "drifting"
+RM.criterion_version(::Drifting) = "0"
+RM.required_structure(::Drifting) = Symbol[]
+RM.evaluate(c::Drifting, record, structure) =
+    (c.calls[] += 1; Dict("values" => Dict("x" => isodd(c.calls[])), "diagnostics" => Dict()))
+struct NotBoolean <: RM.AbstractCriterion end
+RM.criterion_id(::NotBoolean) = "not-boolean"
+RM.criterion_version(::NotBoolean) = "0"
+RM.required_structure(::NotBoolean) = Symbol[]
+RM.evaluate(::NotBoolean, record, structure) = Dict("values" => Dict("x" => 1), "diagnostics" => Dict())
+struct Named <: RM.AbstractCriterion
+    id::String
+    version::String
+    wants::Vector{Symbol}
+end
+RM.criterion_id(c::Named) = c.id
+RM.criterion_version(c::Named) = c.version
+RM.required_structure(c::Named) = c.wants
+RM.evaluate(::Named, record, structure) = Dict("values" => Dict("x" => true), "diagnostics" => Dict())
+end
+
 # Fixture circuits use 1-based unit numbers; the engine uses 0-based bit indices.
 zero_based(edges) = [(s - 1, t - 1, w) for (s, t, w) in edges]
 circuit(n, edges; thresholds=ones(Int, n), inputs=0, outputs=0) =
@@ -35,7 +110,8 @@ mask_of_tuple(x) = foldl((m, i) -> x[i] ? m | (1 << (i - 1)) : m, eachindex(x); 
         @test sort!(collect(keys(project["deps"]))) == ["SHA", "SubstrateRegistry", "TOML"]
         src = joinpath(PROJECT_DIR, "src")
         @test sort!(readdir(src)) ==
-            ["ReactivationMeasurement.jl", "measure.jl", "records.jl", "run.jl", "substrate.jl"]
+            ["ReactivationMeasurement.jl", "cellular.jl", "criteria.jl", "formats.jl", "records.jl",
+             "response.jl", "run.jl", "substrate.jl", "system.jl"]
         for file in readdir(src; join=true), line in eachline(file)
             occursin(r"^\s*(using|import)\s", line) || continue
             @test occursin(r"^\s*(using|import)\s+(SHA|TOML|SubstrateRegistry)\s*$", line)
@@ -179,23 +255,47 @@ mask_of_tuple(x) = foldl((m, i) -> x[i] ? m | (1 << (i - 1)) : m, eachindex(x); 
             token = SR._verify(f.R; registration_id="scratch-reg-01", runner_repo=f.runner,
                 remote_url=f.bare, remote_ref="refs/heads/main")
             @test token isa SR.VerifiedRegistration
+            # CRITERION-MISMATCH: the scratch plan records ["dc", "dc2"]. Anything else is refused
+            # before any output is created.
+            for bad in (RM.AbstractCriterion[], [StandIn.Criterion("dc")],
+                        [StandIn.Criterion("dc"), StandIn.Criterion("other")],
+                        [StandIn.Criterion("dc"), StandIn.Criterion("dc"), StandIn.Criterion("dc2")])
+                out_bad = joinpath(root, "out-bad")
+                @test_throws ArgumentError RM.start_run(token; runner_repo=f.runner,
+                    run_id="scratch-run-00", out_dir=out_bad, criteria=bad)
+                @test !ispath(out_bad)
+            end
             @test_throws ArgumentError RM.start_run(token; runner_repo=f.runner, run_id="scratch-run-01",
-                out_dir=joinpath(f.runner, "out"))
+                out_dir=joinpath(f.runner, "out"), criteria=StandIn.PAIR)
             out = joinpath(root, "out")
-            manifest = RM.start_run(token; runner_repo=f.runner, run_id="scratch-run-01", out_dir=out)
+            manifest = RM.start_run(token; runner_repo=f.runner, run_id="scratch-run-01", out_dir=out,
+                criteria=StandIn.PAIR)
             @test manifest["status"] == "complete"
             @test length(readdir(joinpath(out, "cases"))) == 16
+            start = TOML.parsefile(joinpath(out, "run-start.toml"))
+            @test start["criteria"] == RM.criterion_label.(StandIn.PAIR)
+            @test all(l -> startswith(l, "dc") && occursin("|stand-in-0|", l) && endswith(l, "StandIn"),
+                start["criteria"])
             profile = SR.validate_profile(read(joinpath(f.runner, "specs/scratch-profile.toml")))
             sub, proto = RM.substrate_from_profile(profile)
+            legacy_sub = LegacyEngine.Substrate(sub.n, sub.edges, sub.thresholds, sub.inputs, sub.outputs)
+            legacy_proto = LegacyEngine.Protocol(proto.preparation_steps, proto.kappa_points,
+                proto.horizon, proto.effect_points)
             for id in token.case_ids
                 rec = TOML.parsefile(joinpath(out, "cases", id * ".toml"))
                 @test RM.validate_case_record(rec, sub, proto)
-                expected = RM.measure_case(sub, proto, rec["q"])
+                expected = LegacyEngine.measure_case(legacy_sub, legacy_proto, rec["q"])
                 expected["case_id"] = id
                 @test rec == expected
+                for cid in ("dc", "dc2")
+                    res = TOML.parsefile(joinpath(out, "criteria", cid, id * ".toml"))
+                    @test RM.validate_criterion_result(res)
+                    @test res["case_id"] == id && res["criterion_id"] == cid
+                    @test res["values"] == Dict("kappa_nonempty" => rec["kappa"] != 0)
+                end
             end
             @test_throws ArgumentError RM.start_run(token; runner_repo=f.runner,
-                run_id="scratch-run-02", out_dir=out)
+                run_id="scratch-run-02", out_dir=out, criteria=StandIn.PAIR)
         end
         # A profile that does not fix the output schema cannot be run.
         mktempdir() do root
@@ -204,8 +304,212 @@ mask_of_tuple(x) = foldl((m, i) -> x[i] ? m | (1 << (i - 1)) : m, eachindex(x); 
                 remote_url=f.bare, remote_ref="refs/heads/main")
             @test token isa SR.VerifiedRegistration
             @test_throws ArgumentError RM.start_run(token; runner_repo=f.runner,
-                run_id="scratch-run-03", out_dir=joinpath(root, "out"))
+                run_id="scratch-run-03", out_dir=joinpath(root, "out"), criteria=StandIn.PAIR)
         end
+    end
+
+    @testset "GEN-GOLDEN: the split engine reproduces the RSB-002 engine byte for byte" begin
+        seed = UInt64(0x2545f4914f6cdd1d)
+        nx() = (seed = seed * 0x5851f42d4c957f2d + 0x14057b7ef767814f; seed >> 33)
+        checked = 0
+        for trial in 1:40
+            n = 2 + Int(nx() % 5)
+            edges = Tuple{Int,Int,Int}[]
+            for s in 0:(n - 1), t in 0:(n - 1)
+                s == t && continue
+                r = nx() % 6
+                r == 0 && push!(edges, (s, t, 1))
+                r == 1 && push!(edges, (s, t, 2))
+                r == 2 && push!(edges, (s, t, -1))
+            end
+            th = [1 + Int(nx() % 2) for _ in 1:n]
+            ins = Int(nx() % (1 << n)); outs = Int(nx() % (1 << n)) & ~ins
+            p = 1 + Int(nx() % 3); h = 1 + Int(nx() % 4)
+            kp = 1 + Int(nx() % (p + 1)); ep = 1 + Int(nx() % h)
+            new_sub = RM.Substrate(n, edges, th, ins, outs)
+            old_sub = LegacyEngine.Substrate(n, edges, th, ins, outs)
+            new_proto = RM.Protocol(p, kp, h, ep)
+            old_proto = LegacyEngine.Protocol(p, kp, h, ep)
+            for q in 0:((1 << n) - 1)
+                a = RM.measure_case(new_sub, new_proto, q)
+                b = LegacyEngine.measure_case(old_sub, old_proto, q)
+                ia = IOBuffer(); TOML.print(ia, a; sorted=true)
+                ib = IOBuffer(); TOML.print(ib, b; sorted=true)
+                @test a == b
+                @test take!(ia) == take!(ib)
+                checked += 1
+            end
+        end
+        @test checked == 848
+    end
+
+    @testset "GEN-ORDER: order-limited silencing and its scope" begin
+        for n in 1:6, k in 1:n
+            sets = RM.silencing_sets(n, k)
+            @test length(sets) == sum(binomial(n, r) for r in 0:k)
+            @test issorted(sets) && allunique(sets) && all(a -> count_ones(a) <= k, sets)
+            @test all(a -> begin                       # downward closed
+                        sub = a; ok = true
+                        while true
+                            ok &= insorted(sub, sets); sub == 0 && break; sub = (sub - 1) & a
+                        end
+                        ok
+                    end, sets)
+            k == n && @test sets == collect(0:((1 << n) - 1))
+        end
+        @test_throws ArgumentError RM.silencing_sets(4, 0)
+        @test_throws ArgumentError RM.silencing_sets(4, 5)
+        @test_throws ArgumentError RM.silencing_sets(40, 40)       # too many branches
+        @test length(RM.silencing_sets(62, 1)) == 63               # large systems, singletons only
+
+        seed = UInt64(0x9e3779b97f4a7c15)
+        nx() = (seed = seed * 0x5851f42d4c957f2d + 0x14057b7ef767814f; seed >> 33)
+        for trial in 1:8
+            n = 5
+            edges = Tuple{Int,Int,Int}[]
+            for s in 0:(n - 1), t in 0:(n - 1)
+                s == t && continue
+                r = nx() % 5
+                r == 0 && push!(edges, (s, t, 1))
+                r == 1 && push!(edges, (s, t, 2))
+                r == 2 && push!(edges, (s, t, -1))
+            end
+            sub = RM.Substrate(n, edges, [1 + Int(nx() % 2) for _ in 1:n], 0b00001, 0b10000)
+            proto = RM.Protocol(2, 2, 4, 2)
+            for q in 0:((1 << n) - 1)
+                full = RM.measure_response(sub, proto, q)
+                @test RM.is_exhaustive(full)
+                for k in 1:(n - 1)
+                    part = RM.measure_response(sub, proto, q; max_silencing_order=k)
+                    @test !RM.is_exhaustive(part)
+                    @test part.z == full.z && part.preparation_trace == full.preparation_trace
+                    for (i, a) in enumerate(part.silencing_sets)
+                        @test part.final[i] == full.final[a + 1]
+                        @test part.persistent[i] == full.persistent[a + 1]
+                    end
+                    # Scope: exactly the globally minimal loss sets of size at most k.
+                    for c in 0:(n - 1)
+                        @test RM.minimal_loss_sets(part, c) ==
+                            filter(a -> count_ones(a) <= k, RM.minimal_loss_sets(full, c))
+                    end
+                    # ORDER-SCOPE: the registered format refuses an order-limited table.
+                    @test_throws ArgumentError RM.read_record(RM.RSBCaseRecordV1(), part, RM.roles(sub))
+                    rec = RM.read_record(RM.ResponseRecordV1(), part)
+                    @test RM.validate_response_record(rec)
+                    @test rec["max_silencing_order"] == k
+                end
+                @test RM.read_record(RM.RSBCaseRecordV1(), full, RM.roles(sub)) == RM.measure_case(sub, proto, q)
+            end
+        end
+        # Response records cannot overstate their scope.
+        sub = circuit(5, Oracle.redundant_edges; outputs=0b10000)
+        part = RM.measure_response(sub, RM.Protocol(2, 2, 4, 2), 0b11111; max_silencing_order=2)
+        rec = RM.read_record(RM.ResponseRecordV1(), part)
+        @test !haskey(rec, "loss_sets") && !haskey(rec, "collective_only_loss")
+        bad = deepcopy(rec); bad["silencing_sets"] = collect(0:31)
+        @test_throws ArgumentError RM.validate_response_record(bad)
+        bad = deepcopy(rec); push!(bad["loss_sets_up_to_order"][1], 0b111)
+        @test_throws ArgumentError RM.validate_response_record(bad)
+        bad = deepcopy(rec); bad["loss_sets"] = bad["loss_sets_up_to_order"]
+        @test_throws ArgumentError RM.validate_response_record(bad)
+        # Redundancy is invisible to singletons: unit 5 is lost only when two supports go.
+        single = RM.measure_response(sub, RM.Protocol(2, 2, 4, 2), 0b11111; max_silencing_order=1)
+        @test isempty(RM.minimal_loss_sets(single, 4))
+        @test RM.collective_only_loss(single) & 0b10000 == 0
+        @test !isempty(RM.minimal_loss_sets(part, 4))
+        @test RM.collective_only_loss(part) & 0b10000 != 0
+    end
+
+    @testset "GEN-SYSTEM: the system contract" begin
+        @test RM.check_system_conformance(circuit(5, Oracle.redundant_edges; outputs=0b10000))
+        @test RM.check_system_conformance(circuit(4, Oracle.feedforward_edges))
+        # NONDETERMINISTIC, silencing leak, range: each contract breach is refused.
+        @test_throws ArgumentError RM.check_system_conformance(Stubs.Counter(0))
+        @test_throws ArgumentError RM.check_system_conformance(Stubs.Leaky())
+        @test_throws ArgumentError RM.check_system_conformance(Stubs.OutOfRange())
+        # SYSTEM-PEEK: a response table holds no system.
+        @test all(T -> !(T <: RM.AbstractSystem), fieldtypes(RM.ResponseTable))
+    end
+
+    @testset "GEN-SECOND-SYSTEM: an elementary cellular automaton plugs in unchanged" begin
+        ref_step(n, rule, x, silenced) = begin
+            cells = [(x >> i) & 1 for i in 0:(n - 1)]
+            sent = [((x & ~silenced) >> i) & 1 for i in 0:(n - 1)]
+            next = 0
+            for i in 1:n
+                l = sent[mod1(i - 1, n)]; c = cells[i]; r = sent[mod1(i + 1, n)]
+                idx = 4l + 2c + r
+                (rule >> idx) & 1 == 1 && (next |= 1 << (i - 1))
+            end
+            next
+        end
+        for rule in (0, 30, 90, 110, 184, 204, 255)
+            ca = RM.ElementaryCA(5, rule)
+            @test RM.check_system_conformance(ca)
+            for x in 0:31, sil in 0:31
+                @test RM.step(ca, x, sil) == ref_step(5, rule, x, sil)
+            end
+        end
+        # NO-FORCING: rule 204 copies each cell's own state, so silencing never zeroes a cell.
+        id = RM.ElementaryCA(5, 204)
+        @test all(RM.step(id, x, sil) == x for x in 0:31, sil in 0:31)
+        @test_throws ArgumentError RM.ElementaryCA(2, 30)
+        @test_throws ArgumentError RM.ElementaryCA(5, 256)
+        ca = RM.ElementaryCA(6, 110)
+        proto = RM.Protocol(3, 2, 5, 2)
+        for q in 0:63
+            full = RM.measure_response(ca, proto, q)
+            part = RM.measure_response(ca, proto, q; max_silencing_order=2)
+            @test RM.validate_response_record(RM.read_record(RM.ResponseRecordV1(), full))
+            @test RM.validate_response_record(RM.read_record(RM.ResponseRecordV1(), part))
+            # Roles are a reading, not a property of the system: they are passed in.
+            rec = RM.read_record(RM.RSBCaseRecordV1(), full, (inputs=0b000011, outputs=0b110000))
+            @test sort!(collect(keys(rec))) == sort(filter(!=("case_id"), RM.CASE_RECORD_FIELDS))
+        end
+        st = RM.declared_structure(ca, (inputs=0, outputs=0), [:out_adjacency])
+        @test st[:out_adjacency][1] == 0b100010 && st[:out_adjacency][4] == 0b010100
+    end
+
+    @testset "GEN-CRITERIA: declared structure, identity, determinism, binding" begin
+        sub = circuit(5, Oracle.redundant_edges; inputs=0b00001, outputs=0b10000)
+        proto = RM.Protocol(2, 2, 4, 2)
+        records = [(r = RM.measure_case(sub, proto, q); r["case_id"] = "case-$q"; r) for q in 0:31]
+        # SYSTEM-PEEK: only declared entries exist.
+        st = RM.declared_structure(sub, RM.roles(sub), [:n])
+        @test collect(keys(st)) == [:n] && st[:n] == 5
+        @test_throws ArgumentError st[:outputs]
+        @test_throws ArgumentError RM.declared_structure(sub, RM.roles(sub), [:weights])
+        full = RM.declared_structure(sub, RM.roles(sub), collect(RM.STRUCTURE_KEYS))
+        @test full[:out_adjacency] == RM.out_adjacency(sub)
+        cases = [(r, st) for r in records]
+        @test RM.check_criterion_conformance(StandIn.Criterion("dc"), cases)
+        @test_throws ArgumentError RM.check_criterion_conformance(Stubs.Peeking(), cases)
+        @test_throws ArgumentError RM.check_criterion_conformance(Stubs.HoldsSystem(sub), cases)
+        @test_throws ArgumentError RM.check_criterion_conformance(Stubs.Drifting(Ref(0)), cases)
+        @test_throws ArgumentError RM.check_criterion_conformance(Stubs.NotBoolean(), cases)
+        for (id, version, wants) in (("DC", "1", Symbol[]), ("dc", "", Symbol[]),
+                                     ("dc", "1|x", Symbol[]), ("dc", "1", [:weights]))
+            @test_throws ArgumentError RM.check_criterion_conformance(Stubs.Named(id, version, wants), cases)
+        end
+        res = RM.criterion_result(StandIn.Criterion("dc"), "case-3", records[4], st)
+        @test RM.validate_criterion_result(res)
+        bad = copy(res); bad["values"] = Dict{String,Any}()
+        @test_throws ArgumentError RM.validate_criterion_result(bad)
+        bad = copy(res); bad["extra"] = 1
+        @test_throws ArgumentError RM.validate_criterion_result(bad)
+        # CRITERION-MISMATCH: the run's criteria must equal the registered recorded_criteria.
+        plan = Dict("interpretation" => Dict("recorded_criteria" => ["dc", "dc2"], "primary_criterion" => "dc"))
+        @test RM.check_criteria_binding(plan, StandIn.PAIR)
+        @test RM.check_criteria_binding(plan, reverse(StandIn.PAIR))
+        for bad_set in (RM.AbstractCriterion[], [StandIn.Criterion("dc")],
+                        [StandIn.Criterion("dc"), StandIn.Criterion("dc2"), StandIn.Criterion("x")],
+                        [StandIn.Criterion("dc"), StandIn.Criterion("dc"), StandIn.Criterion("dc2")])
+            @test_throws ArgumentError RM.check_criteria_binding(plan, bad_set)
+        end
+        other = Dict("interpretation" => Dict("recorded_criteria" => ["a", "b"], "primary_criterion" => "dc"))
+        @test_throws ArgumentError RM.check_criteria_binding(other,
+            [StandIn.Criterion("a"), StandIn.Criterion("b")])
+        @test_throws ArgumentError RM.check_criteria_binding(plan, [Stubs.HoldsSystem(sub), StandIn.Criterion("dc2")])
     end
 
     @testset "NO-CANDIDATE-RUN: no measured records of the frozen profile" begin

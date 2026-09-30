@@ -1,7 +1,12 @@
-# Substrate and protocol (design-r2 §2). Sets of units are bit masks with unit index i at
-# bit i (the profile's `unit_index_is_lsb_index`).
+# The reactivation substrate (design-r2 §2): a synchronous threshold network, and one
+# implementation of `AbstractSystem` (RSB-GEN-001 §2). Sets of units are bit masks with unit
+# index i at bit i (the profile's `unit_index_is_lsb_index`).
+#
+# `inputs` and `outputs` are the role assignment the profile declares. They are not used by
+# `step` or by the response layer; only a record format that reads roles (rsb-case-record-v1)
+# and the declared structure handed to criteria use them.
 
-struct Substrate
+struct Substrate <: AbstractSystem
     n::Int
     # (source, target, weight), 0-based; ordinary weights and the environment map together.
     # Both carry the same sent value, so silencing a source silences it on every edge.
@@ -50,6 +55,21 @@ function substrate_from_profile(profile::AbstractDict)
     proto = Protocol(o["preparation_steps"], o["state_window_points"],
         o["intervention_horizon_steps"], o["effect_window_points"])
     sub, proto
+end
+
+nunits(sub::Substrate) = sub.n
+
+"""The role assignment declared by the profile, as bit masks."""
+roles(sub::Substrate) = (inputs=sub.inputs, outputs=sub.outputs)
+
+"""Out-neighbours through a nonzero influence (weights and the environment map together),
+one bit mask per unit. This is structure, not an observed relation."""
+function out_adjacency(sub::Substrate)
+    adj = zeros(Int, sub.n)
+    for (s, t, w) in sub.edges
+        w != 0 && (adj[s + 1] |= 1 << t)
+    end
+    adj
 end
 
 """One synchronous update from the old state `x` with the sources in `silenced` sending 0.

@@ -1,0 +1,15 @@
+# RSB-GEN-001 mutation check (2026-09-28)
+# Each row breaks one guard in the working source (backed up first), runs the isolated suite,
+# and restores the backup. A guard counts as tested only if the suite fails.
+# Restored suite afterwards: RSB-002 reactivation measurement | 70537 70537 (all pass)
+BINDING         => RSB-002 reactivation measurement | 70531 6 70537 27.4s
+ORDER-SCOPE     => RSB-002 reactivation measurement | 69513 1024 70537 33.2s
+STRUCTURE-PEEK  => RSB-002 reactivation measurement | 70535 2 70537 28.5s
+SILENCING-LEAK  => RSB-002 reactivation measurement | 70536 1 70537 27.3s
+HOLDS-SYSTEM    => RSB-002 reactivation measurement | 70536 1 70537 27.8s
+
+BINDING         criteria.jl  check_criteria_binding no longer compares ids with recorded_criteria
+ORDER-SCOPE     formats.jl   rsb-case-record-v1 accepts an order-limited table
+STRUCTURE-PEEK  criteria.jl  DeclaredStructure returns entries the criterion did not declare
+SILENCING-LEAK  system.jl    check_system_conformance stops checking that silenced units influence no other unit
+HOLDS-SYSTEM    criteria.jl  a criterion may keep the system in a field
