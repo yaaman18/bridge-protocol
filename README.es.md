@@ -7,6 +7,9 @@
 
 ---
 
+> **¿Primera vez aquí, o iniciando una discusión?** Lee primero [START_HERE.md](START_HERE.md) (en japonés): una orientación breve con el núcleo de la teoría, lo que deliberadamente no se afirma, el estado actual del trabajo y las cuestiones abiertas.
+
+
 ## Qué es este repositorio
 
 Bridge Protocol es un protocolo para construir una teoría categorial de los sistemas que se automantienen y verificarla por máquina:

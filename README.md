@@ -7,6 +7,9 @@
 
 ---
 
+> **New here, or starting a discussion?** Read [START_HERE.md](START_HERE.md) first — a short orientation with the theory's core, what is deliberately not claimed, the current state of work, and the open questions.
+
+
 ## What this repository is
 
 Bridge Protocol is a protocol for constructing a category-theoretic theory of
