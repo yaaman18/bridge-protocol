@@ -1,0 +1,20 @@
+== four_unit_exhaustive case 5361
+ motors=(:u3, :u4) thresholds=(1, 1, 1, 1) initial=[1, 0, 0, 0]
+ edges=[(:u1, :u2, 1), (:u1, :u3, 1), (:u1, :u4, 1), (:u2, :u3, 1), (:u3, :u2, 1), (:u4, :u1, 1)]
+ κ=[:u2, :u3] baseline=[:u2, :u3] anchor=[1, 1, 1, 0]
+  silence u1: loss=Symbol[]
+  silence u2: loss=[:u3]
+  silence u3: loss=[:u2]
+  silence u4: loss=Symbol[]
+ N3 pairs=Vector{Symbol}[] org=[[:u2, :u3]] baseline=Set([:u2, :u3])
+== six_unit_sequence case 122
+ motors=(:u5, :u6) thresholds=(1, 2, 2, 1, 1, 1) initial=[1, 0, 1, 0, 1, 1]
+ edges=[(:u1, :u2, 1), (:u1, :u3, 1), (:u1, :u5, 1), (:u1, :u6, -1), (:u2, :u3, 1), (:u2, :u4, 1), (:u3, :u4, -1), (:u3, :u5, 1), (:u3, :u6, 1), (:u4, :u5, 1), (:u4, :u6, 1), (:u5, :u3, -1), (:u5, :u4, 1), (:u5, :u6, -1), (:u6, :u1, -1), (:u6, :u3, -1), (:u6, :u4, 1), (:u6, :u5, 1)]
+ κ=[:u4, :u5] baseline=[:u4, :u5] anchor=[0, 0, 0, 1, 1, 0]
+  silence u1: loss=Symbol[]
+  silence u2: loss=Symbol[]
+  silence u3: loss=Symbol[]
+  silence u4: loss=[:u4, :u5]
+  silence u5: loss=[:u4]
+  silence u6: loss=Symbol[]
+ N3 pairs=Vector{Symbol}[] org=[[:u4, :u5]] baseline=Set([:u4, :u5])

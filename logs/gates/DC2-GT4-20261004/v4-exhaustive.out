@@ -1,0 +1,13 @@
+== four_unit_exhaustive
+  FN                                              48  e.g. [5361, 5363, 5365]
+  TN                                              25611  e.g. [0, 1, 2]
+  TP                                              7109  e.g. [549, 551, 557]
+  pair_missed_by_N3:K0_pair_member_motor_not_self_lost(D)48  e.g. [5361, 5363, 5365]
+== six_unit_sequence
+  FN                                              36  e.g. [122, 677, 1150]
+  TN                                              19049  e.g. [0, 1, 2]
+  TP                                              915  e.g. [39, 77, 78]
+  pair_extra_in_N3:not_mutually_lost              12  e.g. [1600, 7892, 7892]
+  pair_missed_by_N3:K0_pair_member_motor_not_self_lost(D)52  e.g. [122, 677, 1150]
+  pair_missed_by_N3:K1_motor_follows_pair_its_action_not_needed9  e.g. [8032, 8032, 8682]
+  pair_missed_by_N3:K2_motor_drives_pair_without_depending_on_it7  e.g. [4862, 6800, 8074]

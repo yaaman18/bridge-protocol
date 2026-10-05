@@ -1,0 +1,6 @@
+Test Summary: | Pass  Total  Time
+registry      |    2      2  5.8s
+Test Summary:                    | Pass  Total   Time
+each exemplar falls in its class |    6      6  12.2s
+Test Summary:                                                                      | Pass  Total   Time
+both search domains: every difference is classified; the pending class is reported |    5      5  33.1s

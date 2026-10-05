@@ -1,0 +1,12 @@
+Test Summary:                         | Pass  Total  Time
+frozen labels agree with edge removal |   30     30  7.9s
+Test Summary:                                   | Pass  Total  Time
+cause 1: production is read through motors only |   10     10  6.4s
+Test Summary:                                                    | Pass  Total  Time
+cause 2: a second sufficient source hides single-unit dependence |    4      4  3.2s
+Test Summary:                                    | Pass  Total  Time
+the false negatives do not depend on the windows |    1      1  0.0s
+Test Summary:                                                                 | Pass  Total  Time
+inspected circuits: the checker's earlier false positives were checker errors |   10     10  8.7s
+Test Summary:                                                              | Pass  Total   Time
+weak reading: no false positive and no unsound pair on both search domains |    4      4  20.3s

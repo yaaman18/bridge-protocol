@@ -1,0 +1,6 @@
+Test Summary:                                                      | Pass  Total  Time
+trial readings are defined as reported and leave the default alone |   14     14  5.8s
+Test Summary:                                      | Pass  Total   Time
+templates: every reading agrees with the v2 labels |   45     45  12.8s
+Test Summary:                                       | Pass  Total  Time
+what each reading changes on the inspected circuits |    8      8  3.9s

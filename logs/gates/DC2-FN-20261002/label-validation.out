@@ -1,0 +1,15 @@
+loop2-motor                      G=true weak=true strict=true weak==planted true strict==planted true
+loop3-motor                      G=true weak=true strict=true weak==planted true strict==planted true
+loop4-motor                      G=true weak=true strict=true weak==planted true strict==planted true
+loop2-both-motors                G=true weak=true strict=true weak==planted true strict==planted true
+loop2-follower                   G=true weak=true strict=true weak==planted true strict==planted true
+loop2-follower-chain             G=true weak=true strict=true weak==planted true strict==planted true
+two-loops                        G=true weak=true strict=true weak==planted true strict==planted true
+two-loops-one-way                G=true weak=true strict=true weak==planted true strict==planted false
+loop2-no-motor-detached          G=true weak=true strict=true weak==planted true strict==planted true
+loop2-no-motor-motor-follower    G=true weak=true strict=true weak==planted true strict==planted true
+redundant-hub                    G=true weak=true strict=false weak==planted true strict==planted false
+oscillator-followers             G=false weak=false strict=false weak==planted true strict==planted true
+gated-pair                       G=true weak=true strict=true weak==planted true strict==planted true
+all-off                          G=false weak=false strict=false weak==planted true strict==planted true
+oscillator-only                  G=false weak=false strict=false weak==planted true strict==planted true

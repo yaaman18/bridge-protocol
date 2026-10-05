@@ -1,0 +1,30 @@
+# Known differences between N3 (DC2.hUnit) and the v4 ground truth (specs/packets/DC2-GROUND-TRUTH-004.md).
+# A difference of an `accepted` class is counted and recorded, not reported as a retraction trigger.
+# A `pending` class is always reported to the user. A difference of no class is always reported.
+# Classes are tested in the order listed; the first match wins.
+schema_version = 1
+phenomenal_claim = "not_certified"
+
+[[class]]
+id = "D_MOTOR_NOT_SELF_LOST"
+kind = "pair_missed_by_N3"
+status = "accepted"
+decided = "2026-10-03"
+meaning = "N3 known limitation: a pair member is a motor that keeps persisting when its own outputs are silenced, so it is not read as produced by its own action"
+rule = "some member of the pair is a motor a with a not in loss(a)"
+
+[[class]]
+id = "ONE_LEG_ACTION"
+kind = "pair_missed_by_N3"
+status = "accepted"
+decided = "2026-10-04"
+meaning = "N3 known limitation: the mutual dependence passes through an action in one direction only; the user adopted 'one direction suffices' as the concept of organization, and N3 requires both"
+rule = "exactly one of the two N3 directions holds: x in Phi({y}) iff some a in loss(y) ∩ M has x in loss(a)"
+
+[[class]]
+id = "N3_LOSS_COMPOSITION_EXTRA"
+kind = "pair_extra_in_N3"
+status = "pending"
+decided = ""
+meaning = "N3 pairs two units that are not mutually irreplaceable, by composing 'silencing y loses a' with 'silencing a loses x' where silencing y does not lose x (silencing side effects); whether this is a retraction condition is undecided"
+rule = "the pair is reported by N3 and some end is not lost when the other end is silenced"

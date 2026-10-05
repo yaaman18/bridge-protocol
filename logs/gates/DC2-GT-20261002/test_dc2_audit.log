@@ -1,0 +1,10 @@
+Test Summary:                                     | Pass  Total  Time
+DC2 checker agrees with the Lean reference models |   12     12  8.3s
+Test Summary:                                                        | Pass  Total     Time
+DC2 checker equals the direct quantifiers on every C3 M2 E1 encoding |    5      5  1m06.2s
+Test Summary:                                            | Pass  Total  Time
+the direct comparison can fail (mutation: c ≠ d dropped) |    1      1  1.2s
+Test Summary:                                                           | Pass  Total   Time
+DC2 enters the catalog, the implication matrix and the separation table |   76     76  44.7s
+Test Summary:                                      | Pass  Total     Time
+the stored DC2 gate report matches a recomputation |   10     10  1m29.6s

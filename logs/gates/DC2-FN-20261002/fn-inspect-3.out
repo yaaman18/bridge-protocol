@@ -1,0 +1,12 @@
+== six_unit_sequence case 2564
+ units=(:u1, :u2, :u3, :u4, :u5, :u6) motors=(:u5, :u6) thresholds=(1, 1, 1, 2, 1, 2) initial=(false, false, false, true, false, true)
+ edges=[(:u1, :u2, 1), (:u1, :u3, 1), (:u1, :u4, 1), (:u2, :u3, 1), (:u2, :u4, 1), (:u2, :u6, 1), (:u3, :u5, 1), (:u3, :u6, 1), (:u4, :u3, 1), (:u4, :u6, -1), (:u5, :u1, -1), (:u5, :u4, -1), (:u6, :u2, 1), (:u6, :u3, 1)]
+ κ=[:u3, :u5] baseline=[:u3, :u5]
+ anchor=(false, false, true, false, true, true) trace0=[[0, 0, 1, 0, 1, 1], [0, 1, 1, 0, 1, 0], [0, 0, 1, 0, 1, 1], [0, 1, 1, 0, 1, 0], [0, 0, 1, 0, 1, 1], [0, 1, 1, 0, 1, 0], [0, 0, 1, 0, 1, 1]]
+  silence u1: loss=Symbol[]
+  silence u2: loss=[:u3, :u5]
+  silence u3: loss=[:u3, :u5]
+  silence u4: loss=Symbol[]
+  silence u5: loss=Symbol[]
+  silence u6: loss=[:u3, :u5]
+ N3=false pairs=Vector{Symbol}[] weak=[[:u1, :u4, :u6, :u3, :u5], [:u1, :u4, :u6, :u2, :u3, :u5], [:u1, :u4, :u3, :u5], [:u1, :u3, :u5], [:u1, :u2, :u6, :u3, :u5], [:u1, :u2, :u4, :u6, :u3, :u5], [:u1, :u2, :u4, :u3, :u5], [:u1, :u2, :u3, :u5], [:u2, :u3, :u5, :u4, :u6], [:u3, :u5, :u4], [:u3, :u5, :u4, :u6]] strict=[[:u1, :u4, :u6, :u3, :u5], [:u1, :u4, :u6, :u2, :u3, :u5], [:u1, :u2, :u6, :u3, :u5], [:u1, :u2, :u4, :u6, :u3, :u5], [:u1, :u2, :u3, :u5], [:u2, :u3, :u5, :u4, :u6], [:u3, :u5, :u4, :u6]]

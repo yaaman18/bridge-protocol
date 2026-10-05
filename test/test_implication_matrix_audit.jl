@@ -9,10 +9,11 @@ const MATRIX_P6_TWO = "one_input_two_motors_P6_H6_L4_R4"
 
 @testset "context-specific implication matrix does not promote finite absence" begin
     report = ImplicationMatrixAudit.implication_matrix_report()
-    @test report["context_count"] == 3
-    @test report["cell_count"] == 3 * 12 * 11
-    @test all(block["cell_count"] == 12 * 11 for block in report["contexts"])
-    @test sort(getindex.(report["contexts"], "model_count")) == [1, 5, 7]
+    # 17 predicates (12 DC-side, 5 DC2-side); 3 measured P3/P6 contexts and 3 abstract DC2 contexts.
+    @test report["context_count"] == 6
+    @test report["cell_count"] == 6 * 17 * 16
+    @test all(block["cell_count"] == 17 * 16 for block in report["contexts"])
+    @test sort(getindex.(report["contexts"], "model_count")) == [1, 4, 5, 5, 7, 12]
     @test !report["implication_proved"]
     @test report["general_impossibility"] == "not_established"
     @test report["phenomenal_claim"] == "not_certified"
@@ -29,11 +30,11 @@ const MATRIX_P6_TWO = "one_input_two_motors_P6_H6_L4_R4"
     @test !one_active["implication_proved"] && one_active["premise_model_count"] == 1
     no_premise = ImplicationMatrixAudit.find_implication(report, MATRIX_P6_TWO, :adjunction, :hSelf)
     @test no_premise["status"] == "premise_uninstantiated_in_finite_catalog"
-    @test no_premise["known_model_count"] == 5 && no_premise["premise_model_count"] == 0
+    @test no_premise["known_model_count"] == 12 && no_premise["premise_model_count"] == 0
     unobserved = ImplicationMatrixAudit.find_implication(
         report, MATRIX_P6_TWO, :candidate_selection_obstructed, :hSelf)
     @test unobserved["status"] == "predicate_unobserved_in_context"
-    @test unobserved["unknown_model_count"] == 5
+    @test unobserved["unknown_model_count"] == 12
     @test_throws ArgumentError ImplicationMatrixAudit.find_implication(report, MATRIX_P3, :hSelf, :hSelf)
 
     for block in report["contexts"], cell in block["cells"]

@@ -1,0 +1,154 @@
+# DRAFT — reactivation analysis plan v2 (RSB-PLAN-002). NOT REGISTERED. Do not run against it.
+# Supersedes specs/reactivation-analysis-plan-v1.toml (registered, immutable; never edited).
+# Corrections from the Lean audit of 2026-09-30 (logs/gates/LEAN-AUDIT-20260930/README.md):
+#   1. the DC2 retraction checks only what DC2.toDC proves (hSelf, hSMC, hAct, beta nonempty);
+#      the graph-boundary hBound and the beta-boundary hBound are recorded as two concepts.
+#   2. the ALL-OFF expectation: hSelf and hSMC are vacuously true on the empty core.
+# Every falsification row carries machine-checkable `expected_components`, compared against the
+# definitions by test/test_analysis_plan_expectations.jl, so a written expectation cannot drift
+# from the definitions again. Rows whose components need DC2 stay pending until RSB-003.
+# Fields left as "PENDING-RSB-003" are filled only after the DC and DC2 plugin is frozen.
+analysis_schema_version = 2
+profile_id = "reactivation-substrate-v1"
+analysis_plan_id = "reactivation-analysis-plan-v2"
+supersedes_analysis_plan = "reactivation-analysis-plan-v1"
+
+[interpretation]
+zero_pass_count = "valid_result"
+nonempty_flags = "derived_diagnostics"
+non_dc_interpretation = "supplied_unary_relations_not_certified"
+claim_scope = "finite_horizon_signal_contribution"
+# The existing DC decides; DC2 (formal-experiments/M1Refinement.lean, not ratified) is recorded
+# for every case as evidence for the DC2 ratification decision only.
+primary_criterion = "dc"
+recorded_criteria = ["dc", "dc2"]
+criterion_result_format = "rsb-criterion-result-v1"
+# Where every internally enabled action is sensed (rho*(kappa) is a subset of sigma*(epsilon)),
+# HingeNeeded holds trivially, so a DC2 pass there is not evidence of hinge dependence.
+dc2_sigma_cover_cases = "recorded_not_counted_as_hinge_evidence"
+# A registration that replaces one withdrawn after its results were seen is reported, but not
+# read as preregistered evidence (registry [[withdrawal]], results_seen_before_withdrawal).
+post_results_replacement = "not_preregistered_evidence"
+
+[incomplete_runs]
+missing_case = "run_incomplete_not_analyzed"
+duplicate_case = "run_invalid_not_analyzed"
+max_attempts = 2
+retry_condition = "previous_attempt_not_complete"
+partial_outputs = "sealed_by_sha256_not_opened_until_retry_completes"
+overlap_rule = "retry_must_equal_first_attempt_on_overlapping_cases"
+after_last_attempt = "registration_spent_not_analyzed"
+
+[redundancy]
+classification = ["pass", "fail_redundancy_ambiguous", "fail"]
+primary_tally = "dc_as_defined_ambiguous_counted_as_fail"
+sensitivity_tally = "ambiguous_excluded"
+uninformative_threshold = 0.5
+
+# DC2's hUnit is MutualPair since 2026-09-30 (specs/packets/DC2-HUNIT-N3.md). Retraction condition
+# N3-RETRACT-UNINFORMATIVE: the 15 planted templates (v2 labels) and the pair-level comparison with the
+# v4 truth (specs/packets/DC2-GROUND-TRUTH-004.md). Differences of an accepted known class
+# (tools/model_audit/fixtures/dc2-known-differences.toml) are counted; any other difference, or a
+# pending class, is reported to the user. No numeric threshold (2026-10-02, 2026-10-04).
+[dc2_unit_informativeness]
+check = "planted_templates_and_v4_pair_truth"
+template_labels = "tools/model_audit/fixtures/organization-ground-truth-v2.toml"
+ground_truth_spec = "specs/packets/DC2-GROUND-TRUTH-004.md"
+known_differences = "tools/model_audit/fixtures/dc2-known-differences.toml"
+report_on = ["template_disagreement", "unclassified_difference", "pending_class_difference"]
+recorded_every_run = ["difference_counts_by_class", "accepted_share_of_v4_pairs"]
+on_report = "report_to_user_for_N3_revision"
+
+[decisions]
+retraction_conditions = [
+  "DISCRIMINATION: all enumerated cases pass DC, or none pass DC -> reject substrate v1; the run is not evidence for or against DC",
+  "ALL-OFF or ISOLATED passes DC -> retract the run as a measurement or adapter error",
+  "any case with DC2 true and any of hSelf, hSMC, hAct false -> retract all DC2 records as an implementation error (DC2.toDC proves these three)",
+  "any case with DC2 true and beta empty -> retract all DC2 records as an implementation error (DC2.beta_nonempty)",
+  "retry output differs from the first attempt on an overlapping case -> retract the run",
+  "a criterion result lacks or adds a registered key -> retract the run",
+  "PROVENANCE: relations read directly from weights or environment_map are accepted -> retract the run",
+]
+stop_conditions = [
+  "registration verification is not VERIFIED -> do not start the run",
+  "completion manifest status is not complete -> do not analyze",
+  "any missing or duplicate case -> do not analyze",
+]
+forbidden_adjustments = [
+  "do not change thresholds, weights, windows or horizons after seeing pass rates",
+  "do not change falsification rows or interpretation after seeing pass rates",
+  "do not add preferences to kappa",
+  "do not change the carrier C = units",
+  "do not count DC2 passes in sigma-cover cases as evidence of hinge dependence",
+  "do not treat a mismatch between the graph-boundary hBound and the beta-boundary hBound as an error",
+  "do not count fail_redundancy_ambiguous cases as passes in the primary tally",
+]
+
+[[falsification]]
+id = "FALSIFICATION-RSB-ALL-OFF"
+condition = "the case with every unit off"
+expected = "DC false (hAct and hBound false; hSelf and hSMC vacuously true on the empty core); DC2 false (the empty core has no mutual pair; hUnit is MutualPair since 2026-09-30, specs/packets/DC2-HUNIT-N3.md)"
+expected_components = { dc = false, hSelf = true, hSMC = true, hAct = false, hBound = false, dc2 = false }
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DISCRIMINATION"
+condition = "all enumerated cases of the profile"
+expected = "DC passes for some but not all cases; otherwise reject substrate v1"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-PROVENANCE"
+condition = "relations taken directly from weights or environment_map instead of measured"
+expected = "rejected by the provenance check"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-ISOLATED"
+condition = "a unit set with no outgoing nonzero edge"
+expected = "hBound false"
+expected_components = { dc = false, hBound = false }
+
+[[falsification]]
+id = "FALSIFICATION-RSB-PROFILE-DIGEST"
+condition = "profile or analysis plan bytes differ from the registered digests"
+expected = "RSB-001 verification rejects; no run starts"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DECOUPLING"
+condition = "a change only to kappa_transitions and state_window_points in a scratch profile"
+expected = "no change to measurement code or the DC adapter is required"
+
+[[falsification]]
+id = "FALSIFICATION-RSB-DC2-IMPLIES-DC"
+condition = "every case where DC2 is evaluated true"
+expected = "hSelf, hSMC and hAct are true and beta is nonempty (DC2.toDC, DC2.beta_nonempty); the graph-boundary hBound may differ"
+expected_components = { dc2 = true, hSelf = true, hSMC = true, hAct = true, beta_nonempty = true }
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-DC2-GRAPH-BOUNDARY"
+condition = "a case whose core is every unit and where DC2 holds"
+expected = "DC2 records are not retracted; the graph-boundary hBound is false and beta is nonempty, recorded side by side"
+expected_components = { dc2 = true, hBound = false, beta_nonempty = true }
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-REDUNDANCY"
+condition = "a core constituent lost only when two supports are silenced together"
+expected = "DC false and classified fail_redundancy_ambiguous"
+expected_components = { dc = false, classification = "fail_redundancy_ambiguous" }
+
+[[criterion_binding]]
+criterion_id = "dc"
+criterion_version = "PENDING-RSB-003"
+package_name = "PENDING-RSB-003"
+package_path = "PENDING-RSB-003"
+package_tree_oid = "PENDING-RSB-003"
+value_keys = ["dc", "hSelf", "hSMC", "hAct", "hBound"]
+diagnostic_keys = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty", "mask_self", "mask_smc", "mask_act"]
+
+[[criterion_binding]]
+criterion_id = "dc2"
+criterion_version = "PENDING-RSB-003"
+package_name = "PENDING-RSB-003"
+package_path = "PENDING-RSB-003"
+package_tree_oid = "PENDING-RSB-003"
+# Fixed by the RSB-003 implementation (tools/ReactivationERIEC/src/dc2.jl), 2026-10-04.
+value_keys = ["dc2", "hSelf2", "hSMC", "hHingeNeeded", "hUnit", "beta_nonempty"]
+diagnostic_keys = ["act", "beta", "sigma_cover", "mutual_pairs", "hUnit_v1", "irreducible_units"]

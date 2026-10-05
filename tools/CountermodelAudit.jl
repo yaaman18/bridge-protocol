@@ -6,10 +6,20 @@ import ..ModelAudit
 import ..BackgroundAudit
 import ..ClosureAudit
 using TOML
+using ERIEC
 
 const QUERY_PREDICATES = Set((:adjunction,:hSelf,:hSMC,:hAct,:hBound,:all_dc,
     :nondegenerate,:active_boundary,:kappa_subset_future,:kappa_subset_nu,
-    :kappa_equals_nu,:candidate_selection_obstructed))
+    :kappa_equals_nu,:candidate_selection_obstructed,
+    :dc2,:hSelf2,:hHingeNeeded,:hUnit,:beta_nonempty))
+
+# DC2 (formal-experiments/M1Refinement.lean, not ratified) read on the same model.
+function _dc2_observations(model)
+    d = ModelAudit.check_dc2(model)
+    d.valid || error("DC2 observation on an invalid model")
+    Dict{Symbol,Bool}(:dc2=>d.dc2,:hSelf2=>d.hSelf2,:hHingeNeeded=>d.hHingeNeeded,
+        :hUnit=>d.hUnit,:beta_nonempty=>d.beta_nonempty)
+end
 
 function _observations(measured; selection_obstructed=nothing)
     closure = ClosureAudit.check_observed_closure(measured.model)
@@ -22,7 +32,37 @@ function _observations(measured; selection_obstructed=nothing)
         :kappa_subset_future=>measured.model.kappa ⊆ q,:kappa_subset_nu=>closure.kappa_subset_nu,
         :kappa_equals_nu=>closure.kappa_equals_nu)
     selection_obstructed === nothing || (values[:candidate_selection_obstructed]=selection_obstructed)
-    values
+    merge!(values,_dc2_observations(measured.model))
+end
+
+# Abstract models (relations set by hand, carriers need not overlap, no graph). Only predicates that
+# the model decides are recorded:
+# - hSelf, hSMC, hAct do not read the boundary, so ERIEC.check_DC decides them;
+# - the graph-boundary hBound is decided only when the core is every constituent (then every graph
+#   boundary is empty, whatever the graph); otherwise it is left unobserved;
+# - all_dc is recorded only when some observed DC component is false.
+# Circuit dynamics predicates (active_boundary, future, nu, selection) are unobserved.
+function _abstract_observations(model)
+    kappa, eps = Set{Symbol}(model.kappa), Set{Symbol}(model.epsilon)
+    sys = ERIEC.ERIEState{Symbol,Symbol,Symbol,Nothing}(
+        m->copy(model.alpha[m]),e->copy(model.sigma[e]),m->copy(model.pi[m]),c->copy(model.rho[c]),
+        _->copy(kappa),_->copy(eps),Set{Symbol}(),nothing)
+    r = ERIEC.check_DC(sys)
+    values = Dict{Symbol,Bool}(:hSelf=>r.hSelf,:hSMC=>r.hSMC,:hAct=>r.hAct,
+        :adjunction=>all(ERIEC.alpha_star(m->copy(model.alpha[m]),N) ⊆ X ==
+                         (N ⊆ ERIEC.sigma_star(e->copy(model.sigma[e]),X))
+                         for N in ERIEC.powerset(collect(model.M)) for X in ERIEC.powerset(collect(model.E))),
+        :nondegenerate=>ModelAudit.dc2_nondegenerate(model))
+    kappa == Set{Symbol}(model.C) && (values[:hBound]=false)
+    (!r.hSelf || !r.hSMC || !r.hAct || get(values,:hBound,true) == false) && (values[:all_dc]=false)
+    merge!(values,_dc2_observations(model))
+end
+
+function _abstract_row(id,context,model;origin)
+    data = ModelAudit.dc2_model_dict(model)
+    Dict{String,Any}("id"=>id,"context"=>context,"origin"=>origin,
+        "model_digest"=>ModelAudit._audit_digest(data),"model"=>data,
+        "observations"=>Dict(String(k)=>v for (k,v) in _abstract_observations(model)))
 end
 
 function _catalog_row(id,context,circuit,measured; selection_obstructed=nothing,origin)
@@ -56,6 +96,24 @@ function finite_model_catalog()
         circuit = ModelAudit.parse_audit_circuit(stored["circuit"])
         push!(rows,_catalog_row("p6-dc-only-"*stored["name"],"one_input_two_motors_P6_H6_L4_R4",
             circuit,ModelAudit.measure_circuit(circuit);origin="fixed_sequence_search"))
+    end
+    dc2 = ModelAudit.dc2_witness_corpus()
+    for ref in ModelAudit.lean_reference_m1r()
+        push!(rows,_abstract_row("m1r-"*ref.name,"lean_reference_M1R",ref.model;origin="lean_reference_model"))
+    end
+    for w in dc2["abstract"]
+        model = ModelAudit.dc2_carrier_model(w["encoding"];nC=w["nC"],nM=w["nM"],nE=w["nE"])
+        push!(rows,_abstract_row("dc2-"*w["name"],"abstract_carrier_C$(w["nC"])_M$(w["nM"])_E$(w["nE"])",
+            model;origin=w["selection"]))
+    end
+    # Measured DC2 witnesses come from the same one-input two-motor P6 search domains as the
+    # p6-dc-only rows; a circuit already in the catalog is not added twice.
+    for w in dc2["measured"]
+        circuit = ModelAudit.parse_audit_circuit(w["circuit"])
+        digest = ModelAudit._audit_digest(ModelAudit.circuit_dict(circuit))
+        any(row->get(row,"circuit_digest","")==digest,rows) && continue
+        push!(rows,_catalog_row("dc2-"*w["name"],"one_input_two_motors_P6_H6_L4_R4",
+            circuit,ModelAudit.measure_circuit(circuit);origin="dc2_search_first_nondegenerate"))
     end
     length(unique(row["id"] for row in rows)) == length(rows) || error("duplicate catalog model ID")
     Dict("schema_version"=>1,"phenomenal_claim"=>"not_certified","execution_certified"=>false,

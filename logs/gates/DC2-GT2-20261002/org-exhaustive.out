@@ -1,0 +1,18 @@
+== v2 labels vs single-edge removal
+loop2-motor                      G2=true G_org=true cycles==planted true
+loop3-motor                      G2=true G_org=true cycles==planted true
+loop4-motor                      G2=true G_org=true cycles==planted true
+loop2-both-motors                G2=true G_org=true cycles==planted true
+loop2-follower                   G2=true G_org=true cycles==planted true
+loop2-follower-chain             G2=true G_org=true cycles==planted true
+two-loops                        G2=true G_org=true cycles==planted true
+two-loops-one-way                G2=true G_org=true cycles==planted true
+loop2-no-motor-detached          G2=false G_org=false cycles==planted true
+loop2-no-motor-motor-follower    G2=false G_org=false cycles==planted true
+redundant-hub                    G2=false G_org=false cycles==planted true
+oscillator-followers             G2=false G_org=false cycles==planted true
+gated-pair                       G2=true G_org=true cycles==planted true
+all-off                          G2=false G_org=false cycles==planted true
+oscillator-only                  G2=false G_org=false cycles==planted true
+four_unit_exhaustive ["fn_motor_not_lost_by_own_silencing" => 48, "fp_path_redundancy_single_source" => 3424, "true_negative" => 25611, "true_positive" => 3685, "unsound_pair" => 3648] first ["fn_motor_not_lost_by_own_silencing" => [5361, 5363, 5365], "fp_path_redundancy_single_source" => [689, 691, 692], "unsound_pair" => [689, 691, 692]]
+six_unit_sequence ["fn_motor_not_lost_by_own_silencing" => 18, "fn_silencing_side_effect" => 13, "fp_path_redundancy_single_source" => 219, "true_negative" => 19054, "true_positive" => 696, "unsound_pair" => 384] first ["fn_motor_not_lost_by_own_silencing" => [122, 2138, 4862], "fn_silencing_side_effect" => [50, 660, 1089], "fp_path_redundancy_single_source" => [78, 94, 290], "unsound_pair" => [78, 78, 78]]

@@ -1,0 +1,878 @@
+definition = "formal-experiments/M1Refinement.lean ERIEC.M1R.DC2 (not ratified)"
+execution_certified = false
+general_impossibility = "not_established"
+implication_proved = false
+phenomenal_claim = "not_certified"
+schema_version = 1
+
+[carrier_C3_M2_E1]
+coverage = "exhaustive"
+dc2_true = 12105
+dc2_true_with_kappa_all = 2169
+encodings = 1048576
+
+    [carrier_C3_M2_E1.nondegenerate_counts]
+    all_four = 9936
+    without_hHingeNeeded = 6528
+    without_hSMC = 5232
+    without_hSelf2 = 0
+    without_hUnit = 27360
+
+    [carrier_C3_M2_E1.pattern_counts]
+    all_four = 12105
+    without_hHingeNeeded = 55952
+    without_hSMC = 6187
+    without_hSelf2 = 4587
+    without_hUnit = 121712
+
+[carrier_C4_M2_E1]
+coverage = "seeded_sample"
+samples = 3000000
+seed = 20260930
+
+    [carrier_C4_M2_E1.nondegenerate_counts]
+    all_four = 40901
+    without_hHingeNeeded = 30512
+    without_hSMC = 20570
+    without_hSelf2 = 26212
+    without_hUnit = 55229
+
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 4
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 4
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 4
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 4
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 1
+countermodels = ["dc2-c3-dc2-kappa-all"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 3
+unknown_models = ["dc2-c3-all-four", "dc2-c3-without-hSMC", "dc2-c3-without-hUnit"]
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "abstract_carrier_C3_M2_E1"
+context_model_count = 4
+countermodel_count = 1
+countermodels = ["dc2-c3-dc2-kappa-all"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 2
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 2
+unknown_models = ["dc2-c3-all-four", "dc2-c3-without-hUnit"]
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 0
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 0
+premise_value = true
+status = "predicate_unobserved_in_context"
+unknown_model_count = 5
+unknown_models = ["dc2-c4-all-four", "dc2-c4-without-hHingeNeeded", "dc2-c4-without-hSMC", "dc2-c4-without-hSelf2", "dc2-c4-without-hUnit"]
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "abstract_carrier_C4_M2_E1"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 2
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 0
+premise_value = true
+status = "premise_uninstantiated_in_finite_catalog"
+unknown_model_count = 3
+unknown_models = ["dc2-c4-all-four", "dc2-c4-without-hHingeNeeded", "dc2-c4-without-hUnit"]
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 2
+countermodels = ["m1r-M1", "m1r-M5"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "lean_reference_M1R"
+context_model_count = 5
+countermodel_count = 2
+countermodels = ["m1r-M1", "m1r-M5"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 5
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "one_input_one_motor_P6_H6_L4_R4"
+context_model_count = 1
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 1
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 1
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 1
+countermodels = ["p6-dc-only-without_hBound"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "one_input_two_motors_P6_H6_L4_R4"
+context_model_count = 12
+countermodel_count = 1
+countermodels = ["p6-dc-only-without_hBound"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 12
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 2
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSelf"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hSMC"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hAct"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "beta_nonempty"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 0
+countermodels = []
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "no_counterexample_in_finite_catalog"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "hBound"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 1
+countermodels = ["p3-adjoint-without_hBound"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+[[dc2_implications]]
+conclusion = "all_dc"
+conclusion_value = true
+context = "two_inputs_two_motors_P3_H6_L4_R4"
+context_model_count = 7
+countermodel_count = 1
+countermodels = ["p3-adjoint-without_hBound"]
+general_impossibility = "not_established"
+implication_proved = false
+known_model_count = 7
+phenomenal_claim = "not_certified"
+premise = "dc2"
+premise_model_count = 4
+premise_value = true
+status = "counterexample_found"
+unknown_model_count = 0
+unknown_models = []
+
+[[lean_agreement]]
+agrees = true
+fact = "beta"
+lean = "ERIEC.M1R.M1.dc2, M1.beta_eq, M1.unit_irred"
+model = "M1"
+[[lean_agreement]]
+agrees = true
+fact = "hUnit_v1"
+lean = "ERIEC.M1R.M1.dc2, M1.beta_eq, M1.unit_irred"
+model = "M1"
+[[lean_agreement]]
+agrees = true
+fact = "dc2"
+lean = "ERIEC.M1R.M1.dc2, M1.beta_eq, M1.unit_irred"
+model = "M1"
+[[lean_agreement]]
+agrees = true
+fact = "act"
+lean = "ERIEC.M1R.M1.dc2, M1.beta_eq, M1.unit_irred"
+model = "M1"
+[[lean_agreement]]
+agrees = true
+fact = "hSelf2"
+lean = "ERIEC.M1R.M2.not_self2"
+model = "M2"
+[[lean_agreement]]
+agrees = true
+fact = "beta"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "hSelf2"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "unit"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "hUnit_v1"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "hHingeNeeded"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "act"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "hSMC"
+lean = "ERIEC.M1R.M3.v1_holds, M3.not_hingeNeeded, M3.unitB_irred"
+model = "M3"
+[[lean_agreement]]
+agrees = true
+fact = "hHingeNeeded"
+lean = "ERIEC.M1R.M4.not_hingeNeeded"
+model = "M4"
+[[lean_agreement]]
+agrees = true
+fact = "beta"
+lean = "ERIEC.M1R.M5.dc2, M5.beta_eq_kappa, M5.unit_irred"
+model = "M5"
+[[lean_agreement]]
+agrees = true
+fact = "hUnit_v1"
+lean = "ERIEC.M1R.M5.dc2, M5.beta_eq_kappa, M5.unit_irred"
+model = "M5"
+[[lean_agreement]]
+agrees = true
+fact = "dc2"
+lean = "ERIEC.M1R.M5.dc2, M5.beta_eq_kappa, M5.unit_irred"
+model = "M5"
+
+[[measured_search]]
+circuits = 32768
+domain = "four_unit_exhaustive"
+exhaustive = true
+hUnit_true = 7109
+nonempty_core_postfixed2 = 2611
+of_which_contain_singleton_postfixed2 = 2611
+seed = 20260910
+
+    [measured_search.nondegenerate_counts]
+    all_four = 656
+    without_hHingeNeeded = 0
+    without_hSMC = 8
+    without_hSelf2 = 944
+    without_hUnit = 114
+
+    [measured_search.pattern_counts]
+    all_four = 660
+    without_hHingeNeeded = 1415
+    without_hSMC = 8
+    without_hSelf2 = 2098
+    without_hUnit = 11618
+[[measured_search]]
+circuits = 20000
+domain = "six_unit_sequence"
+exhaustive = false
+hUnit_true = 915
+nonempty_core_postfixed2 = 734
+of_which_contain_singleton_postfixed2 = 734
+seed = 20260910
+
+    [measured_search.nondegenerate_counts]
+    all_four = 111
+    without_hHingeNeeded = 6
+    without_hSMC = 3
+    without_hSelf2 = 76
+    without_hUnit = 9
+
+    [measured_search.pattern_counts]
+    all_four = 111
+    without_hHingeNeeded = 495
+    without_hSMC = 3
+    without_hSelf2 = 77
+    without_hUnit = 17905
+
+[[separation]]
+context = "lean_reference_M1R"
+nondegenerate_witnesses = []
+pattern = "all_four"
+witnesses = ["m1r-M1", "m1r-M5"]
+[[separation]]
+context = "lean_reference_M1R"
+nondegenerate_witnesses = []
+pattern = "without_hSelf2"
+witnesses = ["m1r-M2"]
+[[separation]]
+context = "lean_reference_M1R"
+nondegenerate_witnesses = []
+pattern = "without_hSMC"
+witnesses = []
+[[separation]]
+context = "lean_reference_M1R"
+nondegenerate_witnesses = []
+pattern = "without_hHingeNeeded"
+witnesses = ["m1r-M3", "m1r-M4"]
+[[separation]]
+context = "lean_reference_M1R"
+nondegenerate_witnesses = []
+pattern = "without_hUnit"
+witnesses = []
+[[separation]]
+context = "abstract_carrier_C3_M2_E1"
+nondegenerate_witnesses = ["dc2-c3-all-four"]
+pattern = "all_four"
+witnesses = ["dc2-c3-all-four", "dc2-c3-dc2-kappa-all"]
+[[separation]]
+context = "abstract_carrier_C3_M2_E1"
+nondegenerate_witnesses = []
+pattern = "without_hSelf2"
+witnesses = []
+[[separation]]
+context = "abstract_carrier_C3_M2_E1"
+nondegenerate_witnesses = ["dc2-c3-without-hSMC"]
+pattern = "without_hSMC"
+witnesses = ["dc2-c3-without-hSMC"]
+[[separation]]
+context = "abstract_carrier_C3_M2_E1"
+nondegenerate_witnesses = []
+pattern = "without_hHingeNeeded"
+witnesses = []
+[[separation]]
+context = "abstract_carrier_C3_M2_E1"
+nondegenerate_witnesses = ["dc2-c3-without-hUnit"]
+pattern = "without_hUnit"
+witnesses = ["dc2-c3-without-hUnit"]
+[[separation]]
+context = "abstract_carrier_C4_M2_E1"
+nondegenerate_witnesses = ["dc2-c4-all-four"]
+pattern = "all_four"
+witnesses = ["dc2-c4-all-four"]
+[[separation]]
+context = "abstract_carrier_C4_M2_E1"
+nondegenerate_witnesses = ["dc2-c4-without-hSelf2"]
+pattern = "without_hSelf2"
+witnesses = ["dc2-c4-without-hSelf2"]
+[[separation]]
+context = "abstract_carrier_C4_M2_E1"
+nondegenerate_witnesses = ["dc2-c4-without-hSMC"]
+pattern = "without_hSMC"
+witnesses = ["dc2-c4-without-hSMC"]
+[[separation]]
+context = "abstract_carrier_C4_M2_E1"
+nondegenerate_witnesses = ["dc2-c4-without-hHingeNeeded"]
+pattern = "without_hHingeNeeded"
+witnesses = ["dc2-c4-without-hHingeNeeded"]
+[[separation]]
+context = "abstract_carrier_C4_M2_E1"
+nondegenerate_witnesses = ["dc2-c4-without-hUnit"]
+pattern = "without_hUnit"
+witnesses = ["dc2-c4-without-hUnit"]
+[[separation]]
+context = "one_input_two_motors_P6_H6_L4_R4"
+nondegenerate_witnesses = ["dc2-six_unit_sequence-all-four", "p6-dc-only-without_hBound"]
+pattern = "all_four"
+witnesses = ["dc2-six_unit_sequence-all-four", "p6-dc-only-without_hBound"]
+[[separation]]
+context = "one_input_two_motors_P6_H6_L4_R4"
+nondegenerate_witnesses = ["dc2-four_unit_exhaustive-without-hSelf2", "dc2-six_unit_sequence-without-hSelf2"]
+pattern = "without_hSelf2"
+witnesses = ["dc2-four_unit_exhaustive-without-hSelf2", "dc2-six_unit_sequence-without-hSelf2"]
+[[separation]]
+context = "one_input_two_motors_P6_H6_L4_R4"
+nondegenerate_witnesses = ["dc2-four_unit_exhaustive-without-hSMC", "dc2-six_unit_sequence-without-hSMC"]
+pattern = "without_hSMC"
+witnesses = ["dc2-four_unit_exhaustive-without-hSMC", "dc2-six_unit_sequence-without-hSMC"]
+[[separation]]
+context = "one_input_two_motors_P6_H6_L4_R4"
+nondegenerate_witnesses = ["dc2-six_unit_sequence-without-hHingeNeeded", "p6-dc-only-without_hAct"]
+pattern = "without_hHingeNeeded"
+witnesses = ["dc2-six_unit_sequence-without-hHingeNeeded", "p6-dc-only-without_hAct"]
+[[separation]]
+context = "one_input_two_motors_P6_H6_L4_R4"
+nondegenerate_witnesses = ["dc2-four_unit_exhaustive-without-hUnit", "p6-dc-only-all_four"]
+pattern = "without_hUnit"
+witnesses = ["dc2-four_unit_exhaustive-without-hUnit", "p6-dc-only-all_four"]

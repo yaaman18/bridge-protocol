@@ -40,10 +40,14 @@ function _record_search_case!(counts, found, circuit, case_id)
     end
 end
 
-"""Two explicitly bounded exploratory domains. No preregistration candidate is read.
-Changing limits creates a different search report, never an assertion of full coverage."""
-function search_measured_models(; domain::Symbol=:four_unit_exhaustive, limit=nothing, seed=20260910)
-    counts, found = Dict{String,Int}(), Dict{String,Any}()
+"""
+    for_each_search_circuit(visit, domain, attempts, seed) -> total
+
+The circuits of the two declared exploratory domains, in case order. `visit(circuit, case_id)` is
+called for each of the first `attempts` cases. Shared by the DC search and the DC2 audit, so both
+walk exactly the same circuits.
+"""
+function for_each_search_circuit(visit, domain::Symbol, attempts, seed)
     if domain == :four_unit_exhaustive
         n, motors = 4, (:u3, :u4)
         total = 32768
@@ -53,7 +57,7 @@ function search_measured_models(; domain::Symbol=:four_unit_exhaustive, limit=no
     else
         throw(ArgumentError("unknown search domain"))
     end
-    attempts = limit === nothing ? total : _circuit_int(limit)
+    attempts = attempts === nothing ? total : _circuit_int(attempts)
     0 <= attempts <= total || throw(ArgumentError("limit outside declared domain"))
     seed_value = _circuit_int(seed)
     seed_value >= 0 || throw(ArgumentError("seed must be nonnegative"))
@@ -81,11 +85,21 @@ function search_measured_models(; domain::Symbol=:four_unit_exhaustive, limit=no
         end
         circuit = AuditCircuit(; units, motors, inputs, edges, thresholds,
             initial=ntuple(i -> !iszero(initial_mask & (1 << (i-1))), n), P=6, H=6, L=4, R=4)
+        visit(circuit, case_id)
+    end
+    (; total, attempts, seed_value)
+end
+
+"""Two explicitly bounded exploratory domains. No preregistration candidate is read.
+Changing limits creates a different search report, never an assertion of full coverage."""
+function search_measured_models(; domain::Symbol=:four_unit_exhaustive, limit=nothing, seed=20260910)
+    counts, found = Dict{String,Int}(), Dict{String,Any}()
+    walk = for_each_search_circuit(domain, limit, seed) do circuit, case_id
         _record_search_case!(counts, found, circuit, case_id)
     end
-    (; domain, attempts, declared_cases=total, seed=seed_value, counts, found,
-       exhaustive=domain == :four_unit_exhaustive && attempts == total,
-       sequence_completed=attempts == total, phenomenal_claim=:not_certified)
+    (; domain, attempts=walk.attempts, declared_cases=walk.total, seed=walk.seed_value, counts, found,
+       exhaustive=domain == :four_unit_exhaustive && walk.attempts == walk.total,
+       sequence_completed=walk.attempts == walk.total, phenomenal_claim=:not_certified)
 end
 
 function measured_search_report(search)

@@ -1,0 +1,26 @@
+Lean refs:
+  M1 (N0 = true, N1 = true, N2 = true, N3 = true) hSelf2=true HN=true
+  M2 (N0 = true, N1 = true, N2 = true, N3 = true) hSelf2=false HN=true
+  M3 (N0 = true, N1 = true, N2 = true, N3 = true) hSelf2=true HN=false
+  M4 (N0 = true, N1 = true, N2 = true, N3 = true) hSelf2=true HN=false
+  M5 (N0 = true, N1 = true, N2 = true, N3 = true) hSelf2=true HN=true
+== C3 M2 E1 exhaustive
+  N0 nondeg: all_four=672 without_hSelf2=0 without_hSMC=480 without_hHingeNeeded=0 without_hUnit=36624 | unit false though core postfixed: 285152
+  N1 nondeg: all_four=37296 without_hSelf2=26016 without_hSMC=20496 without_hHingeNeeded=21504 without_hUnit=0 | unit false though core postfixed: 0
+  N2 nondeg: all_four=9936 without_hSelf2=0 without_hSMC=5232 without_hHingeNeeded=6528 without_hUnit=27360 | unit false though core postfixed: 195072
+  N3 nondeg: all_four=9936 without_hSelf2=0 without_hSMC=5232 without_hHingeNeeded=6528 without_hUnit=27360 | unit false though core postfixed: 195072
+== C4 M2 E1 sample 1e6
+  N0 nondeg: all_four=1011 without_hSelf2=563 without_hSMC=713 without_hHingeNeeded=196 without_hUnit=31056 | unit false though core postfixed: 241150
+  N1 nondeg: all_four=32067 without_hSelf2=48033 without_hSMC=16663 without_hHingeNeeded=20903 without_hUnit=0 | unit false though core postfixed: 0
+  N2 nondeg: all_four=13630 without_hSelf2=8756 without_hSMC=6808 without_hHingeNeeded=10239 without_hUnit=18437 | unit false though core postfixed: 133019
+  N3 nondeg: all_four=13630 without_hSelf2=8756 without_hSMC=6808 without_hHingeNeeded=10239 without_hUnit=18437 | unit false though core postfixed: 133019
+== measured four_unit_exhaustive
+  N0 nondeg: all_four=0 without_hSelf2=0 without_hSMC=0 without_hHingeNeeded=0 without_hUnit=770 | unit false though core postfixed: 2611
+  N1 nondeg: all_four=770 without_hSelf2=1002 without_hSMC=8 without_hHingeNeeded=0 without_hUnit=0 | unit false though core postfixed: 0
+  N2 nondeg: all_four=656 without_hSelf2=944 without_hSMC=8 without_hHingeNeeded=0 without_hUnit=114 | unit false though core postfixed: 388
+  N3 nondeg: all_four=656 without_hSelf2=944 without_hSMC=8 without_hHingeNeeded=0 without_hUnit=114 | unit false though core postfixed: 388
+== measured six_unit_sequence
+  N0 nondeg: all_four=0 without_hSelf2=0 without_hSMC=0 without_hHingeNeeded=0 without_hUnit=120 | unit false though core postfixed: 734
+  N1 nondeg: all_four=120 without_hSelf2=85 without_hSMC=4 without_hHingeNeeded=7 without_hUnit=0 | unit false though core postfixed: 0
+  N2 nondeg: all_four=111 without_hSelf2=76 without_hSMC=3 without_hHingeNeeded=6 without_hUnit=9 | unit false though core postfixed: 96
+  N3 nondeg: all_four=111 without_hSelf2=76 without_hSMC=3 without_hHingeNeeded=6 without_hUnit=9 | unit false though core postfixed: 96

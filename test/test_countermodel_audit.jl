@@ -8,9 +8,15 @@ query(id,premises,conclusion;contexts=P3_CONTEXT) = CountermodelAudit.Countermod
 
 @testset "finite countermodels are evidence and absence is not a theorem" begin
     catalog = CountermodelAudit.finite_model_catalog()
-    @test catalog["model_count"] == 13
-    @test length(unique(row["circuit_digest"] for row in catalog["models"])) == 13
-    @test all(!row["observations"]["all_dc"] || all(row["observations"][k] for k in ("hSelf","hSMC","hAct","hBound")) for row in catalog["models"])
+    # 13 measured models of the three P3/P6 contexts, 21 DC2 rows: 5 Lean references, 9 abstract
+    # carrier encodings, 7 measured circuits (two more measured DC2 witnesses are the circuits of
+    # p6-dc-only-without_hBound and p6-dc-only-all_four); see test_dc2_audit.jl.
+    @test catalog["model_count"] == 34
+    measured_rows = [row for row in catalog["models"] if haskey(row, "circuit_digest")]
+    @test length(measured_rows) == 20
+    @test length(unique(row["circuit_digest"] for row in measured_rows)) == 20
+    @test length(unique(row["model_digest"] for row in catalog["models"] if haskey(row, "model_digest"))) == 14
+    @test all(!get(row["observations"],"all_dc",false) || all(row["observations"][k] for k in ("hSelf","hSMC","hAct","hBound")) for row in catalog["models"])
     for (id,goal,expected_id) in (
         ("self-implies-smc", :hSMC=>true, "p3-adjoint-without_hSMC"),
         ("self-implies-act", :hAct=>true, "p3-adjoint-without_hAct"),

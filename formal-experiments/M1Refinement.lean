@@ -75,6 +75,14 @@ def IrredUnit {M C : Type*} (piRel : M → Set C) (rhoRel : C → Set M)
 def NonSingleton {C : Type*} (U : Set C) : Prop :=
   ∃ x ∈ U, ∃ y ∈ U, x ≠ y
 
+/-- M1R-v2 §3.2(2026-09-30 改訂、specs/packets/DC2-HUNIT-N3.md): 互いを産出し合う異なる2構成素。
+総効果の損失関係ではループ上の構成素が単独で自己維持し、既約単位が単元に縮むため、
+DC2 の hUnit は `IrredUnit ∧ NonSingleton` からこれに置き換えた -/
+def MutualPair {M C : Type*} (piRel : M → Set C) (rhoRel : C → Set M)
+    (K : Set C) : Prop :=
+  ∃ c ∈ K, ∃ d ∈ K, c ≠ d ∧
+    c ∈ Closure.Phi piRel rhoRel {d} ∧ d ∈ Closure.Phi piRel rhoRel {c}
+
 /-! ### §3.3 -/
 
 /-- M1R-v2 §3.3 -/
@@ -192,6 +200,60 @@ theorem act_nonempty_of_hingeNeeded {M E C S : Type*} {piRel : M → Set C}
   obtain ⟨a, haAct, -⟩ := hinge_edge_of_postfixed2 h (kappa s) subset_rfl hne hSelf
   exact ⟨a, haAct⟩
 
+/-! ### §3.2 補題(2026-09-30 改訂) -/
+
+/-- 単元から産出されることは、双方向の産出と同じ -/
+theorem mem_phi2_singleton_iff {M C : Type*} (piRel : M → Set C) (rhoRel : C → Set M)
+    (c d : C) :
+    c ∈ Phi2 piRel rhoRel {d} ↔
+      c ∈ Closure.Phi piRel rhoRel {d} ∧ d ∈ Closure.Phi piRel rhoRel {c} := by
+  constructor
+  · rintro ⟨h1, a, ha, x, hxa, hxd⟩
+    rw [Set.mem_singleton_iff] at hxd
+    subst hxd
+    exact ⟨h1, (aux_mem_phi _ _ _ _).2
+      ⟨a, (aux_mem_rho_star _ _ _).2 ⟨c, rfl, ha⟩, hxa⟩⟩
+  · rintro ⟨h1, h2⟩
+    obtain ⟨a, haR, hda⟩ := (aux_mem_phi _ _ _ _).1 h2
+    obtain ⟨c', hc', ha⟩ := (aux_mem_rho_star _ _ _).1 haR
+    rw [Set.mem_singleton_iff] at hc'
+    subst hc'
+    exact ⟨h1, a, ha, d, hda, rfl⟩
+
+/-- 対があることと、互いに産出し合う2要素以上の自己維持集合があることは同値 -/
+theorem mutualPair_iff {M C : Type*} (piRel : M → Set C) (rhoRel : C → Set M)
+    (K : Set C) :
+    MutualPair piRel rhoRel K ↔
+      ∃ U, U ⊆ K ∧ NonSingleton U ∧ PostFixed2 piRel rhoRel U ∧
+        ∀ c ∈ U, ∀ d ∈ U, c ≠ d → c ∈ Phi2 piRel rhoRel {d} := by
+  constructor
+  · rintro ⟨c, hc, d, hd, hcd, hcD, hdC⟩
+    have hc2 : c ∈ Phi2 piRel rhoRel {d} := (mem_phi2_singleton_iff _ _ _ _).2 ⟨hcD, hdC⟩
+    have hd2 : d ∈ Phi2 piRel rhoRel {c} := (mem_phi2_singleton_iff _ _ _ _).2 ⟨hdC, hcD⟩
+    refine ⟨{c, d}, Set.insert_subset hc (Set.singleton_subset_iff.2 hd),
+      ⟨c, Set.mem_insert _ _, d, Set.mem_insert_of_mem _ rfl, hcd⟩, ?_, ?_⟩
+    · have hdsub : ({d} : Set C) ⊆ ({c, d} : Set C) :=
+        Set.singleton_subset_iff.2 (Set.mem_insert_of_mem _ rfl)
+      have hcsub : ({c} : Set C) ⊆ ({c, d} : Set C) :=
+        Set.singleton_subset_iff.2 (Set.mem_insert _ _)
+      have hc3 : c ∈ Phi2 piRel rhoRel ({c, d} : Set C) := phi2_mono piRel rhoRel hdsub hc2
+      have hd3 : d ∈ Phi2 piRel rhoRel ({c, d} : Set C) := phi2_mono piRel rhoRel hcsub hd2
+      intro x hx
+      rcases hx with hx | hx
+      · rw [hx]; exact hc3
+      · rw [Set.mem_singleton_iff] at hx
+        rw [hx]; exact hd3
+    · intro x hx y hy hxy
+      rw [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy
+      rcases hx with hx | hx <;> rcases hy with hy | hy
+      · exact absurd (hx.trans hy.symm) hxy
+      · rw [hx, hy]; exact hc2
+      · rw [hx, hy]; exact hd2
+      · exact absurd (hx.trans hy.symm) hxy
+  · rintro ⟨U, hUK, ⟨x, hx, y, hy, hxy⟩, -, h⟩
+    obtain ⟨hxY, hyX⟩ := (mem_phi2_singleton_iff _ _ _ _).1 (h x hx y hy hxy)
+    exact ⟨x, hUK hx, y, hUK hy, hxy, hxY, hyX⟩
+
 /-! ### §3.5 -/
 
 /-- M1R-v2 §3.5 -/
@@ -206,13 +268,15 @@ structure DC2 (M E C S : Type*) where
   hSelf2 : PostFixed2 piRel rhoRel (kappa s)
   hSMC : epsilon s ⊆ Hinge.T_prime alphaRel sigmaRel (epsilon s)
   hHingeNeeded : HingeNeeded piRel rhoRel sigmaRel kappa epsilon s
-  hUnit : ∃ U, U ⊆ kappa s ∧ IrredUnit piRel rhoRel U ∧ NonSingleton U
+  /-- 2026-09-30 改訂(specs/packets/DC2-HUNIT-N3.md)。旧: `∃ U, U ⊆ kappa s ∧
+  IrredUnit piRel rhoRel U ∧ NonSingleton U` -/
+  hUnit : MutualPair piRel rhoRel (kappa s)
 
 /-- M1R-v2 §3.5 -/
 theorem DC2.kappa_nonempty {M E C S : Type*} (d : DC2 M E C S) :
     (d.kappa d.s).Nonempty := by
-  obtain ⟨U, hU, ⟨⟨x, hx⟩, -⟩, -⟩ := d.hUnit
-  exact ⟨x, hU hx⟩
+  obtain ⟨c, hc, -⟩ := d.hUnit
+  exact ⟨c, hc⟩
 
 /-- M1R-v2 §3.5 -/
 theorem DC2.beta_nonempty {M E C S : Type*} (d : DC2 M E C S) :
@@ -383,17 +447,23 @@ def dc2 : DC2 M E C Unit where
     rw [aux_act] at this
     cases x <;>
       simp [Phi2, Psi, aux_mem_phi, aux_mem_rho_star, rhoNH, piR, rhoR] at this
-  hUnit := by
-    refine ⟨kappa (), subset_rfl, ⟨⟨.b, trivial⟩, aux_self, ?_⟩,
-      ⟨.b, trivial, .i, trivial, by decide⟩⟩
-    intro V _ ⟨x, hx⟩ hV
-    have hcl := aux_closed V hV
-    have hb : C.b ∈ V := by
-      cases x
-      · exact hx
-      · exact hcl.2 hx
-    ext c
-    cases c <;> simp [kappa, hb, hcl.1 hb]
+  hUnit :=
+    ⟨.b, trivial, .i, trivial, by decide,
+      by simp [aux_mem_phi, aux_mem_rho_star, piR, rhoR],
+      by simp [aux_mem_phi, aux_mem_rho_star, piR, rhoR]⟩
+
+/-- 旧 hUnit の内容(κ 全体が2要素の既約単位)。2026-09-30 の改訂後も事実として残す -/
+theorem unit_irred :
+    IrredUnit piR rhoR (kappa ()) ∧ NonSingleton (kappa ()) := by
+  refine ⟨⟨⟨.b, trivial⟩, aux_self, ?_⟩, ⟨.b, trivial, .i, trivial, by decide⟩⟩
+  intro V _ ⟨x, hx⟩ hV
+  have hcl := aux_closed V hV
+  have hb : C.b ∈ V := by
+    cases x
+    · exact hx
+    · exact hcl.2 hx
+  ext c
+  cases c <;> simp [kappa, hb, hcl.1 hb]
 
 end M1
 
@@ -790,17 +860,23 @@ def dc2 : DC2 M E C Unit where
     rw [aux_act] at this
     cases x <;>
       simp [Phi2, Psi, rhoNH, piR, rhoR] at this
-  hUnit := by
-    refine ⟨kappa (), subset_rfl, ⟨⟨.b, trivial⟩, aux_self, ?_⟩,
-      ⟨.b, trivial, .i, trivial, by decide⟩⟩
-    intro V _ ⟨x, hx⟩ hV
-    have hcl := aux_closed V hV
-    have hb : C.b ∈ V := by
-      cases x
-      · exact hx
-      · exact hcl.2 hx
-    ext c
-    cases c <;> simp [kappa, hb, hcl.1 hb]
+  hUnit :=
+    ⟨.b, trivial, .i, trivial, by decide,
+      by simp [aux_mem_phi, aux_mem_rho_star, piR, rhoR],
+      by simp [aux_mem_phi, aux_mem_rho_star, piR, rhoR]⟩
+
+/-- 旧 hUnit の内容(κ 全体が2要素の既約単位)。2026-09-30 の改訂後も事実として残す -/
+theorem unit_irred :
+    IrredUnit piR rhoR (kappa ()) ∧ NonSingleton (kappa ()) := by
+  refine ⟨⟨⟨.b, trivial⟩, aux_self, ?_⟩, ⟨.b, trivial, .i, trivial, by decide⟩⟩
+  intro V _ ⟨x, hx⟩ hV
+  have hcl := aux_closed V hV
+  have hb : C.b ∈ V := by
+    cases x
+    · exact hx
+    · exact hcl.2 hx
+  ext c
+  cases c <;> simp [kappa, hb, hcl.1 hb]
 
 /-- M1R-v2 §4.5 -/
 theorem not_betaNeeded :
@@ -824,6 +900,9 @@ end ERIEC.M1R
 #print axioms ERIEC.M1R.nu_phi2_postfixed
 #print axioms ERIEC.M1R.IrredUnit
 #print axioms ERIEC.M1R.NonSingleton
+#print axioms ERIEC.M1R.MutualPair
+#print axioms ERIEC.M1R.mem_phi2_singleton_iff
+#print axioms ERIEC.M1R.mutualPair_iff
 #print axioms ERIEC.M1R.beta
 #print axioms ERIEC.M1R.beta_subset_kappa
 #print axioms ERIEC.M1R.beta_subset_phi
@@ -853,6 +932,7 @@ end ERIEC.M1R
 #print axioms ERIEC.M1R.M1.eps
 #print axioms ERIEC.M1R.M1.dc2
 #print axioms ERIEC.M1R.M1.beta_eq
+#print axioms ERIEC.M1R.M1.unit_irred
 #print axioms ERIEC.M1R.M2.alphaR
 #print axioms ERIEC.M1R.M2.sigmaR
 #print axioms ERIEC.M1R.M2.piR
@@ -889,3 +969,4 @@ end ERIEC.M1R
 #print axioms ERIEC.M1R.M5.dc2
 #print axioms ERIEC.M1R.M5.beta_eq_kappa
 #print axioms ERIEC.M1R.M5.not_betaNeeded
+#print axioms ERIEC.M1R.M5.unit_irred

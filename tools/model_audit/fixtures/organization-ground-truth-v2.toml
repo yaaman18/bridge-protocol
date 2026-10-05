@@ -1,0 +1,195 @@
+# Ground truth v2 for DC2's hUnit (specs/packets/DC2-GROUND-TRUTH-002.md): user decisions of 2026-10-02.
+# Only G and planted_loops differ from v1; a planted loop must contain a motor and carry the persistence
+# of every one of its members. v1 header follows.
+# Ground truth for DC2's hUnit (specs/packets/DC2-GROUND-TRUTH-001.md).
+# Labels come from the design of each template, never from a measurement. G = true iff a feedback
+# loop of two or more distinct units is planted among the persisting units and carries their
+# persistence. `planted_loops` lists those loops; `designed_kappa` is the persisting set the design
+# intends (checked against the trace only). Every template has P=6, H=6, L=4, R=4 and an input unit
+# "in" with no edges that starts off. Edges are [source, destination, weight] with 1-based indices.
+schema_version = 1
+phenomenal_claim = "not_certified"
+
+# a ↔ b, both on: each is the other's only source.
+[[template]]
+name = "loop2-motor"
+G = true
+planted_loops = [["a", "b"]]
+designed_kappa = ["a", "b"]
+units = ["in", "a", "b"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 2, 1]]
+thresholds = [1, 1, 1]
+initial = [false, true, true]
+
+# a → b → c → a, all on.
+[[template]]
+name = "loop3-motor"
+G = true
+planted_loops = [["a", "b", "c"]]
+designed_kappa = ["a", "b", "c"]
+units = ["in", "a", "b", "c"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 4, 1], [4, 2, 1]]
+thresholds = [1, 1, 1, 1]
+initial = [false, true, true, true]
+
+# a → b → c → d → a, all on.
+[[template]]
+name = "loop4-motor"
+G = true
+planted_loops = [["a", "b", "c", "d"]]
+designed_kappa = ["a", "b", "c", "d"]
+units = ["in", "a", "b", "c", "d"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 4, 1], [4, 5, 1], [5, 2, 1]]
+thresholds = [1, 1, 1, 1, 1]
+initial = [false, true, true, true, true]
+
+# a ↔ b with both units motors.
+[[template]]
+name = "loop2-both-motors"
+G = true
+planted_loops = [["a", "b"]]
+designed_kappa = ["a", "b"]
+units = ["in", "a", "b"]
+motors = ["a", "b"]
+edges = [[2, 3, 1], [3, 2, 1]]
+thresholds = [1, 1, 1]
+initial = [false, true, true]
+
+# a ↔ b plus a follower f fed only by a; f feeds nothing.
+[[template]]
+name = "loop2-follower"
+G = true
+planted_loops = [["a", "b"]]
+designed_kappa = ["a", "b", "f"]
+units = ["in", "a", "b", "f"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 2, 1], [2, 4, 1]]
+thresholds = [1, 1, 1, 1]
+initial = [false, true, true, true]
+
+# a ↔ b plus a follower chain a → f → g.
+[[template]]
+name = "loop2-follower-chain"
+G = true
+planted_loops = [["a", "b"]]
+designed_kappa = ["a", "b", "f", "g"]
+units = ["in", "a", "b", "f", "g"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 2, 1], [2, 4, 1], [4, 5, 1]]
+thresholds = [1, 1, 1, 1, 1]
+initial = [false, true, true, true, true]
+
+# Two separate loops a ↔ b and c ↔ d, each with a motor.
+[[template]]
+name = "two-loops"
+G = true
+planted_loops = [["a", "b"], ["c", "d"]]
+designed_kappa = ["a", "b", "c", "d"]
+units = ["in", "a", "b", "c", "d"]
+motors = ["a", "c"]
+edges = [[2, 3, 1], [3, 2, 1], [4, 5, 1], [5, 4, 1]]
+thresholds = [1, 1, 1, 1, 1]
+initial = [false, true, true, true, true]
+
+# Two loops with a one-way edge b → c. c still has d as a sufficient source, so the loops do not
+# depend on each other; no cross-loop pair is planted.
+[[template]]
+name = "two-loops-one-way"
+G = true
+planted_loops = [["a", "b"]]
+designed_kappa = ["a", "b", "c", "d"]
+units = ["in", "a", "b", "c", "d"]
+motors = ["a", "c"]
+edges = [[2, 3, 1], [3, 2, 1], [3, 4, 1], [4, 5, 1], [5, 4, 1]]
+thresholds = [1, 1, 1, 1, 1]
+initial = [false, true, true, true, true]
+
+# Loop b ↔ c without any motor; the motor m is detached and off.
+[[template]]
+name = "loop2-no-motor-detached"
+G = false
+planted_loops = []
+designed_kappa = ["b", "c"]
+units = ["in", "m", "b", "c"]
+motors = ["m"]
+edges = [[3, 4, 1], [4, 3, 1]]
+thresholds = [1, 1, 1, 1]
+initial = [false, false, true, true]
+
+# Loop b ↔ c without any motor; the motor m follows c and feeds nothing.
+[[template]]
+name = "loop2-no-motor-motor-follower"
+G = false
+planted_loops = []
+designed_kappa = ["b", "c", "m"]
+units = ["in", "m", "b", "c"]
+motors = ["m"]
+edges = [[3, 4, 1], [4, 3, 1], [4, 2, 1]]
+thresholds = [1, 1, 1, 1]
+initial = [false, true, true, true]
+
+# Hub a with two loops a ↔ b and a ↔ c; a needs b OR c (threshold 1), b and c need a.
+[[template]]
+name = "redundant-hub"
+G = false
+planted_loops = []
+designed_kappa = ["a", "b", "c"]
+units = ["in", "a", "b", "c"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 2, 1], [2, 4, 1], [4, 2, 1]]
+thresholds = [1, 1, 1, 1]
+initial = [false, true, true, true]
+
+# Oscillator p ↔ q (alternating, does not persist). c (motor) and d follow it: each receives p and
+# q, so exactly one source is on at every step. c → d is extra and not needed. No loop among the
+# persisting units.
+[[template]]
+name = "oscillator-followers"
+G = false
+planted_loops = []
+designed_kappa = ["c", "d"]
+units = ["in", "p", "q", "c", "d"]
+motors = ["c"]
+edges = [[2, 3, 1], [3, 2, 1], [2, 4, 1], [3, 4, 1], [2, 5, 1], [3, 5, 1], [4, 5, 1]]
+thresholds = [1, 1, 1, 1, 1]
+initial = [false, true, false, true, true]
+
+# Oscillator p ↔ q feeds c and d; c ↔ d with threshold 2, so each needs the oscillator AND the other.
+# The loop c ↔ d carries their persistence.
+[[template]]
+name = "gated-pair"
+G = true
+planted_loops = [["c", "d"]]
+designed_kappa = ["c", "d"]
+units = ["in", "p", "q", "c", "d"]
+motors = ["c"]
+edges = [[2, 3, 1], [3, 2, 1], [2, 4, 1], [3, 4, 1], [2, 5, 1], [3, 5, 1], [4, 5, 1], [5, 4, 1]]
+thresholds = [1, 1, 1, 2, 2]
+initial = [false, true, false, true, true]
+
+# A loop that starts off: nothing persists.
+[[template]]
+name = "all-off"
+G = false
+planted_loops = []
+designed_kappa = []
+units = ["in", "a", "b"]
+motors = ["a"]
+edges = [[2, 3, 1], [3, 2, 1]]
+thresholds = [1, 1, 1]
+initial = [false, false, false]
+
+# An oscillator alone: nothing persists.
+[[template]]
+name = "oscillator-only"
+G = false
+planted_loops = []
+designed_kappa = []
+units = ["in", "p", "q"]
+motors = ["p"]
+edges = [[2, 3, 1], [3, 2, 1]]
+thresholds = [1, 1, 1]
+initial = [false, true, false]

@@ -1,0 +1,4 @@
+frozen_at = 2026-10-02T11:36:02Z
+note = labels fixed before any N3 evaluation of these templates
+df06557e34cc224be6e6be7de72d61a00940c2692f1a5cf12436ebe98f42ce24  tools/model_audit/fixtures/organization-ground-truth.toml
+c202e149619ff4c0fb9fe9e56800e08e6b08dfdbca31b557c6292d87465dba04  specs/packets/DC2-GROUND-TRUTH-001.md

@@ -1,0 +1,6 @@
+Test Summary:                           | Pass  Total  Time
+ground-truth labels are the frozen ones |    2      2  4.1s
+Test Summary:                   | Pass  Total   Time
+N3 against planted organization |   11     11  18.2s
+Test Summary:                                       | Pass  Total  Time
+the pair check catches a one-directional definition |    1      1  0.7s

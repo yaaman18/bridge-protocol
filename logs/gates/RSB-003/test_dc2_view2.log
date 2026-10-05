@@ -1,0 +1,8 @@
+Test Summary:                                         | Pass  Total   Time
+v4 agrees with the frozen v2 labels and planted loops |   30     30  14.0s
+Test Summary:                                                         | Pass  Total  Time
+view 2 accepts the mutual-protection circuit as one organization pair |    2      2  8.7s
+Test Summary:                               | Pass  Total   Time
+the remaining differences between N3 and v4 |    4      4  11.5s
+Test Summary:                                                                          | Pass  Total   Time
+four-unit domain: N3 never claims organization v4 denies; every miss is limitation (D) |    1      1  12.6s

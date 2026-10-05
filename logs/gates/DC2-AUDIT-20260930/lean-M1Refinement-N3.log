@@ -1,0 +1,80 @@
+'ERIEC.M1R.Psi' does not depend on any axioms
+'ERIEC.M1R.Phi2' does not depend on any axioms
+'ERIEC.M1R.PostFixed2' does not depend on any axioms
+'ERIEC.M1R.psi_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.phi2_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.phi2_subset_phi' does not depend on any axioms
+'ERIEC.M1R.nu_phi2_subset_nu_phi' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.nu_phi2_postfixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.IrredUnit' does not depend on any axioms
+'ERIEC.M1R.NonSingleton' does not depend on any axioms
+'ERIEC.M1R.MutualPair' does not depend on any axioms
+'ERIEC.M1R.mem_phi2_singleton_iff' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.mutualPair_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.beta' does not depend on any axioms
+'ERIEC.M1R.beta_subset_kappa' does not depend on any axioms
+'ERIEC.M1R.beta_subset_phi' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.rhoNH' does not depend on any axioms
+'ERIEC.M1R.HingeEdgeIn' does not depend on any axioms
+'ERIEC.M1R.HingeNeeded' does not depend on any axioms
+'ERIEC.M1R.postfixed2_of_rhoNH' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.postfixed2_rhoNH_of_no_edge' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.hinge_edge_of_postfixed2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.beta_nonempty_of_hingeNeeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.act_nonempty_of_hingeNeeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.DC2.kappa_nonempty' does not depend on any axioms
+'ERIEC.M1R.DC2.beta_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.DC2.act_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.DC2.unit_hinge_edge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.DC2.toDC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.DC2.toDC_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.BetaNeeded' does not depend on any axioms
+'ERIEC.M1R.ResidualNoPostFixed' does not depend on any axioms
+'ERIEC.M1R.V1Conditions' does not depend on any axioms
+'ERIEC.M1R.betaNeeded_of_hingeNeeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.M1.alphaR' does not depend on any axioms
+'ERIEC.M1R.M1.sigmaR' does not depend on any axioms
+'ERIEC.M1R.M1.piR' does not depend on any axioms
+'ERIEC.M1R.M1.rhoR' does not depend on any axioms
+'ERIEC.M1R.M1.kappa' does not depend on any axioms
+'ERIEC.M1R.M1.eps' does not depend on any axioms
+'ERIEC.M1R.M1.dc2' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M1.beta_eq' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M1.unit_irred' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M2.alphaR' does not depend on any axioms
+'ERIEC.M1R.M2.sigmaR' does not depend on any axioms
+'ERIEC.M1R.M2.piR' does not depend on any axioms
+'ERIEC.M1R.M2.rhoR' does not depend on any axioms
+'ERIEC.M1R.M2.kappa' does not depend on any axioms
+'ERIEC.M1R.M2.eps' does not depend on any axioms
+'ERIEC.M1R.M2.boundary' does not depend on any axioms
+'ERIEC.M1R.M2.dc' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M2.not_self2' does not depend on any axioms
+'ERIEC.M1R.M3.alphaR' depends on axioms: [propext]
+'ERIEC.M1R.M3.sigmaR' does not depend on any axioms
+'ERIEC.M1R.M3.piR' does not depend on any axioms
+'ERIEC.M1R.M3.rhoR' does not depend on any axioms
+'ERIEC.M1R.M3.kappa' does not depend on any axioms
+'ERIEC.M1R.M3.eps' does not depend on any axioms
+'ERIEC.M1R.M3.v1_holds' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M3.not_hingeNeeded' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M3.unitB_irred' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M3.unitB_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.M4.alphaR' depends on axioms: [propext]
+'ERIEC.M1R.M4.sigmaR' does not depend on any axioms
+'ERIEC.M1R.M4.piR' does not depend on any axioms
+'ERIEC.M1R.M4.rhoR' does not depend on any axioms
+'ERIEC.M1R.M4.kappa' does not depend on any axioms
+'ERIEC.M1R.M4.eps' does not depend on any axioms
+'ERIEC.M1R.M4.residual_holds' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M4.not_hingeNeeded' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M5.alphaR' does not depend on any axioms
+'ERIEC.M1R.M5.sigmaR' does not depend on any axioms
+'ERIEC.M1R.M5.piR' does not depend on any axioms
+'ERIEC.M1R.M5.rhoR' does not depend on any axioms
+'ERIEC.M1R.M5.kappa' does not depend on any axioms
+'ERIEC.M1R.M5.eps' does not depend on any axioms
+'ERIEC.M1R.M5.dc2' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M5.beta_eq_kappa' depends on axioms: [propext, Quot.sound]
+'ERIEC.M1R.M5.not_betaNeeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.M1R.M5.unit_irred' depends on axioms: [propext, Quot.sound]

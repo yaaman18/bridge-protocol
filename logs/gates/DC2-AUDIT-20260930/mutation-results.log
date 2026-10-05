@@ -1,0 +1,7 @@
+hinge not removed: detected at encoding 590868
+Psi dropped: detected at encoding 197680
+beta via rho*: detected at encoding 66576
+hSMC ignores sigma: detected at encoding 524289
+hUnit_v1 proper subset check skipped: detected at encoding 201776
+MutualPair one direction only: detected at encoding 200720
+MutualPair allows c == d: detected at encoding 66576

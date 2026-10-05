@@ -1,0 +1,39 @@
+ground_truth = "specs/packets/DC2-GROUND-TRUTH-004.md"
+known_differences_sha256 = "9c8dabcd8fd3a3e5936086379c13fb77981fbace0bb9779db9d7a18cf805826f"
+phenomenal_claim = "not_certified"
+report_to_user = true
+reported_classes = ["N3_LOSS_COMPOSITION_EXTRA"]
+schema_version = 1
+
+[[domains]]
+accepted_difference_count = 48
+accepted_share_of_differences = 1.0
+accepted_share_of_v4_pairs = 0.00609833566255876
+circuits = 32768
+domain = "four_unit_exhaustive"
+n3_pairs = 7823
+v4_pairs = 7871
+
+    [domains.difference_counts]
+    D_MOTOR_NOT_SELF_LOST = 48
+
+    [domains.examples]
+    D_MOTOR_NOT_SELF_LOST = [5361, 5363, 5365, 5367, 5368]
+[[domains]]
+accepted_difference_count = 68
+accepted_share_of_differences = 0.85
+accepted_share_of_v4_pairs = 0.05426975259377494
+circuits = 20000
+domain = "six_unit_sequence"
+n3_pairs = 1197
+v4_pairs = 1253
+
+    [domains.difference_counts]
+    D_MOTOR_NOT_SELF_LOST = 52
+    N3_LOSS_COMPOSITION_EXTRA = 12
+    ONE_LEG_ACTION = 16
+
+    [domains.examples]
+    D_MOTOR_NOT_SELF_LOST = [122, 677, 1150, 1357, 1622]
+    N3_LOSS_COMPOSITION_EXTRA = [1600, 7892, 7892, 8207, 8298]
+    ONE_LEG_ACTION = [4862, 6800, 8032, 8032, 8074]

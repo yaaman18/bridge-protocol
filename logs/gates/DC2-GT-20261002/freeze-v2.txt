@@ -1,0 +1,4 @@
+frozen_at = 2026-10-02T12:53:37Z
+note = v2 labels (user decisions 2026-10-02) fixed before any N3 evaluation against them
+dc64c132dbfe607df17af3337beacf981543dfc8d11df23de1d54eb74fd49f07  tools/model_audit/fixtures/organization-ground-truth-v2.toml
+10f46fd2021d9c351bd1a3b86729c1aa29acf0488a5568756bebc380e1c2f827  specs/packets/DC2-GROUND-TRUTH-002.md

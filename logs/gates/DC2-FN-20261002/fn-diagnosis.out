@@ -1,0 +1,13 @@
+== 2. direct recomputation on the false negatives
+loop2-no-motor-detached          κ=[:b, :c] ρ=Dict(:b => [], :c => []) pairs=Tuple{Symbol, Symbol}[]
+loop2-no-motor-motor-follower    κ=[:b, :c, :m] ρ=Dict(:m => [], :b => [:m], :c => [:m]) pairs=Tuple{Symbol, Symbol}[]
+redundant-hub                    κ=[:a, :b, :c] ρ=Dict(:a => [:a], :b => [], :c => []) pairs=Tuple{Symbol, Symbol}[]
+two-loops-one-way                κ=[:a, :b, :c, :d] ρ=Dict(:a => [:a], :b => [:a], :d => [], :c => []) pairs=[(:a, :b)]
+== 3a. motor restriction: same dynamics, loop member b declared a motor / every unit an action
+loop2-no-motor-detached          N3(original)=false N3(b motor)=true N3(all units actions)=true same κ=true
+loop2-no-motor-motor-follower    N3(original)=false N3(b motor)=true N3(all units actions)=true same κ=true
+== 3b. redundancy: loss only under joint silencing, and the redundant edge removed
+redundant-hub                    collective-only losses=String[] minimal silencing sets=Dict("c" => [["a"], ["b", "c"]], "b" => [["a"], ["b", "c"]], "a" => [["a"], ["b", "c"]]) | edges removed [[2, 4, 1], [4, 2, 1]]: pairs=[(:a, :b)]
+two-loops-one-way                collective-only losses=["c"] minimal silencing sets=Dict("c" => [["a", "c"], ["b", "c"], ["a", "d"], ["b", "d"]], "b" => [["a"], ["b"]], "a" => [["a"], ["b"]], "d" => [["c"], ["a", "d"], ["b", "d"]]) | edges removed [[3, 4, 1]]: pairs=[(:a, :b), (:c, :d)]
+== 3c. windows: outcomes of the false negatives across P, H, L, R
+window variants: 72 runs, N3 became true in 0
