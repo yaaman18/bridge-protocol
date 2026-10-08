@@ -16,7 +16,10 @@ const DC_KEYS = Set(["dc", "hSelf", "hSMC", "hAct", "hBound"])
 # not about the value of a definition on a case. They carry no expected_components.
 const PROCEDURAL_ROWS = Set([
     "FALSIFICATION-RSB-DISCRIMINATION", "FALSIFICATION-RSB-PROVENANCE",
-    "FALSIFICATION-RSB-PROFILE-DIGEST", "FALSIFICATION-RSB-DECOUPLING"])
+    "FALSIFICATION-RSB-PROFILE-DIGEST", "FALSIFICATION-RSB-DECOUPLING",
+    # RSB-PLAN-002 §10, checked by tools/ReactivationMeasurement/test/binding_v2.jl
+    "FALSIFICATION-PLAN-STAND-IN", "FALSIFICATION-PLAN-TREE-DRIFT", "FALSIFICATION-PLAN-FOREIGN-LOAD",
+    "FALSIFICATION-PLAN-RESULT-KEYS", "FALSIFICATION-PLAN-RETRY-MISMATCH", "FALSIFICATION-PLAN-THIRD-ATTEMPT"])
 
 # Components that need DC2, beta or the redundancy classification. They are checked against the
 # RSB-003 criteria in tools/ReactivationERIEC/test/runtests.jl ("analysis plan v2 rows that waited
@@ -26,7 +29,9 @@ const PENDING_RSB_003 = Dict(
     "FALSIFICATION-RSB-ALL-OFF" => Set(["dc2"]),
     "FALSIFICATION-RSB-DC2-IMPLIES-DC" => Set(["dc2", "hSelf", "hSMC", "hAct", "beta_nonempty"]),
     "FALSIFICATION-PLAN-DC2-GRAPH-BOUNDARY" => Set(["dc2", "hBound", "beta_nonempty"]),
-    "FALSIFICATION-PLAN-REDUNDANCY" => Set(["dc", "classification"]),
+    "FALSIFICATION-PLAN-REDUNDANCY" => Set(["dc", "dc_T", "classification"]),
+    "FALSIFICATION-PLAN-REDUNDANCY-UNMEDIATED" => Set(["dc", "classification"]),
+    "FALSIFICATION-PLAN-UNMASKED" => Set(["dc", "hBound", "classification"]),
 )
 
 # The profile's boundary rule "outgoing_nonzero_edges": core units with an out-neighbour outside.

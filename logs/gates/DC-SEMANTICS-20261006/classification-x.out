@@ -1,0 +1,12 @@
+== four_unit_exhaustive  pass=444  dc_false=32324
+  ambiguous_old_mask_self       336  (1.0% of dc_false)
+  ambiguous_new_hSelf_T         190  (0.6% of dc_false)
+  old_only                      146  (0.5% of dc_false)
+  new_only                      0  (0.0% of dc_false)
+  dc_T_true_among_dc_false      0  (0.0% of dc_false)
+== six_unit_sequence  pass=58  dc_false=5942
+  ambiguous_old_mask_self       23  (0.4% of dc_false)
+  ambiguous_new_hSelf_T         13  (0.2% of dc_false)
+  old_only                      10  (0.2% of dc_false)
+  new_only                      0  (0.0% of dc_false)
+  dc_T_true_among_dc_false      0  (0.0% of dc_false)

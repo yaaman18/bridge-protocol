@@ -1,0 +1,16 @@
+== case 5361  (all weights +1)
+ edges=[(:u1, :u2, 1), (:u1, :u3, 1), (:u1, :u4, 1), (:u2, :u3, 1), (:u3, :u2, 1), (:u4, :u1, 1)] thresholds=(1, 1, 1, 1) initial=[1, 0, 0, 0]
+ baseline=[:u2, :u3] κ=[:u2, :u3]
+   silence u1: loss=Symbol[]
+   silence u2: loss=[:u3]
+   silence u3: loss=[:u2]
+   silence u4: loss=Symbol[]
+ y=u2 a=u3 x=u2: a∈L(y)=true x∈L(a)=true x∈L(y)=false
+== case 5363  (all weights +1)
+ edges=[(:u1, :u2, 1), (:u1, :u3, 1), (:u1, :u4, 1), (:u2, :u3, 1), (:u3, :u2, 1), (:u4, :u1, 1)] thresholds=(1, 1, 1, 1) initial=[1, 1, 0, 0]
+ baseline=[:u2, :u3] κ=[:u2, :u3]
+   silence u1: loss=Symbol[]
+   silence u2: loss=[:u3]
+   silence u3: loss=[:u2]
+   silence u4: loss=Symbol[]
+ y=u2 a=u3 x=u2: a∈L(y)=true x∈L(a)=true x∈L(y)=false

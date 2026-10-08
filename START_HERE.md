@@ -47,7 +47,8 @@
 ```
 
 発展・増殖・豊穣化・最大化を扱うものが、個体の閉包作用素 `Φ`・求めの図式 `D`・action loop に
-触れていたら層違反。詳細は [.claude/skills/erie-c/INVARIANTS.md](.claude/skills/erie-c/INVARIANTS.md)。
+触れていたら層違反。公開されている詳細は [README.ja.md](README.ja.md) の「メタ層」節と
+[category/erie_c_axiom_categorical_memo.md](category/erie_c_axiom_categorical_memo.md)。
 
 ---
 
@@ -75,6 +76,9 @@ RSB-001 完了  基体 profile の凍結（事前登録。DC 評価なし）
 RSB-002 完了  発信停止と lesion で α/σ/π/ρ を測定する engine
 RSB-GEN-001 完了  測定エンジンを ERIE-C 非依存の 3 層へ汎用化
 RSB-003 実装済  DC・DC2 の判定プラグイン（凍結は未了）
+RSB-BIND-001 実装済  判定基準の tree OID 束縛と解析計画 schema v2
+RSB-RETRY-001 実装済  再実行の方針（試行2回まで、1回目の封印、重なる case の一致）
+RSB-ANALYZE-001 実装済  登録した解析を実行する解析プログラム（判定基準と同じパッケージで束縛）
   ↓
 一括再登録 → 本番 run（未着手）
 ```
@@ -101,7 +105,7 @@ RSB-003 実装済  DC・DC2 の判定プラグイン（凍結は未了）
 
 | 論点 | 状態 | 詳細 |
 |---|---|---|
-| 冗長性の閾値 `X = 0.5` | 推奨値のまま未確定 | 「DC が偽の case の半数以上が冗長性で説明しうるなら、DC の読みは情報を持たない」。根拠のない数値ではないか再検討中。再登録より前に確定が必要 |
+| 冗長性の閾値 `X = 0.5` | **2026-10-07 決定で廃止** | 数値の閾値をやめ、DC と、冗長に支えられた構成素を数えた感度読み `dc_T` の両方で各結論を計算し、食い違えば「冗長性の読みに依存する」と報告する（[logs/gates/DC-SEMANTICS-20261006/](logs/gates/DC-SEMANTICS-20261006/)） |
 | N3 が損失の合成で余分な対を挙げる | 未決（毎回報告される） | 停止の副作用で、互いにかけがえがない訳ではない 2 つを対として数える（例: 6 ユニット系列 case 1600） |
 | 互いに守り合う 2 つの組織の合併 | 未決 | 相互に「刺客を抑え合う」2 つの独立した閉路を、N3 は 1 つの組織と数える（[logs/gates/DC2-E-20261003/](logs/gates/DC2-E-20261003/)） |
 | `Φ_rich` の重みづけ | 未確定 | `(Φ_depth, Φ_div, Φ_level)` の Pareto/合成の取り方 |
@@ -153,7 +157,7 @@ AI の役割は、抽象的な問題設定・設計候補・反例候補・異�
 | 知りたいこと | 読むファイル |
 |---|---|
 | 全体像・検証方法論・現況の数値 | [README.ja.md](README.ja.md) |
-| 理論の不変条項（破ってはいけない条件） | [.claude/skills/erie-c/INVARIANTS.md](.claude/skills/erie-c/INVARIANTS.md) |
+| 理論の不変条項（破ってはいけない条件） | [README.ja.md](README.ja.md) の「メタ層 — そしてなぜ分離するのか」と「主張しないこと」。全文は作業用 skill にあり公開対象外 |
 | 圏論的な定式化と未確定事項 | [category/erie_c_axiom_categorical_memo.md](category/erie_c_axiom_categorical_memo.md) |
 | Lean の証明本体 | [formal/ERIEC/](formal/ERIEC/)（エントリは `formal/ERIEC.lean`） |
 | DC の定義（Julia） | [src/dc.jl](src/dc.jl) |
@@ -163,7 +167,7 @@ AI の役割は、抽象的な問題設定・設計候補・反例候補・異�
 | 有限モデル監査 | [tools/model_audit/](tools/model_audit/)、[tools/CountermodelAudit.jl](tools/CountermodelAudit.jl) |
 | 直近の設計判断 | [specs/packets/](specs/packets/) の `RSB-*.md`、`DC2-*.md` |
 | ゲート実行の証拠 | [logs/gates/](logs/gates/) |
-| 作業指針（AI 向け） | [CLAUDE.md](CLAUDE.md)、[AGENTS.md](AGENTS.md) |
+| 作業指針（AI 向け） | 公開対象外（`.gitignore` により `CLAUDE.md`・`AGENTS.md`・`docs/`・`.claude/` は配布しない） |
 
 ---
 
@@ -171,5 +175,8 @@ AI の役割は、抽象的な問題設定・設計候補・反例候補・異�
 
 - 数値や現況は書いた時点のもの。台帳の現在値は [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) を、
   直近の作業は `git log` を見ること。
+- **公開リポジトリに含まれないものがある。** `.gitignore` により `docs/`、`.claude/`、`CLAUDE.md`、
+  `AGENTS.md` は配布されない。設計意図のうち、これらにしか書かれていない部分は読めない。
+  公開されているのは README、`category/`、`specs/`、`formal/`、`src/`、`test/`、`tools/`、`logs/` である。
 - 本ファイルは議論の入口であって、仕様でも証明でもない。ここに書かれた要約と、
   Lean の型・凍結 statement・テストが食い違った場合は、**後者が正しい**。

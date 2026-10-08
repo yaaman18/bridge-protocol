@@ -11,14 +11,19 @@ module ReactivationERIEC
 
 using ERIEC
 using ReactivationMeasurement
+using SubstrateRegistry
+import SHA
 const RM = ReactivationMeasurement
 
 export DCCriterion, DC2Criterion, erie_model, graph_boundary,
-    DC_VALUE_KEYS, DC_DIAGNOSTIC_KEYS, DC2_VALUE_KEYS, DC2_DIAGNOSTIC_KEYS
+    DC_VALUE_KEYS, DC_DIAGNOSTIC_KEYS, DC2_VALUE_KEYS, DC2_DIAGNOSTIC_KEYS,
+    analyze_run, v4_pairs, preflight
 
 include("dc2_core.jl")
 include("reading.jl")
 include("dc.jl")
 include("dc2.jl")
+include("analysis.jl")
+include("preflight.jl")
 
 end

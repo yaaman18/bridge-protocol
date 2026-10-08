@@ -1,0 +1,21 @@
+== 15 templates: v2 labels vs C and vs N3
+loop2-motor                      G=true   N3=true   C=true   units=[[:a, :b]]
+loop3-motor                      G=true   N3=true   C=true   units=[[:a, :b, :c]]
+loop4-motor                      G=true   N3=true   C=true   units=[[:a, :b, :c, :d]]
+loop2-both-motors                G=true   N3=true   C=true   units=[[:a, :b]]
+loop2-follower                   G=true   N3=true   C=true   units=[[:a, :b]]
+loop2-follower-chain             G=true   N3=true   C=true   units=[[:a, :b]]
+two-loops                        G=true   N3=true   C=true   units=[[:a, :b], [:c, :d]]
+two-loops-one-way                G=true   N3=true   C=true   units=[[:a, :b], [:c, :d]]
+loop2-no-motor-detached          G=false  N3=false  C=true   units=[[:b, :c]]
+loop2-no-motor-motor-follower    G=false  N3=false  C=true   units=[[:b, :c]]
+redundant-hub                    G=false  N3=false  C=true   units=[[:a, :b], [:a, :c]]
+oscillator-followers             G=false  N3=false  C=false 
+gated-pair                       G=true   N3=true   C=false 
+all-off                          G=false  N3=false  C=false 
+oscillator-only                  G=false  N3=false  C=false 
+agreement: C 11/15   N3 15/15
+
+== the hinge question on the audit domains (cores only)
+four_unit_exhaustive: cores=19905  ε-C holds=18232 of which Act empty=13700  naive C holds=18031 of which Act empty=13625
+six_unit_sequence: cores=549  ε-C holds=445 of which Act empty=379  naive C holds=440 of which Act empty=379

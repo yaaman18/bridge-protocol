@@ -1,0 +1,10 @@
+== four_unit_exhaustive
+  cores                                 19905
+  hSelf_true                            12567
+  rescued_by_targeted                   1418
+  still_false                           5920
+== six_unit_sequence
+  cores                                 549
+  hSelf_true                            340
+  rescued_by_targeted                   5
+  still_false                           204

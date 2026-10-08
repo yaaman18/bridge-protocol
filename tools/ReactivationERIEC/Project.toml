@@ -5,6 +5,9 @@ version = "0.1.0"
 [deps]
 ERIEC = "f6f58f5d-34db-4d4f-bf30-7f0e5e7e5c01"
 ReactivationMeasurement = "00c7cce5-4b5a-43df-b128-49a6e7cce6d8"
+SHA = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+SubstrateRegistry = "789c43a8-0927-4f25-94c9-fd51afc94712"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
 [sources]
 ERIEC = {path = "../.."}
@@ -12,10 +15,7 @@ ReactivationMeasurement = {path = "../ReactivationMeasurement"}
 SubstrateRegistry = {path = "../SubstrateRegistry"}
 
 [extras]
-SHA = "ea8e919c-243c-51af-8825-aaa63cd721ce"
-SubstrateRegistry = "789c43a8-0927-4f25-94c9-fd51afc94712"
-TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["SHA", "SubstrateRegistry", "TOML", "Test"]
+test = ["Test"]

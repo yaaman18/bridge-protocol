@@ -1,0 +1,23 @@
+== four_unit_exhaustive
+  act_nonempty                      4642
+  collective_in_C_min               12418
+  collective_only_units             12478
+  core_postfixed                    2611
+  core_postfixed_eps_C              18232
+  core_postfixed_naive_C            18031
+  core_postfixed_with_singleton     2611
+  cores                             19905
+  naive_C_without_hinge             13625
+  singleton_with_self_loss          2611
+== six_unit_sequence
+  C_dir_nonmonotone                 100
+  act_nonempty                      69
+  collective_in_C_min               36
+  collective_only_units             36
+  core_postfixed                    220
+  core_postfixed_eps_C              445
+  core_postfixed_naive_C            440
+  core_postfixed_with_singleton     220
+  cores                             549
+  naive_C_without_hinge             379
+  singleton_with_self_loss          217

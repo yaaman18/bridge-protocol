@@ -1,5 +1,5 @@
      Testing ReactivationERIEC
-      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_onhKfl/Project.toml`
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_HTPEjP/Project.toml`
   [f6f58f5d] ERIEC v0.1.0 `~/bridge-protocol`
   [860a0c13] ReactivationERIEC v0.1.0 `~/bridge-protocol/tools/ReactivationERIEC`
   [00c7cce5] ReactivationMeasurement v0.1.0 `~/bridge-protocol/tools/ReactivationMeasurement`
@@ -7,7 +7,7 @@
   [ea8e919c] SHA v0.7.0
   [fa267f1f] TOML v1.0.3
   [8dfed614] Test v1.11.0
-      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_onhKfl/Manifest.toml`
+      Status `/private/var/folders/82/qvmvqs01469ck832bd6f4k280000gn/T/jl_HTPEjP/Manifest.toml`
   [bbf7d656] CommonSubexpressions v0.3.1
   [163ba53b] DiffResults v1.1.0
   [b552c78f] DiffRules v1.16.0
@@ -54,5 +54,5 @@
         Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading.
      Testing Running tests...
 Test Summary:               | Pass  Total     Time
-RSB-003 DC and DC2 criteria |  452    452  1m14.8s
+RSB-003 DC and DC2 criteria |  457    457  1m19.4s
      Testing ReactivationERIEC tests passed 

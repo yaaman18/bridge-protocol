@@ -1,0 +1,4 @@
+mutant active: overlap
+RSB-BIND-001: criterion binding under analysis schema v2: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/tools/ReactivationMeasurement/test/binding_v2.jl:242
+RSB-BIND-001: criterion binding under analysis schema v2: Test Failed at /Users/yamaguchimitsuyuki/bridge-protocol/tools/ReactivationMeasurement/test/binding_v2.jl:248
+RSB-BIND-001: criterion binding under analysis schema v2 |   35     2     37  21.9s

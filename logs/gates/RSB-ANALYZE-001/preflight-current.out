@@ -1,0 +1,11 @@
+   2687.2 ms  ✓ ReactivationERIEC
+  1 dependency successfully precompiled in 3 seconds. 30 already precompiled.
+== reactivation-analysis-plan-v2.toml  ok = false
+ - the plan still contains PENDING fields
+ - schema: criterion_binding[1].package_tree_oid: expected hex40
+ - schema: criterion_binding[2].package_tree_oid: expected hex40
+== plan-v2-filled.toml  ok = false
+ - dc: tree of tools/ReactivationERIEC at HEAD is 7419ca3243059ebf6aa163a73ad4372931e6ce4c, the plan says 0000000000000000000000000000000000000000
+ - dc: tools/ReactivationERIEC has uncommitted changes
+ - dc2: tree of tools/ReactivationERIEC at HEAD is 7419ca3243059ebf6aa163a73ad4372931e6ce4c, the plan says 0000000000000000000000000000000000000000
+ - dc2: tools/ReactivationERIEC has uncommitted changes

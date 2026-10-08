@@ -25,3 +25,14 @@ packet: `specs/packets/RSB-003.md`。パッケージ: `tools/ReactivationERIEC`�
 
 DC2 の判定コード（`check_dc2` と補助関数）を `tools/model_audit/DC2.jl` から `tools/ReactivationERIEC/src/dc2_core.jl` に移した。
 監査側はそのファイルを `include` するので、監査したコードと束縛されるコードは同じファイル。9/30 の変異スクリプトの読み込み先も更新した。
+
+## 追記: hSelf_T の追加（2026-10-07、ユーザー決定）
+
+DC の判定基準に診断欄 `hSelf_T` を追加した（criterion_version `dc-rsb003-v2`）。
+
+| ファイル | 内容 |
+|---|---|
+| `plugin-tests.log` | 457 件すべて通過。hSelf_T を独立実装（損失集合を全停止集合の持続から再計算）と、ランダム基体と4ユニット全列挙で照合。hSelf ⇒ hSelf_T。救済が実際に起きる（4ユニット全列挙）。新しい REDUNDANCY fixture は ambiguous かつ dc_T 真、旧 fixture は fail（mask_self は空でないが hSelf_T は偽） |
+| `mutations-hself-t.jl`, `.out` | hSelf_T の変異2件（「複数同時停止でのみ失われる」条件を外す、ε への相対化を外す）をどちらも検出 |
+| `test_analysis_plan_expectations.log` | 解析計画 v2 草案の照合 1432 + 2、通過（新しい反証行を保留一覧に登録） |
+

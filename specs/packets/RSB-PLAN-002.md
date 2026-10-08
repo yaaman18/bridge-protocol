@@ -335,3 +335,30 @@ X は研究判断であり、**結果を見た後では決められない**。�
 
 本 packet は設計のみでゲートを持たない。§2(2) の実装、§2(3) の RSB-003、§2(5)(6) の再登録は、
 それぞれ別の作業単位としてゲートを定める。
+
+## 14. 冗長性の読みの改訂（2026-10-07 ユーザー決定）
+
+経緯: スマートフォン上の Claude の「DC の意味論」についての考察を検証した（`logs/gates/DC-SEMANTICS-20261006/`）。
+充足性の閉包 C を hSelf にそのまま使う案は、冗長性と無関係な救済と逆転を起こし、design-r2 の
+「喪失集合を支援集合と同一視しない」「代替証明としない」に反するので採らなかった。
+
+決定:
+1. DC の判定基準に診断欄 `hSelf_T` を記録する。∀c∈κ について、c ∈ Φ(κ)、または c が複数同時停止でのみ失われ、
+   その包含極小喪失集合がすべて κ ∪ ε と交わる。DC の主判定と hSelf の定義は変えない。
+2. 冗長性の分類（§5.3）で、hSelf の部分には `mask_self` の代わりに `hSelf_T` を使う。hSMC と hAct は mask のまま。
+3. §5.3 の規則4（ambiguous の割合が X 以上なら情報を持たない）と §11 の X = 0.5 を**廃止**する。代わりに、
+   `dc_T = hSelf_T ∧ hSMC ∧ hAct ∧ hBound` を感度読みとし、登録した各結論を dc と dc_T の両方で計算して、
+   食い違えば「単独停止の冗長性の読みに依存する」と報告する。数値の閾値は置かない。dc_T は認証ではない。
+4. ambiguous の件数は記述として報告するだけで、何も決めない。
+
+反証条件: 本番で「DC 偽、dc_T 偽、mask_smc か mask_act が空でない」case が DC の不成立の大部分を占めたら、
+この改訂は冗長性の問題の主戦場（hSMC・hAct 側）を外している。その場合は hSMC・hAct 側にも同様の精密化を検討する。
+
+反映先: `specs/drafts/reactivation-analysis-plan-v2.toml` の `[redundancy]`、反証行 REDUNDANCY と
+REDUNDANCY-UNMEDIATED、dc の `diagnostic_keys`。実装: `tools/ReactivationERIEC/src/dc.jl`（criterion_version `dc-rsb003-v2`）。
+
+## 15. §2(2) の実装状況（2026-10-08）
+
+§3（判定基準の束縛）・§4.2（結果の欄の完全一致）・§8（解析計画 schema v2）・§9 の該当部分を RSB-BIND-001 で実装した
+（`logs/gates/RSB-BIND-001/`）。§6（再実行の方針）は RSB-RETRY-001 で実装した（`logs/gates/RSB-RETRY-001/`）。
+§10 の反証行を草案に加えた。未実装は §3.5（`src/` tree OID の記録）のみ。

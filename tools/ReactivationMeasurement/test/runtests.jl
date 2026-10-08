@@ -526,3 +526,7 @@ mask_of_tuple(x) = foldl((m, i) -> x[i] ? m | (1 << (i - 1)) : m, eachindex(x); 
         end
     end
 end
+
+# RSB-BIND-001 (needs the scratch helpers and StandIn defined above).
+include(joinpath(@__DIR__, "scratch_registration.jl"))
+include(joinpath(@__DIR__, "binding_v2.jl"))

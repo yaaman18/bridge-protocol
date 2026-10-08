@@ -7,7 +7,13 @@ const PROFILE_SCHEMA_V1 = "rsb-profile-schema-v1"
 const PROFILE_SCHEMA_V2 = "rsb-profile-schema-v2"
 const PROFILE_SCHEMA_VERSIONS = [PROFILE_SCHEMA_V1, PROFILE_SCHEMA_V2]
 const PROFILE_SCHEMA_VALIDATION_VERSION = PROFILE_SCHEMA_V2
-const ANALYSIS_SCHEMA_VALIDATION_VERSION = "rsb-analysis-schema-v1"
+# Analysis plan schemas. v1 is kept so that registrations made under it still verify; v2 adds the
+# criterion binding, the result keys, the redundancy reading and retry fields (RSB-PLAN-002 §8,
+# RSB-BIND-001). New registrations use the latest version.
+const ANALYSIS_SCHEMA_V1 = "rsb-analysis-schema-v1"
+const ANALYSIS_SCHEMA_V2 = "rsb-analysis-schema-v2"
+const ANALYSIS_SCHEMA_VERSIONS = [ANALYSIS_SCHEMA_V1, ANALYSIS_SCHEMA_V2]
+const ANALYSIS_SCHEMA_VALIDATION_VERSION = ANALYSIS_SCHEMA_V1
 const REGISTRY_SCHEMA_VERSION = 1
 
 # Keys that may appear in both files; their values must agree (RSB-001 §4).
@@ -30,6 +36,11 @@ end
 field(kind::Symbol; allowed=nothing) =
     FieldSpec(kind, allowed === nothing ? nothing : collect(Any, allowed))
 
+"""A key that may be absent. When present it must satisfy `spec`."""
+struct OptionalSpec
+    spec::Any
+end
+
 struct TableArraySpec
     row::Dict{String,Any}
     min_rows::Int
@@ -50,7 +61,10 @@ function _kind_ok(kind::Symbol, x)
     kind === :hex40 && return x isa String && occursin(r"^[0-9a-f]{40}\z", x)
     kind === :id && return x isa String && occursin(ID_PATTERN, x)
     kind === :id_or_empty && return x isa String && (isempty(x) || occursin(ID_PATTERN, x))
+    kind === :hex64_or_empty && return x isa String && (isempty(x) || occursin(r"^[0-9a-f]{64}\z", x))
     kind === :relpath && return x isa String && _is_safe_relpath(x)
+    kind === :scalar_table && return x isa AbstractDict && !isempty(x) &&
+        all(v -> v isa Bool || v isa String, values(x))
     kind === :timestamp && return x isa String &&
         occursin(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z\z", x)
     error("unknown field kind $kind")
@@ -75,7 +89,10 @@ function _check!(errors::Vector{String}, data, schema::Dict{String,Any}, path::S
     end
     for key in sort!(collect(keys(schema)))
         spec = schema[key]
-        if !haskey(data, key)
+        if spec isa OptionalSpec
+            haskey(data, key) || continue
+            spec = spec.spec
+        elseif !haskey(data, key)
             push!(errors, "$where: missing key `$key`")
             continue
         end
@@ -215,6 +232,80 @@ const ANALYSIS_SCHEMA = Dict{String,Any}(
     ), 1),
 )
 
+# v2 (RSB-PLAN-002 §7, §8; RSB-BIND-001 §3.1): every section of the v2 plan is named exactly.
+const ANALYSIS_SCHEMA_V2_KEYS = Dict{String,Any}(
+    "analysis_schema_version" => field(:int; allowed=[2]),
+    "profile_id" => field(:id),
+    "analysis_plan_id" => field(:id),
+    "supersedes_analysis_plan" => field(:id),
+    "interpretation" => Dict{String,Any}(
+        "zero_pass_count" => field(:string),
+        "nonempty_flags" => field(:string),
+        "non_dc_interpretation" => field(:string),
+        "claim_scope" => field(:string),
+        "primary_criterion" => field(:string; allowed=["dc"]),
+        "post_results_replacement" => field(:string; allowed=["not_preregistered_evidence"]),
+        "recorded_criteria" => field(:string_list),
+        "criterion_result_format" => field(:string; allowed=["rsb-criterion-result-v1"]),
+        "dc2_sigma_cover_cases" => field(:string),
+    ),
+    "incomplete_runs" => Dict{String,Any}(
+        "missing_case" => field(:string),
+        "duplicate_case" => field(:string),
+        "max_attempts" => field(:int; allowed=[2]),
+        "retry_condition" => field(:string),
+        "partial_outputs" => field(:string),
+        "overlap_rule" => field(:string),
+        "after_last_attempt" => field(:string),
+    ),
+    "redundancy" => Dict{String,Any}(
+        "classification" => field(:string_list),
+        "self_component" => field(:string; allowed=["hSelf_T"]),
+        "primary_tally" => field(:string),
+        "sensitivity_reading" => field(:string),
+        "robustness_rule" => field(:string),
+        "descriptive_counts" => field(:string_list),
+    ),
+    "dc2_unit_informativeness" => Dict{String,Any}(
+        "check" => field(:string),
+        "template_labels" => field(:relpath),
+        "ground_truth_spec" => field(:relpath),
+        "known_differences" => field(:relpath),
+        "report_on" => field(:string_list),
+        "recorded_every_run" => field(:string_list),
+        "on_report" => field(:string),
+    ),
+    "decisions" => Dict{String,Any}(
+        "retraction_conditions" => field(:string_list),
+        "stop_conditions" => field(:string_list),
+        "forbidden_adjustments" => field(:string_list),
+    ),
+    "falsification" => TableArraySpec(Dict{String,Any}(
+        "id" => field(:string),
+        "condition" => field(:string),
+        "expected" => field(:string),
+        "expected_components" => OptionalSpec(field(:scalar_table)),
+    ), 1),
+    "criterion_binding" => TableArraySpec(Dict{String,Any}(
+        "criterion_id" => field(:string),
+        "criterion_version" => field(:string),
+        "package_name" => field(:string),
+        "package_path" => field(:relpath),
+        "package_tree_oid" => field(:hex40),
+        "value_keys" => field(:string_list),
+        "diagnostic_keys" => field(:string_list),
+        # Directories the criterion depends on but that are not bound; their trees are recorded in
+        # the run-start record only (RSB-PLAN-002 §3.5: binding src/ would break registrations on
+        # changes unrelated to DC, so it is recorded for audit instead).
+        "dependency_paths" => field(:string_list),
+    ), 1),
+)
+
+const ANALYSIS_SCHEMAS = Dict{String,Dict{String,Any}}(
+    ANALYSIS_SCHEMA_V1 => ANALYSIS_SCHEMA,
+    ANALYSIS_SCHEMA_V2 => ANALYSIS_SCHEMA_V2_KEYS,
+)
+
 const REGISTRY_SCHEMA = Dict{String,Any}(
     "registry_schema_version" => field(:int; allowed=[REGISTRY_SCHEMA_VERSION]),
     "registration" => TableArraySpec(Dict{String,Any}(
@@ -229,7 +320,7 @@ const REGISTRY_SCHEMA = Dict{String,Any}(
         "profile_schema_validation_version" =>
             field(:string; allowed=PROFILE_SCHEMA_VERSIONS),
         "analysis_schema_validation_version" =>
-            field(:string; allowed=[ANALYSIS_SCHEMA_VALIDATION_VERSION]),
+            field(:string; allowed=ANALYSIS_SCHEMA_VERSIONS),
         "author_declared_at" => field(:timestamp),
         "author_declared_at_semantics" =>
             field(:string; allowed=["self_declared_not_used_for_ordering"]),
@@ -334,13 +425,32 @@ function profile_schema_version_of(bytes::AbstractVector{UInt8})
     throw(SchemaViolation(["unknown profile schema_version $(repr(v))"]))
 end
 
-"""Parse and validate an analysis plan from raw bytes; throws `SchemaViolation`."""
-function validate_analysis_plan(bytes::AbstractVector{UInt8})
+"""
+    validate_analysis_plan(bytes; version = ANALYSIS_SCHEMA_V1)
+
+Parse and validate an analysis plan from raw bytes under the named schema version; throws
+`SchemaViolation`. Under v2 the criterion bindings must name exactly the recorded criteria.
+"""
+function validate_analysis_plan(bytes::AbstractVector{UInt8}; version::AbstractString=ANALYSIS_SCHEMA_V1)
+    haskey(ANALYSIS_SCHEMAS, version) ||
+        throw(SchemaViolation(["unknown analysis schema version $(repr(version))"]))
     a = _parse_toml(bytes, "analysis plan")
-    errors = _check!(String[], a, ANALYSIS_SCHEMA, "")
+    errors = _check!(String[], a, ANALYSIS_SCHEMAS[version], "")
     if isempty(errors)
         ids = [row["id"] for row in a["falsification"]]
         allunique(ids) || push!(errors, "falsification ids must be unique")
+    end
+    if isempty(errors) && version == ANALYSIS_SCHEMA_V2
+        bound = [b["criterion_id"] for b in a["criterion_binding"]]
+        allunique(bound) || push!(errors, "criterion_binding ids must be unique")
+        Set(bound) == Set(a["interpretation"]["recorded_criteria"]) ||
+            push!(errors, "criterion_binding must name exactly the recorded_criteria")
+        for b in a["criterion_binding"]
+            allunique(b["value_keys"]) && allunique(b["diagnostic_keys"]) && !isempty(b["value_keys"]) ||
+                push!(errors, "criterion_binding $(b["criterion_id"]): result keys must be nonempty and unique")
+            all(_is_safe_relpath, b["dependency_paths"]) && allunique(b["dependency_paths"]) ||
+                push!(errors, "criterion_binding $(b["criterion_id"]): dependency_paths must be unique safe relative paths")
+        end
     end
     isempty(errors) || throw(SchemaViolation(errors))
     a

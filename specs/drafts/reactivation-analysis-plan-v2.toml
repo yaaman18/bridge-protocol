@@ -39,11 +39,22 @@ partial_outputs = "sealed_by_sha256_not_opened_until_retry_completes"
 overlap_rule = "retry_must_equal_first_attempt_on_overlapping_cases"
 after_last_attempt = "registration_spent_not_analyzed"
 
+# Redundancy (RSB-PLAN-002 §5, revised by user decisions of 2026-10-07; evidence
+# logs/gates/DC-SEMANTICS-20261006/). The numeric uninformative_threshold (X = 0.5) is removed: it had no
+# derivation, and replacing mask_self by hSelf_T changes what the ambiguous count measures.
+# - hSelf_T (diagnostic of the dc criterion): every core constituent is produced through the actions,
+#   or it is lost only under joint silencing and every inclusion-minimal loss set of it meets kappa ∪ eps.
+# - dc_T = hSelf_T and hSMC and hAct and hBound: a sensitivity reading, never a certification of DC.
+# - fail_redundancy_ambiguous: dc false, hBound true, (hSelf or hSelf_T), (hSMC or mask_smc nonempty),
+#   (hAct or mask_act nonempty). mask_smc and mask_act stay over-estimates; the class is reported as a
+#   count only and decides nothing.
 [redundancy]
 classification = ["pass", "fail_redundancy_ambiguous", "fail"]
-primary_tally = "dc_as_defined_ambiguous_counted_as_fail"
-sensitivity_tally = "ambiguous_excluded"
-uninformative_threshold = 0.5
+self_component = "hSelf_T"
+primary_tally = "dc_as_defined"
+sensitivity_reading = "dc_T"
+robustness_rule = "each registered conclusion is computed under dc and under dc_T; if they differ, report that conclusion as dependent on the single-silencing redundancy reading"
+descriptive_counts = ["fail_redundancy_ambiguous", "dc_false_dc_T_true", "dc_false_with_mask_smc_or_mask_act"]
 
 # DC2's hUnit is MutualPair since 2026-09-30 (specs/packets/DC2-HUNIT-N3.md). Retraction condition
 # N3-RETRACT-UNINFORMATIVE: the 15 planted templates (v2 labels) and the pair-level comparison with the
@@ -130,9 +141,53 @@ expected_components = { dc2 = true, hBound = false, beta_nonempty = true }
 
 [[falsification]]
 id = "FALSIFICATION-PLAN-REDUNDANCY"
-condition = "a core constituent lost only when two supports are silenced together"
-expected = "DC false and classified fail_redundancy_ambiguous"
-expected_components = { dc = false, classification = "fail_redundancy_ambiguous" }
+condition = "two loops, each produced through a motor, and a core constituent fed by both motors, lost only when two supports are silenced together"
+expected = "DC false only through hSelf; hSelf_T true, dc_T true, classified fail_redundancy_ambiguous, and the conclusion is reported as redundancy-dependent"
+expected_components = { dc = false, dc_T = true, classification = "fail_redundancy_ambiguous" }
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-REDUNDANCY-UNMEDIATED"
+condition = "two loops without any motor that redundantly feed a motor (the RSB-PLAN-002 fixture); mask_self is nonempty"
+expected = "DC false and classified fail: hSelf fails because the loops are not produced through actions, which redundancy does not explain (hSelf_T false)"
+expected_components = { dc = false, classification = "fail" }
+
+# RSB-PLAN-002 §10 rows, mechanised by RSB-BIND-001 and RSB-RETRY-001
+# (tools/ReactivationMeasurement/test/binding_v2.jl). Procedural: no expected_components.
+[[falsification]]
+id = "FALSIFICATION-PLAN-STAND-IN"
+condition = "a criterion with a registered name, defined outside the registered package"
+expected = "start_run refuses before any output"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-TREE-DRIFT"
+condition = "one file of the criterion package changes, between profile_commit and registration_commit or after registration"
+expected = "verification refuses (BINDING_TREE_CHANGED) or start_run refuses the runner tree"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-FOREIGN-LOAD"
+condition = "a package of the registered name is loaded from outside the registered path in the runner checkout"
+expected = "start_run refuses (pkgdir check)"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-RESULT-KEYS"
+condition = "a criterion result adds or lacks a registered key"
+expected = "the case is not recorded and the run fails without a completion manifest"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-RETRY-MISMATCH"
+condition = "an overlapping case of the first attempt differs from the retry by one byte"
+expected = "the completion manifest status is retracted (retry_overlap_mismatch)"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-THIRD-ATTEMPT"
+condition = "a third attempt, or a retry after a completed first attempt, in the same runs root"
+expected = "start_run refuses before any output"
+
+[[falsification]]
+id = "FALSIFICATION-PLAN-UNMASKED"
+condition = "a case with DC false only through hSelf, hSelf_T true, and no graph boundary (hBound false)"
+expected = "classified fail, not fail_redundancy_ambiguous: hBound is structural and redundancy cannot hide it"
+expected_components = { dc = false, hBound = false, classification = "fail" }
 
 [[criterion_binding]]
 criterion_id = "dc"
@@ -141,7 +196,9 @@ package_name = "PENDING-RSB-003"
 package_path = "PENDING-RSB-003"
 package_tree_oid = "PENDING-RSB-003"
 value_keys = ["dc", "hSelf", "hSMC", "hAct", "hBound"]
-diagnostic_keys = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty", "mask_self", "mask_smc", "mask_act"]
+diagnostic_keys = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty", "mask_self", "mask_smc", "mask_act", "hSelf_T"]
+# ERIEC itself (src/) is recorded at run start, not bound (RSB-PLAN-002 §3.5).
+dependency_paths = ["src"]
 
 [[criterion_binding]]
 criterion_id = "dc2"
@@ -152,3 +209,4 @@ package_tree_oid = "PENDING-RSB-003"
 # Fixed by the RSB-003 implementation (tools/ReactivationERIEC/src/dc2.jl), 2026-10-04.
 value_keys = ["dc2", "hSelf2", "hSMC", "hHingeNeeded", "hUnit", "beta_nonempty"]
 diagnostic_keys = ["act", "beta", "sigma_cover", "mutual_pairs", "hUnit_v1", "irreducible_units"]
+dependency_paths = ["src"]

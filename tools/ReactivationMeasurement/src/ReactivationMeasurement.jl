@@ -30,7 +30,8 @@ export AbstractSystem, nunits, check_system_conformance, MAX_UNITS,
     AbstractCriterion, criterion_id, criterion_version, required_structure, evaluate,
     DeclaredStructure, declared_structure, STRUCTURE_KEYS, criterion_label,
     criterion_result, validate_criterion_result, check_criterion_conformance,
-    check_criteria_binding,
+    check_criteria_binding, check_criteria_implementation, check_result_keys,
+    seal_entries, retry_mismatches,
     start_run
 
 include("system.jl")

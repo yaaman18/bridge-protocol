@@ -182,14 +182,33 @@ function _verify_in(workdir, registration_commit, registration_id, runner_repo,
     end
 
     # Exact schemas; only a successful validation may yield a registration (RSB-001 §3).
+    aversion = row["analysis_schema_validation_version"]
     profile, analysis = try
         p = validate_profile(reg_profile; version=row["profile_schema_validation_version"])
-        a = validate_analysis_plan(reg_analysis)
+        a = validate_analysis_plan(reg_analysis; version=aversion)
         validate_pair(p, a)
         (p, a)
     catch e
         e isa SchemaViolation || rethrow()
         return _reject(:SCHEMA, join(e.errors, "; "))
+    end
+
+    # v2: each criterion package is bound by its directory tree (RSB-PLAN-002 §3.2). The tree at
+    # profile_commit must carry the registered OID, and no commit on an ancestry path from
+    # profile_commit to registration_commit may change it.
+    if aversion == ANALYSIS_SCHEMA_V2
+        path_commits = [pcommit; [String(c) for c in split(String(copy(between.out)), '\n'; keepempty=false)]]
+        for b in analysis["criterion_binding"]
+            path, oid = b["package_path"], b["package_tree_oid"]
+            tree_oid_at(repo, pcommit, path) == oid ||
+                return _reject(:BINDING_TREE_MISMATCH,
+                    "criterion $(b["criterion_id"]): tree of $path at profile_commit differs from the registered OID")
+            for c in path_commits
+                tree_oid_at(repo, c, path) == oid ||
+                    return _reject(:BINDING_TREE_CHANGED,
+                        "criterion $(b["criterion_id"]): tree of $path changes at commit $c")
+            end
+        end
     end
 
     # Caller expectations are checked against the row, never used as the authority.
@@ -214,7 +233,7 @@ function _verify_in(workdir, registration_commit, registration_id, runner_repo,
         registration_id, registration_commit, pcommit, ppath, apath,
         row["profile_blob_sha256"], row["analysis_plan_digest"], profile["profile_id"],
         remote_url, remote_ref, observed_oid,
-        row["profile_schema_validation_version"], ANALYSIS_SCHEMA_VALIDATION_VERSION,
+        row["profile_schema_validation_version"], aversion,
         row["author_declared_at"], row["author_declared_at_semantics"], strength,
         canonical_case_ids(profile), runner)
 end

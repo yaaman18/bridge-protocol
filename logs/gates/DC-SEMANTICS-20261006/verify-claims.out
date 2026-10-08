@@ -1,0 +1,12 @@
+== four_unit_exhaustive  circuits=32768
+  (a) necessity not transitive: 192 triples in 84 circuits
+  (b) c in L(c): 22976/68332   c in Phi({c}) for core c: 20258/63755
+  (c) loss not monotone: 0 pairs in 0 circuits
+  (d) C from minimal sets != C read directly: 0 subsets
+  (e) circuits with a post-fixed set under Phi_C: 18232  singleton-only 7772  with a multi-unit minimal 10460
+== six_unit_sequence  circuits=6000
+  (a) necessity not transitive: 77 triples in 52 circuits
+  (b) c in L(c): 957/1366   c in Phi({c}) for core c: 662/1248
+  (c) loss not monotone: 497 pairs in 86 circuits
+  (d) C from minimal sets != C read directly: 90 subsets
+  (e) circuits with a post-fixed set under Phi_C: 446  singleton-only 88  with a multi-unit minimal 358

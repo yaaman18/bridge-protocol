@@ -1,0 +1,17 @@
+== four_unit_exhaustive
+  both_false                            1341
+  both_true                             12235
+  cores                                 19905
+  hSelfC_only                           5997
+  hSelfC_only:NOT_redundancy            1786
+  hSelfC_only:redundancy_masked         4211
+  hSelf_only                            332
+== six_unit_sequence
+  both_false                            71
+  both_true                             300
+  cores                                 549
+  hSelfC_only                           138
+  hSelfC_only:NOT_redundancy            122
+  hSelfC_only:no_motor_in_core          81
+  hSelfC_only:redundancy_masked         16
+  hSelf_only                            40

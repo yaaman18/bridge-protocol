@@ -58,3 +58,21 @@ function _is_ancestor(repo::String, ancestor::String, descendant::String)
     r.exitcode == 1 && return false
     error("merge-base failed: $(r.err)")
 end
+
+"""
+    tree_oid_at(repo, rev, path) -> String or nothing
+
+The OID of the tree at `path` in commit `rev`, or `nothing` if `path` is absent or not a
+directory (RSB-PLAN-002 §3: a criterion package is bound by its directory tree).
+"""
+function tree_oid_at(repo::AbstractString, rev::AbstractString, path::AbstractString)
+    r = _git(["ls-tree", "-d", "-z", String(rev), "--", String(path)]; dir=String(repo))
+    r.ok || return nothing
+    for entry in split(String(copy(r.out)), '\0'; keepempty=false)
+        meta, name = split(entry, '\t'; limit=2)
+        name == path || continue
+        mode, kind, oid = split(meta, ' ')
+        return kind == "tree" ? String(oid) : nothing
+    end
+    nothing
+end

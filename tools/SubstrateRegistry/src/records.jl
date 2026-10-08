@@ -8,6 +8,10 @@
 # bound to the run, fixed before any case is measured. It holds names, never criterion values.
 
 const RECORD_SCHEMA_VERSION = 2
+# Version 3 (RSB-RETRY-001): runs under an analysis plan of schema v2 carry their attempt number,
+# and a second attempt carries the run id and seal of the first one. v1-plan runs stay at 2.
+const RECORD_SCHEMA_V3 = 3
+const RECORD_SCHEMA_VERSIONS = [RECORD_SCHEMA_VERSION, RECORD_SCHEMA_V3]
 
 const RUN_START_SCHEMA = Dict{String,Any}(
     "record_kind" => field(:string; allowed=["rsb_run_start"]),
@@ -24,7 +28,7 @@ const RUN_START_SCHEMA = Dict{String,Any}(
     "observed_remote_oid" => field(:hex40),
     "preregistration_strength" => field(:string; allowed=["full", "post_results_replacement"]),
     "profile_schema_validation_version" => field(:string; allowed=PROFILE_SCHEMA_VERSIONS),
-    "analysis_schema_validation_version" => field(:string; allowed=[ANALYSIS_SCHEMA_VALIDATION_VERSION]),
+    "analysis_schema_validation_version" => field(:string; allowed=ANALYSIS_SCHEMA_VERSIONS),
     "runner_commit" => field(:hex40),
     "runner_tree" => field(:hex40),
     "runner_dirty" => field(:bool; allowed=[false]),
@@ -39,22 +43,53 @@ const RUN_START_SCHEMA = Dict{String,Any}(
 )
 
 const COMPLETION_MISMATCH_CODES = ["case_count", "case_ids_ordered", "case_digest",
-    "runner_commit", "runner_tree", "manifest_sha256", "julia_version", "runner_dirty"]
+    "runner_commit", "runner_tree", "manifest_sha256", "julia_version", "runner_dirty",
+    "retry_overlap_mismatch", "previous_attempt_changed"]
+# A run is retracted, not merely incomplete, when its retry disagrees with the first attempt
+# (RSB-PLAN-002 §6). Measurement is deterministic, so a disagreement is an implementation or
+# environment error.
+const RETRY_MISMATCH_CODES = ["retry_overlap_mismatch", "previous_attempt_changed"]
 
 const COMPLETION_SCHEMA = Dict{String,Any}(
     "record_kind" => field(:string; allowed=["rsb_completion_manifest"]),
-    "record_schema_version" => field(:int; allowed=[RECORD_SCHEMA_VERSION]),
+    "record_schema_version" => field(:int; allowed=RECORD_SCHEMA_VERSIONS),
     "run_id" => field(:id),
     "run_start_record_digest" => field(:hex64),
-    "status" => field(:string; allowed=["complete", "incomplete"]),
+    "status" => field(:string; allowed=["complete", "incomplete", "retracted"]),
     "mismatches" => field(:string_list),
     "completed_case_count" => field(:int),
     "completed_case_digest" => field(:hex64),
     "phenomenal_claim" => field(:string; allowed=["not_certified"]),
 )
 
-"""Build the run-start record. Requires the verification capability."""
+const RUN_START_SCHEMA_V3 = merge(RUN_START_SCHEMA, Dict{String,Any}(
+    "record_schema_version" => field(:int; allowed=[RECORD_SCHEMA_V3]),
+    "attempt" => field(:int; allowed=[1, 2]),
+    "previous_attempt_run_id" => field(:id_or_empty),
+    "previous_attempt_seal_sha256" => field(:hex64_or_empty),
+    # "criterion_id|path|tree_oid" for each dependency path (RSB-PLAN-002 §3.5); recorded, not bound.
+    "dependency_tree_oids" => field(:string_list),
+))
+
+"""
+Build the run-start record. Requires the verification capability. With `attempt` (runs under an
+analysis plan of schema v2) the record is version 3 and carries the attempt fields.
+"""
 function build_run_start_record(token::VerifiedRegistration; run_id::AbstractString,
+        criteria::AbstractVector{<:AbstractString}=String[], attempt=nothing,
+        previous_attempt_run_id::AbstractString="", previous_attempt_seal_sha256::AbstractString="",
+        dependency_tree_oids::AbstractVector{<:AbstractString}=String[])
+    record = _run_start_v2(token; run_id, criteria)
+    attempt === nothing && return record
+    record["record_schema_version"] = RECORD_SCHEMA_V3
+    record["attempt"] = attempt
+    record["previous_attempt_run_id"] = String(previous_attempt_run_id)
+    record["previous_attempt_seal_sha256"] = String(previous_attempt_seal_sha256)
+    record["dependency_tree_oids"] = collect(String, dependency_tree_oids)
+    record
+end
+
+function _run_start_v2(token::VerifiedRegistration; run_id::AbstractString,
         criteria::AbstractVector{<:AbstractString}=String[])
     r = token.runner
     Dict{String,Any}(
@@ -88,7 +123,15 @@ function build_run_start_record(token::VerifiedRegistration; run_id::AbstractStr
 end
 
 function validate_run_start_record(record::AbstractDict)
-    errors = _check!(String[], record, RUN_START_SCHEMA, "")
+    v3 = get(record, "record_schema_version", nothing) == RECORD_SCHEMA_V3
+    errors = _check!(String[], record, v3 ? RUN_START_SCHEMA_V3 : RUN_START_SCHEMA, "")
+    if isempty(errors) && v3
+        first_attempt = record["attempt"] == 1
+        first_attempt == isempty(record["previous_attempt_run_id"]) == isempty(record["previous_attempt_seal_sha256"]) ||
+            push!(errors, "a first attempt has no previous attempt; a second attempt names it and its seal")
+        all(e -> occursin(r"^[a-z0-9][a-z0-9_-]*\|[^|]+\|([0-9a-f]{40}|absent)\z", e), record["dependency_tree_oids"]) ||
+            push!(errors, "dependency_tree_oids entries must be criterion_id|path|tree_oid (or absent)")
+    end
     if isempty(errors)
         ids = record["case_ids"]
         length(ids) == record["case_count"] || push!(errors, "case_count differs from case_ids")
@@ -141,7 +184,8 @@ the runner commit, tree, cleanliness, Manifest digest and Julia version are unch
 Completed case IDs must satisfy the case-ID character set; otherwise `ArgumentError`.
 """
 function completion_manifest(start_record_bytes::AbstractVector{UInt8},
-        completed_case_ids::AbstractVector{<:AbstractString}, runner_now::AbstractDict)
+        completed_case_ids::AbstractVector{<:AbstractString}, runner_now::AbstractDict;
+        retry_mismatches::AbstractVector{<:AbstractString}=String[])
     start = _parse_toml(start_record_bytes, "run-start record")
     validate_run_start_record(start)
     mismatches = String[]
@@ -154,12 +198,16 @@ function completion_manifest(start_record_bytes::AbstractVector{UInt8},
         get(runner_now, key, nothing) == start[key] || push!(mismatches, key)
     end
     get(runner_now, "runner_dirty", true) === false || push!(mismatches, "runner_dirty")
+    all(m -> m in RETRY_MISMATCH_CODES, retry_mismatches) ||
+        throw(ArgumentError("unknown retry mismatch code"))
+    append!(mismatches, retry_mismatches)
+    status = !isempty(retry_mismatches) ? "retracted" : isempty(mismatches) ? "complete" : "incomplete"
     Dict{String,Any}(
         "record_kind" => "rsb_completion_manifest",
-        "record_schema_version" => RECORD_SCHEMA_VERSION,
+        "record_schema_version" => start["record_schema_version"],
         "run_id" => start["run_id"],
         "run_start_record_digest" => _sha(start_record_bytes),
-        "status" => isempty(mismatches) ? "complete" : "incomplete",
+        "status" => status,
         "mismatches" => mismatches,
         "completed_case_count" => length(completed),
         "completed_case_digest" => completed_digest,
@@ -172,6 +220,8 @@ function validate_completion_manifest(manifest::AbstractDict)
     if isempty(errors)
         (manifest["status"] == "complete") == isempty(manifest["mismatches"]) ||
             push!(errors, "status must be complete exactly when there are no mismatches")
+        (manifest["status"] == "retracted") == any(m -> m in RETRY_MISMATCH_CODES, manifest["mismatches"]) ||
+            push!(errors, "status must be retracted exactly when a retry mismatch is recorded")
         all(m -> m in COMPLETION_MISMATCH_CODES, manifest["mismatches"]) ||
             push!(errors, "mismatches must use the fixed mismatch codes")
     end
@@ -186,8 +236,9 @@ Recomputes the manifest from the run-start record and the current runner state, 
 publishes it without overwriting. The status is never taken from the caller.
 """
 function write_completion_manifest(path::AbstractString, start_record_bytes::AbstractVector{UInt8},
-        completed_case_ids::AbstractVector{<:AbstractString}, runner_now::AbstractDict)
-    manifest = completion_manifest(start_record_bytes, completed_case_ids, runner_now)
+        completed_case_ids::AbstractVector{<:AbstractString}, runner_now::AbstractDict;
+        retry_mismatches::AbstractVector{<:AbstractString}=String[])
+    manifest = completion_manifest(start_record_bytes, completed_case_ids, runner_now; retry_mismatches)
     validate_completion_manifest(manifest)
     _write_new_file(path, _toml_bytes(manifest))
     manifest

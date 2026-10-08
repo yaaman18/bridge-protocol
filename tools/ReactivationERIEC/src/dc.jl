@@ -2,12 +2,12 @@
 
 const DC_VALUE_KEYS = ["dc", "hSelf", "hSMC", "hAct", "hBound"]
 const DC_DIAGNOSTIC_KEYS = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty",
-                            "mask_self", "mask_smc", "mask_act"]
+                            "mask_self", "mask_smc", "mask_act", "hSelf_T"]
 
 """ERIEC's DC with the profile's boundary rule `outgoing_nonzero_edges`."""
 struct DCCriterion <: RM.AbstractCriterion end
 RM.criterion_id(::DCCriterion) = "dc"
-RM.criterion_version(::DCCriterion) = "dc-rsb003-v1"
+RM.criterion_version(::DCCriterion) = "dc-rsb003-v2"
 RM.required_structure(::DCCriterion) = (:n, :inputs, :outputs, :out_adjacency)
 
 """Core units with an out-neighbour (through a nonzero influence) outside the core, as a mask."""
@@ -26,6 +26,28 @@ function _collective_only_change(final::AbstractVector, n::Integer)
         count_ones(a) == 1 && (single |= changed)
     end
     any_change & ~single
+end
+
+"""
+    hself_t(record, structure, model) -> Bool
+
+Diagnostic hSelf_T (user decision 2026-10-07, logs/gates/DC-SEMANTICS-20261006/): every core
+constituent is produced through the actions (c ∈ Φ(κ), the reading hSelf uses), or it is lost only
+under joint silencing and every inclusion-minimal loss set of it meets κ ∪ ε. It credits redundantly
+supported constituents only; it is not a certification of DC (design-r2: loss sets are not support
+sets, and this diagnostic is not an alternative proof).
+"""
+function hself_t(record, structure, m)
+    n = structure[:n]
+    keep = record["kappa"] | (record["epsilon"] & structure[:inputs])
+    phi = _dc2_phi(m.pi, m.rho, m.kappa)
+    collective = record["collective_only_loss"]
+    all(m.kappa) do c
+        c in phi && return true
+        i = parse(Int, String(c)[2:end])
+        sets = record["loss_sets"][i + 1]
+        (collective >> i) & 1 == 1 && !isempty(sets) && all(a -> a & keep != 0, sets)
+    end
 end
 
 function RM.evaluate(::DCCriterion, record, structure)
@@ -48,5 +70,6 @@ function RM.evaluate(::DCCriterion, record, structure)
              # over-estimate of "may be hidden", not a proof that it is).
              "mask_self" => _names(_units((loss & record["kappa"]) | (loss & O), n)),
              "mask_smc" => _names(_units(change & (I | O), n)),
-             "mask_act" => _names(_units((loss & O) | (change & O), n))))
+             "mask_act" => _names(_units((loss & O) | (change & O), n)),
+             "hSelf_T" => hself_t(record, structure, m)))
 end

@@ -1,0 +1,12 @@
+Precompiling SubstrateRegistry...
+   2469.1 ms  ✓ SubstrateRegistry
+  1 dependency successfully precompiled in 3 seconds. 4 already precompiled.
+Precompiling ReactivationMeasurement...
+   1357.5 ms  ✓ ReactivationMeasurement
+  1 dependency successfully precompiled in 1 seconds. 5 already precompiled.
+Test Summary:                                | Pass  Total  Time
+RSB revision 2 semantic fixtures (not gates) | 1391   1391  4.2s
+Test Summary:                    |  Pass  Total   Time
+RSB-002 reactivation measurement | 70538  70538  26.7s
+Test Summary:                                            | Pass  Total   Time
+RSB-BIND-001: criterion binding under analysis schema v2 |   39     39  16.1s

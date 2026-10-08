@@ -1,0 +1,6 @@
+Test Summary:                                | Pass  Total  Time
+RSB revision 2 semantic fixtures (not gates) | 1391   1391  3.9s
+Test Summary:                    |  Pass  Total   Time
+RSB-002 reactivation measurement | 70538  70538  27.8s
+Test Summary:                                            | Pass  Total   Time
+RSB-BIND-001: criterion binding under analysis schema v2 |   37     37  15.4s

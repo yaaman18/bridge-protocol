@@ -146,3 +146,47 @@ function check_criteria_binding(analysis::AbstractDict, criteria)
     primary in ids || throw(ArgumentError("primary criterion $primary is missing"))
     true
 end
+
+"""
+    check_criteria_implementation(analysis, criteria, runner_repo) -> Dict(id => binding)
+
+RSB-PLAN-002 §3.3 (RSB-BIND-001): under an analysis plan with `[[criterion_binding]]`, each
+criterion must come from the registered package as checked out in the runner:
+1. the tree of `package_path` at the runner's HEAD has the registered OID;
+2. the criterion type is defined in a package named `package_name`;
+3. that package was loaded from `package_path` inside the runner checkout (`pkgdir`);
+4. `criterion_version` equals the registered value.
+A test stand-in defined in a test module fails (2); a same-named package loaded from elsewhere
+fails (3). Redefining `evaluate` from another module at run time is not prevented (§3.4).
+"""
+function check_criteria_implementation(analysis::AbstractDict, criteria, runner_repo::AbstractString)
+    bindings = Dict(b["criterion_id"] => b for b in analysis["criterion_binding"])
+    for c in criteria
+        id = criterion_id(c)
+        b = get(bindings, id, nothing)
+        b === nothing && throw(ArgumentError("criterion $id has no criterion_binding"))
+        path = b["package_path"]
+        tree_oid_at(runner_repo, "HEAD", path) == b["package_tree_oid"] ||
+            throw(ArgumentError("criterion $id: the runner's tree at $path differs from the registered OID"))
+        root = Base.moduleroot(parentmodule(typeof(c)))
+        String(nameof(root)) == b["package_name"] ||
+            throw(ArgumentError("criterion $id is defined in $(nameof(root)), not in the registered package $(b["package_name"])"))
+        dir = pkgdir(root)
+        expected = joinpath(runner_repo, path)
+        (dir !== nothing && isdir(expected) && realpath(dir) == realpath(expected)) ||
+            throw(ArgumentError("criterion $id: package $(nameof(root)) was not loaded from $path in the runner checkout"))
+        criterion_version(c) == b["criterion_version"] ||
+            throw(ArgumentError("criterion $id: version $(criterion_version(c)) differs from the registered $(b["criterion_version"])"))
+    end
+    bindings
+end
+
+"""The result's value and diagnostic keys must equal the registered ones exactly (RSB-PLAN-002 §4.2)."""
+function check_result_keys(result::AbstractDict, binding::AbstractDict)
+    id = result["criterion_id"]
+    sort!(collect(String, keys(result["values"]))) == sort(binding["value_keys"]) ||
+        throw(ArgumentError("criterion $id: value keys differ from the registered value_keys"))
+    sort!(collect(String, keys(result["diagnostics"]))) == sort(binding["diagnostic_keys"]) ||
+        throw(ArgumentError("criterion $id: diagnostic keys differ from the registered diagnostic_keys"))
+    true
+end
