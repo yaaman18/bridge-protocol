@@ -101,7 +101,8 @@ const KNOWN = joinpath(REPO, "tools", "model_audit", "fixtures", "dc2-known-diff
 # A scratch analysis plan v2 whose bindings carry the real result keys (OIDs are not read by the analysis).
 function scratch_plan_v2(path)
     draft = read(PLAN_V2, String)
-    filled = replace(draft, "package_tree_oid = \"PENDING-RSB-003\"" => "package_tree_oid = \"" * "a"^40 * "\"")
+    # Whatever the draft holds (PENDING before the freeze, the real tree after it), use a placeholder.
+    filled = replace(draft, r"package_tree_oid = \"[^\"]*\"" => "package_tree_oid = \"" * "a"^40 * "\"")
     filled = replace(filled, "profile_id = \"reactivation-substrate-v1\"" => "profile_id = \"scratch-fixture-01\"")
     write(path, filled)
     path
@@ -349,10 +350,11 @@ end
             plan(; version_dc="dc-rsb003-v2") = begin
                 t = read(scratch_plan_v2(joinpath(repo, "specs", "plan.toml")), String)
                 t = replace(t, "package_tree_oid = \"" * "a"^40 * "\"" => "package_tree_oid = \"$oid\"")
-                t = replace(t, "package_name = \"PENDING-RSB-003\"" => "package_name = \"ReactivationERIEC\"")
-                t = replace(t, "package_path = \"PENDING-RSB-003\"" => "package_path = \"tools/ReactivationERIEC\"")
-                t = replace(t, "criterion_version = \"PENDING-RSB-003\"" => "criterion_version = \"$version_dc\"", count=1)
-                t = replace(t, "criterion_version = \"PENDING-RSB-003\"" => "criterion_version = \"dc2-m1r-n3-rsb003-v1\"", count=1)
+                t = replace(t, r"package_name = \"[^\"]*\"" => "package_name = \"ReactivationERIEC\"")
+                t = replace(t, r"package_path = \"[^\"]*\"" => "package_path = \"tools/ReactivationERIEC\"")
+                t = replace(t, r"criterion_version = \"[^\"]*\"" => "criterion_version = \"$version_dc\"", count=1)
+                t = replace(t, r"(criterion_id = \"dc2\"\n)criterion_version = \"[^\"]*\"" =>
+                               s"\1criterion_version = \"dc2-m1r-n3-rsb003-v1\"")
                 write(joinpath(repo, "specs", "plan.toml"), t)
             end
             check() = RE.preflight(repo; plan_path="specs/plan.toml", profile_path="specs/profile.toml")
