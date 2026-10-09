@@ -9,7 +9,7 @@ using ERIEC
 #
 # This checks the v2 DRAFT only. It never reads or runs the registered reactivation profile.
 
-const PLAN_V2 = joinpath(@__DIR__, "..", "specs", "drafts", "reactivation-analysis-plan-v2.toml")
+const PLAN_V2 = joinpath(@__DIR__, "..", "specs", "reactivation-analysis-plan-v2.toml")
 const DC_KEYS = Set(["dc", "hSelf", "hSMC", "hAct", "hBound"])
 
 # Rows whose expectation is procedural (about registration, provenance or the whole enumeration),

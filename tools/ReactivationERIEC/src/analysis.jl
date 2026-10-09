@@ -1,6 +1,6 @@
 # The registered analysis (RSB-ANALYZE-001). It lives in the criterion package, which is bound by its
 # tree OID, so the analysis is preregistered together with the criteria. Every rule below is a rule
-# of the analysis plan v2 (specs/drafts/reactivation-analysis-plan-v2.toml); none is chosen here.
+# of the analysis plan v2 (specs/reactivation-analysis-plan-v2.toml); none is chosen here.
 # No numeric threshold appears (the redundancy threshold X was removed on 2026-10-07).
 
 using TOML
@@ -59,20 +59,25 @@ end
 _not_analyzed(base, reasons) = merge(base, Dict{String,Any}("status" => "not_analyzed", "reasons" => reasons))
 
 """
-    analyze_run(run_dir; profile_path, plan_path, known_differences_path) -> Dict
+    analyze_run(run_dir; repo, profile_path, plan_path) -> Dict
 
 The report of a completed run under the analysis plan v2. `status` is "not_analyzed" (a stop
 condition holds), "run_retracted" (a retraction condition on the run holds; no tally is given) or
-"analyzed".
+"analyzed". Relative paths are read from `repo`. The known-difference registry is the one the plan
+names, and it must carry the plan's `known_differences_sha256` (user decision 2026-10-09).
 """
-function analyze_run(run_dir::AbstractString; profile_path::AbstractString, plan_path::AbstractString,
-        known_differences_path::AbstractString)
+function analyze_run(run_dir::AbstractString; repo::AbstractString, profile_path::AbstractString,
+        plan_path::AbstractString)
+    resolve(p) = isabspath(p) ? p : joinpath(repo, p)
+    profile_path, plan_path = resolve(profile_path), resolve(plan_path)
     profile_bytes = read(profile_path)
     profile = SubstrateRegistry.validate_profile(profile_bytes;
         version=SubstrateRegistry.profile_schema_version_of(profile_bytes))
     sub, _ = RM.substrate_from_profile(profile)
     n, outputs = RM.nunits(sub), RM.roles(sub).outputs
     plan = SubstrateRegistry.validate_analysis_plan(read(plan_path); version="rsb-analysis-schema-v2")
+    informativeness = plan["dc2_unit_informativeness"]
+    known_differences_path = resolve(informativeness["known_differences"])
     classes = TOML.parsefile(known_differences_path)["class"]
     status_of = Dict(c["id"] => c["status"] for c in classes)
 
@@ -81,6 +86,8 @@ function analyze_run(run_dir::AbstractString; profile_path::AbstractString, plan
         "phenomenal_claim" => "not_certified",
         "plan_digest" => bytes2hex(SHA.sha256(read(plan_path))),
         "known_differences_sha256" => bytes2hex(SHA.sha256(read(known_differences_path))))
+    base["known_differences_sha256"] == informativeness["known_differences_sha256"] ||
+        return _not_analyzed(base, ["the known-difference registry differs from the registered digest"])
     isfile(start_path) || return _not_analyzed(base, ["run-start record missing"])
     start = TOML.parsefile(start_path)
     base["run_id"] = start["run_id"]

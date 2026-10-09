@@ -84,6 +84,7 @@ function scratch_analysis_v2(bindings)
     template_labels = "specs/scratch-labels.toml"
     ground_truth_spec = "specs/scratch-truth.md"
     known_differences = "specs/scratch-known.toml"
+    known_differences_sha256 = "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
     report_on = ["scratch"]
     recorded_every_run = ["scratch"]
     on_report = "scratch"

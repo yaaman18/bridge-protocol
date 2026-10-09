@@ -1,13 +1,17 @@
-# DRAFT — reactivation analysis plan v2 (RSB-PLAN-002). NOT REGISTERED. Do not run against it.
+# Reactivation analysis plan v2 (RSB-PLAN-002). Registered by the registry row that names this path
+# (specs/substrate-registry.toml). After registration it is never edited; a change needs a new plan
+# and a new registration.
 # Supersedes specs/reactivation-analysis-plan-v1.toml (registered, immutable; never edited).
 # Corrections from the Lean audit of 2026-09-30 (logs/gates/LEAN-AUDIT-20260930/README.md):
 #   1. the DC2 retraction checks only what DC2.toDC proves (hSelf, hSMC, hAct, beta nonempty);
 #      the graph-boundary hBound and the beta-boundary hBound are recorded as two concepts.
 #   2. the ALL-OFF expectation: hSelf and hSMC are vacuously true on the empty core.
-# Every falsification row carries machine-checkable `expected_components`, compared against the
-# definitions by test/test_analysis_plan_expectations.jl, so a written expectation cannot drift
-# from the definitions again. Rows whose components need DC2 stay pending until RSB-003.
-# Fields left as "PENDING-RSB-003" are filled only after the DC and DC2 plugin is frozen.
+# Every falsification row carries machine-checkable `expected_components` where it concerns values,
+# compared against the definitions by test/test_analysis_plan_expectations.jl and
+# tools/ReactivationERIEC/test/runtests.jl, so a written expectation cannot drift from the definitions.
+# The criterion bindings name the tree of tools/ReactivationERIEC, and known_differences_sha256 the
+# known-difference registry, at the commit that carries this file (RSB-003 freeze). Any change to that
+# directory or that registry invalidates them.
 analysis_schema_version = 2
 profile_id = "reactivation-substrate-v1"
 analysis_plan_id = "reactivation-analysis-plan-v2"
@@ -66,6 +70,7 @@ check = "planted_templates_and_v4_pair_truth"
 template_labels = "tools/model_audit/fixtures/organization-ground-truth-v2.toml"
 ground_truth_spec = "specs/packets/DC2-GROUND-TRUTH-004.md"
 known_differences = "tools/model_audit/fixtures/dc2-known-differences.toml"
+known_differences_sha256 = "9c8dabcd8fd3a3e5936086379c13fb77981fbace0bb9779db9d7a18cf805826f"
 report_on = ["template_disagreement", "unclassified_difference", "pending_class_difference"]
 recorded_every_run = ["difference_counts_by_class", "accepted_share_of_v4_pairs"]
 on_report = "report_to_user_for_N3_revision"
@@ -191,10 +196,10 @@ expected_components = { dc = false, hBound = false, classification = "fail" }
 
 [[criterion_binding]]
 criterion_id = "dc"
-criterion_version = "PENDING-RSB-003"
-package_name = "PENDING-RSB-003"
-package_path = "PENDING-RSB-003"
-package_tree_oid = "PENDING-RSB-003"
+criterion_version = "dc-rsb003-v2"
+package_name = "ReactivationERIEC"
+package_path = "tools/ReactivationERIEC"
+package_tree_oid = "6fa90bd4ba19001659c0e8b0e87dc3a6af9c5f9b"
 value_keys = ["dc", "hSelf", "hSMC", "hAct", "hBound"]
 diagnostic_keys = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty", "mask_self", "mask_smc", "mask_act", "hSelf_T"]
 # ERIEC itself (src/) is recorded at run start, not bound (RSB-PLAN-002 §3.5).
@@ -202,10 +207,10 @@ dependency_paths = ["src"]
 
 [[criterion_binding]]
 criterion_id = "dc2"
-criterion_version = "PENDING-RSB-003"
-package_name = "PENDING-RSB-003"
-package_path = "PENDING-RSB-003"
-package_tree_oid = "PENDING-RSB-003"
+criterion_version = "dc2-m1r-n3-rsb003-v1"
+package_name = "ReactivationERIEC"
+package_path = "tools/ReactivationERIEC"
+package_tree_oid = "6fa90bd4ba19001659c0e8b0e87dc3a6af9c5f9b"
 # Fixed by the RSB-003 implementation (tools/ReactivationERIEC/src/dc2.jl), 2026-10-04.
 value_keys = ["dc2", "hSelf2", "hSMC", "hHingeNeeded", "hUnit", "beta_nonempty"]
 diagnostic_keys = ["act", "beta", "sigma_cover", "mutual_pairs", "hUnit_v1", "irreducible_units"]

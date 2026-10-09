@@ -15,7 +15,7 @@
 ## 2. 確認済みの証拠
 
 - 解析計画の schema は v1 のみで、未知のキーを拒否する厳密な schema（`tools/SubstrateRegistry/src/schema.jl`）。
-  任意キーの仕組みはない。v2 草案（`specs/drafts/reactivation-analysis-plan-v2.toml`）は v1 schema を通らない。
+  任意キーの仕組みはない。v2 草案（`specs/reactivation-analysis-plan-v2.toml`）は v1 schema を通らない。
 - 検証器は profile と解析計画の blob を `profile_commit` から `registration_commit` までの全 commit で照合している
   （`verify.jl` (iv)）。tree OID の照合はない。
 - `start_run` は解析計画を runner checkout から読み直し、`check_criteria_binding` で名前だけを照合する（`run.jl`）。

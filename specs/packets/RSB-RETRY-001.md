@@ -79,4 +79,4 @@ ReactivationMeasurement の試験で、scratch の v2 登録について:
 実装とゲートの実行を終えた（`logs/gates/RSB-RETRY-001/README.md`）。変更したファイル:
 `tools/SubstrateRegistry/src/{schema.jl, records.jl}`、`tools/ReactivationMeasurement/src/{run.jl, ReactivationMeasurement.jl}`、
 試験 `tools/ReactivationMeasurement/test/binding_v2.jl`、`tools/ReactivationERIEC/test/runtests.jl`（UNMASKED）、
-`test/test_analysis_plan_expectations.jl`、草案 `specs/drafts/reactivation-analysis-plan-v2.toml`。
+`test/test_analysis_plan_expectations.jl`、草案 `specs/reactivation-analysis-plan-v2.toml`。

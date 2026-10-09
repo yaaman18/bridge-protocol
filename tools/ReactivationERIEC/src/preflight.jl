@@ -30,6 +30,17 @@ function preflight(repo::AbstractString; plan_path::AbstractString, profile_path
         e isa SubstrateRegistry.SchemaViolation || rethrow()
         append!(problems, "profile/plan pair: " .* e.errors)
     end
+    informativeness = plan["dc2_unit_informativeness"]
+    kd = informativeness["known_differences"]
+    kd_full = joinpath(repo, kd)
+    if !isfile(kd_full)
+        push!(problems, "the known-difference registry $kd does not exist")
+    else
+        bytes2hex(SHA.sha256(read(kd_full))) == informativeness["known_differences_sha256"] ||
+            push!(problems, "the known-difference registry $kd differs from known_differences_sha256")
+        dirty_kd = read(setenv(`git -C $repo status --porcelain --untracked-files=all -- $kd`, ENV), String)
+        isempty(dirty_kd) || push!(problems, "the known-difference registry $kd has uncommitted changes")
+    end
     defined = Dict("dc" => (DCCriterion(), DC_VALUE_KEYS, DC_DIAGNOSTIC_KEYS),
                    "dc2" => (DC2Criterion(), DC2_VALUE_KEYS, DC2_DIAGNOSTIC_KEYS))
     for b in plan["criterion_binding"]

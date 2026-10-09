@@ -271,6 +271,9 @@ const ANALYSIS_SCHEMA_V2_KEYS = Dict{String,Any}(
         "template_labels" => field(:relpath),
         "ground_truth_spec" => field(:relpath),
         "known_differences" => field(:relpath),
+        # The registry's statuses decide what is reported; binding its digest keeps a status change
+        # after the results are seen visible as a deviation (user decision 2026-10-09).
+        "known_differences_sha256" => field(:hex64),
         "report_on" => field(:string_list),
         "recorded_every_run" => field(:string_list),
         "on_report" => field(:string),

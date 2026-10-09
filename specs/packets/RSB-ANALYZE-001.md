@@ -1,7 +1,7 @@
 # RSB-ANALYZE-001: 登録した解析を実行する解析プログラム
 
 - 作成: 2026-10-08（ユーザー指示「どんどん実装を続けて」）
-- 出典: 解析計画 v2 草案（`specs/drafts/reactivation-analysis-plan-v2.toml`）の `[interpretation]`・`[incomplete_runs]`・
+- 出典: 解析計画 v2 草案（`specs/reactivation-analysis-plan-v2.toml`）の `[interpretation]`・`[incomplete_runs]`・
   `[redundancy]`・`[dc2_unit_informativeness]`・`[decisions]`。RSB-PLAN-002 §5、§6、§14。
 - 登録済み profile では run しない。scratch の run と合成した run ディレクトリだけで試験する。
 

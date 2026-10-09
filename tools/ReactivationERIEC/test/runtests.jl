@@ -15,7 +15,7 @@ const SR = SubstrateRegistry
 const RE = ReactivationERIEC
 
 const REPO = normpath(joinpath(@__DIR__, "..", "..", ".."))
-const PLAN_V2 = joinpath(REPO, "specs", "drafts", "reactivation-analysis-plan-v2.toml")
+const PLAN_V2 = joinpath(REPO, "specs", "reactivation-analysis-plan-v2.toml")
 include(joinpath(REPO, "tools", "ModelAudit.jl"))          # the audit's circuits and DC/DC2
 
 # ---------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ end
 
 function analysis_checks(root, out, profile)
     plan = scratch_plan_v2(joinpath(root, "scratch-plan-v2.toml"))
-    analyze(dir) = RE.analyze_run(dir; profile_path=profile, plan_path=plan, known_differences_path=KNOWN)
+    analyze(dir) = RE.analyze_run(dir; repo=REPO, profile_path=profile, plan_path=plan)
     report = analyze(out)
     @test report["status"] == "analyzed" && report["phenomenal_claim"] == "not_certified"
     # Independent recount from the result files.
@@ -138,6 +138,12 @@ function analysis_checks(root, out, profile)
     edit(dir, id, case, f) = (p = joinpath(dir, "criteria", id, case * ".toml"); d = TOML.parsefile(p); f(d);
                               open(io -> TOML.print(io, d; sorted=true), p, "w"))
     @test tampered("no-completion", d -> rm(joinpath(d, "completion.toml")))["status"] == "not_analyzed"
+    # The registry is bound by digest: a plan naming another digest is not analyzed.
+    other = joinpath(root, "scratch-plan-other-digest.toml")
+    write(other, replace(read(plan, String), r"known_differences_sha256 = \"[0-9a-f]{64}\"" =>
+                                                "known_differences_sha256 = \"" * "d"^64 * "\""))
+    r = RE.analyze_run(out; repo=REPO, profile_path=profile, plan_path=other)
+    @test r["status"] == "not_analyzed" && any(x -> occursin("registered digest", x), r["reasons"])
     @test tampered("missing-case", d -> rm(joinpath(d, "cases", ids[end] * ".toml")))["status"] == "not_analyzed"
     @test tampered("extra-key", d -> edit(d, "dc", ids[2], r -> (r["diagnostics"]["extra"] = 1)))["status"] == "not_analyzed"
     zero = only(c for c in ids if TOML.parsefile(joinpath(out, "cases", c * ".toml"))["q"] == 0)
@@ -345,6 +351,8 @@ end
             cp(joinpath(REPO, "tools", "ReactivationERIEC"), joinpath(repo, "tools", "ReactivationERIEC"))
             mkpath(joinpath(repo, "src")); write(joinpath(repo, "src", "stub.jl"), "# dependency path\n")
             mkpath(joinpath(repo, "specs")); write(joinpath(repo, "specs", "profile.toml"), scratch_profile())
+            mkpath(dirname(joinpath(repo, relpath(KNOWN, REPO))))
+            cp(KNOWN, joinpath(repo, relpath(KNOWN, REPO)))
             git("add", "-A"); git("commit", "-q", "-m", "package")
             oid = SR.tree_oid_at(repo, "HEAD", "tools/ReactivationERIEC")
             plan(; version_dc="dc-rsb003-v2") = begin
@@ -369,6 +377,8 @@ end
             @test any(p -> occursin("uncommitted", p), check()["problems"])
             git("add", "-A"); git("commit", "-q", "-m", "drift")
             @test any(p -> occursin("tree of tools/ReactivationERIEC", p), check()["problems"])
+            open(io -> write(io, "# edited\n"), joinpath(repo, relpath(KNOWN, REPO)), "a")
+            @test any(p -> occursin("differs from known_differences_sha256", p), check()["problems"])
         end
     end
 

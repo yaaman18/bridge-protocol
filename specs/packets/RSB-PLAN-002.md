@@ -207,7 +207,7 @@ DC2 false（空でない既約単位が存在しない）」とする。
 文章として書かれた期待値が定義とずれたら、その試験が落ちるようにする。
 
 **2026-09-30 実施済み**:
-- 訂正を反映した草案 `specs/drafts/reactivation-analysis-plan-v2.toml`（未登録。DC・DC2 の実装の同一性など
+- 訂正を反映した草案 `specs/reactivation-analysis-plan-v2.toml`（未登録。DC・DC2 の実装の同一性など
   RSB-003 を待つ欄は `PENDING-RSB-003`）。
 - 照合試験 `test/test_analysis_plan_expectations.jl`。DC の値で決まる期待値は、200 通りの関係の選び方の
   それぞれで定義と照合する。DC2・`beta`・冗長性の分類が要る期待値は、行と欄を明示した保留一覧に載せ、
@@ -354,7 +354,7 @@ X は研究判断であり、**結果を見た後では決められない**。�
 反証条件: 本番で「DC 偽、dc_T 偽、mask_smc か mask_act が空でない」case が DC の不成立の大部分を占めたら、
 この改訂は冗長性の問題の主戦場（hSMC・hAct 側）を外している。その場合は hSMC・hAct 側にも同様の精密化を検討する。
 
-反映先: `specs/drafts/reactivation-analysis-plan-v2.toml` の `[redundancy]`、反証行 REDUNDANCY と
+反映先: `specs/reactivation-analysis-plan-v2.toml` の `[redundancy]`、反証行 REDUNDANCY と
 REDUNDANCY-UNMEDIATED、dc の `diagnostic_keys`。実装: `tools/ReactivationERIEC/src/dc.jl`（criterion_version `dc-rsb003-v2`）。
 
 ## 15. §2(2) の実装状況（2026-10-08）
