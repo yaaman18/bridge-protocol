@@ -199,7 +199,7 @@ criterion_id = "dc"
 criterion_version = "dc-rsb003-v2"
 package_name = "ReactivationERIEC"
 package_path = "tools/ReactivationERIEC"
-package_tree_oid = "6fa90bd4ba19001659c0e8b0e87dc3a6af9c5f9b"
+package_tree_oid = "91405947d5aabe00de5e71506dc9df0eab004707"
 value_keys = ["dc", "hSelf", "hSMC", "hAct", "hBound"]
 diagnostic_keys = ["act", "boundary", "kappa_nonempty", "epsilon_nonempty", "mask_self", "mask_smc", "mask_act", "hSelf_T"]
 # ERIEC itself (src/) is recorded at run start, not bound (RSB-PLAN-002 §3.5).
@@ -210,7 +210,7 @@ criterion_id = "dc2"
 criterion_version = "dc2-m1r-n3-rsb003-v1"
 package_name = "ReactivationERIEC"
 package_path = "tools/ReactivationERIEC"
-package_tree_oid = "6fa90bd4ba19001659c0e8b0e87dc3a6af9c5f9b"
+package_tree_oid = "91405947d5aabe00de5e71506dc9df0eab004707"
 # Fixed by the RSB-003 implementation (tools/ReactivationERIEC/src/dc2.jl), 2026-10-04.
 value_keys = ["dc2", "hSelf2", "hSMC", "hHingeNeeded", "hUnit", "beta_nonempty"]
 diagnostic_keys = ["act", "beta", "sigma_cover", "mutual_pairs", "hUnit_v1", "irreducible_units"]
