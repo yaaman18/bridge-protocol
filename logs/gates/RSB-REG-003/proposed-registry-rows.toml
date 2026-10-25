@@ -1,0 +1,23 @@
+
+[[registration]]
+registration_id = "rsb-003-reactivation-substrate-v1-r2-plan-v2"
+profile_path = "specs/reactivation-substrate-v1-r2.toml"
+analysis_plan_path = "specs/reactivation-analysis-plan-v2.toml"
+profile_blob_sha256 = "b6457ac8558141f01845b04f44cfa71b797e729b00a4b9ee62809d6a9d8699b8"
+analysis_plan_digest = "ec1feeb08fc6ee86ed17388e42bc04d25080df4f503de8111d7376945b3386e3"
+profile_commit = "f9d47d9c60c59aa016a1a99d79ce4c5afece3e30"
+remote_url = "https://github.com/yaaman18/bridge-protocol.git"
+remote_ref = "refs/heads/main"
+profile_schema_validation_version = "rsb-profile-schema-v2"
+analysis_schema_validation_version = "rsb-analysis-schema-v2"
+author_declared_at = "2026-10-09T10:04:41Z"
+author_declared_at_semantics = "self_declared_not_used_for_ordering"
+supersedes = "rsb-002-reactivation-substrate-v1-r2"
+
+[[withdrawal]]
+registration_id = "rsb-002-reactivation-substrate-v1-r2"
+reason = "analysis plan v1 had two logical errors (found by the Lean audit of 2026-09-30) and no criterion binding; withdrawn before any run and replaced by analysis plan v2 (RSB-PLAN-002, user decision 2026-10-09)"
+superseded_by = "rsb-003-reactivation-substrate-v1-r2-plan-v2"
+results_seen_before_withdrawal = false
+declared_at = "2026-10-09T10:04:41Z"
+declared_at_semantics = "self_declared_not_used_for_ordering"
