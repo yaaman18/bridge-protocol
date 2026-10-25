@@ -1,0 +1,5 @@
+agency passers=129  tracking overlaps core=106  of which agency still holds with tracking outside the core only=50
+agent                    tracking=["s1", "s2"] core=["c1", "c2"]
+static-agent             tracking=["s1", "s2"] core=["c1", "c2"]
+oscillating-core-agent   tracking=["s1", "s2"] core=["a", "b"]
+sensor-in-core           tracking=["s1", "s2", "c1", "c2"] core=["c1", "c2"]

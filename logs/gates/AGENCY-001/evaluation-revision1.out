@@ -1,0 +1,14 @@
+Precompiling AgencySubstrate...
+   1331.3 ms  ✓ AgencySubstrate
+  1 dependency successfully precompiled in 1 seconds. 4 already precompiled.
+== templates.toml  sha256=e18130213f6a2902
+agent                L2 T→T    L3 T→T     core=["c1", "c2"] hinge=true tracking=["s1", "s2"]
+static-agent         L2 T→T    L3 F→F     core=["c1", "c2"] hinge=true tracking=["s1", "s2"]
+reflex               L2 F→F    L3 T→T     core=["m1", "c1", "c2"] hinge=true tracking=String[]
+thermostat           L2 F→F    L3 T→T     core=["c1", "c2"] hinge=false tracking=String[]
+alternator           L2 F→F    L3 T→T     core=["a", "b", "m1", "m2"] hinge=true tracking=String[]
+no-loop              L2 F→F    L3 F→F     core=String[] hinge=false tracking=String[]
+== templates-adversarial.toml  sha256=9a3fc557e7caa599
+agent-plus-foragers  L2 F→F    L3 T→T     core=["m3", "m4", "c1", "c2"] hinge=true tracking=["s1", "s2"]
+resource-switcher    L2 F→F    L3 T→T     core=["m1", "c1", "c2"] hinge=true tracking=String[]
+stimulus-response    L2 F→F    L3 F→F     core=String[] hinge=false tracking=["s1", "s2"]

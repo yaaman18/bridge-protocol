@@ -1,0 +1,4 @@
+decoupled-forager      L2 F→F    L3 T→T     core=["c1", "c2"] hinge=false diff=true tracking=["s1", "s2"] needed=true alive=true
+oscillating-core-agent L2 T→T    L3 T→T     core=["a", "b"] hinge=true diff=true tracking=["s1", "s2"] needed=true alive=true
+sensor-in-core         L2 T→T    L3 T→T     core=["c1", "c2"] hinge=true diff=true tracking=["s1", "s2", "c1", "c2"] needed=true alive=true
+crossed-wiring         L2 F→F    L3 T→T     core=["c1", "c2"] hinge=true diff=true tracking=["s1", "s2"] needed=false alive=false

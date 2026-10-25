@@ -1,0 +1,7 @@
+sha256 3ae2c651f05378a53229db4a5ce59f3a6b9757f29844d379c90f89e0b63aff15
+costly-tracker: label L2=false L3=true | agency=false self_producing=true  agree
+   core=["m2", "c1", "c2"] hinge=true alive_somewhere=true differentiated=true value_needed=false tracking=["s1", "s2"]
+   choices=Dict("c1-better" => ["m1"], "c2-better" => ["m2", "m3"]) survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0) without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 1, "p2-then-p1" => 0, "p1-then-p2" => 0)
+shared-relay-reflex: label L2=false L3=false | agency=false self_producing=false  agree
+   core=String[] hinge=false alive_somewhere=true differentiated=true value_needed=true tracking=["s1", "s2"]
+   choices=Dict("c1-better" => ["m1"], "c2-better" => ["m2"]) survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1) without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)

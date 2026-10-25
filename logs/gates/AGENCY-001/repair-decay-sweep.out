@@ -1,0 +1,7 @@
+decay_period=2   lifetime=8    self-repairing: repairing-agent, repairing-core
+decay_period=4   lifetime=16   self-repairing: repairing-agent, repairing-core
+decay_period=8   lifetime=32   self-repairing: repairing-agent, repairing-core
+decay_period=12  lifetime=48   self-repairing: repairing-agent, repairing-core
+decay_period=15  lifetime=60   self-repairing: repairing-agent, repairing-core
+decay_period=16  lifetime=64   self-repairing: (none)
+decay_period=32  lifetime=128  self-repairing: (none)

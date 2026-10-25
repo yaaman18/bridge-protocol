@@ -1,0 +1,75 @@
+# Adversarial templates of AGENCY-001: built to fool the criteria. Labels come from the concept, not
+# from a measurement, and are frozen (logs/gates/AGENCY-001/freeze-adversarial.txt) before evaluation.
+# Same [params] as templates.toml (copied so that this file stands alone).
+schema_version = 1
+
+[params]
+smax = 4
+decay_period = 8
+grow_cost = 1
+resource0 = 10
+rmax = 30
+horizon = 60
+alive_window = 5
+strength0 = 4
+switch_at = 20
+survival_schedules = [
+  { name = "p1-high", first = [5, 0], second = [5, 0] },
+  { name = "p2-high", first = [0, 5], second = [0, 5] },
+  { name = "p1-then-p2", first = [5, 0], second = [0, 5] },
+  { name = "p2-then-p1", first = [0, 5], second = [5, 0] },
+]
+choice_resource0 = 1000
+choice_rmax = 100000
+choice_window = [5, 15]
+choice_schedules = [
+  { name = "c1-better", first = [5, 4], second = [5, 4] },
+  { name = "c2-better", first = [4, 5], second = [4, 5] },
+]
+
+# The agent plus two foragers that harvest both patches unconditionally. Its choice differs with value,
+# but it survives just as well without the value-tracking: tracking is not needed. Not an agent.
+[[template]]
+name = "agent-plus-foragers"
+L2 = false
+L3 = true
+units = ["s1", "s2", "m1", "m2", "m3", "m4", "c1", "c2"]
+theta = [1, 1, 2, 2, 1, 1, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2, m3 = 1, m4 = 2 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["s1", "m1", 1], ["c1", "m1", 1], ["s2", "m2", 1], ["c2", "m2", 1], ["c1", "m3", 1], ["c2", "m4", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# Harvests patch 1; when its own resource runs low it switches to patch 2. It tracks its own state, not
+# the value of the couplings. Under the AGENCY-001 definition (value-differentiated action) it is not an
+# agent; whether such self-state regulation should count is a conceptual question left open.
+[[template]]
+name = "resource-switcher"
+L2 = false
+L3 = true
+units = ["r", "m1", "m2", "c1", "c2", "i"]
+theta = [1, 1, 2, 1, 1, 1]
+patch_sensors = {}
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = { r = [5, "low"] }
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["c1", "m1", 1], ["i", "m1", -1], ["r", "i", 1], ["r", "m2", 1], ["c2", "m2", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# Sensors drive the motors directly; there is no self-sustaining loop. Its activity is entirely driven by
+# the environment. It is not self-maintaining, so not an agent; and its connections are kept by
+# environment-driven activity, not by its own, so not self-producing.
+[[template]]
+name = "stimulus-response"
+L2 = false
+L3 = false
+units = ["s1", "s2", "m1", "m2"]
+theta = [1, 1, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["s1", "m1", 1], ["s2", "m2", 1]]
+initial = []
+maintain = true

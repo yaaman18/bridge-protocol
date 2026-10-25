@@ -1,0 +1,17 @@
+== (1) decay_period sweep (horizon 60, strength0 4)
+decay_period=2   lifetime=8    L2/L3: agent:T/T  static-agent:T/F  reflex:F/T  thermostat:F/T  alternator:F/T  no-loop:F/F
+decay_period=4   lifetime=16   L2/L3: agent:T/T  static-agent:T/F  reflex:F/T  thermostat:F/T  alternator:F/T  no-loop:F/F
+decay_period=8   lifetime=32   L2/L3: agent:T/T  static-agent:T/F  reflex:F/T  thermostat:F/T  alternator:F/T  no-loop:F/F
+decay_period=12  lifetime=48   L2/L3: agent:T/T  static-agent:T/F  reflex:F/T  thermostat:F/T  alternator:F/T  no-loop:F/F
+decay_period=15  lifetime=60   L2/L3: agent:T/T  static-agent:T/F  reflex:F/T  thermostat:F/T  alternator:F/T  no-loop:F/F
+decay_period=16  lifetime=64   L2/L3: agent:T/F  static-agent:T/F  reflex:F/F  thermostat:F/F  alternator:F/F  no-loop:F/F
+decay_period=32  lifetime=128  L2/L3: agent:T/F  static-agent:T/F  reflex:F/F  thermostat:F/F  alternator:F/F  no-loop:F/F
+== (2) random circuits
+circuits=20000 agency=129 self_producing=3513 both=129
+component counts: ["alive_somewhere" => 7878, "core_enables_action" => 1047, "differentiated" => 9389, "self_maintaining" => 3510, "value_needed" => 4588]
+example #88 core=["m1", "m2", "x1", "x2"] tracking=["s1", "m1"] theta=[1, 1, 1, 1, 1, 1, 1]
+   edges=[("s1", "m2", -1), ("s1", "x1", -1), ("s2", "m2", 1), ("s2", "x1", 1), ("m1", "x2", 1), ("m1", "x3", -1), ("m2", "x2", 1), ("x1", "m2", 1), ("x2", "m1", 1), ("x2", "x1", 1), ("x3", "x1", 1), ("x3", "x2", 1)]
+example #147 core=["m2", "x3"] tracking=["s1"] theta=[1, 1, 2, 1, 2, 1, 1]
+   edges=[("s1", "m1", 1), ("s1", "x2", -1), ("s2", "m1", -1), ("s2", "x2", -1), ("m1", "x1", -1), ("m1", "x2", -1), ("m1", "x3", 1), ("m2", "m1", 1), ("m2", "x2", -1), ("m2", "x3", 1), ("x2", "m2", 1), ("x2", "x1", -1), ("x3", "m2", 1), ("x3", "x2", 1)]
+example #350 core=["m2", "x2"] tracking=["s1", "s2", "m1", "x1", "x2", "x3"] theta=[1, 1, 2, 1, 2, 1, 2]
+   edges=[("s1", "m1", 1), ("s1", "m2", 1), ("s1", "x3", -1), ("s2", "m1", 1), ("s2", "m2", -1), ("s2", "x3", 1), ("m1", "m2", -1), ("m1", "x1", 1), ("m2", "m1", 1), ("m2", "x2", 1), ("m2", "x3", 1), ("x1", "x3", 1), ("x2", "m2", 1), ("x2", "x1", 1), ("x2", "x3", -1), ("x3", "m1", 1), ("x3", "m2", -1)]

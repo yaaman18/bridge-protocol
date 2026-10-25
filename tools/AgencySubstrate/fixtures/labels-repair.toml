@@ -1,0 +1,30 @@
+# Labels of the deepened L3 (self-repair, L3R) for the 15 templates written before it (the four
+# frozen template sets). Labels come from the concept and are frozen
+# (logs/gates/AGENCY-001/freeze-repair.txt) before the criterion is implemented or run.
+#
+# Every self-maintaining core among them is a pair of units that keep each other going (c1 and c2, or
+# the alternating a and b). Silencing either unit's output stops the other, so a lost constituent can
+# never grow back. Templates without such a core, or whose structure is given from outside, are not
+# self-producing to begin with. All are false.
+schema_version = 1
+
+[L3R]
+# templates.toml
+agent = false
+static-agent = false
+reflex = false
+thermostat = false
+alternator = false
+no-loop = false
+# templates-adversarial.toml
+agent-plus-foragers = false
+resource-switcher = false
+stimulus-response = false
+# templates-adversarial-2.toml
+decoupled-forager = false
+oscillating-core-agent = false
+sensor-in-core = false
+crossed-wiring = false
+# templates-adversarial-3.toml
+costly-tracker = false
+shared-relay-reflex = false

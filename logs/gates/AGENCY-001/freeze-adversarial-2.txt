@@ -1,0 +1,3 @@
+frozen_at = 2026-10-09T10:49:20Z
+note = round-2 adversarial labels fixed after the criteria revision and before evaluating it on them
+4db4d8cdc45ce5758cd673b1cce6af4f95faea48b8c061d779b726467c556564  tools/AgencySubstrate/fixtures/templates-adversarial-2.toml

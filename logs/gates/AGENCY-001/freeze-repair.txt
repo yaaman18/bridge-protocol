@@ -1,0 +1,4 @@
+frozen_at = 2026-10-24T13:55:17Z
+note = labels of the deepened L3 (self-repair, user decision 2026-10-24) fixed before the criterion is implemented or run
+3a1ae6b79aedfd635610066597c323585108fc5e39444a7005e0dc8f6207b352  tools/AgencySubstrate/fixtures/templates-repair.toml
+dc3c7a181c7cb697aaa0f61bfb0e90a5ce38957d776800cfbc65e4bef248a660  tools/AgencySubstrate/fixtures/labels-repair.toml

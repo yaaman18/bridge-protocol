@@ -1,0 +1,8 @@
+'ERIEC.Agency.ValueNeeded' does not depend on any axioms
+'ERIEC.Agency.SelfProducing' does not depend on any axioms
+'ERIEC.Agency.Model.dc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Agency.Model.agency' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Agency.dc_does_not_entail_valueNeeded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Agency.agency_does_not_entail_mattering' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Agency.agency_does_not_entail_selfProducing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ERIEC.Agency.agency_dc' depends on axioms: [propext, Quot.sound]

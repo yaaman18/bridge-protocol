@@ -1,0 +1,6 @@
+agent-plus-foragers  L2 label=false got=false   L3 label=true  got=true   
+     differentiated=true tracking=["s1", "s2"] needed=false survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1) without=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1)
+resource-switcher    L2 label=false got=false   L3 label=true  got=true   
+     differentiated=false tracking=String[] needed=false survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0) without=Dict{String, Bool}()
+stimulus-response    L2 label=false got=true  ✗ L3 label=false got=true  ✗
+     differentiated=true tracking=["s1", "s2"] needed=true survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1) without=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)

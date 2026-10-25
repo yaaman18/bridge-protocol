@@ -1,0 +1,114 @@
+# Templates of AGENCY-001 for the deepened L3 (user decision of 2026-10-24): self-repair, the
+# regeneration by the system's own activity of a constituent it has lost. L3R is the label of the
+# deepened L3; labels come from the concept, not from a measurement, and are frozen
+# (logs/gates/AGENCY-001/freeze-repair.txt) before the criterion is implemented or run.
+# The damage is source silencing only (P-04): a core unit is silenced long enough for its outgoing
+# connections to decay to nothing, then released. A lost constituent is regenerated only if both of
+# its ends are active again by the system's own activity.
+# Same [params] as templates.toml (copied so that this file stands alone).
+schema_version = 1
+
+[params]
+smax = 4
+decay_period = 8
+grow_cost = 1
+resource0 = 10
+rmax = 30
+horizon = 60
+alive_window = 5
+strength0 = 4
+switch_at = 20
+survival_schedules = [
+  { name = "p1-high", first = [5, 0], second = [5, 0] },
+  { name = "p2-high", first = [0, 5], second = [0, 5] },
+  { name = "p1-then-p2", first = [5, 0], second = [0, 5] },
+  { name = "p2-then-p1", first = [0, 5], second = [5, 0] },
+]
+choice_resource0 = 1000
+choice_rmax = 100000
+choice_window = [5, 15]
+choice_schedules = [
+  { name = "c1-better", first = [5, 4], second = [5, 4] },
+  { name = "c2-better", first = [4, 5], second = [4, 5] },
+]
+
+# The agent with a core of three units, each driving the other two. Losing the output of any one core
+# unit leaves the other two running, and the lost connections grow back once it is released.
+[[template]]
+name = "repairing-agent"
+L2 = true
+L3 = true
+L3R = true
+units = ["s1", "s2", "m1", "m2", "c1", "c2", "c3"]
+theta = [1, 1, 2, 2, 1, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c1", "c3", 1], ["c2", "c1", 1], ["c2", "c3", 1], ["c3", "c1", 1], ["c3", "c2", 1], ["s1", "m1", 1], ["c1", "m1", 1], ["s2", "m2", 1], ["c2", "m2", 1]]
+initial = ["c1", "c2", "c3"]
+maintain = true
+
+# The same three-unit core without sensing; its motor is driven by two core units, so the motor stays
+# active while either is silenced and the lost connection to it grows back. Not an agent.
+[[template]]
+name = "repairing-core"
+L2 = false
+L3 = true
+L3R = true
+units = ["m1", "c1", "c2", "c3"]
+theta = [1, 1, 1, 1]
+patch_sensors = {}
+motors = { m1 = 1 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c1", "c3", 1], ["c2", "c1", 1], ["c2", "c3", 1], ["c3", "c1", 1], ["c3", "c2", 1], ["c1", "m1", 1], ["c2", "m1", 1]]
+initial = ["c1", "c2", "c3"]
+maintain = true
+
+# Three units in a one-way ring. It maintains its connections, but silencing any one unit stops the
+# whole ring: size without alternative routes does not repair.
+[[template]]
+name = "ring-of-three"
+L2 = false
+L3 = true
+L3R = false
+units = ["c1", "c2", "c3"]
+theta = [1, 1, 1]
+patch_sensors = {}
+motors = {}
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c3", 1], ["c3", "c1", 1]]
+initial = ["c1", "c2", "c3"]
+maintain = true
+
+# The repairing three-unit core with a fourth unit kept only by c3. Silencing c3 stops c4, and the
+# connections between them never grow back: the system loses a part of itself for good. Repair must
+# hold for every constituent, so not self-repairing.
+[[template]]
+name = "partially-repairing"
+L2 = false
+L3 = true
+L3R = false
+units = ["c1", "c2", "c3", "c4"]
+theta = [1, 1, 1, 1]
+patch_sensors = {}
+motors = {}
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c1", "c3", 1], ["c2", "c1", 1], ["c2", "c3", 1], ["c3", "c1", 1], ["c3", "c2", 1], ["c3", "c4", 1], ["c4", "c3", 1]]
+initial = ["c1", "c2", "c3", "c4"]
+maintain = true
+
+# The repairing core with connections that never change (structure given from outside). Nothing is
+# lost, so nothing is regenerated; and it is not self-producing to begin with.
+[[template]]
+name = "static-redundant-core"
+L2 = false
+L3 = false
+L3R = false
+units = ["c1", "c2", "c3"]
+theta = [1, 1, 1]
+patch_sensors = {}
+motors = {}
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c1", "c3", 1], ["c2", "c1", 1], ["c2", "c3", 1], ["c3", "c1", 1], ["c3", "c2", 1]]
+initial = ["c1", "c2", "c3"]
+maintain = false

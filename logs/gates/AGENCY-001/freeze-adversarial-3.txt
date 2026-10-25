@@ -1,0 +1,3 @@
+frozen_at = 2026-10-09T11:20:34Z
+note = round-3 adversarial labels, written to exercise the two clauses the mutation test found untested, fixed before evaluation
+3ae2c651f05378a53229db4a5ce59f3a6b9757f29844d379c90f89e0b63aff15  tools/AgencySubstrate/fixtures/templates-adversarial-3.toml

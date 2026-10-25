@@ -1,0 +1,3 @@
+frozen_at = 2026-10-09T10:44:50Z
+note = template labels fixed before any AGENCY-001 criterion was implemented or run
+e18130213f6a29022a0f22323e46c41b969351df5fbb7c92143bc53ce4757425  tools/AgencySubstrate/fixtures/templates.toml

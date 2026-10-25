@@ -1,0 +1,4 @@
+adopted                                 agency=74 self_producing=3513 self_repairing=17 agency&repairing=0 core nonempty=3510
+tracking-any-change                     agency=77 self_producing=3513 self_repairing=17 agency&repairing=0 core nonempty=3510
+repair-without-alive-check              agency=74 self_producing=3513 self_repairing=17 agency&repairing=0 core nonempty=3510
+repair-without-constituent-requirement  agency=74 self_producing=3513 self_repairing=17 agency&repairing=0 core nonempty=3510

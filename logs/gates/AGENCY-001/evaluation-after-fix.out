@@ -1,0 +1,11 @@
+Precompiling AgencySubstrate...
+   1344.0 ms  ✓ AgencySubstrate
+  1 dependency successfully precompiled in 1 seconds. 4 already precompiled.
+templates sha256 = e18130213f6a29022a0f22323e46c41b969351df5fbb7c92143bc53ce4757425
+agent          L2 label=true  got=true   L3 label=true  got=true   tracking=["s1", "s2"]
+static-agent   L2 label=true  got=true   L3 label=false got=false  tracking=["s1", "s2"]
+reflex         L2 label=false got=false  L3 label=true  got=true   tracking=String[]
+thermostat     L2 label=false got=false  L3 label=true  got=true   tracking=String[]
+alternator     L2 label=false got=false  L3 label=true  got=true   tracking=String[]
+no-loop        L2 label=false got=false  L3 label=false got=false  tracking=String[]
+agreement 12/12

@@ -1,0 +1,63 @@
+# Adversarial templates of AGENCY-001, round 3: written to exercise the two clauses that the mutation
+# test found untested by rounds 1–2 (logs/gates/AGENCY-001/mutation.out): the dominance clause of
+# ValueNeeded, and silencing the sensors when finding the endogenous core. Labels come from the concept
+# and are frozen (logs/gates/AGENCY-001/freeze-adversarial-3.txt) before evaluation.
+# Same [params] as templates.toml (copied so that this file stands alone).
+schema_version = 1
+
+[params]
+smax = 4
+decay_period = 8
+grow_cost = 1
+resource0 = 10
+rmax = 30
+horizon = 60
+alive_window = 5
+strength0 = 4
+switch_at = 20
+survival_schedules = [
+  { name = "p1-high", first = [5, 0], second = [5, 0] },
+  { name = "p2-high", first = [0, 5], second = [0, 5] },
+  { name = "p1-then-p2", first = [5, 0], second = [0, 5] },
+  { name = "p2-then-p1", first = [0, 5], second = [5, 0] },
+]
+choice_resource0 = 1000
+choice_rmax = 100000
+choice_window = [5, 15]
+choice_schedules = [
+  { name = "c1-better", first = [5, 4], second = [5, 4] },
+  { name = "c2-better", first = [4, 5], second = [4, 5] },
+]
+
+# Its choice follows value, but when patch 2 is the better one the sensing also switches on a costly
+# extra motor and two helpers, which starve it; without sensing it harvests patch 2 by default and
+# lives there. The value-tracking helps in one environment and kills it in another, so it is not needed
+# in the sense of strict dominance (P-05). Not an agent. Its own loop keeps its connections.
+[[template]]
+name = "costly-tracker"
+L2 = false
+L3 = true
+units = ["s1", "s2", "m1", "m2", "m3", "h1", "h2", "c1", "c2"]
+theta = [1, 1, 2, 1, 1, 1, 1, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2, m3 = 1 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["s1", "m1", 1], ["c1", "m1", 1], ["c1", "m2", 1], ["s1", "m2", -1], ["s2", "m3", 1], ["s2", "h1", 1], ["s2", "h2", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# Sensors drive the motors through one shared relay; there is no self-sustaining loop, so all its
+# activity comes from the environment. Not self-maintaining, so not an agent; its connections are kept
+# only by environment-driven activity, so not self-producing.
+[[template]]
+name = "shared-relay-reflex"
+L2 = false
+L3 = false
+units = ["s1", "s2", "r", "m1", "m2"]
+theta = [1, 1, 1, 2, 2]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["s1", "r", 1], ["s2", "r", 1], ["s1", "m1", 1], ["r", "m1", 1], ["s2", "m2", 1], ["r", "m2", 1]]
+initial = []
+maintain = true

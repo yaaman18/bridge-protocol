@@ -1,0 +1,6 @@
+none: stimulus-response core=String[] hinge=false differentiated=true value_needed=true agency=false
+none: random agency=129
+no-domination-clause: stimulus-response core=String[] hinge=false differentiated=true value_needed=true agency=false
+no-domination-clause: random agency=137
+core-without-silencing-sensors: stimulus-response core=["m1"] hinge=false differentiated=true value_needed=true agency=false
+core-without-silencing-sensors: random agency=307

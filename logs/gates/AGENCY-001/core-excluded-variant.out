@@ -1,0 +1,20 @@
+templates.toml                agent                    label L2=true adopted=true variant=true
+templates.toml                static-agent             label L2=true adopted=true variant=true
+templates.toml                reflex                   label L2=false adopted=false variant=false
+templates.toml                thermostat               label L2=false adopted=false variant=false
+templates.toml                alternator               label L2=false adopted=false variant=false
+templates.toml                no-loop                  label L2=false adopted=false variant=false
+templates-adversarial.toml    agent-plus-foragers      label L2=false adopted=false variant=false
+templates-adversarial.toml    resource-switcher        label L2=false adopted=false variant=false
+templates-adversarial.toml    stimulus-response        label L2=false adopted=false variant=false
+templates-adversarial-2.toml  decoupled-forager        label L2=false adopted=false variant=false
+templates-adversarial-2.toml  oscillating-core-agent   label L2=true adopted=true variant=true
+templates-adversarial-2.toml  sensor-in-core           label L2=true adopted=true variant=true
+templates-adversarial-2.toml  crossed-wiring           label L2=false adopted=false variant=false
+random: adopted=129 variant=74 lost=56 (tracking entirely inside core: 0)
+#88 units=["s1", "s2", "m1", "m2", "x1", "x2", "x3"] edges=[("s1", "m2", -1), ("s1", "x1", -1), ("s2", "m2", 1), ("s2", "x1", 1), ("m1", "x2", 1), ("m1", "x3", -1), ("m2", "x2", 1), ("x1", "m2", 1), ("x2", "m1", 1), ("x2", "x1", 1), ("x3", "x1", 1), ("x3", "x2", 1)]
+   core=["m1", "m2", "x1", "x2"] tracking=["s1", "m1"] outside-core=["s1"] survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1) without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 1, "p2-then-p1" => 0, "p1-then-p2" => 0)
+#350 units=["s1", "s2", "m1", "m2", "x1", "x2", "x3"] edges=[("s1", "m1", 1), ("s1", "m2", 1), ("s1", "x3", -1), ("s2", "m1", 1), ("s2", "m2", -1), ("s2", "x3", 1), ("m1", "m2", -1), ("m1", "x1", 1), ("m2", "m1", 1), ("m2", "x2", 1), ("m2", "x3", 1), ("x1", "x3", 1), ("x2", "m2", 1), ("x2", "x1", 1), ("x2", "x3", -1), ("x3", "m1", 1), ("x3", "m2", -1)]
+   core=["m2", "x2"] tracking=["s1", "s2", "m1", "x1", "x2", "x3"] outside-core=["s1", "s2", "m1", "x1", "x3"] survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0) without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)
+#402 units=["s1", "s2", "m1", "m2", "x1", "x2", "x3"] edges=[("s2", "m1", -1), ("s2", "x1", 1), ("s2", "x2", 1), ("m2", "x2", 1), ("m2", "x3", 1), ("x1", "m1", 1), ("x1", "m2", 1), ("x1", "x2", 1), ("x2", "m1", 1), ("x2", "x1", 1), ("x2", "x3", -1), ("x3", "m1", 1), ("x3", "m2", -1), ("x3", "x1", 1)]
+   core=["m1", "m2", "x1", "x2"] tracking=["s2", "x2"] outside-core=["s2"] survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1) without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)

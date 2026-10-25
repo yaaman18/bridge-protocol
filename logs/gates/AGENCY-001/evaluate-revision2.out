@@ -1,0 +1,43 @@
+templates.toml                agent                    labels L2/L3/L3R=(true, true, false) verdicts=(true, true, false)
+    core=["c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates.toml                static-agent             labels L2/L3/L3R=(true, false, false) verdicts=(true, false, false)
+    core=["c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates.toml                reflex                   labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["m1", "c1", "c2"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates.toml                thermostat               labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["c1", "c2"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates.toml                alternator               labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["a", "b", "m1", "m2"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates.toml                no-loop                  labels L2/L3/L3R=(false, false, false) verdicts=(false, false, false)
+    core=String[] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates-adversarial.toml    agent-plus-foragers      labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["m3", "m4", "c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=false
+templates-adversarial.toml    resource-switcher        labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["m1", "c1", "c2"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates-adversarial.toml    stimulus-response        labels L2/L3/L3R=(false, false, false) verdicts=(false, false, false)
+    core=String[] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates-adversarial-2.toml  decoupled-forager        labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates-adversarial-2.toml  oscillating-core-agent   labels L2/L3/L3R=(true, true, false) verdicts=(true, true, false)
+    core=["a", "b"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates-adversarial-2.toml  sensor-in-core           labels L2/L3/L3R=(true, true, false) verdicts=(true, true, false)
+    core=["c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2", "c1", "c2"] value_needed=true
+templates-adversarial-2.toml  crossed-wiring           labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=false
+templates-adversarial-3.toml  costly-tracker           labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["m2", "c1", "c2"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=false
+templates-adversarial-3.toml  shared-relay-reflex      labels L2/L3/L3R=(false, false, false) verdicts=(false, false, false)
+    core=String[] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2"] value_needed=true
+templates-adversarial-4.toml  core-motor-recruiter     labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["m1", "m2", "c1", "c2"] tracking(ablated)=["s2"] tracking(measured)=["s2", "m1"] value_needed=false
+templates-repair.toml         repairing-agent          labels L2/L3/L3R=(true, true, true) verdicts=(true, true, true)
+    core=["c1", "c2", "c3"] tracking(ablated)=["s1", "s2"] tracking(measured)=["s1", "s2", "c1", "c2"] value_needed=true
+templates-repair.toml         repairing-core           labels L2/L3/L3R=(false, true, true) verdicts=(false, true, true)
+    core=["m1", "c1", "c2", "c3"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates-repair.toml         ring-of-three            labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["c1", "c2", "c3"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates-repair.toml         partially-repairing      labels L2/L3/L3R=(false, true, false) verdicts=(false, true, false)
+    core=["c1", "c2", "c3", "c4"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+templates-repair.toml         static-redundant-core    labels L2/L3/L3R=(false, false, false) verdicts=(false, false, false)
+    core=["c1", "c2", "c3"] tracking(ablated)=String[] tracking(measured)=String[] value_needed=false
+agreement 63/63

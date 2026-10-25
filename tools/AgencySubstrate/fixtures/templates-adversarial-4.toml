@@ -1,0 +1,49 @@
+# Adversarial template of AGENCY-001, round 4: written, knowing the target, to tell apart the old and the
+# new rule for the value-tracking ablation (user decision of 2026-10-24: core units are not ablated as
+# value-tracking). No frozen template of rounds 1–3 does. Labels come from the concept and are frozen
+# (logs/gates/AGENCY-001/freeze-adversarial-4.txt) before evaluation.
+# Same [params] as templates.toml (copied so that this file stands alone).
+schema_version = 1
+
+[params]
+smax = 4
+decay_period = 8
+grow_cost = 1
+resource0 = 10
+rmax = 30
+horizon = 60
+alive_window = 5
+strength0 = 4
+switch_at = 20
+survival_schedules = [
+  { name = "p1-high", first = [5, 0], second = [5, 0] },
+  { name = "p2-high", first = [0, 5], second = [0, 5] },
+  { name = "p1-then-p2", first = [5, 0], second = [0, 5] },
+  { name = "p2-then-p1", first = [0, 5], second = [5, 0] },
+]
+choice_resource0 = 1000
+choice_rmax = 100000
+choice_window = [5, 15]
+choice_schedules = [
+  { name = "c1-better", first = [5, 4], second = [5, 4] },
+  { name = "c2-better", first = [4, 5], second = [4, 5] },
+]
+
+# A self-sustaining loop drives two motors that harvest both patches whatever their yields; when
+# patch 2 is the better one, the sensor and the patch-1 motor together recruit a third motor on patch 2.
+# Its choice differs with value, but the recruitment never decides survival: it lives on the two core
+# motors alone. Only silencing the core motor m1 (which stops it harvesting) makes it die. Not an
+# agent. The loop keeps its own connections (L3); it is a bare pair of units, so it cannot repair.
+[[template]]
+name = "core-motor-recruiter"
+L2 = false
+L3 = true
+L3R = false
+units = ["s1", "s2", "m1", "m2", "m3", "c1", "c2"]
+theta = [1, 1, 1, 1, 2, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2, m3 = 2 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["c1", "m1", 1], ["c1", "m2", 1], ["m1", "m3", 1], ["s2", "m3", 1]]
+initial = ["c1", "c2"]
+maintain = true

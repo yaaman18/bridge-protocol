@@ -1,0 +1,19 @@
+templates sha256 = e18130213f6a29022a0f22323e46c41b969351df5fbb7c92143bc53ce4757425
+agent          L2 label=true  got=true     L3 label=true  got=false ✗
+     differentiated=true tracking=["s1", "s2"] choices=Dict("c1-better" => ["m1"], "c2-better" => ["m2"])
+     survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1)  without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)
+static-agent   L2 label=true  got=true     L3 label=false got=false  
+     differentiated=true tracking=["s1", "s2"] choices=Dict("c1-better" => ["m1"], "c2-better" => ["m2"])
+     survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1)  without tracking=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)
+reflex         L2 label=false got=false    L3 label=true  got=true   
+     differentiated=false tracking=String[] choices=Dict("c1-better" => ["m1"], "c2-better" => ["m1"])
+     survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)  without tracking=Dict{String, Bool}()
+thermostat     L2 label=false got=false    L3 label=true  got=true   
+     differentiated=false tracking=String[] choices=Dict("c1-better" => [], "c2-better" => [])
+     survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)  without tracking=Dict{String, Bool}()
+alternator     L2 label=false got=false    L3 label=true  got=true   
+     differentiated=false tracking=String[] choices=Dict("c1-better" => ["m1", "m2"], "c2-better" => ["m1", "m2"])
+     survival=Dict{String, Bool}("p1-high" => 1, "p2-high" => 1, "p2-then-p1" => 1, "p1-then-p2" => 1)  without tracking=Dict{String, Bool}()
+no-loop        L2 label=false got=false    L3 label=false got=false  
+     differentiated=false tracking=String[] choices=Dict("c1-better" => [], "c2-better" => [])
+     survival=Dict{String, Bool}("p1-high" => 0, "p2-high" => 0, "p2-then-p1" => 0, "p1-then-p2" => 0)  without tracking=Dict{String, Bool}()

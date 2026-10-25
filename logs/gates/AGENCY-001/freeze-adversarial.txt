@@ -1,0 +1,3 @@
+frozen_at = 2026-10-09T10:47:32Z
+note = adversarial template labels fixed before evaluation
+9a3fc557e7caa599f7cb0d7737c5aa188f1369f725d2c53c5f687c752e5a0f6b  tools/AgencySubstrate/fixtures/templates-adversarial.toml

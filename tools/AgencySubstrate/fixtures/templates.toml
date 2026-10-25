@@ -1,0 +1,119 @@
+# Ground-truth templates of AGENCY-001 §3.4. Labels come from the design of each template, never from
+# a measurement, and are frozen (SHA-256 in logs/gates/AGENCY-001/freeze.txt) before any criterion is run.
+# L2 = agency (actions differ with the value of the coupling, and that value-tracking is needed to survive).
+# L3 = structural self-production (without activity the connections vanish; with its own activity they persist).
+schema_version = 1
+
+[params]
+smax = 4
+decay_period = 8
+grow_cost = 1
+resource0 = 10
+rmax = 30
+horizon = 60
+alive_window = 5
+strength0 = 4
+switch_at = 20
+# Survival schedules: (yield of patch 1, yield of patch 2) before and after switch_at.
+survival_schedules = [
+  { name = "p1-high", first = [5, 0], second = [5, 0] },
+  { name = "p2-high", first = [0, 5], second = [0, 5] },
+  { name = "p1-then-p2", first = [5, 0], second = [0, 5] },
+  { name = "p2-then-p1", first = [0, 5], second = [5, 0] },
+]
+# Choice is measured with abundant resource and both patches positive, so that starvation cannot
+# change which motors are active.
+choice_resource0 = 1000
+choice_rmax = 100000
+choice_window = [5, 15]
+choice_schedules = [
+  { name = "c1-better", first = [5, 4], second = [5, 4] },
+  { name = "c2-better", first = [4, 5], second = [4, 5] },
+]
+
+# Senses which patch yields more and drives the motor of that patch, together with a self-sustaining
+# loop. Uses (and so keeps) the connections that carry its activity.
+[[template]]
+name = "agent"
+L2 = true
+L3 = true
+units = ["s1", "s2", "m1", "m2", "c1", "c2"]
+theta = [1, 1, 2, 2, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["s1", "m1", 1], ["c1", "m1", 1], ["s2", "m2", 1], ["c2", "m2", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# The same wiring with connections that never change: structure given from outside.
+[[template]]
+name = "static-agent"
+L2 = true
+L3 = false
+units = ["s1", "s2", "m1", "m2", "c1", "c2"]
+theta = [1, 1, 2, 2, 1, 1]
+patch_sensors = { s1 = 1, s2 = 2 }
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["s1", "m1", 1], ["c1", "m1", 1], ["s2", "m2", 1], ["c2", "m2", 1]]
+initial = ["c1", "c2"]
+maintain = false
+
+# No sensing: always harvests patch 1.
+[[template]]
+name = "reflex"
+L2 = false
+L3 = true
+units = ["m1", "c1", "c2"]
+theta = [1, 1, 1]
+patch_sensors = {}
+motors = { m1 = 1 }
+resource_sensors = {}
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["c1", "m1", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# Senses its own resource and harvests patch 1 only while the resource is low. It regulates itself
+# but never chooses between couplings of different value.
+[[template]]
+name = "thermostat"
+L2 = false
+L3 = true
+units = ["r", "m1", "c1", "c2"]
+theta = [1, 2, 1, 1]
+patch_sensors = {}
+motors = { m1 = 1 }
+resource_sensors = { r = [8, "low"] }
+edges = [["c1", "c2", 1], ["c2", "c1", 1], ["c1", "m1", 1], ["r", "m1", 1]]
+initial = ["c1", "c2"]
+maintain = true
+
+# An oscillator that harvests both patches in turn, whatever their yields. It can survive without
+# tracking value.
+[[template]]
+name = "alternator"
+L2 = false
+L3 = true
+units = ["a", "b", "m1", "m2"]
+theta = [1, 1, 1, 1]
+patch_sensors = {}
+motors = { m1 = 1, m2 = 2 }
+resource_sensors = {}
+edges = [["a", "b", 1], ["b", "a", 1], ["a", "m1", 1], ["b", "m2", 1]]
+initial = ["a"]
+maintain = true
+
+# No self-sustaining loop: activity stops at once.
+[[template]]
+name = "no-loop"
+L2 = false
+L3 = false
+units = ["m1", "c1"]
+theta = [1, 1]
+patch_sensors = {}
+motors = { m1 = 1 }
+resource_sensors = {}
+edges = [["c1", "m1", 1]]
+initial = ["c1"]
+maintain = true

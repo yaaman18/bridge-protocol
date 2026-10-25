@@ -1,0 +1,1 @@
+core nonempty & L3 = 3510; core nonempty & not L3 = 0; core empty & L3 = 3; neither = 16487
