@@ -70,7 +70,7 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 
 ### 役割の異なる二つの台帳
 
-検証証拠は二つの台帳で表現される。schema v1 の [specs/ledger.toml](specs/ledger.toml) は、認証済みの Lean–Julia 束縛・依存関係・certificate catalog エントリの**索引**である。その 61 件の検証点はすべて終端の `certified` エントリであり、claim ライフサイクルの真実源ではない。実装作業がその status を進めることはない。
+検証証拠は二つの台帳で表現される。schema v1 の [specs/ledger.toml](specs/ledger.toml) は、認証済みの Lean–Julia 束縛・依存関係・certificate catalog エントリの**索引**である。その 63 件の検証点はすべて終端の `certified` エントリであり、claim ライフサイクルの真実源ではない。実装作業がその status を進めることはない。
 
 **原子ライフサイクル台帳**は [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml) である。91 件の claim を四つの独立軸 — `spec_status`, `proof_status`, `implementation_status`, `certification_status` — で記録し、15 の claim group と 44 の evidence batch にまとめている。各 claim は [specs/statements/](specs/statements/) 下の凍結された Lean statement ファイル（108 件）を指し、台帳はそのファイルの sha256 を保持するので、statement が claim の下から静かに書き換わることはない。
 
@@ -78,19 +78,19 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 
 四つの規則が台帳に意味を与える。
 
-**1. 証拠か、さもなくば無効。** claim が `certified` と記されるのは、[logs/gates/](logs/gates/) 下に実際のゲートログが存在する場合**のみ**である。そのログは証拠としてコミットされる（2026-08-31 時点で 159 のゲートディレクトリ、1389 のログファイル）。台帳 validator は各 `certification_log` のパスがディスク上に実在することを独立に再検査する。
+**1. 証拠か、さもなくば無効。** claim が `certified` と記されるのは、[logs/gates/](logs/gates/) 下に実際のゲートログが存在する場合**のみ**である。そのログは証拠としてコミットされる（2026-10-25 時点で 197 のゲートディレクトリ、1786 のファイル）。台帳 validator は各 `certification_log` のパスがディスク上に実在することを独立に再検査する。
 
 **2. 可視ギャップ原則。** v2 は、対応する軸で証明や認証を欠く claim を記録する。それらが黙って落とされることも、黙って信じられることもない。`proof_status = "unproved"` の claim には、validator が `claim_kind = "conjecture"` と `checker_relation = "observation_only"` を**強制する**。
 
 **3. 二軸原則**（2026-08-01 導入）。v1 台帳の `certified` は、`contract_id` が参照する**単一の** Lean 宣言が機械検査されたことのみを意味し、`claim_ja` の散文が列挙する全性質を保証**しない**。その散文が contract によってどこまで裏付けられているかは、独立した `coverage_audit` 軸が記録する。`unreviewed` は未監査、`complete` は監査済みを意味する。二つの軸は直交する。`coverage_audit` が `unreviewed` のままでも contract は certified でありつづけ、認証だけでは散文の被覆を一切含意しない。
 
-**4. checker は自らが実際に判定するものを宣言する。** `true` を返す Julia checker が、束縛された Lean statement の決定手続きであるとは自動的には言えない。[specs/checker-semantic-manifest.toml](specs/checker-semantic-manifest.toml) は 164 件すべての contract を、checker が statement に対して持つ関係で分類する。
+**4. checker は自らが実際に判定するものを宣言する。** `true` を返す Julia checker が、束縛された Lean statement の決定手続きであるとは自動的には言えない。[specs/checker-semantic-manifest.toml](specs/checker-semantic-manifest.toml) は 166 件すべての contract を、checker が statement に対して持つ関係で分類する。
 
 | `checker_relation` | 件数 | 意味 |
 |---|---:|---|
 | `lean_only` | 72 | Lean で機械検査済み。Julia 側の判定は主張しない |
 | `exact_finite_decision` | 28 | 与えられた有限台の上で statement を決定する |
-| `witness_validator` | 28 | 供給された証人を検証する。固定 Lean 対象との同一性は立てない |
+| `witness_validator` | 30 | 供給された証人を検証する。固定 Lean 対象との同一性は立てない |
 | `regression_only` | 14 | 現行挙動を固定する。statement については何も決定しない |
 | `observation_only` | 10 | 観測の記録のみ |
 | `sound_only` | 5 | 誤受理なし。取りこぼしはありうる |
@@ -98,7 +98,7 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 | `counterexample_validator` | 2 | 供給された反例を検証する |
 | `complete_only` | 1 | 誤棄却なし。過剰受理はありうる |
 
-164 件のうち 92 件が `reviewed`（査読者名と根拠ログ付き）、72 件が `machine_verified` である。各エントリはさらに、自らの `scope`、`assumptions`、そして行う保証・行わない保証（`guarantee`）を記録する。[specs/cert-scope-registry.toml](specs/cert-scope-registry.toml) は同じ 164 contract の認証スコープを記録し、現在そのすべてが `context_local` である。すなわち、検査された文脈を超えるスコープを主張する contract は存在しない。
+166 件のうち 94 件が `reviewed`（査読者名と根拠ログ付き）、72 件が `machine_verified` である。各エントリはさらに、自らの `scope`、`assumptions`、そして行う保証・行わない保証（`guarantee`）を記録する。[specs/cert-scope-registry.toml](specs/cert-scope-registry.toml) は同じ 166 contract の認証スコープを記録し、現在そのすべてが `context_local` である。すなわち、検査された文脈を超えるスコープを主張する contract は存在しない。
 
 ### 検査そのものを守る
 
@@ -110,13 +110,13 @@ happy path しか走らないテスト群は、自らの空洞化を検出でき
 - **安定 ID を持つ失敗様式レジストリ。** [specs/verification-failure-modes.toml](specs/verification-failure-modes.toml) は観測済みの 4 様式（呼び出し側が渡す証明済み Bool、有限標本による不透明 callback の同一視、循環 oracle、通常ゲートに接続されていない反証条件）を、それぞれの証拠ログとともに記録する。
 - **反証条件の負債に対するラチェット。** `tools/verify/ratchet_check.jl --base-ref <commit>` は、作業ツリーの `falsification_pending_max` を明示された base commit の同じ欄と比較し、増加していないことを要求する。base ref は呼び出し側が明示せねばならず、git が使えない場合は緑にせず `UNVERIFIED` を報告する。
 
-### 現況（2026-08-31）
+### 現況（2026-10-25）
 
 | | 値 |
 |---|---|
-| v1 検証点 | 61 件、すべて `certified` |
-| v1 `coverage_audit` | `complete` 10 件、`unreviewed` 51 件 |
-| v1 `legacy_coverage` 監査 | 10 エントリ。contract は原子 claim 7 件を被覆し、85 件を被覆しない |
+| v1 検証点 | 63 件、すべて `certified` |
+| v1 `coverage_audit` | `complete` 11 件、`unreviewed` 52 件 |
+| v1 `legacy_coverage` 監査 | 11 エントリ。contract は原子 claim 7 件を被覆し、85 件を被覆しない |
 | v2 原子 claim | 91 件 |
 | v2 `spec_status` | `frozen` 86 件、`draft` 5 件 |
 | v2 `proof_status` | `proved` 68 件、`not_applicable` 22 件、`unproved` 1 件 |
@@ -124,7 +124,16 @@ happy path しか走らないテスト群は、自らの空洞化を検出でき
 | v2 `certification_status` | `certified` 38 件、`uncertified` 53 件 |
 | 記入済みの反証条件 | 91 件中 0 件 |
 
-三行目は注意して読まれたい。監査済みの 10 エントリを通して、その散文が主張する性質のうち機械検査に裏付けられているのは 7 件のみであり、残る 85 件は contract の外側にある。
+三行目は注意して読まれたい。監査済みの 11 エントリを通して、その散文が主張する性質のうち機械検査に裏付けられているのは 7 件のみであり、残る 85 件は contract の外側にある。
+
+### 進行中の研究の筋（2026-10-25）
+
+いずれも台帳の status を動かさない、未批准の作業である。詳しい現況とユーザー判断待ちの論点は [START_HERE.md](START_HERE.md) にある。
+
+- **RSB（測定の筋）** — 定義を偏りなく実際の基体に当てるための測定パイプライン。判定基準のパッケージを git の tree OID で束縛し、解析計画 v2 を凍結した（[specs/reactivation-analysis-plan-v2.toml](specs/reactivation-analysis-plan-v2.toml)）。登録簿への追記（一括再登録）と本番 run はまだ行っていない。
+- **DC2（M1 の精緻化）** — 既約単位の条件を、互いを産出し合う 2 要素の存在（`MutualPair`）へ改訂し、答えを事前に凍結した正解の型と照合している。
+- **AGENCY-001** — `DC` と `phenomenal_claim` のあいだに、主体性（環境との結合の価値に応じて行為を変え、その調整が生存に要ること）、構造の自己産出、自己修復の三つの監査対象を立てる実験。Lean の定義（[formal-experiments/Agency.lean](formal-experiments/Agency.lean)）と試作基体（[tools/AgencySubstrate/](tools/AgencySubstrate/)）からなる。評価前に凍結した 21 型で判定がラベルと一致した（[logs/gates/AGENCY-001/](logs/gates/AGENCY-001/)）。現象的な主張はしない。
+- **判断原則の台帳** — 判断の原則と決定ログ（[specs/decision-principles.md](specs/decision-principles.md)）。
 
 ### 自動化されていないもの
 

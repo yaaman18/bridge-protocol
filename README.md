@@ -117,7 +117,7 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 
 Verification evidence is represented by two ledgers. The schema-v1
 [specs/ledger.toml](specs/ledger.toml) is an **index** of certified Lean–Julia bindings,
-dependencies, and certificate-catalog entries. Its 61 verification points are all terminal
+dependencies, and certificate-catalog entries. Its 63 verification points are all terminal
 `certified` entries; it is not the claim-lifecycle source of truth, and implementation work
 does not advance its status.
 
@@ -133,8 +133,8 @@ file so the statement cannot drift out from under the claim.
 Four rules give the ledgers their meaning.
 
 **1. Evidence or nothing.** A claim is marked `certified` **only** when actual gate logs
-exist under [logs/gates/](logs/gates/) — those logs are committed as evidence (159 gate
-directories, 1389 log files as of 2026-08-31). The ledger validator independently re-checks
+exist under [logs/gates/](logs/gates/) — those logs are committed as evidence (197 gate
+directories, 1786 files as of 2026-10-25). The ledger validator independently re-checks
 that each `certification_log` path exists on disk.
 
 **2. The visible gap principle.** v2 records claims that lack proof or certification on
@@ -153,13 +153,13 @@ never implies prose coverage.
 **4. Checkers declare what they actually decide.** A Julia checker that returns `true` is
 not automatically a decision procedure for the Lean statement it is bound to.
 [specs/checker-semantic-manifest.toml](specs/checker-semantic-manifest.toml) classifies all
-164 contracts by the relation their checker bears to the statement:
+166 contracts by the relation their checker bears to the statement:
 
 | `checker_relation` | Count | Meaning |
 |---|---:|---|
 | `lean_only` | 72 | machine-checked in Lean; no Julia-side decision claimed |
 | `exact_finite_decision` | 28 | decides the statement on the supplied finite carriers |
-| `witness_validator` | 28 | validates a supplied witness; does not establish identity with a fixed Lean object |
+| `witness_validator` | 30 | validates a supplied witness; does not establish identity with a fixed Lean object |
 | `regression_only` | 14 | pins current behavior; decides nothing about the statement |
 | `observation_only` | 10 | records an observation only |
 | `sound_only` | 5 | no false accepts; may miss |
@@ -167,11 +167,11 @@ not automatically a decision procedure for the Lean statement it is bound to.
 | `counterexample_validator` | 2 | validates a supplied counterexample |
 | `complete_only` | 1 | no false rejects; may over-accept |
 
-Of the 164, 92 are `reviewed` (a named reviewer with a basis log) and 72 are
+Of the 166, 94 are `reviewed` (a named reviewer with a basis log) and 72 are
 `machine_verified`. Each entry additionally records its `scope`, its `assumptions`, and the
 `guarantee` it will and will not make.
 [specs/cert-scope-registry.toml](specs/cert-scope-registry.toml) records the certification
-scope of the same 164 contracts; all are currently `context_local`, meaning no contract
+scope of the same 166 contracts; all are currently `context_local`, meaning no contract
 claims a scope beyond the context it was checked in.
 
 ### Guarding the checks themselves
@@ -204,13 +204,13 @@ author, and the same design error recurring three times.
   supplied by the caller; when git is unavailable the check reports `UNVERIFIED` rather
   than passing green.
 
-### Current state (2026-08-31)
+### Current state (2026-10-25)
 
 | | Value |
 |---|---|
-| v1 verification points | 61, all `certified` |
-| v1 `coverage_audit` | 10 `complete`, 51 `unreviewed` |
-| v1 `legacy_coverage` audit | 10 entries; contracts cover 7 atomic claims, do not cover 85 |
+| v1 verification points | 63, all `certified` |
+| v1 `coverage_audit` | 11 `complete`, 52 `unreviewed` |
+| v1 `legacy_coverage` audit | 11 entries; contracts cover 7 atomic claims, do not cover 85 |
 | v2 atomic claims | 91 |
 | v2 `spec_status` | 86 `frozen`, 5 `draft` |
 | v2 `proof_status` | 68 `proved`, 22 `not_applicable`, 1 `unproved` |
@@ -218,8 +218,30 @@ author, and the same design error recurring three times.
 | v2 `certification_status` | 38 `certified`, 53 `uncertified` |
 | Falsification conditions written | 0 of 91 |
 
-Read the third row carefully: across the 10 audited legacy entries, only 7 of the properties
+Read the third row carefully: across the 11 audited legacy entries, only 7 of the properties
 their prose asserts are backed by a machine check; the remaining 85 lie outside the contract.
+
+### Ongoing lines of work (2026-10-25)
+
+None of these moves a ledger status; all are unratified work. The detailed state and the questions
+awaiting the author's decision are in [START_HERE.md](START_HERE.md) (in Japanese).
+
+- **RSB (measurement)** — a pipeline for applying the definitions to an actual substrate without
+  bias. The criterion package is bound by its git tree OID and analysis plan v2 is frozen
+  ([specs/reactivation-analysis-plan-v2.toml](specs/reactivation-analysis-plan-v2.toml)). The
+  registry append (batch re-registration) and the production run have not been done.
+- **DC2 (a refinement of M1)** — the irreducible-unit condition was revised to the existence of
+  two constituents producing each other (`MutualPair`), and is checked against ground-truth
+  templates whose answers were frozen in advance.
+- **AGENCY-001** — an experiment placing three audit targets between `DC` and
+  `phenomenal_claim`: agency (actions change with the value of the environment coupling, and that
+  tracking is needed to survive), structural self-production, and self-repair. It consists of Lean
+  definitions ([formal-experiments/Agency.lean](formal-experiments/Agency.lean)) and a prototype
+  substrate ([tools/AgencySubstrate/](tools/AgencySubstrate/)); on 21 templates whose labels were
+  frozen before evaluation, the verdicts agree with the labels
+  ([logs/gates/AGENCY-001/](logs/gates/AGENCY-001/)). No phenomenal claim is made.
+- **Decision-principle register** — the principles for decisions and the decision log
+  ([specs/decision-principles.md](specs/decision-principles.md)).
 
 ### What is not automated
 

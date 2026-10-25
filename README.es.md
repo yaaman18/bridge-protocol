@@ -70,7 +70,7 @@ proposed ──G1──▶ formalized ──G2──▶ bound ──G3──▶ 
 
 ### Dos libros mayores con papeles distintos
 
-La evidencia de verificación se representa mediante dos libros mayores. El de esquema v1, [specs/ledger.toml](specs/ledger.toml), es un **índice** de vínculos Lean–Julia certificados, dependencias y entradas del catálogo de certificados. Sus 61 puntos de verificación son todos entradas terminales `certified`; no es la fuente de verdad del ciclo de vida de las afirmaciones, y el trabajo de implementación no avanza su estado.
+La evidencia de verificación se representa mediante dos libros mayores. El de esquema v1, [specs/ledger.toml](specs/ledger.toml), es un **índice** de vínculos Lean–Julia certificados, dependencias y entradas del catálogo de certificados. Sus 63 puntos de verificación son todos entradas terminales `certified`; no es la fuente de verdad del ciclo de vida de las afirmaciones, y el trabajo de implementación no avanza su estado.
 
 El **libro mayor atómico del ciclo de vida** es [specs/claim-ledger-v2.toml](specs/claim-ledger-v2.toml). Registra 91 afirmaciones sobre cuatro ejes independientes —`spec_status`, `proof_status`, `implementation_status` y `certification_status`— agrupadas en 15 grupos con 44 lotes de evidencia. Cada afirmación apunta a un archivo de enunciado Lean congelado bajo [specs/statements/](specs/statements/) (108 archivos), y el libro mayor guarda el sha256 de ese archivo para que el enunciado no pueda cambiar por debajo de la afirmación.
 
@@ -78,19 +78,19 @@ El **libro mayor atómico del ciclo de vida** es [specs/claim-ledger-v2.toml](sp
 
 Cuatro reglas dan sentido a los libros mayores.
 
-**1. Evidencia o nada.** Una afirmación se marca `certified` **solo** cuando existen registros reales de compuerta bajo [logs/gates/](logs/gates/); esos registros se versionan como evidencia (159 directorios de compuerta, 1389 archivos de registro al 2026-08-31). El validador comprueba de forma independiente que cada ruta `certification_log` existe en disco.
+**1. Evidencia o nada.** Una afirmación se marca `certified` **solo** cuando existen registros reales de compuerta bajo [logs/gates/](logs/gates/); esos registros se versionan como evidencia (197 directorios de compuerta, 1786 archivos al 2026-10-25). El validador comprueba de forma independiente que cada ruta `certification_log` existe en disco.
 
 **2. El principio de la brecha visible.** v2 registra las afirmaciones que carecen de demostración o certificación en sus ejes correspondientes. Nunca se descartan ni se creen en silencio. A una afirmación con `proof_status = "unproved"` el validador le *impone* `claim_kind = "conjecture"` y `checker_relation = "observation_only"`.
 
 **3. El principio de dos ejes** (introducido el 2026-08-01). `certified` en el libro mayor v1 significa únicamente que la **única** declaración de Lean referida por `contract_id` ha sido verificada por máquina; **no** garantiza todas las propiedades enumeradas en la prosa de `claim_ja`. El eje separado `coverage_audit` registra cuánto de esa prosa está respaldado por el contrato: `unreviewed` significa aún sin auditar, `complete` significa auditado. Los ejes son ortogonales: un contrato sigue certificado mientras `coverage_audit` sea `unreviewed`, y la certificación por sí sola nunca implica cobertura de la prosa.
 
-**4. Los verificadores declaran qué deciden realmente.** Un verificador en Julia que devuelve `true` no es automáticamente un procedimiento de decisión para el enunciado Lean al que está ligado. [specs/checker-semantic-manifest.toml](specs/checker-semantic-manifest.toml) clasifica los 164 contratos según la relación que su verificador guarda con el enunciado:
+**4. Los verificadores declaran qué deciden realmente.** Un verificador en Julia que devuelve `true` no es automáticamente un procedimiento de decisión para el enunciado Lean al que está ligado. [specs/checker-semantic-manifest.toml](specs/checker-semantic-manifest.toml) clasifica los 166 contratos según la relación que su verificador guarda con el enunciado:
 
 | `checker_relation` | Núm. | Significado |
 |---|---:|---|
 | `lean_only` | 72 | verificado por máquina en Lean; no se afirma decisión del lado Julia |
 | `exact_finite_decision` | 28 | decide el enunciado sobre los portadores finitos suministrados |
-| `witness_validator` | 28 | valida un testigo suministrado; no establece identidad con un objeto Lean fijo |
+| `witness_validator` | 30 | valida un testigo suministrado; no establece identidad con un objeto Lean fijo |
 | `regression_only` | 14 | fija el comportamiento actual; no decide nada sobre el enunciado |
 | `observation_only` | 10 | registra solo una observación |
 | `sound_only` | 5 | sin falsos positivos; puede omitir casos |
@@ -98,7 +98,7 @@ Cuatro reglas dan sentido a los libros mayores.
 | `counterexample_validator` | 2 | valida un contraejemplo suministrado |
 | `complete_only` | 1 | sin falsos rechazos; puede aceptar de más |
 
-De los 164, 92 están `reviewed` (con revisor nombrado y registro de base) y 72 están `machine_verified`. Cada entrada registra además su `scope`, sus `assumptions` y la garantía (`guarantee`) que dará y la que no. [specs/cert-scope-registry.toml](specs/cert-scope-registry.toml) registra el alcance de certificación de esos mismos 164 contratos; actualmente todos son `context_local`, es decir, ningún contrato reclama un alcance más allá del contexto en que fue verificado.
+De los 166, 94 están `reviewed` (con revisor nombrado y registro de base) y 72 están `machine_verified`. Cada entrada registra además su `scope`, sus `assumptions` y la garantía (`guarantee`) que dará y la que no. [specs/cert-scope-registry.toml](specs/cert-scope-registry.toml) registra el alcance de certificación de esos mismos 166 contratos; actualmente todos son `context_local`, es decir, ningún contrato reclama un alcance más allá del contexto en que fue verificado.
 
 ### Proteger las propias verificaciones
 
@@ -110,13 +110,13 @@ Un conjunto de tests que solo recorre el camino feliz no puede detectar su propi
 - **Un registro de modos de fallo con identificadores estables.** [specs/verification-failure-modes.toml](specs/verification-failure-modes.toml) recoge 4 modos observados (booleanos de demostración suministrados por el llamador, identificación de callbacks opacos a partir de muestras finitas, oráculos circulares y condiciones de falsación no conectadas a las compuertas), cada uno con sus registros de evidencia.
 - **Un trinquete sobre la deuda de falsación.** `tools/verify/ratchet_check.jl --base-ref <commit>` compara el `falsification_pending_max` del árbol de trabajo con el mismo campo en un commit base nombrado explícitamente y exige que no haya aumentado. El llamador debe suministrar la referencia base; cuando git no está disponible, la verificación informa `UNVERIFIED` en lugar de pasar en verde.
 
-### Estado actual (2026-08-31)
+### Estado actual (2026-10-25)
 
 | | Valor |
 |---|---|
-| Puntos de verificación v1 | 61, todos `certified` |
-| `coverage_audit` v1 | 10 `complete`, 51 `unreviewed` |
-| Auditoría `legacy_coverage` v1 | 10 entradas; los contratos cubren 7 afirmaciones atómicas y no cubren 85 |
+| Puntos de verificación v1 | 63, todos `certified` |
+| `coverage_audit` v1 | 11 `complete`, 52 `unreviewed` |
+| Auditoría `legacy_coverage` v1 | 11 entradas; los contratos cubren 7 afirmaciones atómicas y no cubren 85 |
 | Afirmaciones atómicas v2 | 91 |
 | `spec_status` v2 | 86 `frozen`, 5 `draft` |
 | `proof_status` v2 | 68 `proved`, 22 `not_applicable`, 1 `unproved` |
@@ -124,7 +124,16 @@ Un conjunto de tests que solo recorre el camino feliz no puede detectar su propi
 | `certification_status` v2 | 38 `certified`, 53 `uncertified` |
 | Condiciones de falsación escritas | 0 de 91 |
 
-Léase la tercera fila con atención: en las 10 entradas auditadas, solo 7 de las propiedades que su prosa afirma están respaldadas por una verificación mecánica; las 85 restantes quedan fuera del contrato.
+Léase la tercera fila con atención: en las 11 entradas auditadas, solo 7 de las propiedades que su prosa afirma están respaldadas por una verificación mecánica; las 85 restantes quedan fuera del contrato.
+
+### Líneas de trabajo en curso (2026-10-25)
+
+Ninguna mueve un estado del libro mayor; todas son trabajo no ratificado. El estado detallado y las cuestiones pendientes de decisión del autor están en [START_HERE.md](START_HERE.md) (en japonés).
+
+- **RSB (medición)** — una canalización para aplicar las definiciones a un sustrato real sin sesgo. El paquete de criterios queda ligado por su tree OID de git y el plan de análisis v2 está congelado ([specs/reactivation-analysis-plan-v2.toml](specs/reactivation-analysis-plan-v2.toml)). La anotación en el registro (re-registro conjunto) y la ejecución de producción aún no se han hecho.
+- **DC2 (un refinamiento de M1)** — la condición de unidad irreducible se revisó a la existencia de dos constituyentes que se producen mutuamente (`MutualPair`), y se contrasta con plantillas de verdad de referencia cuyas respuestas se congelaron de antemano.
+- **AGENCY-001** — un experimento que sitúa tres objetivos de auditoría entre `DC` y `phenomenal_claim`: agencia (las acciones cambian con el valor del acoplamiento con el entorno, y ese seguimiento es necesario para sobrevivir), autoproducción estructural y autorreparación. Consta de definiciones en Lean ([formal-experiments/Agency.lean](formal-experiments/Agency.lean)) y un sustrato prototipo ([tools/AgencySubstrate/](tools/AgencySubstrate/)); en 21 plantillas cuyas etiquetas se congelaron antes de evaluar, los veredictos coinciden con las etiquetas ([logs/gates/AGENCY-001/](logs/gates/AGENCY-001/)). No se hace ninguna afirmación fenoménica.
+- **Registro de principios de decisión** — los principios para decidir y el registro de decisiones ([specs/decision-principles.md](specs/decision-principles.md)).
 
 ### Qué no está automatizado
 

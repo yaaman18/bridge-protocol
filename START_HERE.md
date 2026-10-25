@@ -66,36 +66,43 @@
 
 ---
 
-## 4. いま何をしているか（2026-10-05 時点）
+## 4. いま何をしているか（2026-10-25 時点）
 
-理論の中核は Lean 側でかなり固まっている。現在の焦点は、**その定義を偏りなく実際の基体に当てられるか**
-という測定の問題に移っている。作業系列は RSB（Reactivation SuBstrate）。
+理論の中核は Lean 側でかなり固まっている。現在の作業は二つの筋に分かれる。一つは、**その定義を偏りなく実際の基体に
+当てられるか**という測定の問題（RSB、Reactivation SuBstrate）。もう一つは、DC と `phenomenal_claim` のあいだに
+**認定可能な段を立てられるか**という問題（AGENCY-001）。
 
 ```
 RSB-001 完了  基体 profile の凍結（事前登録。DC 評価なし）
 RSB-002 完了  発信停止と lesion で α/σ/π/ρ を測定する engine
 RSB-GEN-001 完了  測定エンジンを ERIE-C 非依存の 3 層へ汎用化
-RSB-003 実装済  DC・DC2 の判定プラグイン（凍結は未了）
+RSB-003 凍結済  DC・DC2 の判定プラグイン。判定基準パッケージの tree OID を解析計画 v2 に記入して凍結
 RSB-BIND-001 実装済  判定基準の tree OID 束縛と解析計画 schema v2
 RSB-RETRY-001 実装済  再実行の方針（試行2回まで、1回目の封印、重なる case の一致）
 RSB-ANALYZE-001 実装済  登録した解析を実行する解析プログラム（判定基準と同じパッケージで束縛）
   ↓
-一括再登録 → 本番 run（未着手）
+一括再登録（登録簿への追記。追記する行の下書きと予行演習は logs/gates/RSB-REG-003/）→ 本番 run（どちらも未着手）
+
+AGENCY-001（未批准の実験）  主体性（L2）・構造の自己産出（L3）・自己修復（L3R）の監査対象
 ```
 
-### 直近 1 週間の主要な出来事
+### 10 月 5 日以降の主要な出来事
 
-1. **Lean 点検**で、登録済み解析計画 v1 に論理の誤り 2 件が見つかった。登録済みファイルは書き換えず、
-   草案 v2 で訂正し、期待値を定義と機械照合する試験を追加した。
-2. **DC2**（M1 の精緻化、未批准）を初めて有限モデル監査に入れた。直接の量化式と全 1,048,576 符号化で照合。
-3. その監査で、**DC2 の条件 `hUnit` が測定回路 52,768 件で一度も成り立たない**ことが判明。定義と測定が
-   噛み合っていなかった。ユーザー決定により `hUnit` を `MutualPair`（互いを産出し合う 2 要素の存在）へ改訂。
-4. 新定義が「組織」の概念と対応しているかを、**答えを事前にハッシュで凍結した 15 種類の回路**で照合した。
-   その過程で「冗長な支えを組織と呼ぶか」「互いに守り合う 2 つは 1 つの組織か」といった概念的な問いが
-   次々に出て、一つずつユーザーが決定した。
+1. **DC の意味論**（10-07 決定）: `hSelf` の冗長性の限界を、診断の欄 `hSelf_T` で記録することにした。
+   冗長性の閾値 `X` は廃止し、`dc` と `dc_T` の結論を比べる読みにした。
+2. **RSB の凍結**: 判定基準を git の tree OID で束縛し、再実行の方針と解析プログラムを実装した。
+   既知の差分の登録簿を digest で縛り、解析計画 v2 を凍結した。登録簿への追記と本番 run は、ユーザーの指示でまだ保留している。
+3. **判断原則の台帳**（10-09 承認）: 判断を A（既存の原則で決まる）・B（原則同士が衝突）・C（新しい判断）に振り分ける。
+   A は推奨案で進めて記録し、B・C と取り消せない操作だけをユーザーに返す（[specs/decision-principles.md](specs/decision-principles.md)）。
+4. **AGENCY-001**（10-09 開始、10-24 改訂 2）: 「自律的に自己を維持する何か」に近づくための段を、監査対象として立てた。
+   - Lean の定義と分離定理（[formal-experiments/Agency.lean](formal-experiments/Agency.lean)）。分離定理は、段が論理的に別物であることを示すだけで、内容はほぼ自明。
+   - 試作基体（[tools/AgencySubstrate/](tools/AgencySubstrate/)）。資源の制約、使えば保たれ使わなければ消える結線、発信停止だけの介入を持つ。
+   - 評価前にラベルを凍結した 21 型で、L2・L3・L3R の判定がラベルと一致（63/63）。変異試験と別コンテキストの検証も済ませた。
+   - 分かった限界: この基体の L3 は「内発的な活動がある」とほぼ同じで判別力が弱い。自己修復は、実質的に核の冗長性を測っている（推論）。
+     経緯と数値は [logs/gates/AGENCY-001/README.md](logs/gates/AGENCY-001/README.md)。
 
-経緯は [specs/packets/DC2-HUNIT-N3.md](specs/packets/DC2-HUNIT-N3.md) と
-[logs/gates/](logs/gates/) の `DC2-*` ディレクトリに全て残っている。
+DC2 の経緯（`hUnit` の `MutualPair` への改訂と、正解の型との照合）は
+[specs/packets/DC2-HUNIT-N3.md](specs/packets/DC2-HUNIT-N3.md) と [logs/gates/](logs/gates/) の `DC2-*` ディレクトリに残っている。
 
 ---
 
@@ -108,6 +115,9 @@ RSB-ANALYZE-001 実装済  登録した解析を実行する解析プログラ�
 | 冗長性の閾値 `X = 0.5` | **2026-10-07 決定で廃止** | 数値の閾値をやめ、DC と、冗長に支えられた構成素を数えた感度読み `dc_T` の両方で各結論を計算し、食い違えば「冗長性の読みに依存する」と報告する（[logs/gates/DC-SEMANTICS-20261006/](logs/gates/DC-SEMANTICS-20261006/)） |
 | N3 が損失の合成で余分な対を挙げる | 未決（毎回報告される） | 停止の副作用で、互いにかけがえがない訳ではない 2 つを対として数える（例: 6 ユニット系列 case 1600） |
 | 互いに守り合う 2 つの組織の合併 | 未決 | 相互に「刺客を抑え合う」2 つの独立した閉路を、N3 は 1 つの組織と数える（[logs/gates/DC2-E-20261003/](logs/gates/DC2-E-20261003/)） |
+| 自己修復と DC2 の決定 2 の関係 | 未決（種類 B） | 自己修復は核の冗長性を要求するが、DC2 では「冗長に支えられた閉路は組織でない」と決めた。別の監査対象として並べるかを問う（[specs/packets/AGENCY-001.md](specs/packets/AGENCY-001.md) §10） |
+| AGENCY-001 の監査対象の正式名 | 未決 | コード上は `Agency`。「意識」とは呼ばない |
+| 一括再登録と本番 run | 保留（ユーザー指示） | 追記する行の下書きと予行演習は [logs/gates/RSB-REG-003/](logs/gates/RSB-REG-003/) |
 | `Φ_rich` の重みづけ | 未確定 | `(Φ_depth, Φ_div, Φ_level)` の Pareto/合成の取り方 |
 | 増殖の射の正確な定義 | 未確定 | 発生（DC 連続）と生殖（変異分岐）の形式 |
 | 入れ子の圏論的足場 | 未確定 | 有限 poset で足りるか、fibration や operad まで要るか |
@@ -127,6 +137,10 @@ RSB-ANALYZE-001 実装済  登録した解析を実行する解析プログラ�
 - **「証明した」は Lean が typecheck した場合のみ。「実装した」はテストが通った場合のみ。**
 - **意味を変える提案は、複数候補と推奨理由まで出して、最終決定はユーザーに返す。**
   判定の意味、公開 API、理論の不変条項に触れる変更がこれに当たる。
+
+判断を求めるときは [specs/decision-principles.md](specs/decision-principles.md)（判断原則の台帳）の手順と書式に従う。
+既にある原則で決まる問い（種類 A）は推奨案で進めて決定ログに記録し、原則同士がぶつかる問い（B）と
+新しい問い（C）、取り消せない操作だけをユーザーに返す。
 
 AI の役割は、抽象的な問題設定・設計候補・反例候補・異分野間の接続を**発散的に生成する**こと。
 その出力は、ユーザーが採用するか、リポジトリの証拠で裏付けられるまでは**未検証の仮説**である。
@@ -165,7 +179,9 @@ AI の役割は、抽象的な問題設定・設計候補・反例候補・異�
 | 測定エンジン | [tools/ReactivationMeasurement/](tools/ReactivationMeasurement/) |
 | DC・DC2 の判定プラグイン | [tools/ReactivationERIEC/](tools/ReactivationERIEC/) |
 | 有限モデル監査 | [tools/model_audit/](tools/model_audit/)、[tools/CountermodelAudit.jl](tools/CountermodelAudit.jl) |
-| 直近の設計判断 | [specs/packets/](specs/packets/) の `RSB-*.md`、`DC2-*.md` |
+| 直近の設計判断 | [specs/packets/](specs/packets/) の `RSB-*.md`、`DC2-*.md`、`AGENCY-001.md` |
+| 判断の原則と決定ログ | [specs/decision-principles.md](specs/decision-principles.md) |
+| 主体性・自己産出・自己修復（実験） | [specs/packets/AGENCY-001.md](specs/packets/AGENCY-001.md)、[formal-experiments/Agency.lean](formal-experiments/Agency.lean)、[tools/AgencySubstrate/](tools/AgencySubstrate/) |
 | ゲート実行の証拠 | [logs/gates/](logs/gates/) |
 | 作業指針（AI 向け） | 公開対象外（`.gitignore` により `CLAUDE.md`・`AGENTS.md`・`docs/`・`.claude/` は配布しない） |
 
